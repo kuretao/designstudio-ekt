@@ -12,6 +12,7 @@ import ContentPage from "./pages/ContentPage";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import PortfolioPage from "./pages/PortfolioPage";
+import ReviewsPage from "./pages/ReviewsPage";
 import ServiceDetailPage from "./pages/ServiceDetailPage";
 import ServicesPage from "./pages/ServicesPage";
 import { getCurrentPath, normalizePath } from "./router";
@@ -31,6 +32,7 @@ function RoutedPage({ currentPath, activeProject, setActiveProject }: RoutedPage
   const contentPage = contentPages.find((page) => `/${page.id}` === currentPath);
 
   if (servicePage) return <ServiceDetailPage item={servicePage} />;
+  if (currentPath === "/otzyvy-o-nas") return <ReviewsPage />;
   if (contentPage) return <ContentPage page={contentPage} />;
   if (currentPath === "/") return <HomePage activeProject={activeProject} setActiveProject={setActiveProject} />;
   if (currentPath === "/o-nas") {
@@ -87,12 +89,52 @@ function App() {
       });
 
       if (currentPath !== "/") {
-        gsap.from(".page-in", {
-          y: 36,
-          opacity: 0,
+        gsap.fromTo(
+          ".page-in",
+          {
+            autoAlpha: 0,
+            y: 36,
+          },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.85,
+            stagger: 0.08,
+            ease: "power3.out",
+            clearProps: "opacity,visibility,transform",
+          },
+        );
+
+        const reviewCards = gsap.utils.toArray<HTMLElement>(".review-card");
+        if (reviewCards.length) {
+          gsap.set(reviewCards, { opacity: 1, visibility: "visible" });
+          gsap.fromTo(
+            reviewCards,
+            {
+              y: 32,
+              scale: 0.985,
+            },
+            {
+              y: 0,
+              scale: 1,
+              opacity: 1,
+              visibility: "visible",
+              clearProps: "opacity,visibility,transform",
+              delay: 0.1,
+              duration: 0.8,
+              stagger: 0.07,
+              ease: "power3.out",
+              overwrite: "auto",
+            },
+          );
+        }
+
+        gsap.from(".review-card img", {
+          scale: 1.06,
           duration: 0.85,
           stagger: 0.08,
           ease: "power3.out",
+          clearProps: "transform",
         });
         return;
       }

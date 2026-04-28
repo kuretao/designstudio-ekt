@@ -16,6 +16,49 @@ export const GlobalStyle = createGlobalStyle`
     background: #d7c4a1;
     color: #0d0d0b;
   }
+
+  @keyframes reviewFloat {
+    0%, 100% {
+      transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+
+    50% {
+      transform: translate3d(0, -16px, 0) rotate(1.5deg);
+    }
+  }
+
+  @keyframes reviewSweep {
+    0% {
+      transform: translateX(-120%);
+    }
+
+    100% {
+      transform: translateX(120%);
+    }
+  }
+
+  .review-orbit {
+    animation: reviewFloat 8s ease-in-out infinite;
+  }
+
+  .review-orbit-delayed {
+    animation: reviewFloat 9s ease-in-out 1.4s infinite;
+  }
+
+  .review-sheen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(110deg, transparent 0%, rgba(215, 196, 161, 0.16) 48%, transparent 62%);
+    opacity: 0;
+    transform: translateX(-120%);
+  }
+
+  .review-sheen:hover::before {
+    opacity: 1;
+    animation: reviewSweep 1.15s ease forwards;
+  }
 `;
 
 export const GlassPanel = styled.div`

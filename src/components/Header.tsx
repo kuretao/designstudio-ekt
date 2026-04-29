@@ -1,17 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { contactInfo, servicePageItems } from "../data";
+import ContactModal from "./ContactModal";
 
 function Header() {
   const currentPath = usePathname();
+  const [modalOpen, setModalOpen] = useState(false);
   const linkClass = (path: string) =>
     `transition hover:text-white ${currentPath === path ? "text-[#d7c4a1]" : ""}`;
   const servicesActive =
     currentPath === "/services" || servicePageItems.some((item) => currentPath === `/${item.id}`);
 
   return (
+    <>
     <header className="fixed left-0 right-0 top-0 z-50 px-5 py-4 md:px-10 lg:px-16">
       <div className="nav-item mx-auto flex max-w-[1600px] items-center justify-between gap-5 rounded-full border border-white/10 bg-[#0d0d0b]/70 px-5 py-3 text-white shadow-[0_18px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl">
         <Link href="/" className="shrink-0 text-xs uppercase tracking-[0.34em] text-white md:text-sm">
@@ -47,12 +51,12 @@ function Header() {
           <Link className={linkClass("/blog")} href="/blog">Блог</Link>
           <Link className={linkClass("/otzyvy-o-nas")} href="/otzyvy-o-nas">Отзывы</Link>
         </nav>
-        <a
-          href={contactInfo.phoneHref}
+        <button
+          onClick={() => setModalOpen(true)}
           className="hidden rounded-full border border-[#d7c4a1]/40 px-4 py-2 text-xs text-[#d7c4a1] transition hover:bg-[#d7c4a1] hover:text-[#0d0d0b] md:block"
         >
           {contactInfo.phone}
-        </a>
+        </button>
       </div>
       <nav className="nav-item mt-3 flex gap-3 overflow-x-auto rounded-full border border-white/10 bg-[#0d0d0b]/75 px-4 py-3 text-[10px] uppercase tracking-[0.18em] text-white/75 backdrop-blur-xl lg:hidden">
         <Link className="shrink-0 hover:text-white" href="/o-nas">О нас</Link>
@@ -65,6 +69,8 @@ function Header() {
         <Link className="shrink-0 hover:text-white" href="/otzyvy-o-nas">Отзывы</Link>
       </nav>
     </header>
+    <ContactModal open={modalOpen} onClose={() => setModalOpen(false)} />
+    </>
   );
 }
 

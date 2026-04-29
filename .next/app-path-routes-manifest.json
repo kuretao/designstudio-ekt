@@ -1,15 +1,15 @@
 {
   "/_not-found/page": "/_not-found",
-  "/akcii-i-skidki/page": "/akcii-i-skidki",
   "/kontakty/page": "/kontakty",
-  "/page": "/",
+  "/akcii-i-skidki/page": "/akcii-i-skidki",
   "/novosti/page": "/novosti",
-  "/o-nas/page": "/o-nas",
   "/otzyvy-o-nas/page": "/otzyvy-o-nas",
-  "/politika-konfidencialnosti/page": "/politika-konfidencialnosti",
+  "/o-nas/page": "/o-nas",
   "/services/page": "/services",
-  "/user/agreement/page": "/user/agreement",
+  "/page": "/",
   "/portfolio/page": "/portfolio",
-  "/novosti/[slug]/page": "/novosti/[slug]",
-  "/[slug]/page": "/[slug]"
+  "/user/agreement/page": "/user/agreement",
+  "/politika-konfidencialnosti/page": "/politika-konfidencialnosti",
+  "/[slug]/page": "/[slug]",
+  "/novosti/[slug]/page": "/novosti/[slug]"
 }

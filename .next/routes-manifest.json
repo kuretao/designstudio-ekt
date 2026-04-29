@@ -94,6 +94,12 @@
       "namedRegex": "^/otzyvy\\-o\\-nas(?:/)?$"
     },
     {
+      "page": "/politika-konfidencialnosti",
+      "regex": "^/politika\\-konfidencialnosti(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/politika\\-konfidencialnosti(?:/)?$"
+    },
+    {
       "page": "/portfolio",
       "regex": "^/portfolio(?:/)?$",
       "routeKeys": {},
@@ -104,6 +110,12 @@
       "regex": "^/services(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/services(?:/)?$"
+    },
+    {
+      "page": "/user/agreement",
+      "regex": "^/user/agreement(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/user/agreement(?:/)?$"
     }
   ],
   "dataRoutes": [],

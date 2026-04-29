@@ -14,7 +14,9 @@
       "Bash(git commit -m 'fix: replace <a> tags with Next.js <Link> for correct basePath routing *)",
       "WebFetch(domain:3dsmartdesign.ru)",
       "Bash(git commit -m 'feat: add news section with 4 articles from 3dsmartdesign.ru *)",
-      "Bash(git commit -m 'feat: promos page + contact modal \\(Telegram/WhatsApp/Viber\\) *)"
+      "Bash(git commit -m 'feat: promos page + contact modal \\(Telegram/WhatsApp/Viber\\) *)",
+      "Bash(git commit -m 'fix: exclude dedicated routes from [slug] generateStaticParams *)",
+      "Bash(npx next *)"
     ]
   }
 }

@@ -20,31 +20,25 @@
       "static/chunks/4bd1b696-c023c6e3521b1417.js",
       "static/chunks/255-85ccbd787ec94f21.js",
       "static/chunks/main-app-d2bb941803ffba3f.js",
-      "static/css/26cc4f50219fbee5.css",
+      "static/css/9ba5803ac09453e3.css",
       "static/chunks/c15bf2b0-52e8419f34af26ab.js",
       "static/chunks/553-1db25f2c0d12d455.js",
       "static/chunks/619-ba102abea3e3d0e4.js",
       "static/chunks/605-a7249f34438736f7.js",
       "static/chunks/77-327a837ac19a3b90.js",
       "static/chunks/64-fd9855b8e0e4fa51.js",
-      "static/chunks/app/layout-7f7cb7cedcf3959c.js"
+      "static/chunks/754-ac5e868dca6dc80c.js",
+      "static/chunks/app/layout-ad6525b249039c60.js"
     ],
     "/akcii-i-skidki/page": [
       "static/chunks/webpack-bdb81ebc177afae5.js",
       "static/chunks/4bd1b696-c023c6e3521b1417.js",
       "static/chunks/255-85ccbd787ec94f21.js",
       "static/chunks/main-app-d2bb941803ffba3f.js",
-      "static/chunks/64-fd9855b8e0e4fa51.js",
-      "static/chunks/app/akcii-i-skidki/page-f015fb4d705f20b6.js"
-    ],
-    "/novosti/page": [
-      "static/chunks/webpack-bdb81ebc177afae5.js",
-      "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/255-85ccbd787ec94f21.js",
-      "static/chunks/main-app-d2bb941803ffba3f.js",
       "static/chunks/619-ba102abea3e3d0e4.js",
       "static/chunks/64-fd9855b8e0e4fa51.js",
-      "static/chunks/app/novosti/page-a5b6f2330af941b1.js"
+      "static/chunks/754-ac5e868dca6dc80c.js",
+      "static/chunks/app/akcii-i-skidki/page-1a75ffdc2685c5dd.js"
     ],
     "/kontakty/page": [
       "static/chunks/webpack-bdb81ebc177afae5.js",
@@ -64,16 +58,14 @@
       "static/chunks/64-fd9855b8e0e4fa51.js",
       "static/chunks/app/otzyvy-o-nas/page-e198c05d030dbedb.js"
     ],
-    "/portfolio/page": [
+    "/novosti/page": [
       "static/chunks/webpack-bdb81ebc177afae5.js",
       "static/chunks/4bd1b696-c023c6e3521b1417.js",
       "static/chunks/255-85ccbd787ec94f21.js",
       "static/chunks/main-app-d2bb941803ffba3f.js",
-      "static/chunks/c15bf2b0-52e8419f34af26ab.js",
-      "static/chunks/605-a7249f34438736f7.js",
-      "static/chunks/202-93fc850754e1630d.js",
+      "static/chunks/619-ba102abea3e3d0e4.js",
       "static/chunks/64-fd9855b8e0e4fa51.js",
-      "static/chunks/app/portfolio/page-e1bbb2a762d4b4e1.js"
+      "static/chunks/app/novosti/page-a5b6f2330af941b1.js"
     ],
     "/o-nas/page": [
       "static/chunks/webpack-bdb81ebc177afae5.js",
@@ -95,7 +87,25 @@
       "static/chunks/202-93fc850754e1630d.js",
       "static/chunks/64-fd9855b8e0e4fa51.js",
       "static/chunks/759-2310caa8f6eab6e0.js",
-      "static/chunks/app/page-e006068597cd5a0e.js"
+      "static/chunks/app/page-0e24ef4274dbd754.js"
+    ],
+    "/politika-konfidencialnosti/page": [
+      "static/chunks/webpack-bdb81ebc177afae5.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-85ccbd787ec94f21.js",
+      "static/chunks/main-app-d2bb941803ffba3f.js",
+      "static/chunks/app/politika-konfidencialnosti/page-d1eb966c3237eef9.js"
+    ],
+    "/portfolio/page": [
+      "static/chunks/webpack-bdb81ebc177afae5.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-85ccbd787ec94f21.js",
+      "static/chunks/main-app-d2bb941803ffba3f.js",
+      "static/chunks/c15bf2b0-52e8419f34af26ab.js",
+      "static/chunks/605-a7249f34438736f7.js",
+      "static/chunks/202-93fc850754e1630d.js",
+      "static/chunks/64-fd9855b8e0e4fa51.js",
+      "static/chunks/app/portfolio/page-e1bbb2a762d4b4e1.js"
     ],
     "/services/page": [
       "static/chunks/webpack-bdb81ebc177afae5.js",
@@ -106,6 +116,13 @@
       "static/chunks/619-ba102abea3e3d0e4.js",
       "static/chunks/64-fd9855b8e0e4fa51.js",
       "static/chunks/app/services/page-86d7a76d4e13b361.js"
+    ],
+    "/user/agreement/page": [
+      "static/chunks/webpack-bdb81ebc177afae5.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/255-85ccbd787ec94f21.js",
+      "static/chunks/main-app-d2bb941803ffba3f.js",
+      "static/chunks/app/user/agreement/page-bb705f47f5708d32.js"
     ],
     "/[slug]/page": [
       "static/chunks/webpack-bdb81ebc177afae5.js",

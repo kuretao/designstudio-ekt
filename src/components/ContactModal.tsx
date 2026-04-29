@@ -133,6 +133,35 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
 
         <div className="mx-6 border-t border-white/8" />
 
+        {/* Messengers — horizontal row */}
+        <div className="px-6 pt-4">
+          <p className="mb-3 text-[10px] uppercase tracking-[0.28em] text-white/30">Написать в мессенджере</p>
+          <div className="grid grid-cols-4 gap-2">
+            {messengers.map((m) => (
+              <a
+                key={m.key}
+                href={messengerHrefs[m.key]}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`group flex flex-col items-center gap-2 rounded-2xl border bg-gradient-to-b px-2 py-3.5 transition duration-300 ${m.color} ${m.glow} ${!agreed ? "pointer-events-none opacity-40" : ""}`}
+                tabIndex={agreed ? 0 : -1}
+              >
+                <span className={`transition duration-300 group-hover:scale-110 ${m.accent}`}>{m.icon}</span>
+                <p className={`text-[10px] font-medium leading-none ${m.accent}`}>{m.label}</p>
+              </a>
+            ))}
+            <a
+              href={messengerLinks.phoneHref}
+              className={`group flex flex-col items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-2 py-3.5 transition duration-300 hover:border-white/25 hover:bg-white/[0.07] ${!agreed ? "pointer-events-none opacity-40" : ""}`}
+            >
+              <span className="text-[#d7c4a1] transition duration-300 group-hover:scale-110"><PhoneIcon /></span>
+              <p className="text-[10px] font-medium leading-none text-white/50 group-hover:text-white/75">Звонок</p>
+            </a>
+          </div>
+        </div>
+
+        <div className="mx-6 mt-4 border-t border-white/8" />
+
         {/* Form fields */}
         <div className="space-y-2.5 px-6 pt-4">
           <input
@@ -149,47 +178,29 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
             onChange={(e) => setContact(e.target.value)}
             className={inputCls}
           />
-        </div>
-
-        {/* Messengers */}
-        <div className="space-y-2 px-6 pt-4">
-          <p className="mb-1 text-[10px] uppercase tracking-[0.28em] text-white/30">Открыть в мессенджере</p>
-          {messengers.map((m) => (
-            <a
-              key={m.key}
-              href={messengerHrefs[m.key]}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`group flex items-center gap-3.5 rounded-[1.25rem] border bg-gradient-to-r px-4 py-3.5 transition duration-300 ${m.color} ${m.glow} ${!agreed ? "pointer-events-none opacity-40" : ""}`}
-              tabIndex={agreed ? 0 : -1}
-            >
-              <span className={`transition duration-300 group-hover:scale-110 ${m.accent}`}>{m.icon}</span>
-              <div className="flex-1">
-                <p className={`text-sm font-medium leading-none ${m.accent}`}>{m.label}</p>
-                <p className="mt-0.5 text-[11px] text-white/35">{messengerLinks.phone}</p>
-              </div>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4 text-white/20 transition group-hover:translate-x-0.5 group-hover:text-white/50">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-              </svg>
-            </a>
-          ))}
-        </div>
-
-        {/* Phone */}
-        <div className="px-6 pt-2">
-          <a
-            href={messengerLinks.phoneHref}
-            className={`flex items-center gap-3.5 rounded-[1.25rem] border border-white/8 bg-white/[0.03] px-4 py-3.5 transition duration-300 hover:border-white/18 hover:bg-white/[0.06] ${!agreed ? "pointer-events-none opacity-40" : ""}`}
+          <button
+            disabled={!agreed}
+            onClick={() => {
+              const subject = encodeURIComponent(promoTitle ? `Запись на акцию: ${promoTitle}` : "Заявка с сайта 3D Smart Design");
+              const body = encodeURIComponent(
+                [
+                  name.trim() ? `Имя: ${name.trim()}` : "",
+                  contact.trim() ? `Контакт: ${contact.trim()}` : "",
+                  promoTitle ? `Акция: ${promoTitle}` : "",
+                ]
+                  .filter(Boolean)
+                  .join("\n")
+              );
+              window.location.href = `mailto:3dsmartdesign@bk.ru?subject=${subject}&body=${body}`;
+            }}
+            className={`w-full rounded-2xl py-3.5 text-sm font-medium tracking-[0.06em] transition duration-300 ${
+              agreed
+                ? "bg-[#d7c4a1] text-[#0d0d0b] hover:bg-[#f3efe7] hover:shadow-[0_0_32px_rgba(215,196,161,0.3)]"
+                : "cursor-not-allowed bg-white/5 text-white/20"
+            }`}
           >
-            <span className="text-[#d7c4a1]"><PhoneIcon /></span>
-            <div className="flex-1">
-              <p className="text-sm leading-none text-white/75">Позвонить</p>
-              <p className="mt-0.5 text-[11px] text-white/35">{messengerLinks.phone}</p>
-            </div>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4 text-white/20 transition group-hover:text-white/50">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-            </svg>
-          </a>
+            Отправить заявку
+          </button>
         </div>
 
         {/* Consent checkbox */}

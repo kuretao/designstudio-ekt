@@ -1,10 +1,10 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { contactInfo, servicePageItems } from "../data";
 
-type HeaderProps = {
-  currentPath: string;
-};
-
-function Header({ currentPath }: HeaderProps) {
+function Header() {
+  const currentPath = usePathname();
   const linkClass = (path: string) =>
     `transition hover:text-white ${currentPath === path ? "text-[#d7c4a1]" : ""}`;
   const servicesActive =

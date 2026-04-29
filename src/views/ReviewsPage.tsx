@@ -1,3 +1,5 @@
+"use client";
+
 import { reviewStats, testimonials } from "../data";
 import { GlassPanel } from "../ui";
 

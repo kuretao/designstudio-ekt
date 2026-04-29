@@ -1,3 +1,5 @@
+"use client";
+
 import { projects } from "../data";
 import type { Project } from "../types";
 import { GlassPanel } from "../ui";

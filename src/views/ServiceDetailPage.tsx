@@ -1,3 +1,5 @@
+"use client";
+
 import { servicePageItems } from "../data";
 import { GlassPanel } from "../ui";
 import { ContactSection } from "./ContactPage";

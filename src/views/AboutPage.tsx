@@ -1,3 +1,5 @@
+"use client";
+
 import { GlassPanel } from "../ui";
 
 function AboutPage() {

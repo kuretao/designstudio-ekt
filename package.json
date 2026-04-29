@@ -2,48 +2,33 @@
   "name": "DesignStudioEKT",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint . && stylelint '**/*.css'",
-    "lint:js": "eslint .",
-    "lint:css": "stylelint '**/*.css'",
-    "lint:fix": "eslint . --fix && stylelint '**/*.css' --fix",
-    "format": "prettier --write .",
-    "preview": "vite preview"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write ."
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.2.4",
     "gsap": "^3.15.0",
     "jotai": "^2.19.1",
+    "next": "^15.3.2",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "styled-components": "^6.4.1",
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@rolldown/binding-win32-x64-msvc": "^1.0.0-rc.17",
     "@tailwindcss/oxide-win32-x64-msvc": "^4.2.4",
+    "@tailwindcss/postcss": "^4.2.4",
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/styled-components": "^5.1.36",
-    "@vitejs/plugin-react": "^6.0.1",
     "babel-plugin-styled-components": "^2.1.4",
-    "eslint": "^10.2.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.5",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17.5.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^15.3.2",
     "prettier": "^3.8.3",
-    "stylelint": "^17.9.1",
-    "stylelint-config-standard": "^40.0.0",
-    "stylelint-config-tailwindcss": "^1.0.1",
-    "typescript": "~6.0.2",
-    "typescript-eslint": "^8.58.2",
-    "vite": "^8.0.10"
+    "typescript": "~5.8.0"
   }
 }

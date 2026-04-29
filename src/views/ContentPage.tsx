@@ -1,3 +1,5 @@
+"use client";
+
 import { contentPages, projects } from "../data";
 import { GlassPanel } from "../ui";
 

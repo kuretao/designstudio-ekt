@@ -1,3 +1,5 @@
+"use client";
+
 function NotFoundPage() {
   return (
     <section className="page-in flex min-h-screen items-center px-5 py-28 md:px-10 lg:px-16">

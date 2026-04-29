@@ -1,3 +1,5 @@
+"use client";
+
 import { servicePageItems, services } from "../data";
 import { GlassPanel } from "../ui";
 

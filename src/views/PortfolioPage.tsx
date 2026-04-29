@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { atom, useAtom } from "jotai";
 import gsap from "gsap";

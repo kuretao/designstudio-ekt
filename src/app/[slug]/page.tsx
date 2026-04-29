@@ -3,10 +3,15 @@ import { servicePageItems, contentPages } from "@/src/data";
 import ServiceDetailPage from "@/src/views/ServiceDetailPage";
 import ContentPage from "@/src/views/ContentPage";
 
+// Slugs that have their own dedicated app routes — exclude from [slug]
+const DEDICATED_ROUTES = new Set(["novosti", "akcii-i-skidki", "otzyvy-o-nas"]);
+
 export function generateStaticParams() {
   return [
     ...servicePageItems.map((item) => ({ slug: item.id })),
-    ...contentPages.map((page) => ({ slug: page.id })),
+    ...contentPages
+      .filter((page) => !DEDICATED_ROUTES.has(page.id))
+      .map((page) => ({ slug: page.id })),
   ];
 }
 

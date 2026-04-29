@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { contentPages, projects } from "../data";
 import { GlassPanel } from "../ui";
+import SectionLabel from "../components/SectionLabel";
 
 type ContentPageItem = (typeof contentPages)[number];
 
@@ -10,7 +11,7 @@ export function ContentPagesOverview() {
   return (
     <section className="border-t border-white/10 px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
-        <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">Информационные страницы</p>
+        <SectionLabel>Информационные страницы</SectionLabel>
         <h2 className="mb-12 max-w-4xl text-5xl font-light tracking-[-0.055em] md:text-7xl">
           Акции, новости, блог и отзывы
         </h2>
@@ -40,7 +41,7 @@ function ContentPage({ page }: { page: ContentPageItem }) {
     <div className="page-in pt-24">
       <section className="px-5 py-28 md:px-10 lg:px-16">
         <div className="mx-auto max-w-7xl">
-          <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">{page.eyebrow}</p>
+          <SectionLabel>{page.eyebrow}</SectionLabel>
           <h1 className="max-w-5xl text-6xl font-light tracking-[-0.06em] md:text-8xl">{page.title}</h1>
           <p className="mt-8 max-w-3xl text-xl leading-relaxed text-[#d8d1c4]">{page.text}</p>
           <div className="mt-14 grid gap-5 md:grid-cols-3">

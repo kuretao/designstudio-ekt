@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { servicePageItems, services } from "../data";
 import { GlassPanel } from "../ui";
+import SectionLabel from "../components/SectionLabel";
 
 export function ServicesSummary() {
   return (
     <section id="services" className="border-t border-white/10 px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
-        <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">Services & pricing</p>
+        <SectionLabel>Services &amp; pricing</SectionLabel>
         <div className="mb-12 grid gap-8 md:grid-cols-[1fr_0.8fr] md:items-end">
           <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">Услуги и цены</h2>
           <p className="text-[#d8d1c4]">
@@ -40,7 +41,7 @@ export function ServicePages() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 grid gap-8 md:grid-cols-[1fr_0.8fr] md:items-end">
           <div>
-            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">Все страницы услуг</p>
+            <SectionLabel>Все страницы услуг</SectionLabel>
             <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">Направления 3D Smart Design</h2>
           </div>
           <p className="text-lg leading-relaxed text-[#d8d1c4]">
@@ -83,7 +84,7 @@ export function Workflow() {
   return (
     <section className="px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
-        <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">Workflow</p>
+        <SectionLabel>Workflow</SectionLabel>
         <h2 className="mb-14 max-w-4xl text-5xl font-light tracking-[-0.055em] md:text-7xl">
           Этапы работы без хаоса и лишней коммуникации
         </h2>

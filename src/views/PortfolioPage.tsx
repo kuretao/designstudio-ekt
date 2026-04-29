@@ -5,6 +5,7 @@ import { atom, useAtom } from "jotai";
 import gsap from "gsap";
 import { filters, portfolioDemoItems, projects } from "../data";
 import type { FilterCategory, Project } from "../types";
+import SectionLabel from "../components/SectionLabel";
 
 const activeFilterAtom = atom<FilterCategory>("Все");
 
@@ -49,7 +50,7 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
     <div id="portfolio" className="mx-auto w-full max-w-7xl">
       <div className="mb-12 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
         <div>
-          <p className="section-in mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">Portfolio</p>
+          <SectionLabel>Portfolio</SectionLabel>
           <h2 className="section-in max-w-3xl text-5xl font-light tracking-[-0.055em] md:text-7xl">
             Сетка проектов с фильтрацией по направлениям
           </h2>
@@ -132,7 +133,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 grid gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-end">
           <div>
-            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">Project page preview</p>
+            <SectionLabel>Project page preview</SectionLabel>
             <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">{project.title}</h2>
           </div>
           <p className="text-lg leading-relaxed text-[#d8d1c4]">
@@ -170,7 +171,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
 
         <div className="mt-20 grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <div>
-            <p className="mb-4 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">Render / Blueprint</p>
+            <SectionLabel className="mb-4">Render / Blueprint</SectionLabel>
             <h3 className="text-4xl font-light tracking-[-0.045em] md:text-6xl">Сравнение до / после</h3>
             <p className="mt-5 text-[#d8d1c4]">
               Ползунок можно заменить на реальные чертежи, рендеры или фотографии объекта до реконструкции.

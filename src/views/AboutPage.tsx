@@ -1,13 +1,14 @@
 "use client";
 
 import { GlassPanel } from "../ui";
+import SectionLabel from "../components/SectionLabel";
 
 function AboutPage() {
   return (
     <section id="o-nas" className="border-t border-white/10 px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
         <div>
-          <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">О нас</p>
+          <SectionLabel>О нас</SectionLabel>
           <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">
             Студия концептуального дизайна. Дизайн с умом.
           </h2>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { contactInfo, servicePageItems } from "../data";
+import SectionLabel from "../components/SectionLabel";
 
 /* ─── icons ─────────────────────────────────────────────────── */
 const TgIcon = () => (
@@ -127,7 +128,7 @@ export function ContactSection() {
 
         {/* ── Hero heading ── */}
         <FadeUp delay={0}>
-          <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">Контакты</p>
+          <SectionLabel>Контакты</SectionLabel>
         </FadeUp>
         <FadeUp delay={80}>
           <h1 className="text-6xl font-light leading-[0.9] tracking-[-0.065em] md:text-8xl lg:text-[10rem]">
@@ -273,7 +274,7 @@ export function ContactSection() {
           {/* Form */}
           <FadeUp delay={0}>
             <div className="rounded-[2.5rem] border border-white/10 bg-white/[0.025] p-8 md:p-10">
-              <p className="mb-2 text-xs uppercase tracking-[0.4em] text-[#d7c4a1]">Написать нам</p>
+              <SectionLabel className="mb-2">Написать нам</SectionLabel>
               <h2 className="mb-8 text-3xl font-light tracking-[-0.04em] text-white">Оставить заявку</h2>
               <div className="grid gap-3">
                 <input

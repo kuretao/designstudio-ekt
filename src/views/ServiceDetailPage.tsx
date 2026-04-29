@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { servicePageItems } from "../data";
 import { GlassPanel } from "../ui";
 import { ContactSection } from "./ContactPage";
@@ -17,18 +18,18 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
             <h1 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">{item.title}</h1>
             <p className="mt-6 text-lg leading-relaxed text-[#d8d1c4]">{item.text}</p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <a
+              <Link
                 href="/kontakty"
                 className="rounded-full bg-[#d7c4a1] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#0d0d0b] transition hover:bg-[#f3efe7]"
               >
                 Обсудить проект
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/services"
                 className="rounded-full border border-white/15 px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#d8d1c4] transition hover:border-[#d7c4a1] hover:text-white"
               >
                 Все услуги
-              </a>
+              </Link>
             </div>
           </div>
           <div className="group relative min-h-[520px] overflow-hidden rounded-[2.5rem] border border-white/10">

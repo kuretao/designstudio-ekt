@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { projects } from "../data";
 import type { Project } from "../types";
 import { GlassPanel } from "../ui";
@@ -74,13 +75,13 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
                   Создаем архитектуру, интерьеры и ландшафты для частных резиденций, отелей, галерей и премиальных рабочих
                   пространств.
                 </p>
-                <a
+                <Link
                   href="/kontakty"
                   className="group inline-flex h-14 items-center justify-center rounded-full border border-[#d7c4a1]/50 px-7 text-sm uppercase tracking-[0.22em] text-[#f3efe7] transition hover:bg-[#d7c4a1] hover:text-[#0d0d0b]"
                 >
                   Обсудить проект
                   <span className="ml-3 transition group-hover:translate-x-1">→</span>
-                </a>
+                </Link>
               </div>
             </div>
           </div>

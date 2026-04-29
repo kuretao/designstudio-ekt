@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { contentPages, projects } from "../data";
 import { GlassPanel } from "../ui";
 
@@ -15,7 +16,7 @@ export function ContentPagesOverview() {
         </h2>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {contentPages.map((page) => (
-            <a
+            <Link
               key={page.id}
               id={page.id}
               href={`/${page.id}`}
@@ -26,7 +27,7 @@ export function ContentPagesOverview() {
                 {page.title}
               </h3>
               <p className="mt-5 leading-relaxed text-[#d8d1c4]">{page.text}</p>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

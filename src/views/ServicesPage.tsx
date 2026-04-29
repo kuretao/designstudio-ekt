@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { servicePageItems, services } from "../data";
 import { GlassPanel } from "../ui";
 
@@ -49,7 +50,7 @@ export function ServicePages() {
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {servicePageItems.map((item) => (
-            <a
+            <Link
               key={item.id}
               id={item.id}
               href={`/${item.id}`}
@@ -68,7 +69,7 @@ export function ServicePages() {
                 </div>
               </div>
               <p className="p-6 leading-relaxed text-[#d8d1c4]">{item.text}</p>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

@@ -34,6 +34,14 @@
   },
   "dynamicRoutes": [
     {
+      "page": "/novosti/[slug]",
+      "regex": "^/novosti/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/novosti/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/[slug]",
       "regex": "^/([^/]+?)(?:/)?$",
       "routeKeys": {
@@ -60,6 +68,12 @@
       "regex": "^/kontakty(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/kontakty(?:/)?$"
+    },
+    {
+      "page": "/novosti",
+      "regex": "^/novosti(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/novosti(?:/)?$"
     },
     {
       "page": "/o-nas",

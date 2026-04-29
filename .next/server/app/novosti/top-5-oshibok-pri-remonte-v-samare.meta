@@ -1,0 +1,7 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/novosti/layout,_N_T_/novosti/[slug]/layout,_N_T_/novosti/[slug]/page,_N_T_/novosti/top-5-oshibok-pri-remonte-v-samare"
+  }
+}

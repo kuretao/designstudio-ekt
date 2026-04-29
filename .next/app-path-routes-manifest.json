@@ -1,10 +1,12 @@
 {
   "/_not-found/page": "/_not-found",
-  "/kontakty/page": "/kontakty",
+  "/novosti/page": "/novosti",
   "/o-nas/page": "/o-nas",
   "/otzyvy-o-nas/page": "/otzyvy-o-nas",
   "/page": "/",
+  "/kontakty/page": "/kontakty",
   "/portfolio/page": "/portfolio",
   "/services/page": "/services",
+  "/novosti/[slug]/page": "/novosti/[slug]",
   "/[slug]/page": "/[slug]"
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { contactInfo, servicePageItems } from "../data";
 import SectionLabel from "../components/SectionLabel";
+import CustomSelect from "../components/CustomSelect";
 
 /* ─── icons ─────────────────────────────────────────────────── */
 const TgIcon = () => (
@@ -289,22 +290,12 @@ export function ContactSection() {
                   value={contactVal}
                   onChange={(e) => setContactVal(e.target.value)}
                 />
-                <div className="relative">
-                  <select
-                    className={`${inputCls} cursor-pointer appearance-none`}
-                    value={service}
-                    onChange={(e) => setService(e.target.value)}
-                    style={{ background: "rgba(255,255,255,0.04)" }}
-                  >
-                    <option value="">Выберите услугу</option>
-                    {servicePageItems.map((item) => (
-                      <option key={item.id} value={item.title} style={{ background: "#111" }}>{item.title}</option>
-                    ))}
-                  </select>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                  </svg>
-                </div>
+                <CustomSelect
+                  value={service}
+                  onChange={setService}
+                  placeholder="Выберите услугу"
+                  options={servicePageItems.map((item) => ({ value: item.title, label: item.title }))}
+                />
                 <textarea
                   className={`${inputCls} min-h-[120px] resize-none`}
                   placeholder="Коротко о проекте"

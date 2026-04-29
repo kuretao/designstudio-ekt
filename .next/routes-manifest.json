@@ -64,6 +64,12 @@
       "namedRegex": "^/_not\\-found(?:/)?$"
     },
     {
+      "page": "/akcii-i-skidki",
+      "regex": "^/akcii\\-i\\-skidki(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/akcii\\-i\\-skidki(?:/)?$"
+    },
+    {
       "page": "/kontakty",
       "regex": "^/kontakty(?:/)?$",
       "routeKeys": {},

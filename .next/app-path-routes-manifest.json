@@ -1,12 +1,13 @@
 {
   "/_not-found/page": "/_not-found",
+  "/akcii-i-skidki/page": "/akcii-i-skidki",
   "/novosti/page": "/novosti",
-  "/o-nas/page": "/o-nas",
-  "/otzyvy-o-nas/page": "/otzyvy-o-nas",
-  "/page": "/",
   "/kontakty/page": "/kontakty",
+  "/otzyvy-o-nas/page": "/otzyvy-o-nas",
   "/portfolio/page": "/portfolio",
+  "/o-nas/page": "/o-nas",
+  "/page": "/",
   "/services/page": "/services",
-  "/novosti/[slug]/page": "/novosti/[slug]",
-  "/[slug]/page": "/[slug]"
+  "/[slug]/page": "/[slug]",
+  "/novosti/[slug]/page": "/novosti/[slug]"
 }

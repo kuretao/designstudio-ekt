@@ -13,7 +13,7 @@ export function ServicesSummary() {
         <div className="mb-12 grid gap-8 md:grid-cols-[1fr_0.8fr] md:items-end">
           <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">Услуги и цены</h2>
           <p className="text-[#d8d1c4]">
-            Стоимость фиксируется после брифа и состава работ. Ниже — понятная стартовая структура.
+            Стоимость фиксируется после брифа и состава работ. Ниже - понятная стартовая структура по основным направлениям студии.
           </p>
         </div>
 
@@ -45,7 +45,7 @@ export function ServicePages() {
             <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">Направления 3D Smart Design</h2>
           </div>
           <p className="text-lg leading-relaxed text-[#d8d1c4]">
-            Эти блоки соответствуют страницам услуг на 3dsmartdesign.ru и доступны из выпадающего меню.
+            Перенесены все направления из старого меню: интерьер, коммерческие пространства, комплектация, 3D, ландшафт, архитектура и документация.
           </p>
         </div>
 
@@ -65,7 +65,7 @@ export function ServicePages() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0b]/85 via-transparent to-[#d7c4a1]/10" />
                 <div className="absolute bottom-5 left-5 right-5">
-                  <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#d7c4a1]">Service page</p>
+                  <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#d7c4a1]">{item.eyebrow}</p>
                   <h3 className="text-3xl font-light tracking-[-0.04em]">{item.title}</h3>
                 </div>
               </div>

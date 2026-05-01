@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { contentPages, projects } from "../data";
+import { contentPages, newsArticles, projects } from "../data";
 import { GlassPanel } from "../ui";
 import SectionLabel from "../components/SectionLabel";
 
@@ -37,35 +37,59 @@ export function ContentPagesOverview() {
 }
 
 function ContentPage({ page }: { page: ContentPageItem }) {
+  const isBlog = page.id === "blog";
+
   return (
     <div className="page-in pt-24">
-      <section className="px-5 py-28 md:px-10 lg:px-16">
-        <div className="mx-auto max-w-7xl">
+      <section className="relative overflow-hidden px-5 py-28 md:px-10 lg:px-16">
+        <img src={projects[0].image} alt={page.title} className="absolute inset-0 h-full w-full object-cover opacity-25" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,#0d0d0b,rgba(13,13,11,.82),rgba(13,13,11,.45))]" />
+        <div className="relative mx-auto max-w-7xl">
           <SectionLabel>{page.eyebrow}</SectionLabel>
           <h1 className="max-w-5xl text-6xl font-light tracking-[-0.06em] md:text-8xl">{page.title}</h1>
           <p className="mt-8 max-w-3xl text-xl leading-relaxed text-[#d8d1c4]">{page.text}</p>
-          <div className="mt-14 grid gap-5 md:grid-cols-3">
-            {[projects[0], projects[1], projects[2]].map((project, index) => (
-              <GlassPanel
-                key={`${page.id}-${project.id}`}
-                className="group overflow-hidden rounded-[2rem] p-0 transition duration-500 hover:-translate-y-2 hover:border-[#d7c4a1]/60"
-              >
-                <div className="relative h-72 overflow-hidden">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0b]/80 via-transparent to-transparent" />
-                  <span className="absolute bottom-5 left-5 text-sm text-[#d7c4a1]">0{index + 1}</span>
-                </div>
-                <div className="p-6">
-                  <h2 className="text-2xl font-light">{project.title}</h2>
-                  <p className="mt-3 text-sm leading-relaxed text-[#d8d1c4]">{project.description}</p>
-                </div>
-              </GlassPanel>
-            ))}
-          </div>
+        </div>
+      </section>
+
+      <section className="px-5 py-24 md:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          {isBlog ? (
+            <div className="grid gap-5 md:grid-cols-3">
+              {newsArticles.slice(1).map((article) => (
+                <Link
+                  key={article.slug}
+                  href={`/novosti/${article.slug}`}
+                  className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#d7c4a1]/60"
+                >
+                  <div className="relative h-64 overflow-hidden">
+                    <img src={article.image} alt={article.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0b]/85 via-transparent to-transparent" />
+                    <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.28em] text-[#d7c4a1]">{article.category}</span>
+                  </div>
+                  <div className="p-6">
+                    <h2 className="text-2xl font-light leading-tight">{article.title}</h2>
+                    <p className="mt-4 text-sm leading-relaxed text-[#d8d1c4]">{article.preview}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="grid gap-5 md:grid-cols-3">
+              {[projects[0], projects[1], projects[2]].map((project, index) => (
+                <GlassPanel key={`${page.id}-${project.id}`} className="group overflow-hidden rounded-[2rem] p-0 transition duration-500 hover:-translate-y-2 hover:border-[#d7c4a1]/60">
+                  <div className="relative h-72 overflow-hidden">
+                    <img src={project.image} alt={project.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0b]/80 via-transparent to-transparent" />
+                    <span className="absolute bottom-5 left-5 text-sm text-[#d7c4a1]">0{index + 1}</span>
+                  </div>
+                  <div className="p-6">
+                    <h2 className="text-2xl font-light">{project.title}</h2>
+                    <p className="mt-3 text-sm leading-relaxed text-[#d8d1c4]">{project.description}</p>
+                  </div>
+                </GlassPanel>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </div>

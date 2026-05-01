@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { filters, portfolioDemoItems, projects } from "../data";
 import type { FilterCategory, Project } from "../types";
 import SectionLabel from "../components/SectionLabel";
+import { GlassPanel } from "../ui";
 
 const activeFilterAtom = atom<FilterCategory>("Все");
 
@@ -17,6 +18,15 @@ type PortfolioProps = {
 type PortfolioGridProps = {
   onSelectProject: (project: Project) => void;
 };
+
+function scrollToProjectShowcase() {
+  window.setTimeout(() => {
+    document.getElementById("project-showcase")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, 60);
+}
 
 export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
   const [activeFilter, setActiveFilter] = useAtom(activeFilterAtom);
@@ -99,7 +109,10 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
           <button
             type="button"
             key={project.id}
-            onClick={() => onSelectProject(project)}
+            onClick={() => {
+              onSelectProject(project);
+              scrollToProjectShowcase();
+            }}
             className="grid-card group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] text-left transition duration-500 hover:-translate-y-2 hover:border-[#d7c4a1]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
           >
             <div className="relative h-80 overflow-hidden">
@@ -117,7 +130,12 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
                 </h3>
               </div>
             </div>
-            <div className="p-6 text-sm leading-relaxed text-[#d8d1c4]">{project.description}</div>
+            <div className="p-6">
+              <p className="text-sm leading-relaxed text-[#d8d1c4]">{project.description}</p>
+              <span className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-[#d7c4a1] transition group-hover:gap-3">
+                Смотреть проект <span>→</span>
+              </span>
+            </div>
           </button>
         ))}
       </div>
@@ -127,35 +145,61 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
 
 export function ProjectShowcase({ project }: { project: Project }) {
   const [compare, setCompare] = useState(52);
+  const gallery = [project.image, project.afterImage || projects[1].image, project.beforeImage || projects[2].image];
 
   return (
-    <section className="px-5 py-28 md:px-10 lg:px-16">
+    <section id="project-showcase" className="scroll-mt-28 px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 grid gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-end">
-          <div>
-            <SectionLabel>Project page preview</SectionLabel>
-            <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">{project.title}</h2>
-          </div>
-          <p className="text-lg leading-relaxed text-[#d8d1c4]">
-            Задача: создать цельный визуальный код объекта — от первого впечатления и маршрута движения до материала,
-            света и деталей реализации.
-          </p>
-        </div>
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.025]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(215,196,161,.16),transparent_30%)]" />
+          <div className="relative grid gap-0 lg:grid-cols-[1.08fr_0.92fr]">
+            <div className="group relative min-h-[620px] overflow-hidden">
+              <img
+                src={project.image}
+                alt={project.title}
+                className="absolute inset-0 h-full w-full object-cover transition duration-[1200ms] ease-out group-hover:scale-105 group-hover:brightness-110 group-hover:saturate-125"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0b]/85 via-[#0d0d0b]/10 to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center gap-3">
+                <span className="rounded-full border border-[#d7c4a1]/40 bg-[#0d0d0b]/55 px-4 py-2 text-xs uppercase tracking-[0.24em] text-[#d7c4a1] backdrop-blur">
+                  {project.category}
+                </span>
+                <span className="rounded-full border border-white/15 bg-[#0d0d0b]/45 px-4 py-2 text-xs text-white/70 backdrop-blur">
+                  {project.location}
+                </span>
+                <span className="rounded-full border border-white/15 bg-[#0d0d0b]/45 px-4 py-2 text-xs text-white/70 backdrop-blur">
+                  {project.year}
+                </span>
+              </div>
+            </div>
 
-        <div className="group relative overflow-hidden rounded-[2.5rem] border border-white/10 transition duration-500 hover:-translate-y-1 hover:border-[#d7c4a1]/55 hover:shadow-[0_34px_120px_rgba(215,196,161,0.14)]">
-          <img
-            src={project.image}
-            alt={project.title}
-            className="h-[78vh] w-full object-cover transition duration-[1200ms] ease-out group-hover:scale-105 group-hover:brightness-110 group-hover:saturate-125"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,transparent_35%,rgba(13,13,11,.38)),linear-gradient(180deg,transparent,rgba(215,196,161,.12))] opacity-0 transition duration-500 group-hover:opacity-100" />
-          <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/0 transition duration-500 group-hover:ring-[#d7c4a1]/35" />
+            <div className="relative flex flex-col justify-between p-7 md:p-10">
+              <div>
+                <SectionLabel>Выбранный проект</SectionLabel>
+                <h2 className="text-5xl font-light leading-[0.95] tracking-[-0.055em] md:text-7xl">{project.title}</h2>
+                <p className="mt-7 text-lg leading-relaxed text-[#d8d1c4]">{project.description}</p>
+              </div>
+
+              <div className="mt-10 grid gap-4">
+                {[
+                  ["Задача", "Собрать цельный визуальный код объекта: планировка, материалы, свет и настроение."],
+                  ["Результат", "Проект можно презентовать, согласовывать с подрядчиками и использовать как базу реализации."],
+                  ["Формат", "3D-ракурсы, подбор решений, рабочая логика и визуальная подача для клиента."],
+                ].map(([title, text]) => (
+                  <GlassPanel key={title} className="rounded-[1.25rem] p-5">
+                    <span className="text-xs uppercase tracking-[0.28em] text-[#d7c4a1]">{title}</span>
+                    <p className="mt-3 text-sm leading-relaxed text-[#d8d1c4]">{text}</p>
+                  </GlassPanel>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="mt-8 grid gap-5 md:grid-cols-3">
-          {[project.image, projects[2].image, projects[3].image].map((image, index) => (
+          {gallery.map((image, index) => (
             <div
-              key={`${image}-${index}`}
+              key={`${project.id}-${image}-${index}`}
               className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#d7c4a1]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.42)]"
             >
               <img
@@ -163,8 +207,8 @@ export function ProjectShowcase({ project }: { project: Project }) {
                 alt={`${project.title} gallery ${index + 1}`}
                 className="h-80 w-full object-cover transition duration-700 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:saturate-125"
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0d0d0b]/65 via-transparent to-[#d7c4a1]/10 opacity-0 transition duration-500 group-hover:opacity-100" />
-              <div className="pointer-events-none absolute inset-4 rounded-[1.55rem] border border-white/0 transition duration-500 group-hover:border-white/25" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0d0d0b]/70 via-transparent to-[#d7c4a1]/10 opacity-0 transition duration-500 group-hover:opacity-100" />
+              <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.24em] text-[#d7c4a1]">0{index + 1}</span>
             </div>
           ))}
         </div>
@@ -174,11 +218,11 @@ export function ProjectShowcase({ project }: { project: Project }) {
             <SectionLabel className="mb-4">Render / Blueprint</SectionLabel>
             <h3 className="text-4xl font-light tracking-[-0.045em] md:text-6xl">Сравнение до / после</h3>
             <p className="mt-5 text-[#d8d1c4]">
-              Ползунок можно заменить на реальные чертежи, рендеры или фотографии объекта до реконструкции.
+              Ползунок показывает, как меняется восприятие объекта после визуальной проработки. Здесь можно заменить демо на реальные чертежи, рендеры или фото объекта.
             </p>
           </div>
 
-          <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 transition duration-500 hover:-translate-y-1 hover:border-[#d7c4a1]/55 hover:shadow-[0_28px_90px_rgba(215,196,161,0.12)]">
+          <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.025] transition duration-500 hover:-translate-y-1 hover:border-[#d7c4a1]/55 hover:shadow-[0_28px_90px_rgba(215,196,161,0.12)]">
             <img
               src={project.beforeImage || projects[4].image}
               alt="before"

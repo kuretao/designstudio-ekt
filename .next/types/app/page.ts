@@ -1,4 +1,4 @@
-// File: C:\Users\strazewicz\Documents\GitHub\DesignStudio-EKT\src\app\page.tsx
+// File: C:\Users\bogda\Documents\GitHub\DesignStudio-EKT\src\app\page.tsx
 import * as entry from '../../../src/app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

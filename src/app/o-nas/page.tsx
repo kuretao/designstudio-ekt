@@ -1,9 +1,5 @@
-import AboutPage from "@/src/views/AboutPage";
+import AboutPageFull from "@/src/views/AboutPageFull";
 
 export default function Page() {
-  return (
-    <div className="page-in pt-24">
-      <AboutPage />
-    </div>
-  );
+  return <AboutPageFull />;
 }

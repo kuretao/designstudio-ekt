@@ -29,18 +29,9 @@ function FeatureProject({ project, label, reverse = false }: { project: Project;
           <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">{project.title}</h2>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-[#d8d1c4] md:text-lg">{project.description}</p>
           <div className="mt-9 grid grid-cols-3 gap-4 border-t border-white/15 pt-6 text-sm text-[#d8d1c4]">
-            <div>
-              <span className="block text-white">{project.category}</span>
-              Тип
-            </div>
-            <div>
-              <span className="block text-white">{project.location}</span>
-              Локация
-            </div>
-            <div>
-              <span className="block text-white">{project.year}</span>
-              Год
-            </div>
+            <div><span className="block text-white">{project.category}</span>Тип</div>
+            <div><span className="block text-white">{project.location}</span>Локация</div>
+            <div><span className="block text-white">{project.year}</span>Год</div>
           </div>
         </GlassPanel>
       </div>
@@ -50,30 +41,26 @@ function FeatureProject({ project, label, reverse = false }: { project: Project;
 
 function HomePage({ activeProject, setActiveProject }: HomePageProps) {
   const storyText =
-    "Мы проектируем не стены, а сценарии жизни: тишину утром, свет на фактуре камня, маршрут взгляда, паузу между городом и домом.";
+    "Мы проектируем не стены, а сценарии жизни: утренний свет, маршрут взгляда, тишину материалов и точную документацию для реализации.";
 
   return (
     <>
       <div className="slides-wrap">
         <section className="hero-section snap-section relative flex min-h-screen overflow-hidden px-5 py-28 md:px-10 lg:px-16">
-          <div
-            className="hero-image absolute inset-0 bg-cover bg-center opacity-55"
-            style={{ backgroundImage: `url(${projects[0].image})` }}
-          />
+          <div className="hero-image absolute inset-0 bg-cover bg-center opacity-55" style={{ backgroundImage: `url(${projects[5].image})` }} />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(215,196,161,.18),transparent_32%),linear-gradient(90deg,rgba(13,13,11,.96),rgba(13,13,11,.62),rgba(13,13,11,.25))]" />
 
           <div className="relative z-10 flex w-full items-end">
             <div className="max-w-6xl">
               <p className="hero-reveal mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">
-                Conceptual architecture studio
+                Студия дизайна интерьера и архитектуры в Самаре
               </p>
               <h1 className="hero-reveal max-w-5xl text-6xl font-light leading-[0.92] tracking-[-0.07em] md:text-8xl lg:text-[9.5rem]">
-                Тишина формы. Сила пространства.
+                Дизайн с умом.
               </h1>
               <div className="hero-reveal mt-8 grid max-w-4xl gap-6 md:grid-cols-[1fr_auto] md:items-end">
                 <p className="text-lg leading-relaxed text-[#d8d1c4] md:text-xl">
-                  Создаем архитектуру, интерьеры и ландшафты для частных резиденций, отелей, галерей и премиальных рабочих
-                  пространств.
+                  Создаем интерьеры, архитектуру, 3D-визуализацию и ландшафтные проекты: от концепции до рабочей документации, комплектации и сопровождения.
                 </p>
                 <Link
                   href="/kontakty"
@@ -102,7 +89,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
           </div>
         </section>
 
-        <FeatureProject project={projects[1]} label="Избранный проект 02" reverse />
+        <FeatureProject project={projects[2]} label="Избранный проект 02" reverse />
 
         <section className="snap-section portfolio-grid-section min-h-screen px-5 py-28 md:px-10 lg:px-16">
           <PortfolioGrid onSelectProject={setActiveProject} />

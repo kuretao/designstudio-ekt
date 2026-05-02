@@ -5,18 +5,18 @@ export default function AgreementPage() {
     <div className="page-in pt-24">
       <section className="px-5 pb-10 pt-20 md:px-10 lg:px-16">
         <div className="mx-auto max-w-4xl">
-          <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">Документ</p>
+          <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#C58351]">Документ</p>
           <h1 className="mb-12 text-5xl font-light leading-[0.92] tracking-[-0.055em] md:text-7xl">
             Согласие на обработку<br />персональных данных
           </h1>
 
-          <div className="space-y-8 text-[#d8d1c4] leading-relaxed">
+          <div className="space-y-8 text-[#D6D1CA] leading-relaxed">
             <div className="rounded-[2rem] border border-white/10 bg-white/[0.025] p-8 md:p-12">
               <p className="text-lg leading-relaxed">
                 Настоящим, действуя свободно, своей волей и в своём интересе, я даю согласие оператору —
                 студии концептуального дизайна <span className="text-white">3D Smart Design Studio</span>,
                 сайт&nbsp;
-                <span className="text-[#d7c4a1]">3dsmartdesign.ru</span>, — на обработку моих персональных данных.
+                <span className="text-[#C58351]">3dsmartdesign.ru</span>, — на обработку моих персональных данных.
               </p>
             </div>
 
@@ -44,7 +44,7 @@ export default function AgreementPage() {
                   "блокирование и уничтожение",
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm">
-                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#d7c4a1]" />
+                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#C58351]" />
                     {item}
                   </li>
                 ))}
@@ -71,7 +71,7 @@ export default function AgreementPage() {
                 электронной почты оператора:{" "}
                 <a
                   href="mailto:3dsmartdesign@bk.ru"
-                  className="text-[#d7c4a1] transition hover:text-white"
+                  className="text-[#C58351] transition hover:text-white"
                 >
                   3dsmartdesign@bk.ru
                 </a>
@@ -83,7 +83,7 @@ export default function AgreementPage() {
               <h2 className="mb-4 text-xl font-light tracking-[-0.03em] text-white">Контактные данные оператора</h2>
               <div className="space-y-2 text-sm text-white/60">
                 <p>Студия концептуального дизайна <span className="text-white/80">3D Smart Design Studio</span></p>
-                <p>Сайт: <span className="text-[#d7c4a1]">3dsmartdesign.ru</span></p>
+                <p>Сайт: <span className="text-[#C58351]">3dsmartdesign.ru</span></p>
                 <p>Телефон: <span className="text-white/80">+7 (987) 942-12-42</span></p>
                 <p>Email: <span className="text-white/80">3dsmartdesign@bk.ru</span></p>
               </div>

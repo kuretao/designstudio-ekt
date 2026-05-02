@@ -3,20 +3,66 @@
 import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
+  :root {
+    --color-black: #050505;
+    --color-graphite: #171717;
+    --color-graphite-soft: #22201f;
+    --color-white: #F5F2EC;
+    --color-copper: #C58351;
+  }
+
   html {
     scroll-behavior: auto;
-    background: #0d0d0b;
+    background: var(--color-black);
   }
 
   body {
-    background: #0d0d0b;
-    color: #f3efe7;
+    background:
+      radial-gradient(circle at 72% 18%, rgba(197, 131, 81, 0.12), transparent 28rem),
+      radial-gradient(circle at 12% 72%, rgba(255, 255, 255, 0.045), transparent 24rem),
+      linear-gradient(135deg, var(--color-black) 0%, #0b0b0b 42%, var(--color-graphite) 100%);
+    color: var(--color-white);
     overflow-x: hidden;
   }
 
   ::selection {
-    background: #d7c4a1;
-    color: #0d0d0b;
+    background: var(--color-copper);
+    color: var(--color-black);
+  }
+
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .motion-cursor {
+    will-change: transform, opacity;
+  }
+
+  .motion-progress {
+    box-shadow: 0 0 24px rgba(197, 131, 81, 0.55);
+    will-change: transform;
+  }
+
+  .motion-curtain {
+    background:
+      linear-gradient(90deg, var(--color-black), var(--color-graphite) 45%, rgba(197, 131, 81, 0.72));
+    will-change: transform;
+  }
+
+  .hero-video,
+  .project-bg,
+  .parallax-media {
+    will-change: transform;
+  }
+
+  .magnetic-card {
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .copper-text {
+    color: var(--color-copper);
   }
 
   @keyframes reviewFloat {
@@ -52,7 +98,7 @@ export const GlobalStyle = createGlobalStyle`
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(110deg, transparent 0%, rgba(215, 196, 161, 0.16) 48%, transparent 62%);
+    background: linear-gradient(110deg, transparent 0%, rgba(197, 131, 81, 0.16) 48%, transparent 62%);
     opacity: 0;
     transform: translateX(-120%);
   }
@@ -64,10 +110,12 @@ export const GlobalStyle = createGlobalStyle`
 `;
 
 export const GlassPanel = styled.div`
-  border: 1px solid rgba(243, 239, 231, 0.16);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.025));
-  backdrop-filter: blur(18px);
-  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(245, 242, 236, 0.14);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.018)),
+    linear-gradient(180deg, rgba(197, 131, 81, 0.055), transparent 54%);
+  backdrop-filter: blur(22px);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 `;
 
 export const Noise = styled.div`
@@ -75,7 +123,7 @@ export const Noise = styled.div`
   position: fixed;
   inset: 0;
   z-index: 60;
-  opacity: 0.08;
+  opacity: 0.055;
   mix-blend-mode: overlay;
   background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,.7) 0 1px, transparent 1px),
     radial-gradient(circle at 70% 30%, rgba(255,255,255,.45) 0 1px, transparent 1px);

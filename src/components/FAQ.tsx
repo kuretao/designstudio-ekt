@@ -11,7 +11,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
     <div
       className={`rounded-[1.5rem] border bg-white/[0.03] transition-all duration-300 ${
         open
-          ? "border-[#d7c4a1]/45 bg-white/[0.045] shadow-[0_8px_40px_rgba(215,196,161,0.06)]"
+          ? "border-[#C58351]/45 bg-white/[0.045] shadow-[0_8px_40px_rgba(197,131,81,0.06)]"
           : "border-white/10 hover:border-white/20 hover:bg-white/[0.04]"
       }`}
     >
@@ -31,7 +31,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
         <span
           className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-lg font-light leading-none transition-all duration-300 ${
             open
-              ? "rotate-45 border-[#d7c4a1]/50 bg-[#d7c4a1]/10 text-[#d7c4a1]"
+              ? "rotate-45 border-[#C58351]/50 bg-[#C58351]/10 text-[#C58351]"
               : "border-white/15 text-white/40"
           }`}
         >
@@ -45,7 +45,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
         style={{ gridTemplateRows: open ? "1fr" : "0fr", transitionDuration: "350ms" }}
       >
         <div className="overflow-hidden">
-          <p className="px-7 pb-7 pt-1 leading-relaxed text-[#d8d1c4] pl-[4.25rem]">
+          <p className="px-7 pb-7 pt-1 leading-relaxed text-[#D6D1CA] pl-[4.25rem]">
             {a}
           </p>
         </div>

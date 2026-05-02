@@ -7,7 +7,7 @@ import { GlassPanel } from "../ui";
 function BodyBlock({ block }: { block: NewsArticle["body"][number] }) {
   if (block.type === "heading") {
     return (
-      <h2 className="mt-12 text-3xl font-light tracking-[-0.04em] text-[#f3efe7] md:text-4xl">
+      <h2 className="mt-12 text-3xl font-light tracking-[-0.04em] text-[#F5F2EC] md:text-4xl">
         {block.text}
       </h2>
     );
@@ -16,8 +16,8 @@ function BodyBlock({ block }: { block: NewsArticle["body"][number] }) {
     return (
       <ul className="mt-5 space-y-3">
         {block.items?.map((item, i) => (
-          <li key={i} className="flex gap-4 leading-relaxed text-[#d8d1c4]">
-            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d7c4a1]" />
+          <li key={i} className="flex gap-4 leading-relaxed text-[#D6D1CA]">
+            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#C58351]" />
             {item}
           </li>
         ))}
@@ -25,7 +25,7 @@ function BodyBlock({ block }: { block: NewsArticle["body"][number] }) {
     );
   }
   return (
-    <p className="mt-6 text-lg leading-relaxed text-[#d8d1c4]">{block.text}</p>
+    <p className="mt-6 text-lg leading-relaxed text-[#D6D1CA]">{block.text}</p>
   );
 }
 
@@ -41,11 +41,11 @@ function NewsArticlePage({ article }: { article: NewsArticle }) {
           alt={article.title}
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0b] via-[#0d0d0b]/55 to-[#0d0d0b]/10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0d0d0b]/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/55 to-[#050505]/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/60 to-transparent" />
         <div className="relative z-10 mx-auto w-full max-w-5xl">
           <div className="mb-6 flex flex-wrap items-center gap-4">
-            <span className="rounded-full border border-[#d7c4a1]/45 bg-[#0d0d0b]/50 px-4 py-1.5 text-[10px] uppercase tracking-[0.3em] text-[#d7c4a1] backdrop-blur">
+            <span className="rounded-full border border-[#C58351]/45 bg-[#050505]/50 px-4 py-1.5 text-[10px] uppercase tracking-[0.3em] text-[#C58351] backdrop-blur">
               {article.category}
             </span>
             <span className="text-sm text-white/50">{article.date}</span>
@@ -63,7 +63,7 @@ function NewsArticlePage({ article }: { article: NewsArticle }) {
           <div className="grid gap-12 lg:grid-cols-[1fr_280px] lg:items-start">
             {/* Article text */}
             <div>
-              <p className="text-xl font-light leading-relaxed text-[#f3efe7]">
+              <p className="text-xl font-light leading-relaxed text-[#F5F2EC]">
                 {article.preview}
               </p>
               <div className="mt-2 border-t border-white/10" />
@@ -75,7 +75,7 @@ function NewsArticlePage({ article }: { article: NewsArticle }) {
               <div className="mt-16 border-t border-white/10 pt-8">
                 <Link
                   href="/novosti"
-                  className="inline-flex items-center gap-3 text-sm uppercase tracking-[0.22em] text-[#d7c4a1] transition hover:gap-5"
+                  className="inline-flex items-center gap-3 text-sm uppercase tracking-[0.22em] text-[#C58351] transition hover:gap-5"
                 >
                   ← Все новости
                 </Link>
@@ -85,19 +85,19 @@ function NewsArticlePage({ article }: { article: NewsArticle }) {
             {/* Sidebar */}
             <aside className="space-y-4 lg:sticky lg:top-32">
               <GlassPanel className="rounded-[1.75rem] p-6">
-                <p className="mb-4 text-xs uppercase tracking-[0.3em] text-[#d7c4a1]">Об авторе</p>
-                <p className="text-sm leading-relaxed text-[#d8d1c4]">
+                <p className="mb-4 text-xs uppercase tracking-[0.3em] text-[#C58351]">Об авторе</p>
+                <p className="text-sm leading-relaxed text-[#D6D1CA]">
                   Команда 3D Smart Design Studio — студия концептуального дизайна. Интерьеры, архитектура, ландшафт и 3D-визуализация.
                 </p>
               </GlassPanel>
               <GlassPanel className="rounded-[1.75rem] p-6">
-                <p className="mb-4 text-xs uppercase tracking-[0.3em] text-[#d7c4a1]">Обсудить проект</p>
-                <p className="mb-5 text-sm leading-relaxed text-[#d8d1c4]">
+                <p className="mb-4 text-xs uppercase tracking-[0.3em] text-[#C58351]">Обсудить проект</p>
+                <p className="mb-5 text-sm leading-relaxed text-[#D6D1CA]">
                   Есть идея или вопрос? Свяжитесь с нами — ответим в течение рабочего дня.
                 </p>
                 <Link
                   href="/kontakty"
-                  className="inline-flex w-full items-center justify-center rounded-full bg-[#d7c4a1] px-5 py-3 text-xs uppercase tracking-[0.22em] text-[#0d0d0b] transition hover:bg-[#f3efe7]"
+                  className="inline-flex w-full items-center justify-center rounded-full bg-[#C58351] px-5 py-3 text-xs uppercase tracking-[0.22em] text-[#050505] transition hover:bg-[#F5F2EC]"
                 >
                   Написать нам
                 </Link>
@@ -111,7 +111,7 @@ function NewsArticlePage({ article }: { article: NewsArticle }) {
       {related.length > 0 && (
         <section className="border-t border-white/10 px-5 py-20 md:px-10 lg:px-16">
           <div className="mx-auto max-w-7xl">
-            <p className="mb-3 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">Читать также</p>
+            <p className="mb-3 text-xs uppercase tracking-[0.45em] text-[#C58351]">Читать также</p>
             <h2 className="mb-10 text-4xl font-light tracking-[-0.045em] md:text-6xl">
               Другие новости
             </h2>
@@ -120,7 +120,7 @@ function NewsArticlePage({ article }: { article: NewsArticle }) {
                 <Link
                   key={a.slug}
                   href={`/novosti/${a.slug}`}
-                  className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.02] transition duration-500 hover:-translate-y-2 hover:border-[#d7c4a1]/55 hover:shadow-[0_24px_80px_rgba(0,0,0,0.42)]"
+                  className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.02] transition duration-500 hover:-translate-y-2 hover:border-[#C58351]/55 hover:shadow-[0_24px_80px_rgba(0,0,0,0.42)]"
                 >
                   <div className="relative h-52 overflow-hidden">
                     <img
@@ -128,8 +128,8 @@ function NewsArticlePage({ article }: { article: NewsArticle }) {
                       alt={a.title}
                       className="h-full w-full object-cover transition duration-700 group-hover:scale-110 group-hover:brightness-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0b]/80 via-transparent to-[#d7c4a1]/10" />
-                    <span className="absolute left-4 top-4 rounded-full border border-[#d7c4a1]/35 bg-[#0d0d0b]/60 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-[#d7c4a1] backdrop-blur">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-transparent to-[#C58351]/10" />
+                    <span className="absolute left-4 top-4 rounded-full border border-[#C58351]/35 bg-[#050505]/60 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-[#C58351] backdrop-blur">
                       {a.category}
                     </span>
                   </div>

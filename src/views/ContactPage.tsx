@@ -93,7 +93,7 @@ function FadeUp({ children, delay = 0, className = "" }: { children: React.React
   );
 }
 
-const inputCls = "w-full rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-sm text-[#f3efe7] outline-none transition placeholder:text-white/25 focus:border-[#d7c4a1]/60 focus:bg-white/[0.07]";
+const inputCls = "w-full rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-sm text-[#F5F2EC] outline-none transition placeholder:text-white/25 focus:border-[#C58351]/60 focus:bg-white/[0.07]";
 
 export function ContactSection() {
   const [name, setName] = useState("");
@@ -122,7 +122,7 @@ export function ContactSection() {
   return (
     <section id="contact" className="relative overflow-hidden px-5 pb-28 pt-20 md:px-10 lg:px-16">
       {/* Background glow orbs */}
-      <div className="pointer-events-none absolute -left-32 top-0 h-[600px] w-[600px] rounded-full opacity-20" style={{ background: "radial-gradient(circle, rgba(215,196,161,0.35) 0%, transparent 70%)", filter: "blur(80px)" }} />
+      <div className="pointer-events-none absolute -left-32 top-0 h-[600px] w-[600px] rounded-full opacity-20" style={{ background: "radial-gradient(circle, rgba(197,131,81,0.35) 0%, transparent 70%)", filter: "blur(80px)" }} />
       <div className="pointer-events-none absolute -right-24 bottom-32 h-[500px] w-[500px] rounded-full opacity-15" style={{ background: "radial-gradient(circle, rgba(115,96,242,0.4) 0%, transparent 70%)", filter: "blur(80px)" }} />
 
       <div className="relative z-10 mx-auto max-w-7xl">
@@ -134,7 +134,7 @@ export function ContactSection() {
         <FadeUp delay={80}>
           <h1 className="text-6xl font-light leading-[0.9] tracking-[-0.065em] md:text-8xl lg:text-[10rem]">
             Свяжитесь<br />
-            <span className="text-[#d7c4a1]">с нами</span>
+            <span className="text-[#C58351]">с нами</span>
           </h1>
         </FadeUp>
 
@@ -160,11 +160,11 @@ export function ContactSection() {
             {
               label: "Телефон",
               content: (
-                <a href={contactInfo.phoneHref} className="text-2xl font-light text-white transition duration-300 hover:text-[#d7c4a1]">
+                <a href={contactInfo.phoneHref} className="text-2xl font-light text-white transition duration-300 hover:text-[#C58351]">
                   {contactInfo.phone}
                 </a>
               ),
-              accent: "#d7c4a1",
+              accent: "#C58351",
               delay: 0,
               icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
@@ -177,11 +177,11 @@ export function ContactSection() {
               content: (
                 <div className="space-y-1.5">
                   {contactInfo.emails.map((e) => (
-                    <a key={e} href={`mailto:${e}`} className="block text-sm text-white/75 transition hover:text-[#d7c4a1]">{e}</a>
+                    <a key={e} href={`mailto:${e}`} className="block text-sm text-white/75 transition hover:text-[#C58351]">{e}</a>
                   ))}
                 </div>
               ),
-              accent: "#d7c4a1",
+              accent: "#C58351",
               delay: 80,
               icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
@@ -307,8 +307,8 @@ export function ContactSection() {
                   onClick={handleSubmit}
                   className="relative h-14 overflow-hidden rounded-full text-sm font-medium uppercase tracking-[0.24em] transition duration-300"
                   style={{
-                    background: sent ? "rgba(74,222,128,0.2)" : "#d7c4a1",
-                    color: sent ? "#4ade80" : "#0d0d0b",
+                    background: sent ? "rgba(74,222,128,0.2)" : "#C58351",
+                    color: sent ? "#4ade80" : "#050505",
                     border: sent ? "1px solid rgba(74,222,128,0.4)" : "none",
                   }}
                 >
@@ -339,7 +339,7 @@ export function ContactSection() {
               <div className="rounded-[2rem] border border-white/10 bg-white/[0.025] p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.3em] text-[#d7c4a1]">Студия</p>
+                    <p className="text-xs uppercase tracking-[0.3em] text-[#C58351]">Студия</p>
                     <p className="mt-1 text-lg font-light text-white">3D Smart Design Studio</p>
                     <p className="mt-0.5 text-sm text-white/40">Самара · Удалённо по всему миру</p>
                   </div>

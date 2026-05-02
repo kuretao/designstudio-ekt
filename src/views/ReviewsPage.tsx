@@ -9,19 +9,19 @@ function ReviewsPage() {
   return (
     <div className="page-in pt-24">
       <section className="relative overflow-hidden px-5 py-28 md:px-10 lg:px-16">
-        <div className="review-orbit absolute right-[8%] top-32 hidden h-52 w-52 rounded-full border border-[#d7c4a1]/25 bg-[#d7c4a1]/10 blur-sm lg:block" />
+        <div className="review-orbit absolute right-[8%] top-32 hidden h-52 w-52 rounded-full border border-[#C58351]/25 bg-[#C58351]/10 blur-sm lg:block" />
         <div className="review-orbit-delayed absolute bottom-28 left-[5%] hidden h-36 w-36 rounded-full border border-white/10 bg-white/[0.04] lg:block" />
 
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
             <div>
-              <p className="review-card mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">Отзывы о нас</p>
+              <p className="review-card mb-5 text-xs uppercase tracking-[0.45em] text-[#C58351]">Отзывы о нас</p>
               <h1 className="review-card max-w-5xl text-6xl font-light leading-[0.92] tracking-[-0.065em] md:text-8xl">
                 Клиенты говорят о сроках, деталях и спокойной реализации
               </h1>
             </div>
             <div className="review-card">
-              <p className="max-w-xl text-lg leading-relaxed text-[#d8d1c4]">
+              <p className="max-w-xl text-lg leading-relaxed text-[#D6D1CA]">
                 Перенесли отзывы с исходной страницы и собрали их в живую презентационную витрину: реальные даты,
                 направления работ, короткие выводы и ответы студии.
               </p>
@@ -29,7 +29,7 @@ function ReviewsPage() {
                 {reviewStats.map((stat) => (
                   <GlassPanel key={stat.value} className="rounded-[1.35rem] p-5">
                     <span className="block text-2xl font-light text-white">{stat.value}</span>
-                    <span className="mt-2 block text-xs uppercase leading-relaxed tracking-[0.18em] text-[#d8d1c4]">
+                    <span className="mt-2 block text-xs uppercase leading-relaxed tracking-[0.18em] text-[#D6D1CA]">
                       {stat.label}
                     </span>
                   </GlassPanel>
@@ -46,20 +46,20 @@ function ReviewsPage() {
                   alt={featuredReview.title}
                   className="absolute inset-0 h-full w-full object-cover transition duration-[1200ms] hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0b] via-[#0d0d0b]/58 to-[#0d0d0b]/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/58 to-[#050505]/10" />
                 <div className="absolute inset-x-6 bottom-6 md:inset-x-9 md:bottom-9">
-                  <div className="mb-8 inline-flex rounded-full border border-[#d7c4a1]/45 bg-[#0d0d0b]/60 px-4 py-2 text-xs uppercase tracking-[0.24em] text-[#d7c4a1] backdrop-blur">
+                  <div className="mb-8 inline-flex rounded-full border border-[#C58351]/45 bg-[#050505]/60 px-4 py-2 text-xs uppercase tracking-[0.24em] text-[#C58351] backdrop-blur">
                     {featuredReview.service}
                   </div>
                   <p className="max-w-3xl text-3xl font-light leading-tight tracking-[-0.04em] md:text-5xl">
                     {featuredReview.title}
                   </p>
-                  <p className="mt-6 max-w-2xl text-base leading-relaxed text-[#d8d1c4] md:text-lg">
+                  <p className="mt-6 max-w-2xl text-base leading-relaxed text-[#D6D1CA] md:text-lg">
                     {featuredReview.text}
                   </p>
                   <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-white/15 pt-6">
                     <span className="text-xl text-white">{featuredReview.name}</span>
-                    <span className="text-sm text-[#d8d1c4]">{featuredReview.date}</span>
+                    <span className="text-sm text-[#D6D1CA]">{featuredReview.date}</span>
                   </div>
                 </div>
               </div>
@@ -69,7 +69,7 @@ function ReviewsPage() {
               {testimonials.slice(1).map((review, index) => (
                 <GlassPanel
                   key={review.name}
-                  className="review-card review-sheen relative overflow-hidden rounded-[2rem] p-6 transition duration-500 hover:-translate-y-2 hover:border-[#d7c4a1]/60 hover:shadow-[0_24px_90px_rgba(0,0,0,0.38)]"
+                  className="review-card review-sheen relative overflow-hidden rounded-[2rem] p-6 transition duration-500 hover:-translate-y-2 hover:border-[#C58351]/60 hover:shadow-[0_24px_90px_rgba(0,0,0,0.38)]"
                 >
                   <div className="flex gap-5">
                     <div className="hidden h-28 w-24 shrink-0 overflow-hidden rounded-[1.25rem] sm:block">
@@ -77,16 +77,16 @@ function ReviewsPage() {
                     </div>
                     <div>
                       <div className="mb-5 flex flex-wrap items-center gap-3">
-                        <span className="rounded-full bg-[#d7c4a1]/12 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-[#d7c4a1]">
+                        <span className="rounded-full bg-[#C58351]/12 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-[#C58351]">
                           0{index + 2}
                         </span>
                         <span className="text-xs uppercase tracking-[0.18em] text-white/50">{review.service}</span>
                       </div>
                       <h2 className="text-3xl font-light leading-tight tracking-[-0.04em]">{review.title}</h2>
-                      <p className="mt-4 leading-relaxed text-[#d8d1c4]">{review.text}</p>
+                      <p className="mt-4 leading-relaxed text-[#D6D1CA]">{review.text}</p>
                       <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm">
                         <span className="text-white">{review.name}</span>
-                        <span className="text-[#d8d1c4]">{review.date}</span>
+                        <span className="text-[#D6D1CA]">{review.date}</span>
                       </div>
                     </div>
                   </div>
@@ -100,26 +100,26 @@ function ReviewsPage() {
       <section className="border-t border-white/10 px-5 py-28 md:px-10 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.8fr_1.2fr]">
           <div className="review-card">
-            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">Диалог со студией</p>
+            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#C58351]">Диалог со студией</p>
             <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">Ответы администратора без сухой формальности</h2>
-            <p className="mt-6 text-lg leading-relaxed text-[#d8d1c4]">
+            <p className="mt-6 text-lg leading-relaxed text-[#D6D1CA]">
               Для страницы оставили не только клиентские впечатления, но и короткий ответ студии — так блок выглядит
               живым и поддерживает доверие.
             </p>
           </div>
 
           <div className="relative">
-            <div className="absolute left-5 top-0 hidden h-full w-px bg-gradient-to-b from-[#d7c4a1] via-white/15 to-transparent md:block" />
+            <div className="absolute left-5 top-0 hidden h-full w-px bg-gradient-to-b from-[#C58351] via-white/15 to-transparent md:block" />
             <div className="grid gap-5">
               {testimonials.map((review, index) => (
                 <div key={`${review.name}-reply`} className="review-card relative md:pl-14">
-                  <span className="absolute left-0 top-7 hidden h-3 w-3 rounded-full bg-[#d7c4a1] shadow-[0_0_28px_rgba(215,196,161,0.8)] md:block" />
-                  <GlassPanel className="rounded-[1.75rem] p-6 transition duration-500 hover:-translate-y-1 hover:border-[#d7c4a1]/50">
+                  <span className="absolute left-0 top-7 hidden h-3 w-3 rounded-full bg-[#C58351] shadow-[0_0_28px_rgba(197,131,81,0.8)] md:block" />
+                  <GlassPanel className="rounded-[1.75rem] p-6 transition duration-500 hover:-translate-y-1 hover:border-[#C58351]/50">
                     <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                      <span className="text-sm text-[#d7c4a1]">Ответ на отзыв #{index + 1}</span>
+                      <span className="text-sm text-[#C58351]">Ответ на отзыв #{index + 1}</span>
                       <span className="text-xs uppercase tracking-[0.18em] text-white/45">Администратор</span>
                     </div>
-                    <p className="text-lg leading-relaxed text-[#f3efe7]">{review.adminReply}</p>
+                    <p className="text-lg leading-relaxed text-[#F5F2EC]">{review.adminReply}</p>
                   </GlassPanel>
                 </div>
               ))}
@@ -134,9 +134,9 @@ function ReviewsPage() {
             <div className="grid lg:grid-cols-[0.95fr_1.05fr]">
               <div className="relative min-h-[420px] overflow-hidden">
                 <img src={testimonials[1].image} alt="Оставить отзыв" className="absolute inset-0 h-full w-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0b] via-[#0d0d0b]/35 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/35 to-transparent" />
                 <div className="absolute bottom-8 left-8 right-8">
-                  <p className="mb-4 text-xs uppercase tracking-[0.36em] text-[#d7c4a1]">Оставить отзыв</p>
+                  <p className="mb-4 text-xs uppercase tracking-[0.36em] text-[#C58351]">Оставить отзыв</p>
                   <h2 className="max-w-lg text-4xl font-light tracking-[-0.05em] md:text-6xl">
                     Расскажите, каким был ваш проект
                   </h2>
@@ -144,23 +144,23 @@ function ReviewsPage() {
               </div>
               <form className="grid gap-4 p-6 md:p-9">
                 <input
-                  className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4 outline-none transition placeholder:text-white/35 focus:border-[#d7c4a1]"
+                  className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4 outline-none transition placeholder:text-white/35 focus:border-[#C58351]"
                   placeholder="Имя *"
                 />
                 <input
-                  className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4 outline-none transition placeholder:text-white/35 focus:border-[#d7c4a1]"
+                  className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4 outline-none transition placeholder:text-white/35 focus:border-[#C58351]"
                   placeholder="E-mail *"
                 />
                 <textarea
-                  className="min-h-44 rounded-2xl border border-white/10 bg-black/20 px-5 py-4 outline-none transition placeholder:text-white/35 focus:border-[#d7c4a1]"
+                  className="min-h-44 rounded-2xl border border-white/10 bg-black/20 px-5 py-4 outline-none transition placeholder:text-white/35 focus:border-[#C58351]"
                   placeholder="Текст *"
                 />
-                <p className="text-sm leading-relaxed text-[#d8d1c4]">
+                <p className="text-sm leading-relaxed text-[#D6D1CA]">
                   Отправленное сообщение появится после проверки администратором сайта.
                 </p>
                 <button
                   type="button"
-                  className="h-14 rounded-full bg-[#d7c4a1] px-7 text-sm uppercase tracking-[0.24em] text-[#0d0d0b] transition hover:bg-[#f3efe7]"
+                  className="h-14 rounded-full bg-[#C58351] px-7 text-sm uppercase tracking-[0.24em] text-[#050505] transition hover:bg-[#F5F2EC]"
                 >
                   Отправить отзыв
                 </button>

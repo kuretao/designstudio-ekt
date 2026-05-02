@@ -296,6 +296,7 @@ export const contactInfo = {
 
 export const messengerLinks = {
   phoneHref: contactInfo.phoneHref,
+  max: "https://max.ru/",
   telegram: "https://t.me/+79879421242",
   whatsapp: "https://wa.me/79879421242",
   viber: "viber://chat?number=%2B79879421242",

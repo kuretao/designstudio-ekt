@@ -23,6 +23,13 @@ export const GlobalStyle = createGlobalStyle`
       linear-gradient(135deg, var(--color-black) 0%, #0b0b0b 42%, var(--color-graphite) 100%);
     color: var(--color-white);
     overflow-x: hidden;
+    scrollbar-width: none;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   ::selection {
@@ -46,8 +53,12 @@ export const GlobalStyle = createGlobalStyle`
 
   .motion-curtain {
     background:
-      linear-gradient(90deg, var(--color-black), var(--color-graphite) 45%, rgba(197, 131, 81, 0.72));
-    will-change: transform;
+      linear-gradient(90deg, rgba(245, 242, 236, 0.08), rgba(197, 131, 81, 0.08) 44%, rgba(5, 5, 5, 0.18)),
+      rgba(10, 10, 10, 0.22);
+    backdrop-filter: blur(22px) saturate(0.82);
+    -webkit-backdrop-filter: blur(22px) saturate(0.82);
+    border-right: 1px solid rgba(245, 242, 236, 0.12);
+    will-change: transform, opacity, backdrop-filter;
   }
 
   .hero-video,

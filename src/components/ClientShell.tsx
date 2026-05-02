@@ -1,17 +1,113 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { messengerLinks } from "../data";
 import { GlobalStyle, Noise } from "../ui";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
+const routeLabels: Record<string, string> = {
+  "/": "Home",
+  "/akcii-i-skidki": "Акции",
+  "/blog": "Блог",
+  "/kontakty": "Контакты",
+  "/novosti": "Новости",
+  "/o-nas": "О нас",
+  "/otzyvy-o-nas": "Отзывы",
+  "/politika-konfidencialnosti": "Политика",
+  "/portfolio": "Портфолио",
+  "/services": "Услуги",
+  "/user/agreement": "Соглашение",
+};
+
+const floatingMessengers = [
+  {
+    label: "MAX",
+    icon: "max",
+    href: messengerLinks.max,
+  },
+  {
+    label: "TG",
+    icon: "telegram",
+    href: messengerLinks.telegram,
+  },
+];
+
+function getRouteLabel(path: string) {
+  if (routeLabels[path]) return routeLabels[path];
+  if (path.startsWith("/novosti/")) return "Новости";
+
+  const slug = path.split("/").filter(Boolean).at(-1);
+  if (!slug) return "Home";
+
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function MessengerIcon({ icon }: { icon: string }) {
+  if (icon === "telegram") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
+        <path
+          d="M20.2 4.8 3.9 11.1c-1.1.44-1.1 1.05-.2 1.33l4.18 1.3 1.6 4.9c.2.56.1.78.68.78.44 0 .64-.2.9-.44l2.16-2.1 4.5 3.32c.82.45 1.42.22 1.63-.76l2.95-13.9c.3-1.2-.45-1.74-1.78-1.23Z"
+          fill="currentColor"
+        />
+        <path d="m8.08 13.48 9.68-6.1c.45-.28.86-.13.52.17l-8.28 7.48-.32 3.42" stroke="#050505" strokeOpacity="0.5" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
+      <path
+        d="M5.2 15.8V8.2c0-1.55 1.72-2.48 3-1.62l3.8 2.55 3.8-2.55c1.28-.86 3 .07 3 1.62v7.6c0 1.55-1.72 2.48-3 1.62L12 14.87l-3.8 2.55c-1.28.86-3-.07-3-1.62Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+      <path d="M8.15 9.55 12 12.1l3.85-2.55M8.15 14.45 12 11.9l3.85 2.55" stroke="currentColor" strokeWidth="1.45" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export default function ClientShell({ children }: { children: React.ReactNode }) {
   const mainRef = useRef<HTMLDivElement | null>(null);
+  const previousPathRef = useRef<string | null>(null);
+  const [backLabel, setBackLabel] = useState("Home");
   const pathname = usePathname();
+  const router = useRouter();
+  const showBackHome = pathname !== "/";
+
+  const goBackHome = () => {
+    if (window.history.length > 1) {
+      router.back();
+      return;
+    }
+
+    router.push("/");
+  };
+
+  useEffect(() => {
+    const storedPreviousPath = window.sessionStorage.getItem("previousPath");
+    if (storedPreviousPath && storedPreviousPath !== pathname) {
+      setBackLabel(getRouteLabel(storedPreviousPath));
+    }
+
+    const previousPath = previousPathRef.current;
+    if (previousPath && previousPath !== pathname) {
+      window.sessionStorage.setItem("previousPath", previousPath);
+      setBackLabel(getRouteLabel(previousPath));
+    }
+
+    previousPathRef.current = pathname;
+  }, [pathname]);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -79,8 +175,8 @@ export default function ClientShell({ children }: { children: React.ReactNode })
 
       gsap
         .timeline({ defaults: { ease: "expo.inOut" } })
-        .set(".motion-curtain", { scaleX: 1, transformOrigin: "left center" })
-        .to(".motion-curtain", { scaleX: 0, duration: 1.05 });
+        .set(".motion-curtain", { autoAlpha: 1, scaleX: 1, transformOrigin: "center" })
+        .to(".motion-curtain", { autoAlpha: 0, scaleX: 0, duration: 1.1 });
 
       gsap.fromTo(
         "header",
@@ -272,6 +368,30 @@ export default function ClientShell({ children }: { children: React.ReactNode })
         <div className="motion-cursor-core h-full w-full rounded-full border border-[rgba(197,131,81,0.5)] bg-[rgba(197,131,81,0.1)]" />
       </div>
       <Noise />
+      {showBackHome && (
+        <button
+          type="button"
+          onClick={goBackHome}
+          className="fixed left-5 top-24 z-[45] flex h-10 items-center gap-3 rounded-full border border-white/10 bg-[#171717]/72 px-5 text-sm font-medium text-white/86 backdrop-blur-md transition duration-300 hover:border-white/20 hover:bg-[#202020]/82 hover:text-white md:left-12 md:top-28"
+        >
+          <span className="text-lg leading-none text-white/76">‹</span>
+          <span>{backLabel}</span>
+        </button>
+      )}
+      <div className="fixed bottom-5 right-5 z-[45] flex flex-col gap-2 md:bottom-8 md:right-8">
+        {floatingMessengers.map((messenger) => (
+          <a
+            key={messenger.label}
+            href={messenger.href}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={messenger.label}
+            className="grid h-12 w-12 place-items-center rounded-full border border-white/18 bg-white/12 text-white backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-white/34 hover:bg-white/18"
+          >
+            <MessengerIcon icon={messenger.icon} />
+          </a>
+        ))}
+      </div>
       {children}
     </main>
   );

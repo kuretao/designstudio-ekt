@@ -47,7 +47,14 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
     <>
       <div className="slides-wrap">
         <section className="hero-section snap-section relative flex min-h-screen overflow-hidden px-5 py-28 md:px-10 lg:px-16">
-          <div className="hero-image absolute inset-0 bg-cover bg-center opacity-55" style={{ backgroundImage: `url(${projects[5].image})` }} />
+          <video
+            className="absolute inset-0 h-full w-full object-cover opacity-55"
+            src="/background.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(215,196,161,.18),transparent_32%),linear-gradient(90deg,rgba(13,13,11,.96),rgba(13,13,11,.62),rgba(13,13,11,.25))]" />
 
           <div className="relative z-10 flex w-full items-end">

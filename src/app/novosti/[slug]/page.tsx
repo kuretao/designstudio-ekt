@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { newsArticles } from "@/src/data";
-import NewsArticlePage from "@/src/views/NewsArticlePage";
+import NewsArticlePage from "@/src/modules/pages/NewsArticlePage";
 
 export function generateStaticParams() {
   return newsArticles.map((a) => ({ slug: a.slug }));

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { servicePageItems, contentPages } from "@/src/data";
-import ServiceDetailPage from "@/src/views/ServiceDetailPage";
-import ContentPage from "@/src/views/ContentPage";
+import ServiceDetailPage from "@/src/modules/pages/ServiceDetailPage";
+import ContentPage from "@/src/modules/pages/ContentPage";
 
 // Slugs that have their own dedicated app routes — exclude from [slug]
 const DEDICATED_ROUTES = new Set(["novosti", "akcii-i-skidki", "otzyvy-o-nas"]);

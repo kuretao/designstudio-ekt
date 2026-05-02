@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import StyledRegistry from "@/src/components/StyledRegistry";
-import ClientShell from "@/src/components/ClientShell";
-import Header from "@/src/components/Header";
-import Footer from "@/src/components/Footer";
+import StyledRegistry from "@/src/components/providers/StyledRegistry";
+import ClientShell from "@/src/components/layout/ClientShell";
+import Header from "@/src/components/layout/Header";
+import Footer from "@/src/components/layout/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {

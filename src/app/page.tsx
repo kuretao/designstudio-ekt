@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { projects } from "@/src/data";
-import HomePage from "@/src/views/HomePage";
+import HomePage from "@/src/modules/pages/HomePage";
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState(projects[0]);

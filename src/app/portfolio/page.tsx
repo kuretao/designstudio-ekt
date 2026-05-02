@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { projects } from "@/src/data";
-import PortfolioPage from "@/src/views/PortfolioPage";
+import PortfolioPage from "@/src/modules/pages/PortfolioPage";
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState(projects[0]);

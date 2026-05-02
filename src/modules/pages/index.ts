@@ -1,0 +1,15 @@
+export { default as AboutPage } from "./AboutPage";
+export { default as AboutPageFull } from "./AboutPageFull";
+export { default as AgreementPage } from "./AgreementPage";
+export { default as ContactPage } from "./ContactPage";
+export { default as ContentPage } from "./ContentPage";
+export { default as HomePage } from "./HomePage";
+export { default as NewsArticlePage } from "./NewsArticlePage";
+export { default as NewsPage } from "./NewsPage";
+export { default as NotFoundPage } from "./NotFoundPage";
+export { default as PortfolioPage } from "./PortfolioPage";
+export { default as PrivacyPage } from "./PrivacyPage";
+export { default as PromosPage } from "./PromosPage";
+export { default as ReviewsPage } from "./ReviewsPage";
+export { default as ServiceDetailPage } from "./ServiceDetailPage";
+export { default as ServicesPage } from "./ServicesPage";

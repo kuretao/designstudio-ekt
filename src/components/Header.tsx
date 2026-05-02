@@ -152,7 +152,7 @@ export default function Header() {
                   transitionProperty: "opacity, transform",
                 }}
                 onMouseEnter={(event) => {
-                  event.currentTarget.style.color = "#fff";
+                  event.currentTarget.style.color = "#C58351";
                   event.currentTarget.style.transition = "color 140ms ease, opacity 820ms cubic-bezier(.19,1,.22,1), transform 820ms cubic-bezier(.19,1,.22,1)";
                 }}
                 onMouseLeave={(event) => {

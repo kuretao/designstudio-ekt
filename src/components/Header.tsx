@@ -82,7 +82,7 @@ export default function Header() {
   };
 
   const menuLinkCls = (path: string) =>
-    `block text-right text-[13px] font-semibold uppercase tracking-[0.17em] transition-[opacity,transform] duration-[820ms] ease-[cubic-bezier(.19,1,.22,1)] md:text-[17px] ${
+    `block text-right text-[13px] font-semibold uppercase tracking-[0.17em] transition-[opacity,transform] duration-[820ms] ease-[cubic-bezier(.19,1,.22,1)] hover:text-[#C58351] md:text-[17px] ${
       currentPath === path ? "text-white/78" : "text-white/40"
     }`;
 
@@ -150,13 +150,6 @@ export default function Header() {
                   transform: menuOpen ? "translate3d(0, 0, 0)" : "translate3d(-96px, 0, 0)",
                   transitionDelay: menuOpen ? `${560 + index * 85}ms` : "0ms",
                   transitionProperty: "opacity, transform",
-                }}
-                onMouseEnter={(event) => {
-                  event.currentTarget.style.color = "#C58351";
-                  event.currentTarget.style.transition = "color 140ms ease, opacity 820ms cubic-bezier(.19,1,.22,1), transform 820ms cubic-bezier(.19,1,.22,1)";
-                }}
-                onMouseLeave={(event) => {
-                  event.currentTarget.style.color = currentPath === item.href ? "rgba(255,255,255,0.78)" : "rgba(255,255,255,0.4)";
                 }}
               >
                 {item.label}

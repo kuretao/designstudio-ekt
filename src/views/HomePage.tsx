@@ -49,7 +49,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
         <section className="hero-section snap-section relative flex min-h-screen overflow-hidden px-5 py-28 md:px-10 lg:px-16">
           <video
             className="absolute inset-0 h-full w-full object-cover opacity-55"
-            src="/background.mp4"
+            src={`${process.env.NODE_ENV === 'production' ? '/DesignStudio-EKT' : ''}/background.mp4`}
             autoPlay
             muted
             loop

@@ -88,7 +88,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/16 bg-[#070707]/10 px-5 text-white backdrop-blur-[8px] md:px-10 lg:px-12">
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/16 bg-[#050505]/10 px-5 text-white backdrop-blur-[8px] md:px-10 lg:px-12">
         <div className="mx-auto grid h-[72px] max-w-[1680px] grid-cols-[1fr_auto_1fr] items-center md:h-[76px]">
           <button
             type="button"
@@ -124,7 +124,7 @@ export default function Header() {
 
       <section
         id="rolls-menu"
-        className={`fixed left-0 top-0 z-[70] h-screen w-full max-w-[650px] overflow-hidden bg-[#050308]/18 text-white shadow-[38px_0_120px_rgba(0,0,0,0.18)] backdrop-blur-[18px] transition-transform duration-[760ms] ease-[cubic-bezier(.77,0,.18,1)] ${
+        className={`fixed left-0 top-0 z-[70] h-screen w-full max-w-[650px] overflow-hidden bg-[#050505]/18 text-white shadow-[38px_0_120px_rgba(0,0,0,0.18)] backdrop-blur-[18px] transition-transform duration-[760ms] ease-[cubic-bezier(.77,0,.18,1)] ${
           menuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -152,7 +152,7 @@ export default function Header() {
                   transitionProperty: "opacity, transform",
                 }}
                 onMouseEnter={(event) => {
-                  event.currentTarget.style.color = "rgba(255,255,255,0.78)";
+                  event.currentTarget.style.color = "#C58351";
                   event.currentTarget.style.transition = "color 140ms ease, opacity 820ms cubic-bezier(.19,1,.22,1), transform 820ms cubic-bezier(.19,1,.22,1)";
                 }}
                 onMouseLeave={(event) => {

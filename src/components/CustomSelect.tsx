@@ -39,11 +39,11 @@ export default function CustomSelect({
         onClick={() => setOpen((v) => !v)}
         className={`flex w-full cursor-pointer items-center justify-between rounded-2xl border px-5 py-4 text-sm transition-all duration-200 ${
           open
-            ? "border-[#d7c4a1]/55 bg-white/[0.07]"
+            ? "border-[#C58351]/55 bg-white/[0.07]"
             : "border-white/10 bg-white/[0.04] hover:border-white/20 hover:bg-white/[0.06]"
         }`}
       >
-        <span className={selected ? "text-[#f3efe7]" : "text-white/30"}>
+        <span className={selected ? "text-[#F5F2EC]" : "text-white/30"}>
           {selected ? selected.label : placeholder}
         </span>
         <svg
@@ -52,7 +52,7 @@ export default function CustomSelect({
           stroke="currentColor"
           strokeWidth="1.5"
           className={`h-4 w-4 shrink-0 transition-all duration-250 ${
-            open ? "rotate-180 text-[#d7c4a1]/70" : "text-white/25"
+            open ? "rotate-180 text-[#C58351]/70" : "text-white/25"
           }`}
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -61,7 +61,7 @@ export default function CustomSelect({
 
       {/* Dropdown panel */}
       <div
-        className="absolute left-0 right-0 top-[calc(100%+6px)] z-50 overflow-hidden rounded-2xl border border-white/10 bg-[#0f0f0e] shadow-[0_28px_70px_rgba(0,0,0,0.55),0_0_0_1px_rgba(215,196,161,0.05)] backdrop-blur-xl transition-all duration-200"
+        className="absolute left-0 right-0 top-[calc(100%+6px)] z-50 overflow-hidden rounded-2xl border border-white/10 bg-[#111111] shadow-[0_28px_70px_rgba(0,0,0,0.55),0_0_0_1px_rgba(197,131,81,0.05)] backdrop-blur-xl transition-all duration-200"
         style={{
           opacity: open ? 1 : 0,
           transform: open ? "translateY(0) scale(1)" : "translateY(-6px) scale(0.98)",
@@ -73,7 +73,7 @@ export default function CustomSelect({
           type="button"
           onClick={() => { onChange(""); setOpen(false); }}
           className={`w-full px-5 py-3.5 text-left text-sm transition-colors duration-150 hover:bg-white/[0.05] ${
-            !value ? "text-[#d7c4a1]/60" : "text-white/25 hover:text-white/50"
+            !value ? "text-[#C58351]/60" : "text-white/25 hover:text-white/50"
           }`}
         >
           {placeholder}
@@ -91,13 +91,13 @@ export default function CustomSelect({
                 type="button"
                 onClick={() => { onChange(opt.value); setOpen(false); }}
                 className={`group flex w-full items-center gap-3 px-5 py-3 text-left text-sm transition-all duration-150 hover:bg-white/[0.05] ${
-                  active ? "text-[#d7c4a1]" : "text-white/55 hover:text-white"
+                  active ? "text-[#C58351]" : "text-white/55 hover:text-white"
                 }`}
               >
                 <span
                   className={`h-1.5 w-1.5 shrink-0 rounded-full transition-all duration-150 ${
                     active
-                      ? "bg-[#d7c4a1] shadow-[0_0_6px_rgba(215,196,161,0.7)]"
+                      ? "bg-[#C58351] shadow-[0_0_6px_rgba(197,131,81,0.7)]"
                       : "bg-white/15 group-hover:bg-white/35"
                   }`}
                 />
@@ -108,7 +108,7 @@ export default function CustomSelect({
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
-                    className="ml-auto h-3.5 w-3.5 text-[#d7c4a1]/70"
+                    className="ml-auto h-3.5 w-3.5 text-[#C58351]/70"
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                   </svg>

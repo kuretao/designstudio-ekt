@@ -160,7 +160,7 @@ function renderBody(text: string) {
     if (para.startsWith("**") || para.includes("**")) {
       const parts = para.split(/(\*\*[^*]+\*\*)/g);
       return (
-        <p key={i} className="text-[#d8d1c4] leading-relaxed">
+        <p key={i} className="text-[#D6D1CA] leading-relaxed">
           {parts.map((part, j) =>
             part.startsWith("**") && part.endsWith("**") ? (
               <span key={j} className="font-medium text-white">
@@ -174,7 +174,7 @@ function renderBody(text: string) {
       );
     }
     return (
-      <p key={i} className="text-[#d8d1c4] leading-relaxed">
+      <p key={i} className="text-[#D6D1CA] leading-relaxed">
         {para}
       </p>
     );
@@ -186,7 +186,7 @@ export default function PrivacyPage() {
     <div className="page-in pt-24">
       <section className="px-5 pb-10 pt-20 md:px-10 lg:px-16">
         <div className="mx-auto max-w-4xl">
-          <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#d7c4a1]">Документ</p>
+          <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#C58351]">Документ</p>
           <h1 className="mb-4 text-5xl font-light leading-[0.92] tracking-[-0.055em] md:text-7xl">
             Политика конфиденциальности
           </h1>
@@ -205,7 +205,7 @@ export default function PrivacyPage() {
                 className="group rounded-[2rem] border border-white/10 bg-white/[0.025] p-8 transition hover:border-white/20 md:p-10"
               >
                 <div className="mb-5 flex items-center gap-4">
-                  <span className="text-xs font-light tracking-[0.3em] text-[#d7c4a1]/60">
+                  <span className="text-xs font-light tracking-[0.3em] text-[#C58351]/60">
                     {section.num}
                   </span>
                   <h2 className="text-xl font-light tracking-[-0.02em] text-white md:text-2xl">
@@ -226,13 +226,13 @@ export default function PrivacyPage() {
               <p>Студия концептуального дизайна <span className="text-white/80">3D Smart Design Studio</span></p>
               <p>
                 Телефон:{" "}
-                <a href="tel:+79879421242" className="text-[#d7c4a1] transition hover:text-white">
+                <a href="tel:+79879421242" className="text-[#C58351] transition hover:text-white">
                   +7 (987) 942-12-42
                 </a>
               </p>
               <p>
                 Email:{" "}
-                <a href="mailto:3dsmartdesign@bk.ru" className="text-[#d7c4a1] transition hover:text-white">
+                <a href="mailto:3dsmartdesign@bk.ru" className="text-[#C58351] transition hover:text-white">
                   3dsmartdesign@bk.ru
                 </a>
               </p>

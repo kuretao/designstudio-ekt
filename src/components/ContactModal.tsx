@@ -11,7 +11,7 @@ type Props = {
 };
 
 const inputCls =
-  "w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-[#f3efe7] outline-none transition placeholder:text-white/25 focus:border-[#d7c4a1]/60 focus:bg-white/[0.07]";
+  "w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-[#F5F2EC] outline-none transition placeholder:text-white/25 focus:border-[#C58351]/60 focus:bg-white/[0.07]";
 
 export default function ContactModal({ open, onClose, promoTitle }: Props) {
   const backdropRef = useRef<HTMLDivElement>(null);
@@ -47,7 +47,7 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
     { label: "Telegram", href: messengerLinks.telegram, color: "border-[#229ED9]/35 text-[#229ED9]" },
     { label: "WhatsApp", href: `${messengerLinks.whatsapp}?text=${message}`, color: "border-[#25D366]/35 text-[#25D366]" },
     { label: "Viber", href: messengerLinks.viber, color: "border-[#7360F2]/35 text-[#7360F2]" },
-    { label: "Звонок", href: messengerLinks.phoneHref, color: "border-[#d7c4a1]/35 text-[#d7c4a1]" },
+    { label: "Звонок", href: messengerLinks.phoneHref, color: "border-[#C58351]/35 text-[#C58351]" },
   ];
 
   return (
@@ -55,10 +55,10 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
       ref={backdropRef}
       onClick={(event) => event.target === backdropRef.current && onClose()}
       className="fixed inset-0 z-[100] flex items-end justify-center p-4 sm:items-center"
-      style={{ background: "rgba(13,13,11,0.85)", backdropFilter: "blur(14px)" }}
+      style={{ background: "rgba(5,5,5,0.85)", backdropFilter: "blur(14px)" }}
     >
-      <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-[#111110] shadow-[0_40px_120px_rgba(0,0,0,0.75)]">
-        <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-64 -translate-x-1/2 rounded-full bg-[#d7c4a1]/10 blur-3xl" />
+      <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] shadow-[0_40px_120px_rgba(0,0,0,0.75)]">
+        <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-64 -translate-x-1/2 rounded-full bg-[#C58351]/10 blur-3xl" />
 
         <div className="relative px-6 pb-4 pt-6">
           <button
@@ -68,11 +68,11 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
           >
             ×
           </button>
-          <p className="mb-1 text-[10px] uppercase tracking-[0.4em] text-[#d7c4a1]">Связаться с нами</p>
-          <h2 className="text-2xl font-light tracking-[-0.035em] text-[#f3efe7]">
+          <p className="mb-1 text-[10px] uppercase tracking-[0.4em] text-[#C58351]">Связаться с нами</p>
+          <h2 className="text-2xl font-light tracking-[-0.035em] text-[#F5F2EC]">
             {promoTitle ? "Записаться на акцию" : "Напишите нам"}
           </h2>
-          {promoTitle && <p className="mt-1.5 text-sm text-[#d8d1c4]">«{promoTitle}»</p>}
+          {promoTitle && <p className="mt-1.5 text-sm text-[#D6D1CA]">«{promoTitle}»</p>}
         </div>
 
         <div className="mx-6 border-t border-white/8" />
@@ -115,7 +115,7 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
               window.location.href = `mailto:3dsmartdesign@bk.ru?subject=${subject}&body=${body}`;
             }}
             className={`w-full rounded-2xl py-3.5 text-sm font-medium tracking-[0.06em] transition duration-300 ${
-              agreed ? "bg-[#d7c4a1] text-[#0d0d0b] hover:bg-[#f3efe7]" : "cursor-not-allowed bg-white/5 text-white/20"
+              agreed ? "bg-[#C58351] text-[#050505] hover:bg-[#F5F2EC]" : "cursor-not-allowed bg-white/5 text-white/20"
             }`}
           >
             Отправить заявку
@@ -124,14 +124,14 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
 
         <div className="px-6 pb-2 pt-4">
           <label className="flex cursor-pointer items-start gap-3">
-            <input type="checkbox" checked={agreed} onChange={(event) => setAgreed(event.target.checked)} className="mt-1 accent-[#d7c4a1]" />
+            <input type="checkbox" checked={agreed} onChange={(event) => setAgreed(event.target.checked)} className="mt-1 accent-[#C58351]" />
             <span className="text-xs leading-relaxed text-white/40">
               Я ознакомился(-ась) с{" "}
-              <Link href="/user/agreement" target="_blank" className="text-[#d7c4a1]/70 underline underline-offset-2">
+              <Link href="/user/agreement" target="_blank" className="text-[#C58351]/70 underline underline-offset-2">
                 пользовательским соглашением
               </Link>{" "}
               и{" "}
-              <Link href="/politika-konfidencialnosti" target="_blank" className="text-[#d7c4a1]/70 underline underline-offset-2">
+              <Link href="/politika-konfidencialnosti" target="_blank" className="text-[#C58351]/70 underline underline-offset-2">
                 политикой конфиденциальности
               </Link>
               .

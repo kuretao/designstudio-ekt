@@ -61,7 +61,7 @@ function FooterLogo() {
         ))}
         <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="22s" repeatCount="indefinite" />
       </g>
-      <circle cx={0} cy={0} r={0.19} fill="#0d0d0b" stroke="rgba(255,255,255,0.42)" strokeWidth="0.032" />
+      <circle cx={0} cy={0} r={0.19} fill="#050505" stroke="rgba(255,255,255,0.42)" strokeWidth="0.032" />
     </svg>
   );
 }
@@ -72,9 +72,9 @@ export default function Footer() {
   const col2 = servicePageItems.slice(half);
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-[#0d0d0b]">
+    <footer className="relative overflow-hidden border-t border-white/10 bg-[#050505]">
       {/* Glow accent */}
-      <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full opacity-[0.07]" style={{ background: "radial-gradient(circle, #d7c4a1 0%, transparent 70%)", filter: "blur(60px)" }} />
+      <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full opacity-[0.07]" style={{ background: "radial-gradient(circle, #C58351 0%, transparent 70%)", filter: "blur(60px)" }} />
 
       {/* ── Main grid ── */}
       <div className="mx-auto max-w-7xl px-5 pb-12 pt-16 md:px-10 lg:px-16">
@@ -113,7 +113,7 @@ export default function Footer() {
 
           {/* ── Col 2 · Услуги ── */}
           <div>
-            <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#d7c4a1]">Услуги</p>
+            <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#C58351]">Услуги</p>
             <ul className="space-y-2.5">
               {col1.map((item) => (
                 <li key={item.id}>
@@ -121,7 +121,7 @@ export default function Footer() {
                     href={`/${item.id}`}
                     className="group flex items-center gap-2 text-sm text-white/45 transition-colors duration-200 hover:text-white"
                   >
-                    <span className="h-px w-3 shrink-0 bg-white/15 transition-all duration-200 group-hover:w-4 group-hover:bg-[#d7c4a1]" />
+                    <span className="h-px w-3 shrink-0 bg-white/15 transition-all duration-200 group-hover:w-4 group-hover:bg-[#C58351]" />
                     {item.title}
                   </Link>
                 </li>
@@ -132,7 +132,7 @@ export default function Footer() {
                     href={`/${item.id}`}
                     className="group flex items-center gap-2 text-sm text-white/45 transition-colors duration-200 hover:text-white"
                   >
-                    <span className="h-px w-3 shrink-0 bg-white/15 transition-all duration-200 group-hover:w-4 group-hover:bg-[#d7c4a1]" />
+                    <span className="h-px w-3 shrink-0 bg-white/15 transition-all duration-200 group-hover:w-4 group-hover:bg-[#C58351]" />
                     {item.title}
                   </Link>
                 </li>
@@ -142,7 +142,7 @@ export default function Footer() {
 
           {/* ── Col 3 · Навигация ── */}
           <div>
-            <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#d7c4a1]">Разделы</p>
+            <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#C58351]">Разделы</p>
             <ul className="space-y-2.5">
               {navLinks.map((l) => (
                 <li key={l.href}>
@@ -150,7 +150,7 @@ export default function Footer() {
                     href={l.href}
                     className="group flex items-center gap-2 text-sm text-white/45 transition-colors duration-200 hover:text-white"
                   >
-                    <span className="h-px w-3 shrink-0 bg-white/15 transition-all duration-200 group-hover:w-4 group-hover:bg-[#d7c4a1]" />
+                    <span className="h-px w-3 shrink-0 bg-white/15 transition-all duration-200 group-hover:w-4 group-hover:bg-[#C58351]" />
                     {l.label}
                   </Link>
                 </li>
@@ -160,14 +160,14 @@ export default function Footer() {
 
           {/* ── Col 4 · Контакты ── */}
           <div>
-            <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#d7c4a1]">Контакты</p>
+            <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#C58351]">Контакты</p>
             <div className="space-y-5">
               {/* Phone */}
               <div>
                 <p className="mb-1 text-[10px] uppercase tracking-[0.22em] text-white/25">Телефон</p>
                 <a
                   href={contactInfo.phoneHref}
-                  className="text-base font-light text-white transition-colors duration-200 hover:text-[#d7c4a1]"
+                  className="text-base font-light text-white transition-colors duration-200 hover:text-[#C58351]"
                 >
                   {contactInfo.phone}
                 </a>
@@ -181,7 +181,7 @@ export default function Footer() {
                     <a
                       key={e}
                       href={`mailto:${e}`}
-                      className="block text-sm text-white/60 transition-colors duration-200 hover:text-[#d7c4a1]"
+                      className="block text-sm text-white/60 transition-colors duration-200 hover:text-[#C58351]"
                     >
                       {e}
                     </a>

@@ -68,17 +68,17 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
             {portfolioDemoItems.map((item) => (
               <div
                 key={item.title}
-                className="group relative h-80 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#d7c4a1]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.42)]"
+                className="group relative h-80 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#C58351]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.42)]"
               >
                 <img
                   src={item.image}
                   alt={item.title}
                   className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:saturate-125"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0b]/80 via-[#0d0d0b]/10 to-[#d7c4a1]/10 opacity-80 transition duration-500 group-hover:opacity-100" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-[#050505]/10 to-[#C58351]/10 opacity-80 transition duration-500 group-hover:opacity-100" />
                 <div className="absolute inset-4 rounded-[1.55rem] border border-white/0 transition duration-500 group-hover:border-white/25" />
                 <div className="absolute bottom-5 left-5 right-5">
-                  <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#d7c4a1]">{item.meta}</p>
+                  <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#C58351]">{item.meta}</p>
                   <h3 className="text-2xl font-light tracking-[-0.035em] text-white">{item.title}</h3>
                 </div>
               </div>
@@ -94,8 +94,8 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
               onClick={() => setActiveFilter(filter)}
               className={`relative overflow-hidden rounded-full border px-5 py-3 text-xs uppercase tracking-[0.22em] transition duration-300 ${
                 activeFilter === filter
-                  ? "border-[#d7c4a1] bg-[#d7c4a1] text-[#0d0d0b] shadow-[0_0_34px_rgba(215,196,161,0.22)]"
-                  : "border-white/15 text-[#d8d1c4] hover:-translate-y-0.5 hover:border-[#d7c4a1]/60 hover:bg-white/[0.04] hover:text-white"
+                  ? "border-[#C58351] bg-[#C58351] text-[#050505] shadow-[0_0_34px_rgba(197,131,81,0.22)]"
+                  : "border-white/15 text-[#D6D1CA] hover:-translate-y-0.5 hover:border-[#C58351]/60 hover:bg-white/[0.04] hover:text-white"
               }`}
             >
               {filter}
@@ -113,7 +113,7 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
               onSelectProject(project);
               scrollToProjectShowcase();
             }}
-            className="grid-card group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] text-left transition duration-500 hover:-translate-y-2 hover:border-[#d7c4a1]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
+            className="grid-card group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] text-left transition duration-500 hover:-translate-y-2 hover:border-[#C58351]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
           >
             <div className="relative h-80 overflow-hidden">
               <img
@@ -121,18 +121,18 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
                 alt={project.title}
                 className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:saturate-125"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-[#d7c4a1]/10 transition duration-500 group-hover:from-black/70" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-[#C58351]/10 transition duration-500 group-hover:from-black/70" />
               <div className="absolute inset-4 rounded-[1.55rem] border border-white/0 transition duration-500 group-hover:border-white/25" />
               <div className="absolute bottom-5 left-5 right-5">
-                <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#d7c4a1]">{project.category}</p>
+                <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#C58351]">{project.category}</p>
                 <h3 className="text-3xl font-light tracking-[-0.04em] transition duration-500 group-hover:translate-x-1">
                   {project.title}
                 </h3>
               </div>
             </div>
             <div className="p-6">
-              <p className="text-sm leading-relaxed text-[#d8d1c4]">{project.description}</p>
-              <span className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-[#d7c4a1] transition group-hover:gap-3">
+              <p className="text-sm leading-relaxed text-[#D6D1CA]">{project.description}</p>
+              <span className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-[#C58351] transition group-hover:gap-3">
                 Смотреть проект <span>→</span>
               </span>
             </div>
@@ -151,7 +151,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
     <section id="project-showcase" className="scroll-mt-28 px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
         <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.025]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(215,196,161,.16),transparent_30%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(197,131,81,.16),transparent_30%)]" />
           <div className="relative grid gap-0 lg:grid-cols-[1.08fr_0.92fr]">
             <div className="group relative min-h-[620px] overflow-hidden">
               <img
@@ -159,15 +159,15 @@ export function ProjectShowcase({ project }: { project: Project }) {
                 alt={project.title}
                 className="absolute inset-0 h-full w-full object-cover transition duration-[1200ms] ease-out group-hover:scale-105 group-hover:brightness-110 group-hover:saturate-125"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0b]/85 via-[#0d0d0b]/10 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/85 via-[#050505]/10 to-transparent" />
               <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center gap-3">
-                <span className="rounded-full border border-[#d7c4a1]/40 bg-[#0d0d0b]/55 px-4 py-2 text-xs uppercase tracking-[0.24em] text-[#d7c4a1] backdrop-blur">
+                <span className="rounded-full border border-[#C58351]/40 bg-[#050505]/55 px-4 py-2 text-xs uppercase tracking-[0.24em] text-[#C58351] backdrop-blur">
                   {project.category}
                 </span>
-                <span className="rounded-full border border-white/15 bg-[#0d0d0b]/45 px-4 py-2 text-xs text-white/70 backdrop-blur">
+                <span className="rounded-full border border-white/15 bg-[#050505]/45 px-4 py-2 text-xs text-white/70 backdrop-blur">
                   {project.location}
                 </span>
-                <span className="rounded-full border border-white/15 bg-[#0d0d0b]/45 px-4 py-2 text-xs text-white/70 backdrop-blur">
+                <span className="rounded-full border border-white/15 bg-[#050505]/45 px-4 py-2 text-xs text-white/70 backdrop-blur">
                   {project.year}
                 </span>
               </div>
@@ -177,7 +177,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
               <div>
                 <SectionLabel>Выбранный проект</SectionLabel>
                 <h2 className="text-5xl font-light leading-[0.95] tracking-[-0.055em] md:text-7xl">{project.title}</h2>
-                <p className="mt-7 text-lg leading-relaxed text-[#d8d1c4]">{project.description}</p>
+                <p className="mt-7 text-lg leading-relaxed text-[#D6D1CA]">{project.description}</p>
               </div>
 
               <div className="mt-10 grid gap-4">
@@ -187,8 +187,8 @@ export function ProjectShowcase({ project }: { project: Project }) {
                   ["Формат", "3D-ракурсы, подбор решений, рабочая логика и визуальная подача для клиента."],
                 ].map(([title, text]) => (
                   <GlassPanel key={title} className="rounded-[1.25rem] p-5">
-                    <span className="text-xs uppercase tracking-[0.28em] text-[#d7c4a1]">{title}</span>
-                    <p className="mt-3 text-sm leading-relaxed text-[#d8d1c4]">{text}</p>
+                    <span className="text-xs uppercase tracking-[0.28em] text-[#C58351]">{title}</span>
+                    <p className="mt-3 text-sm leading-relaxed text-[#D6D1CA]">{text}</p>
                   </GlassPanel>
                 ))}
               </div>
@@ -200,15 +200,15 @@ export function ProjectShowcase({ project }: { project: Project }) {
           {gallery.map((image, index) => (
             <div
               key={`${project.id}-${image}-${index}`}
-              className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#d7c4a1]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.42)]"
+              className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#C58351]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.42)]"
             >
               <img
                 src={image}
                 alt={`${project.title} gallery ${index + 1}`}
                 className="h-80 w-full object-cover transition duration-700 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:saturate-125"
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0d0d0b]/70 via-transparent to-[#d7c4a1]/10 opacity-0 transition duration-500 group-hover:opacity-100" />
-              <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.24em] text-[#d7c4a1]">0{index + 1}</span>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/70 via-transparent to-[#C58351]/10 opacity-0 transition duration-500 group-hover:opacity-100" />
+              <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.24em] text-[#C58351]">0{index + 1}</span>
             </div>
           ))}
         </div>
@@ -217,12 +217,12 @@ export function ProjectShowcase({ project }: { project: Project }) {
           <div>
             <SectionLabel className="mb-4">Render / Blueprint</SectionLabel>
             <h3 className="text-4xl font-light tracking-[-0.045em] md:text-6xl">Сравнение до / после</h3>
-            <p className="mt-5 text-[#d8d1c4]">
+            <p className="mt-5 text-[#D6D1CA]">
               Ползунок показывает, как меняется восприятие объекта после визуальной проработки. Здесь можно заменить демо на реальные чертежи, рендеры или фото объекта.
             </p>
           </div>
 
-          <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.025] transition duration-500 hover:-translate-y-1 hover:border-[#d7c4a1]/55 hover:shadow-[0_28px_90px_rgba(215,196,161,0.12)]">
+          <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.025] transition duration-500 hover:-translate-y-1 hover:border-[#C58351]/55 hover:shadow-[0_28px_90px_rgba(197,131,81,0.12)]">
             <img
               src={project.beforeImage || projects[4].image}
               alt="before"
@@ -235,13 +235,13 @@ export function ProjectShowcase({ project }: { project: Project }) {
                 className="h-[520px] w-[calc(100vw-40px)] max-w-none object-cover transition duration-700 group-hover:scale-[1.03] group-hover:brightness-110 group-hover:saturate-125 lg:w-[760px]"
               />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0b]/30 via-transparent to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/30 via-transparent to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
             <div
-              className="absolute inset-y-0 w-px bg-[#d7c4a1] shadow-[0_0_28px_rgba(215,196,161,0.9)] transition duration-300 group-hover:w-0.5"
+              className="absolute inset-y-0 w-px bg-[#C58351] shadow-[0_0_28px_rgba(197,131,81,0.9)] transition duration-300 group-hover:w-0.5"
               style={{ left: `${compare}%` }}
             />
             <div
-              className="pointer-events-none absolute top-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d7c4a1]/80 bg-[#0d0d0b]/65 shadow-[0_0_30px_rgba(215,196,161,0.35)] backdrop-blur transition duration-300 group-hover:scale-110 group-hover:bg-[#d7c4a1] group-hover:shadow-[0_0_42px_rgba(215,196,161,0.75)]"
+              className="pointer-events-none absolute top-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#C58351]/80 bg-[#050505]/65 shadow-[0_0_30px_rgba(197,131,81,0.35)] backdrop-blur transition duration-300 group-hover:scale-110 group-hover:bg-[#C58351] group-hover:shadow-[0_0_42px_rgba(197,131,81,0.75)]"
               style={{ left: `${compare}%` }}
             />
             <input
@@ -251,7 +251,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
               max="100"
               value={compare}
               onChange={(event) => setCompare(Number(event.target.value))}
-              className="absolute inset-x-8 bottom-8 accent-[#d7c4a1]"
+              className="absolute inset-x-8 bottom-8 accent-[#C58351]"
             />
           </div>
         </div>

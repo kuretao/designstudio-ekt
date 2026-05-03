@@ -51,7 +51,7 @@ const directions = [
 
 export default function AboutPageFull() {
   return (
-    <div className="page-in pt-24">
+    <div className="page-in">
       <section className="relative min-h-[calc(100vh-6rem)] overflow-hidden px-5 py-20 md:px-10 lg:px-16">
         <img src={projects[0].image} alt="3D Smart Design Studio" className="absolute inset-0 h-full w-full object-cover opacity-45" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.98),rgba(5,5,5,.78),rgba(5,5,5,.22)),linear-gradient(0deg,#050505,transparent_42%)]" />

@@ -33,7 +33,7 @@ function NewsArticlePage({ article }: { article: NewsArticle }) {
   const related = newsArticles.filter((a) => a.slug !== article.slug).slice(0, 3);
 
   return (
-    <article className="page-in pt-24">
+    <article className="page-in">
       {/* Hero */}
       <section className="relative flex min-h-[70vh] items-end overflow-hidden px-5 pb-16 md:px-10 lg:px-16">
         <img

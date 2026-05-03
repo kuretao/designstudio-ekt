@@ -6,20 +6,20 @@ import ContactModal from "@/src/modals/ContactModal";
 
 const badgeColors: Record<string, string> = {
   Интерьер: "border-[#C58351]/40 text-[#C58351]",
-  Визуализация: "border-[#7360F2]/40 text-[#7360F2]",
-  Ландшафт: "border-[#4ade80]/35 text-[#4ade80]",
+  Визуализация: "border-[#C58351]/40 text-[#C58351]",
+  Ландшафт: "border-[#C58351]/40 text-[#C58351]",
 };
 
 const highlightColors: Record<string, string> = {
   Интерьер: "text-[#C58351]",
-  Визуализация: "text-[#9d8eff]",
-  Ландшафт: "text-[#4ade80]",
+  Визуализация: "text-[#C58351]",
+  Ландшафт: "text-[#C58351]",
 };
 
 const glowColors: Record<string, string> = {
   Интерьер: "hover:shadow-[0_32px_100px_rgba(197,131,81,0.12)]",
-  Визуализация: "hover:shadow-[0_32px_100px_rgba(115,96,242,0.14)]",
-  Ландшафт: "hover:shadow-[0_32px_100px_rgba(74,222,128,0.12)]",
+  Визуализация: "hover:shadow-[0_32px_100px_rgba(197,131,81,0.12)]",
+  Ландшафт: "hover:shadow-[0_32px_100px_rgba(197,131,81,0.12)]",
 };
 
 export default function PromosPage() {
@@ -108,9 +108,9 @@ export default function PromosPage() {
                         onClick={() => openModal(promo.title)}
                         className={`group/btn inline-flex items-center gap-3 rounded-full border px-7 py-4 text-xs uppercase tracking-[0.24em] transition duration-300 ${
                           promo.badge === "Визуализация"
-                            ? "border-[#7360F2]/50 text-[#9d8eff] hover:bg-[#7360F2] hover:text-white"
+                            ? "border-[#C58351]/50 text-[#C58351] hover:bg-[#C58351] hover:text-[#050505]"
                             : promo.badge === "Ландшафт"
-                            ? "border-[#4ade80]/40 text-[#4ade80] hover:bg-[#4ade80] hover:text-[#050505]"
+                            ? "border-[#C58351]/50 text-[#C58351] hover:bg-[#C58351] hover:text-[#050505]"
                             : "border-[#C58351]/50 text-[#C58351] hover:bg-[#C58351] hover:text-[#050505]"
                         }`}
                       >

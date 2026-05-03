@@ -44,9 +44,9 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
   );
 
   const messengerItems = [
-    { label: "Telegram", href: messengerLinks.telegram, color: "border-[#229ED9]/35 text-[#229ED9]" },
-    { label: "WhatsApp", href: `${messengerLinks.whatsapp}?text=${message}`, color: "border-[#25D366]/35 text-[#25D366]" },
-    { label: "Viber", href: messengerLinks.viber, color: "border-[#7360F2]/35 text-[#7360F2]" },
+    { label: "Telegram", href: messengerLinks.telegram, color: "border-[#C58351]/35 text-[#C58351]" },
+    { label: "WhatsApp", href: `${messengerLinks.whatsapp}?text=${message}`, color: "border-[#C58351]/35 text-[#C58351]" },
+    { label: "Viber", href: messengerLinks.viber, color: "border-[#C58351]/35 text-[#C58351]" },
     { label: "Звонок", href: messengerLinks.phoneHref, color: "border-[#C58351]/35 text-[#C58351]" },
   ];
 

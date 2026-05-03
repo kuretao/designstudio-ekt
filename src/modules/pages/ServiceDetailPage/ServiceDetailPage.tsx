@@ -10,7 +10,7 @@ type ServicePageItem = (typeof servicePageItems)[number];
 
 function ServiceDetailPage({ item }: { item: ServicePageItem }) {
   return (
-    <div className="page-in pt-24">
+    <div className="page-in">
       <section className="relative min-h-screen overflow-hidden px-5 pb-20 pt-28 md:px-10 lg:px-16">
         <img src={item.image} alt={item.title} className="absolute inset-0 h-full w-full object-cover opacity-45" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.98),rgba(5,5,5,.70),rgba(5,5,5,.28)),radial-gradient(circle_at_72%_18%,rgba(197,131,81,.22),transparent_34%)]" />

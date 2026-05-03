@@ -40,7 +40,7 @@ function ContentPage({ page }: { page: ContentPageItem }) {
   const isBlog = page.id === "blog";
 
   return (
-    <div className="page-in pt-24">
+    <div className="page-in">
       <section className="relative overflow-hidden px-5 py-28 md:px-10 lg:px-16">
         <img src={projects[0].image} alt={page.title} className="absolute inset-0 h-full w-full object-cover opacity-25" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,#050505,rgba(5,5,5,.82),rgba(5,5,5,.45))]" />

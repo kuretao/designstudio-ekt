@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { projects } from "@/src/data";
@@ -67,10 +67,10 @@ export default function AboutPageFull() {
               3D Smart Design Studio соединяет эстетику, инженерную логику и понятный процесс. Заказчик видит не просто красивую картинку, а уверенный маршрут от идеи до реализации.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              <Link href="/kontakty" className="rounded-full border border-[#C58351] bg-[#C58351] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:-translate-y-0.5 hover:bg-[#d19362]">
+              <Link href="/kontakty" className="rounded-full border border-[#D69A66] bg-[#D69A66] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:-translate-y-0.5 hover:bg-[#E3AD7B]">
                 Обсудить проект
               </Link>
-              <Link href="/portfolio" className="rounded-full border border-white/15 bg-black/25 px-6 py-4 text-xs uppercase tracking-[0.24em] text-white/75 backdrop-blur transition duration-300 hover:border-[#C58351]/70 hover:text-white">
+              <Link href="/portfolio" className="rounded-full border border-white/15 bg-black/25 px-6 py-4 text-xs uppercase tracking-[0.24em] text-white/75 backdrop-blur transition duration-300 hover:border-[#D69A66]/70 hover:text-white">
                 Смотреть работы
               </Link>
             </div>
@@ -80,7 +80,7 @@ export default function AboutPageFull() {
             <div className="grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 sm:grid-cols-3">
               {stats.slice(0, 3).map((stat) => (
                 <div key={stat.value} className="bg-[#050505]/72 p-5 backdrop-blur">
-                  <strong className="block text-3xl font-light tracking-[-0.04em] text-[#C58351]">{stat.value}</strong>
+                  <strong className="block text-3xl font-light tracking-[-0.04em] text-[#D69A66]">{stat.value}</strong>
                   <span className="mt-3 block text-xs uppercase leading-relaxed tracking-[0.16em] text-[#D6D1CA]">{stat.label}</span>
                 </div>
               ))}
@@ -94,12 +94,12 @@ export default function AboutPageFull() {
                   <p className="absolute bottom-5 left-5 right-5 text-2xl font-light tracking-[-0.04em]">Премиальная подача начинается с точной системы</p>
                 </div>
                 <div className="p-6 md:p-7">
-                  <p className="text-xs uppercase tracking-[0.35em] text-[#C58351]">Что внутри подхода</p>
+                  <p className="text-xs uppercase tracking-[0.35em] text-[#D69A66]">Что внутри подхода</p>
                   <div className="mt-6 grid gap-3">
                     {directions.map((direction) => (
                       <div key={direction} className="flex items-center justify-between border-b border-white/10 pb-3">
                         <span className="text-sm text-[#F5F2EC]">{direction}</span>
-                        <span className="text-[#C58351]">→</span>
+                        <span className="text-[#D69A66]">→</span>
                       </div>
                     ))}
                   </div>
@@ -114,7 +114,7 @@ export default function AboutPageFull() {
         <div className="mx-auto grid max-w-7xl gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 md:grid-cols-4">
           {stats.map((stat) => (
             <div key={stat.value} className="bg-[#050505] p-7">
-              <strong className="block text-4xl font-light tracking-[-0.05em] text-[#C58351] md:text-5xl">{stat.value}</strong>
+              <strong className="block text-4xl font-light tracking-[-0.05em] text-[#D69A66] md:text-5xl">{stat.value}</strong>
               <p className="mt-5 text-sm leading-relaxed text-[#D6D1CA]">{stat.label}</p>
             </div>
           ))}
@@ -132,8 +132,8 @@ export default function AboutPageFull() {
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {principles.map((item, index) => (
-              <GlassPanel key={item.title} className="rounded-[1.5rem] p-6 transition duration-500 hover:-translate-y-1 hover:border-[#C58351]/50">
-                <span className="text-sm text-[#C58351]">0{index + 1}</span>
+              <GlassPanel key={item.title} className="rounded-[1.5rem] p-6 transition duration-500 hover:-translate-y-1 hover:border-[#D69A66]/50">
+                <span className="text-sm text-[#D69A66]">0{index + 1}</span>
                 <h3 className="mt-8 text-2xl font-light tracking-[-0.035em]">{item.title}</h3>
                 <p className="mt-4 text-sm leading-relaxed text-[#D6D1CA]">{item.text}</p>
               </GlassPanel>
@@ -193,8 +193,8 @@ export default function AboutPageFull() {
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {workflow.map(([number, title, text]) => (
-              <div key={number} className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.025] p-7 transition duration-500 hover:-translate-y-1 hover:border-[#C58351]/45">
-                <span className="text-sm text-[#C58351]">{number}</span>
+              <div key={number} className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.025] p-7 transition duration-500 hover:-translate-y-1 hover:border-[#D69A66]/45">
+                <span className="text-sm text-[#D69A66]">{number}</span>
                 <h3 className="mt-10 text-2xl font-light">{title}</h3>
                 <p className="mt-4 text-sm leading-relaxed text-[#D6D1CA]">{text}</p>
               </div>
@@ -204,7 +204,7 @@ export default function AboutPageFull() {
       </section>
 
       <section className="px-5 pb-28 md:px-10 lg:px-16">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#C58351] p-8 text-[#050505] md:p-12 lg:p-16">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#D69A66] p-8 text-[#050505] md:p-12 lg:p-16">
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
             <div>
               <p className="mb-4 text-xs uppercase tracking-[0.35em] opacity-60">Начнем с разговора</p>

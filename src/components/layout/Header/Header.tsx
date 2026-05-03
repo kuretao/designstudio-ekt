@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -82,7 +82,7 @@ export default function Header() {
   };
 
   const menuLinkCls = (path: string) =>
-    `block text-right text-[13px] font-semibold uppercase tracking-[0.17em] transition-[opacity,transform] duration-[820ms] ease-[cubic-bezier(.19,1,.22,1)] hover:text-[#C58351] md:text-[17px] ${
+    `block text-right text-[13px] font-semibold uppercase tracking-[0.17em] transition-[opacity,transform] duration-[820ms] ease-[cubic-bezier(.19,1,.22,1)] hover:text-[#D69A66] md:text-[17px] ${
       currentPath === path ? "text-white/78" : "text-white/40"
     }`;
 

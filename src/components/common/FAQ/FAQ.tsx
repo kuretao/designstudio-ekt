@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { faq } from "@/src/data";
@@ -11,7 +11,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
     <div
       className={`rounded-[1.5rem] border bg-white/[0.03] transition-all duration-300 ${
         open
-          ? "border-[#C58351]/45 bg-white/[0.045] shadow-[0_8px_40px_rgba(197,131,81,0.06)]"
+          ? "border-[#D69A66]/45 bg-white/[0.045] shadow-[0_8px_40px_rgba(214,154,102,0.06)]"
           : "border-white/10 hover:border-white/20 hover:bg-white/[0.04]"
       }`}
     >
@@ -31,7 +31,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
         <span
           className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-lg font-light leading-none transition-all duration-300 ${
             open
-              ? "rotate-45 border-[#C58351]/50 bg-[#C58351]/10 text-[#C58351]"
+              ? "rotate-45 border-[#D69A66]/50 bg-[#D69A66]/10 text-[#D69A66]"
               : "border-white/15 text-white/40"
           }`}
         >

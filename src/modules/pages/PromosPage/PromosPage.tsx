@@ -1,25 +1,25 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { promos } from "@/src/data";
 import ContactModal from "@/src/modals/ContactModal";
 
 const badgeColors: Record<string, string> = {
-  Интерьер: "border-[#C58351]/40 text-[#C58351]",
-  Визуализация: "border-[#C58351]/40 text-[#C58351]",
-  Ландшафт: "border-[#C58351]/40 text-[#C58351]",
+  Интерьер: "border-[#D69A66]/40 text-[#D69A66]",
+  Визуализация: "border-[#D69A66]/40 text-[#D69A66]",
+  Ландшафт: "border-[#D69A66]/40 text-[#D69A66]",
 };
 
 const highlightColors: Record<string, string> = {
-  Интерьер: "text-[#C58351]",
-  Визуализация: "text-[#C58351]",
-  Ландшафт: "text-[#C58351]",
+  Интерьер: "text-[#D69A66]",
+  Визуализация: "text-[#D69A66]",
+  Ландшафт: "text-[#D69A66]",
 };
 
 const glowColors: Record<string, string> = {
-  Интерьер: "hover:shadow-[0_32px_100px_rgba(197,131,81,0.12)]",
-  Визуализация: "hover:shadow-[0_32px_100px_rgba(197,131,81,0.12)]",
-  Ландшафт: "hover:shadow-[0_32px_100px_rgba(197,131,81,0.12)]",
+  Интерьер: "hover:shadow-[0_32px_100px_rgba(214,154,102,0.12)]",
+  Визуализация: "hover:shadow-[0_32px_100px_rgba(214,154,102,0.12)]",
+  Ландшафт: "hover:shadow-[0_32px_100px_rgba(214,154,102,0.12)]",
 };
 
 export default function PromosPage() {
@@ -37,7 +37,7 @@ export default function PromosPage() {
         {/* Hero */}
         <section className="px-5 pb-10 pt-20 md:px-10 lg:px-16">
           <div className="mx-auto max-w-7xl">
-            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#C58351]">Special offers</p>
+            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Special offers</p>
             <div className="grid gap-8 md:grid-cols-[1fr_0.55fr] md:items-end">
               <h1 className="text-6xl font-light leading-[0.92] tracking-[-0.065em] md:text-8xl">
                 Акции&nbsp;и скидки
@@ -47,7 +47,7 @@ export default function PromosPage() {
                   Пакетные условия для комплексных проектов. Стоимость фиксируется после брифа — ниже стартовая структура.
                 </p>
                 <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-xs text-white/50">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#C58351]" />
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#D69A66]" />
                   Акции действуют до 31 января 2026
                 </div>
               </div>
@@ -108,10 +108,10 @@ export default function PromosPage() {
                         onClick={() => openModal(promo.title)}
                         className={`group/btn inline-flex items-center gap-3 rounded-full border px-7 py-4 text-xs uppercase tracking-[0.24em] transition duration-300 ${
                           promo.badge === "Визуализация"
-                            ? "border-[#C58351]/50 text-[#C58351] hover:bg-[#C58351] hover:text-[#050505]"
+                            ? "border-[#D69A66]/50 text-[#D69A66] hover:bg-[#D69A66] hover:text-[#050505]"
                             : promo.badge === "Ландшафт"
-                            ? "border-[#C58351]/50 text-[#C58351] hover:bg-[#C58351] hover:text-[#050505]"
-                            : "border-[#C58351]/50 text-[#C58351] hover:bg-[#C58351] hover:text-[#050505]"
+                            ? "border-[#D69A66]/50 text-[#D69A66] hover:bg-[#D69A66] hover:text-[#050505]"
+                            : "border-[#D69A66]/50 text-[#D69A66] hover:bg-[#D69A66] hover:text-[#050505]"
                         }`}
                       >
                         Записаться на акцию
@@ -140,8 +140,8 @@ export default function PromosPage() {
         <section className="px-5 py-20 md:px-10 lg:px-16">
           <div className="mx-auto max-w-7xl">
             <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.025] px-8 py-14 text-center md:px-16">
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(197,131,81,0.1),transparent_60%)]" />
-              <p className="relative mb-4 text-xs uppercase tracking-[0.45em] text-[#C58351]">Нужна консультация?</p>
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(214,154,102,0.1),transparent_60%)]" />
+              <p className="relative mb-4 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Нужна консультация?</p>
               <h2 className="relative mx-auto max-w-2xl text-4xl font-light tracking-[-0.045em] md:text-6xl">
                 Расскажем подробнее о каждой акции
               </h2>
@@ -150,7 +150,7 @@ export default function PromosPage() {
               </p>
               <button
                 onClick={() => openModal()}
-                className="relative mt-10 inline-flex items-center gap-3 rounded-full bg-[#C58351] px-8 py-4 text-sm uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:bg-[#F5F2EC] hover:shadow-[0_0_48px_rgba(197,131,81,0.35)]"
+                className="relative mt-10 inline-flex items-center gap-3 rounded-full bg-[#D69A66] px-8 py-4 text-sm uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:bg-[#F5F2EC] hover:shadow-[0_0_48px_rgba(214,154,102,0.35)]"
               >
                 Связаться с нами
                 <span>→</span>

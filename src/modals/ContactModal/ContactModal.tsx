@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -11,7 +11,7 @@ type Props = {
 };
 
 const inputCls =
-  "w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-[#F5F2EC] outline-none transition placeholder:text-white/25 focus:border-[#C58351]/60 focus:bg-white/[0.07]";
+  "w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-[#F5F2EC] outline-none transition placeholder:text-white/25 focus:border-[#D69A66]/60 focus:bg-white/[0.07]";
 
 export default function ContactModal({ open, onClose, promoTitle }: Props) {
   const backdropRef = useRef<HTMLDivElement>(null);
@@ -44,10 +44,10 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
   );
 
   const messengerItems = [
-    { label: "Telegram", href: messengerLinks.telegram, color: "border-[#C58351]/35 text-[#C58351]" },
-    { label: "WhatsApp", href: `${messengerLinks.whatsapp}?text=${message}`, color: "border-[#C58351]/35 text-[#C58351]" },
-    { label: "Viber", href: messengerLinks.viber, color: "border-[#C58351]/35 text-[#C58351]" },
-    { label: "Звонок", href: messengerLinks.phoneHref, color: "border-[#C58351]/35 text-[#C58351]" },
+    { label: "Telegram", href: messengerLinks.telegram, color: "border-[#D69A66]/35 text-[#D69A66]" },
+    { label: "WhatsApp", href: `${messengerLinks.whatsapp}?text=${message}`, color: "border-[#D69A66]/35 text-[#D69A66]" },
+    { label: "Viber", href: messengerLinks.viber, color: "border-[#D69A66]/35 text-[#D69A66]" },
+    { label: "Звонок", href: messengerLinks.phoneHref, color: "border-[#D69A66]/35 text-[#D69A66]" },
   ];
 
   return (
@@ -58,7 +58,7 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
       style={{ background: "rgba(5,5,5,0.85)", backdropFilter: "blur(14px)" }}
     >
       <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111] shadow-[0_40px_120px_rgba(0,0,0,0.75)]">
-        <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-64 -translate-x-1/2 rounded-full bg-[#C58351]/10 blur-3xl" />
+        <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-64 -translate-x-1/2 rounded-full bg-[#D69A66]/10 blur-3xl" />
 
         <div className="relative px-6 pb-4 pt-6">
           <button
@@ -68,7 +68,7 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
           >
             ×
           </button>
-          <p className="mb-1 text-[10px] uppercase tracking-[0.4em] text-[#C58351]">Связаться с нами</p>
+          <p className="mb-1 text-[10px] uppercase tracking-[0.4em] text-[#D69A66]">Связаться с нами</p>
           <h2 className="text-2xl font-light tracking-[-0.035em] text-[#F5F2EC]">
             {promoTitle ? "Записаться на акцию" : "Напишите нам"}
           </h2>
@@ -115,7 +115,7 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
               window.location.href = `mailto:3dsmartdesign@bk.ru?subject=${subject}&body=${body}`;
             }}
             className={`w-full rounded-2xl py-3.5 text-sm font-medium tracking-[0.06em] transition duration-300 ${
-              agreed ? "bg-[#C58351] text-[#050505] hover:bg-[#F5F2EC]" : "cursor-not-allowed bg-white/5 text-white/20"
+              agreed ? "bg-[#D69A66] text-[#050505] hover:bg-[#F5F2EC]" : "cursor-not-allowed bg-white/5 text-white/20"
             }`}
           >
             Отправить заявку
@@ -124,14 +124,14 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
 
         <div className="px-6 pb-2 pt-4">
           <label className="flex cursor-pointer items-start gap-3">
-            <input type="checkbox" checked={agreed} onChange={(event) => setAgreed(event.target.checked)} className="mt-1 accent-[#C58351]" />
+            <input type="checkbox" checked={agreed} onChange={(event) => setAgreed(event.target.checked)} className="mt-1 accent-[#D69A66]" />
             <span className="text-xs leading-relaxed text-white/40">
               Я ознакомился(-ась) с{" "}
-              <Link href="/user/agreement" target="_blank" className="text-[#C58351]/70 underline underline-offset-2">
+              <Link href="/user/agreement" target="_blank" className="text-[#D69A66]/70 underline underline-offset-2">
                 пользовательским соглашением
               </Link>{" "}
               и{" "}
-              <Link href="/politika-konfidencialnosti" target="_blank" className="text-[#C58351]/70 underline underline-offset-2">
+              <Link href="/politika-konfidencialnosti" target="_blank" className="text-[#D69A66]/70 underline underline-offset-2">
                 политикой конфиденциальности
               </Link>
               .

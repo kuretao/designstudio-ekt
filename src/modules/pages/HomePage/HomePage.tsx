@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { projects } from "@/src/data";
@@ -25,7 +25,7 @@ function FeatureProject({ project, label, reverse = false }: { project: Project;
 
       <div className={`relative z-10 grid w-full gap-8 md:grid-cols-2 ${reverse ? "md:[&>*:first-child]:col-start-2" : ""}`}>
         <GlassPanel className="section-in magnetic-card rounded-[2rem] p-7 md:p-10">
-          <p className="mb-6 text-xs uppercase tracking-[0.42em] text-[#C58351]">{label}</p>
+          <p className="mb-6 text-xs uppercase tracking-[0.42em] text-[#D69A66]">{label}</p>
           <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">{project.title}</h2>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-[#D6D1CA] md:text-lg">{project.description}</p>
           <div className="mt-9 grid grid-cols-3 gap-4 border-t border-white/15 pt-6 text-sm text-[#D6D1CA]">
@@ -55,12 +55,12 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
             loop
             playsInline
           />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(197,131,81,.16),transparent_32%),linear-gradient(90deg,rgba(5,5,5,.92),rgba(5,5,5,.58),rgba(5,5,5,.2))]" />
-          <div className="hero-copper-line absolute bottom-0 left-0 z-[1] h-px w-full bg-gradient-to-r from-[#C58351] via-white/30 to-transparent" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(214,154,102,.16),transparent_32%),linear-gradient(90deg,rgba(5,5,5,.92),rgba(5,5,5,.58),rgba(5,5,5,.2))]" />
+          <div className="hero-copper-line absolute bottom-0 left-0 z-[1] h-px w-full bg-gradient-to-r from-[#D69A66] via-white/30 to-transparent" />
 
           <div className="relative z-10 flex w-full items-end">
             <div className="max-w-6xl">
-              <p className="hero-reveal mb-5 text-xs uppercase tracking-[0.45em] text-[#C58351]">
+              <p className="hero-reveal mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">
                 Студия дизайна интерьера и архитектуры в Самаре
               </p>
               <h1 className="hero-reveal max-w-5xl text-6xl font-light leading-[0.92] tracking-[-0.07em] md:text-8xl lg:text-[9.5rem]">
@@ -72,7 +72,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
                 </p>
                 <Link
                   href="/kontakty"
-                  className="group inline-flex h-14 items-center justify-center rounded-full border border-[#C58351]/50 px-7 text-sm uppercase tracking-[0.22em] text-[#F5F2EC] transition hover:bg-[#C58351] hover:text-[#050505]"
+                  className="group inline-flex h-14 items-center justify-center rounded-full border border-[#D69A66]/50 px-7 text-sm uppercase tracking-[0.22em] text-[#F5F2EC] transition hover:bg-[#D69A66] hover:text-[#050505]"
                 >
                   Обсудить проект
                   <span className="ml-3 transition group-hover:translate-x-1">→</span>
@@ -86,7 +86,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
 
         <section className="snap-section story-section flex min-h-screen items-center px-5 py-28 md:px-10 lg:px-16">
           <div className="mx-auto max-w-6xl">
-            <p className="section-in mb-10 text-xs uppercase tracking-[0.45em] text-[#C58351]">Design philosophy</p>
+            <p className="section-in mb-10 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Design philosophy</p>
             <h2 className="text-4xl font-light leading-tight tracking-[-0.045em] text-[#F5F2EC] md:text-6xl lg:text-7xl">
               {storyText.split(" ").map((word, index) => (
                 <span key={`${word}-${index}`} className="story-word inline-block pr-3">

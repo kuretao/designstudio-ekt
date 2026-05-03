@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -26,7 +26,7 @@ export default function SectionLabel({ children, className = "mb-5", dir = "left
   return (
     <p
       ref={ref}
-      className={`flex items-center gap-2 text-xs uppercase tracking-[0.45em] text-[#C58351] ${className}`}
+      className={`flex items-center gap-2 text-xs uppercase tracking-[0.45em] text-[#D69A66] ${className}`}
       style={{
         opacity: vis ? 1 : 0,
         transform: vis
@@ -37,7 +37,7 @@ export default function SectionLabel({ children, className = "mb-5", dir = "left
         transition: "opacity 0.55s ease, transform 0.55s ease",
       }}
     >
-      <span className="text-[#C58351]/50">—</span>
+      <span className="text-[#D69A66]/50">—</span>
       {children}
     </p>
   );

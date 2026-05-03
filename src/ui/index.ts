@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import styled, { createGlobalStyle } from "styled-components";
 
@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
     --color-graphite: #171717;
     --color-graphite-soft: #22201f;
     --color-white: #F5F2EC;
-    --color-copper: #C58351;
+    --color-copper: #D69A66;
   }
 
   html {
@@ -18,7 +18,7 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     background:
-      radial-gradient(circle at 72% 18%, rgba(197, 131, 81, 0.12), transparent 28rem),
+      radial-gradient(circle at 72% 18%, rgba(214,154,102, 0.12), transparent 28rem),
       radial-gradient(circle at 12% 72%, rgba(255, 255, 255, 0.045), transparent 24rem),
       linear-gradient(135deg, var(--color-black) 0%, #0b0b0b 42%, var(--color-graphite) 100%);
     color: var(--color-white);
@@ -47,13 +47,13 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .motion-progress {
-    box-shadow: 0 0 24px rgba(197, 131, 81, 0.55);
+    box-shadow: 0 0 24px rgba(214,154,102, 0.55);
     will-change: transform;
   }
 
   .motion-curtain {
     background:
-      linear-gradient(90deg, rgba(245, 242, 236, 0.08), rgba(197, 131, 81, 0.08) 44%, rgba(5, 5, 5, 0.18)),
+      linear-gradient(90deg, rgba(245, 242, 236, 0.08), rgba(214,154,102, 0.08) 44%, rgba(5, 5, 5, 0.18)),
       rgba(10, 10, 10, 0.22);
     backdrop-filter: blur(22px) saturate(0.82);
     -webkit-backdrop-filter: blur(22px) saturate(0.82);
@@ -109,7 +109,7 @@ export const GlobalStyle = createGlobalStyle`
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(110deg, transparent 0%, rgba(197, 131, 81, 0.16) 48%, transparent 62%);
+    background: linear-gradient(110deg, transparent 0%, rgba(214,154,102, 0.16) 48%, transparent 62%);
     opacity: 0;
     transform: translateX(-120%);
   }
@@ -124,7 +124,7 @@ export const GlassPanel = styled.div`
   border: 1px solid rgba(245, 242, 236, 0.14);
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.018)),
-    linear-gradient(180deg, rgba(197, 131, 81, 0.055), transparent 54%);
+    linear-gradient(180deg, rgba(214,154,102, 0.055), transparent 54%);
   backdrop-filter: blur(22px);
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 `;

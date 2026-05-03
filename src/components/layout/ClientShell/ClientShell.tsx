@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -369,10 +369,10 @@ export default function ClientShell({ children }: { children: React.ReactNode })
   return (
     <main ref={mainRef} className="min-h-screen bg-[#050505] text-[#F5F2EC] antialiased">
       <GlobalStyle />
-      <div className="motion-progress fixed left-0 top-0 z-[100] h-px w-full origin-left scale-x-0 bg-[#C58351]" />
+      <div className="motion-progress fixed left-0 top-0 z-[100] h-px w-full origin-left scale-x-0 bg-[#D69A66]" />
       <div className="motion-curtain pointer-events-none fixed inset-0 z-[98] origin-left scale-x-0" />
       <div className="motion-cursor pointer-events-none fixed left-0 top-0 z-[120] hidden h-4 w-4 md:block">
-        <div className="motion-cursor-core h-full w-full rounded-full border border-[rgba(197,131,81,0.5)] bg-[rgba(197,131,81,0.1)]" />
+        <div className="motion-cursor-core h-full w-full rounded-full border border-[rgba(214,154,102,0.5)] bg-[rgba(214,154,102,0.1)]" />
       </div>
       <Noise />
       {showBackHome && (

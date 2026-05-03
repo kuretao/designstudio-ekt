@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import { contactInfo, servicePageItems } from "@/src/data";
@@ -39,12 +39,12 @@ const PinIcon = () => (
 
 /* ─── social links ───────────────────────────────────────────── */
 const socials = [
-  { label: "Telegram",  href: "https://t.me/+79879421242",                              icon: <TgIcon />,  color: "#C58351", bg: "rgba(197,131,81,0.12)",  border: "rgba(197,131,81,0.35)" },
-  { label: "WhatsApp",  href: "https://wa.me/79879421242",                              icon: <WaIcon />,  color: "#C58351", bg: "rgba(197,131,81,0.12)",  border: "rgba(197,131,81,0.35)" },
-  { label: "Viber",     href: "viber://chat?number=%2B79879421242",                     icon: <VbIcon />,  color: "#C58351", bg: "rgba(197,131,81,0.12)", border: "rgba(197,131,81,0.35)" },
-  { label: "LinkedIn",  href: "https://www.linkedin.com/in/3dsmartdesignstudio",        icon: <LiIcon />,  color: "#C58351", bg: "rgba(197,131,81,0.12)",  border: "rgba(197,131,81,0.35)" },
-  { label: "Behance",   href: "https://www.behance.net/3dsmartdesign",                  icon: <BeIcon />,  color: "#C58351", bg: "rgba(197,131,81,0.12)",  border: "rgba(197,131,81,0.35)" },
-  { label: "Pinterest", href: "https://ru.pinterest.com/3D_SMART_DESIGN_STUDIO/",       icon: <PinIcon />, color: "#C58351", bg: "rgba(197,131,81,0.12)",    border: "rgba(197,131,81,0.35)"  },
+  { label: "Telegram",  href: "https://t.me/+79879421242",                              icon: <TgIcon />,  color: "#D69A66", bg: "rgba(214,154,102,0.12)",  border: "rgba(214,154,102,0.35)" },
+  { label: "WhatsApp",  href: "https://wa.me/79879421242",                              icon: <WaIcon />,  color: "#D69A66", bg: "rgba(214,154,102,0.12)",  border: "rgba(214,154,102,0.35)" },
+  { label: "Viber",     href: "viber://chat?number=%2B79879421242",                     icon: <VbIcon />,  color: "#D69A66", bg: "rgba(214,154,102,0.12)", border: "rgba(214,154,102,0.35)" },
+  { label: "LinkedIn",  href: "https://www.linkedin.com/in/3dsmartdesignstudio",        icon: <LiIcon />,  color: "#D69A66", bg: "rgba(214,154,102,0.12)",  border: "rgba(214,154,102,0.35)" },
+  { label: "Behance",   href: "https://www.behance.net/3dsmartdesign",                  icon: <BeIcon />,  color: "#D69A66", bg: "rgba(214,154,102,0.12)",  border: "rgba(214,154,102,0.35)" },
+  { label: "Pinterest", href: "https://ru.pinterest.com/3D_SMART_DESIGN_STUDIO/",       icon: <PinIcon />, color: "#D69A66", bg: "rgba(214,154,102,0.12)",    border: "rgba(214,154,102,0.35)"  },
 ];
 
 /* ─── animated counter ───────────────────────────────────────── */
@@ -93,7 +93,7 @@ function FadeUp({ children, delay = 0, className = "" }: { children: React.React
   );
 }
 
-const inputCls = "w-full rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-sm text-[#F5F2EC] outline-none transition placeholder:text-white/25 focus:border-[#C58351]/60 focus:bg-white/[0.07]";
+const inputCls = "w-full rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-sm text-[#F5F2EC] outline-none transition placeholder:text-white/25 focus:border-[#D69A66]/60 focus:bg-white/[0.07]";
 
 function ContactMapPanel() {
   return (
@@ -109,12 +109,12 @@ function ContactMapPanel() {
       <div className="rounded-[2rem] border border-white/10 bg-white/[0.025] p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[#C58351]">Studio</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-[#D69A66]">Studio</p>
             <p className="mt-1 text-lg font-light text-white">3D Smart Design Studio</p>
             <p className="mt-0.5 text-sm text-white/40">Samara · remote worldwide</p>
           </div>
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
-            <div className="h-2.5 w-2.5 animate-pulse rounded-full bg-[#C58351]" />
+            <div className="h-2.5 w-2.5 animate-pulse rounded-full bg-[#D69A66]" />
           </div>
         </div>
       </div>
@@ -149,8 +149,8 @@ export function ContactSection() {
   return (
     <section id="contact" className="relative overflow-hidden px-5 pb-28 pt-20 md:px-10 lg:px-16">
       {/* Background glow orbs */}
-      <div className="pointer-events-none absolute -left-32 top-0 h-[600px] w-[600px] rounded-full opacity-20" style={{ background: "radial-gradient(circle, rgba(197,131,81,0.35) 0%, transparent 70%)", filter: "blur(80px)" }} />
-      <div className="pointer-events-none absolute -right-24 bottom-32 h-[500px] w-[500px] rounded-full opacity-15" style={{ background: "radial-gradient(circle, rgba(197,131,81,0.35) 0%, transparent 70%)", filter: "blur(80px)" }} />
+      <div className="pointer-events-none absolute -left-32 top-0 h-[600px] w-[600px] rounded-full opacity-20" style={{ background: "radial-gradient(circle, rgba(214,154,102,0.35) 0%, transparent 70%)", filter: "blur(80px)" }} />
+      <div className="pointer-events-none absolute -right-24 bottom-32 h-[500px] w-[500px] rounded-full opacity-15" style={{ background: "radial-gradient(circle, rgba(214,154,102,0.35) 0%, transparent 70%)", filter: "blur(80px)" }} />
 
       <div className="relative z-10 mx-auto max-w-7xl">
 
@@ -161,7 +161,7 @@ export function ContactSection() {
         <FadeUp delay={80}>
           <h1 className="text-6xl font-light leading-[0.9] tracking-[-0.065em] md:text-8xl lg:text-[10rem]">
             Свяжитесь<br />
-            <span className="text-[#C58351]">с нами</span>
+            <span className="text-[#D69A66]">с нами</span>
           </h1>
         </FadeUp>
 
@@ -187,11 +187,11 @@ export function ContactSection() {
             {
               label: "Телефон",
               content: (
-                <a href={contactInfo.phoneHref} className="text-2xl font-light text-white transition duration-300 hover:text-[#C58351]">
+                <a href={contactInfo.phoneHref} className="text-2xl font-light text-white transition duration-300 hover:text-[#D69A66]">
                   {contactInfo.phone}
                 </a>
               ),
-              accent: "#C58351",
+              accent: "#D69A66",
               delay: 0,
               icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
@@ -204,11 +204,11 @@ export function ContactSection() {
               content: (
                 <div className="space-y-1.5">
                   {contactInfo.emails.map((e) => (
-                    <a key={e} href={`mailto:${e}`} className="block text-sm text-white/75 transition hover:text-[#C58351]">{e}</a>
+                    <a key={e} href={`mailto:${e}`} className="block text-sm text-white/75 transition hover:text-[#D69A66]">{e}</a>
                   ))}
                 </div>
               ),
-              accent: "#C58351",
+              accent: "#D69A66",
               delay: 80,
               icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
@@ -224,7 +224,7 @@ export function ContactSection() {
                   <p className="text-sm text-white/75">Сб–Вс: 10:00 – 19:00</p>
                 </div>
               ),
-              accent: "#C58351",
+              accent: "#D69A66",
               delay: 160,
               icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
@@ -240,7 +240,7 @@ export function ContactSection() {
                   <p className="text-xs text-white/35">Работаем удалённо по всему миру</p>
                 </div>
               ),
-              accent: "#C58351",
+              accent: "#D69A66",
               delay: 240,
               icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
@@ -280,7 +280,7 @@ export function ContactSection() {
                 href={s.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-2.5 rounded-full border border-white/18 bg-white/12 px-4 py-2.5 text-sm text-white/85 transition duration-300 hover:-translate-y-0.5 hover:border-[#C58351]/35 hover:bg-[#C58351]/12 hover:text-[#C58351]"
+                className="group flex items-center gap-2.5 rounded-full border border-white/18 bg-white/12 px-4 py-2.5 text-sm text-white/85 transition duration-300 hover:-translate-y-0.5 hover:border-[#D69A66]/35 hover:bg-[#D69A66]/12 hover:text-[#D69A66]"
                 style={{
                   boxShadow: "none",
                 }}
@@ -331,9 +331,9 @@ export function ContactSection() {
                   onClick={handleSubmit}
                   className="relative h-14 overflow-hidden rounded-full text-sm font-medium uppercase tracking-[0.24em] transition duration-300"
                   style={{
-                    background: sent ? "rgba(197,131,81,0.2)" : "#C58351",
-                    color: sent ? "#C58351" : "#050505",
-                    border: sent ? "1px solid rgba(197,131,81,0.4)" : "none",
+                    background: sent ? "rgba(214,154,102,0.2)" : "#D69A66",
+                    color: sent ? "#D69A66" : "#050505",
+                    border: sent ? "1px solid rgba(214,154,102,0.4)" : "none",
                   }}
                 >
                   <span className="relative z-10">{sent ? "✓ Заявка отправлена" : "Отправить заявку"}</span>

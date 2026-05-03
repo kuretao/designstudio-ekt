@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { projects, servicePageItems, services } from "@/src/data";
@@ -22,7 +22,7 @@ function ServicesHero() {
 
       <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl gap-10 lg:grid-cols-[0.94fr_1.06fr] lg:items-end">
         <div className="pb-6">
-          <p className="text-xs uppercase tracking-[0.38em] text-[#C58351]">Services / 3D Smart Design</p>
+          <p className="text-xs uppercase tracking-[0.38em] text-[#D69A66]">Services / 3D Smart Design</p>
           <h1 className="mt-5 max-w-5xl text-6xl font-light leading-[0.9] tracking-[-0.065em] text-white md:text-8xl lg:text-9xl">
             Услуги студии
           </h1>
@@ -32,13 +32,13 @@ function ServicesHero() {
           <div className="mt-9 flex flex-wrap gap-3">
             <Link
               href="/kontakty"
-              className="rounded-full border border-[#C58351] bg-[#C58351] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:-translate-y-0.5 hover:bg-[#d19362]"
+              className="rounded-full border border-[#D69A66] bg-[#D69A66] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:-translate-y-0.5 hover:bg-[#E3AD7B]"
             >
               Обсудить проект
             </Link>
             <Link
               href="/portfolio"
-              className="rounded-full border border-white/15 bg-black/25 px-6 py-4 text-xs uppercase tracking-[0.24em] text-white/75 backdrop-blur transition duration-300 hover:border-[#C58351]/70 hover:text-white"
+              className="rounded-full border border-white/15 bg-black/25 px-6 py-4 text-xs uppercase tracking-[0.24em] text-white/75 backdrop-blur transition duration-300 hover:border-[#D69A66]/70 hover:text-white"
             >
               Смотреть работы
             </Link>
@@ -49,7 +49,7 @@ function ServicesHero() {
           <div className="grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 sm:grid-cols-3">
             {serviceHeroStats.map(([value, label]) => (
               <div key={value} className="bg-[#050505]/72 p-5 backdrop-blur">
-                <strong className="block text-3xl font-light tracking-[-0.04em] text-[#C58351]">{value}</strong>
+                <strong className="block text-3xl font-light tracking-[-0.04em] text-[#D69A66]">{value}</strong>
                 <span className="mt-3 block text-xs uppercase leading-relaxed tracking-[0.18em] text-[#D6D1CA]">{label}</span>
               </div>
             ))}
@@ -60,12 +60,12 @@ function ServicesHero() {
               <Link
                 key={item.id}
                 href={`/${item.id}`}
-                className="group relative min-h-56 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#C58351]/60"
+                className="group relative min-h-56 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60"
               >
                 <img src={item.image} alt={item.title} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/92 via-[#050505]/28 to-transparent" />
                 <div className="absolute inset-x-5 bottom-5">
-                  <p className="mb-2 text-xs uppercase tracking-[0.22em] text-[#C58351]">{item.eyebrow}</p>
+                  <p className="mb-2 text-xs uppercase tracking-[0.22em] text-[#D69A66]">{item.eyebrow}</p>
                   <h2 className="text-xl font-light leading-tight tracking-[-0.035em]">{item.title}</h2>
                 </div>
               </Link>
@@ -94,7 +94,7 @@ export function ServicesSummary() {
             <GlassPanel key={service.title} className="rounded-[2rem] p-7">
               <div className="mb-8 flex items-start justify-between gap-4">
                 <h3 className="text-3xl font-light tracking-[-0.04em]">{service.title}</h3>
-                <span className="whitespace-nowrap rounded-full bg-white/10 px-4 py-2 text-sm text-[#C58351]">
+                <span className="whitespace-nowrap rounded-full bg-white/10 px-4 py-2 text-sm text-[#D69A66]">
                   {service.price}
                 </span>
               </div>
@@ -127,7 +127,7 @@ export function ServicePages() {
               key={item.id}
               id={item.id}
               href={`/${item.id}`}
-              className="group scroll-mt-28 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#C58351]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
+              className="group scroll-mt-28 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
             >
               <div className="relative h-72 overflow-hidden">
                 <img
@@ -135,9 +135,9 @@ export function ServicePages() {
                   alt={item.title}
                   className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:saturate-125"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/85 via-transparent to-[#C58351]/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/85 via-transparent to-[#D69A66]/10" />
                 <div className="absolute bottom-5 left-5 right-5">
-                  <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#C58351]">{item.eyebrow}</p>
+                  <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#D69A66]">{item.eyebrow}</p>
                   <h3 className="text-3xl font-light tracking-[-0.04em]">{item.title}</h3>
                 </div>
               </div>
@@ -163,7 +163,7 @@ export function Workflow() {
         <div className="grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 md:grid-cols-3 lg:grid-cols-6">
           {steps.map((step, index) => (
             <div key={step} className="bg-[#050505] p-7">
-              <span className="mb-14 block text-sm text-[#C58351]">0{index + 1}</span>
+              <span className="mb-14 block text-sm text-[#D69A66]">0{index + 1}</span>
               <h3 className="text-2xl font-light">{step}</h3>
             </div>
           ))}

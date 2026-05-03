@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { contentPages, newsArticles, projects } from "@/src/data";
@@ -21,9 +21,9 @@ export function ContentPagesOverview() {
               key={page.id}
               id={page.id}
               href={`/${page.id}`}
-              className="group scroll-mt-28 rounded-[2rem] border border-white/10 bg-white/[0.03] p-7 transition duration-500 hover:-translate-y-2 hover:border-[#C58351]/60"
+              className="group scroll-mt-28 rounded-[2rem] border border-white/10 bg-white/[0.03] p-7 transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60"
             >
-              <p className="mb-8 text-xs uppercase tracking-[0.32em] text-[#C58351]">{page.eyebrow}</p>
+              <p className="mb-8 text-xs uppercase tracking-[0.32em] text-[#D69A66]">{page.eyebrow}</p>
               <h3 className="text-3xl font-light tracking-[-0.04em] transition duration-500 group-hover:translate-x-1">
                 {page.title}
               </h3>
@@ -59,12 +59,12 @@ function ContentPage({ page }: { page: ContentPageItem }) {
                 <Link
                   key={article.slug}
                   href={`/novosti/${article.slug}`}
-                  className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#C58351]/60"
+                  className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60"
                 >
                   <div className="relative h-64 overflow-hidden">
                     <img src={article.image} alt={article.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/85 via-transparent to-transparent" />
-                    <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.28em] text-[#C58351]">{article.category}</span>
+                    <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.28em] text-[#D69A66]">{article.category}</span>
                   </div>
                   <div className="p-6">
                     <h2 className="text-2xl font-light leading-tight">{article.title}</h2>
@@ -76,11 +76,11 @@ function ContentPage({ page }: { page: ContentPageItem }) {
           ) : (
             <div className="grid gap-5 md:grid-cols-3">
               {[projects[0], projects[1], projects[2]].map((project, index) => (
-                <GlassPanel key={`${page.id}-${project.id}`} className="group overflow-hidden rounded-[2rem] p-0 transition duration-500 hover:-translate-y-2 hover:border-[#C58351]/60">
+                <GlassPanel key={`${page.id}-${project.id}`} className="group overflow-hidden rounded-[2rem] p-0 transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60">
                   <div className="relative h-72 overflow-hidden">
                     <img src={project.image} alt={project.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-transparent to-transparent" />
-                    <span className="absolute bottom-5 left-5 text-sm text-[#C58351]">0{index + 1}</span>
+                    <span className="absolute bottom-5 left-5 text-sm text-[#D69A66]">0{index + 1}</span>
                   </div>
                   <div className="p-6">
                     <h2 className="text-2xl font-light">{project.title}</h2>

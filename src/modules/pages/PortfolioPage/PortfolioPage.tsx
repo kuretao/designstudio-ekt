@@ -208,10 +208,10 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
   }, [filteredProjects]);
 
   return (
-    <div id="portfolio" className="mx-auto w-full max-w-7xl">
-      <div className="mb-10 rounded-[2.15rem] bg-[#111111] p-4 md:p-6">
+    <div id="portfolio" className="relative mx-auto w-full max-w-7xl">
+      <GlassPanel className="relative z-[80] mb-10 overflow-visible rounded-[2.15rem] p-4 md:p-6">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-          <div className="grid gap-3 rounded-[1.55rem] border border-white/10 bg-[#1a1a1a] p-3 md:grid-cols-3 lg:w-[620px]">
+          <div className="grid gap-3 rounded-[1.55rem] border border-white/10 bg-white/[0.045] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-[1px] md:grid-cols-3 lg:w-[620px]">
             <div>
               <span className="mb-2 block px-1 text-xs font-medium text-[#D69A66]">Directions</span>
               <CustomSelect
@@ -249,15 +249,15 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
               placeholder="Country, City"
-              className="h-[54px] w-full rounded-[1.55rem] border border-white/10 bg-[#1d1d1d] px-8 pr-16 text-sm text-white outline-none transition placeholder:text-[#C4A898] focus:border-white/25"
+              className="h-[54px] w-full rounded-[1.55rem] border border-white/10 bg-white/[0.055] px-8 pr-16 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] outline-none backdrop-blur-[1px] transition placeholder:text-[#C4A898]/70 focus:border-[#D69A66]/45 focus:bg-white/[0.075]"
             />
             <span className="pointer-events-none absolute right-8 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-white" />
             <span className="pointer-events-none absolute right-[27px] top-[31px] h-2 w-0.5 -rotate-45 bg-white" />
           </label>
         </div>
-      </div>
+      </GlassPanel>
 
-      <div ref={gridRef} className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div ref={gridRef} className="relative z-0 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {filteredProjects.map((project) => (
           <button
             type="button"

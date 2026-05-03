@@ -48,10 +48,10 @@ function ServicesHero() {
         <div className="grid gap-4 pb-8">
           <div className="grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 sm:grid-cols-3">
             {serviceHeroStats.map(([value, label]) => (
-              <div key={value} className="bg-[#050505]/72 p-5 backdrop-blur">
+              <GlassPanel key={value} className="p-5">
                 <strong className="block text-3xl font-light tracking-[-0.04em] text-[#D69A66]">{value}</strong>
                 <span className="mt-3 block text-xs uppercase leading-relaxed tracking-[0.18em] text-[#D6D1CA]">{label}</span>
-              </div>
+              </GlassPanel>
             ))}
           </div>
 
@@ -160,12 +160,18 @@ export function Workflow() {
         <h2 className="mb-14 max-w-4xl text-5xl font-light tracking-[-0.055em] md:text-7xl">
           Этапы работы без хаоса и лишней коммуникации
         </h2>
-        <div className="grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 md:grid-cols-3 lg:grid-cols-6">
+        <div className="grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] md:grid-cols-3 lg:grid-cols-6">
           {steps.map((step, index) => (
-            <div key={step} className="bg-[#050505] p-7">
+            <GlassPanel
+              key={step}
+              className="p-7 lg:px-6 xl:p-7"
+              style={{ background: "rgba(255, 255, 255, 0.03)", boxShadow: "none" }}
+            >
               <span className="mb-14 block text-sm text-[#D69A66]">0{index + 1}</span>
-              <h3 className="text-2xl font-light">{step}</h3>
-            </div>
+              <h3 className="whitespace-nowrap pr-2 text-[clamp(1rem,1.12vw,1.25rem)] font-light leading-tight md:text-2xl lg:text-[clamp(1rem,1.12vw,1.25rem)]">
+                {step}
+              </h3>
+            </GlassPanel>
           ))}
         </div>
       </div>

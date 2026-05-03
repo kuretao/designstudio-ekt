@@ -79,10 +79,10 @@ export default function AboutPageFull() {
           <div className="mb-8 grid gap-4">
             <div className="grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 sm:grid-cols-3">
               {stats.slice(0, 3).map((stat) => (
-                <div key={stat.value} className="bg-[#050505]/72 p-5 backdrop-blur">
+                <GlassPanel key={stat.value} className="p-5">
                   <strong className="block text-3xl font-light tracking-[-0.04em] text-[#D69A66]">{stat.value}</strong>
                   <span className="mt-3 block text-xs uppercase leading-relaxed tracking-[0.16em] text-[#D6D1CA]">{stat.label}</span>
-                </div>
+                </GlassPanel>
               ))}
             </div>
 
@@ -111,12 +111,12 @@ export default function AboutPageFull() {
       </section>
 
       <section className="border-t border-white/10 px-5 py-20 md:px-10 lg:px-16">
-        <div className="mx-auto grid max-w-7xl gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 md:grid-cols-4">
+        <div className="mx-auto grid max-w-7xl gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 shadow-[0_24px_90px_rgba(0,0,0,0.24)] md:grid-cols-4">
           {stats.map((stat) => (
-            <div key={stat.value} className="bg-[#050505] p-7">
+            <GlassPanel key={stat.value} className="p-7">
               <strong className="block text-4xl font-light tracking-[-0.05em] text-[#D69A66] md:text-5xl">{stat.value}</strong>
               <p className="mt-5 text-sm leading-relaxed text-[#D6D1CA]">{stat.label}</p>
-            </div>
+            </GlassPanel>
           ))}
         </div>
       </section>

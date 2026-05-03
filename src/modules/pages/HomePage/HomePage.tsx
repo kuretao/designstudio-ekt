@@ -18,10 +18,11 @@ type HomePageProps = {
 
 function FeatureProject({ project, label, reverse = false }: { project: Project; label: string; reverse?: boolean }) {
   return (
-    <section className="snap-section relative flex min-h-screen items-end overflow-hidden px-5 py-16 md:px-10 lg:px-16">
+    <section className="snap-section feature-project-section relative flex min-h-screen items-end overflow-hidden px-5 py-16 md:px-10 lg:px-16">
       <div className="project-bg absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${project.image})` }} />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/35 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/80 via-transparent to-[#050505]/60" />
+      <div className="feature-project-light absolute inset-0" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#080705] via-[#080705]/30 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#080705]/72 via-[#324238]/12 to-[#E8DDCE]/18" />
 
       <div className={`relative z-10 grid w-full gap-8 md:grid-cols-2 ${reverse ? "md:[&>*:first-child]:col-start-2" : ""}`}>
         <GlassPanel className="section-in magnetic-card rounded-[2rem] p-7 md:p-10">
@@ -45,17 +46,18 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
 
   return (
     <>
-      <div className="slides-wrap">
-        <section className="hero-section snap-section relative flex min-h-screen overflow-hidden px-5 py-28 md:px-10 lg:px-16">
+      <div className="slides-wrap relative isolate overflow-hidden bg-[#0f0d0a]">
+        <section className="hero-section snap-section relative z-[1] flex min-h-screen overflow-hidden px-5 py-28 md:px-10 lg:px-16">
           <video
-            className="hero-video absolute inset-0 h-full w-full object-cover opacity-65"
+            className="hero-video absolute inset-0 h-full w-full object-cover opacity-75"
             src={`${process.env.NODE_ENV === 'production' ? '/DesignStudio-EKT' : ''}/background.mp4`}
             autoPlay
             muted
             loop
             playsInline
           />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(214,154,102,.16),transparent_32%),linear-gradient(90deg,rgba(5,5,5,.92),rgba(5,5,5,.58),rgba(5,5,5,.2))]" />
+          <div className="hero-light-field absolute inset-0" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,rgba(232,221,206,.22),transparent_33%),radial-gradient(circle_at_18%_78%,rgba(111,128,106,.16),transparent_36%),linear-gradient(90deg,rgba(8,7,5,.88),rgba(8,7,5,.58)_44%,rgba(15,13,10,.2))]" />
           <div className="hero-copper-line absolute bottom-0 left-0 z-[1] h-px w-full bg-gradient-to-r from-[#D69A66] via-white/30 to-transparent" />
 
           <div className="relative z-10 flex w-full items-end">
@@ -72,7 +74,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
                 </p>
                 <Link
                   href="/kontakty"
-                  className="group inline-flex h-14 items-center justify-center rounded-full border border-[#D69A66]/50 px-7 text-sm uppercase tracking-[0.22em] text-[#F5F2EC] transition hover:bg-[#D69A66] hover:text-[#050505]"
+                  className="group inline-flex h-14 items-center justify-center rounded-full border border-[#D69A66]/50 px-7 text-sm uppercase tracking-[0.22em] text-[#F5F2EC] transition hover:bg-[#D69A66] hover:text-[#0c0b09]"
                 >
                   Обсудить проект
                   <span className="ml-3 transition group-hover:translate-x-1">→</span>
@@ -84,8 +86,10 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
 
         <FeatureProject project={projects[0]} label="Избранный проект 01" />
 
-        <section className="snap-section story-section flex min-h-screen items-center px-5 py-28 md:px-10 lg:px-16">
-          <div className="mx-auto max-w-6xl">
+        <section className="snap-section story-section relative z-[1] flex min-h-screen items-center  px-5 py-28 md:px-10 lg:px-16">
+          <div className="story-backdrop absolute inset-0" aria-hidden="true" />
+          
+          <div className="relative z-10 mx-auto max-w-6xl">
             <p className="section-in mb-10 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Design philosophy</p>
             <h2 className="text-4xl font-light leading-tight tracking-[-0.045em] text-[#F5F2EC] md:text-6xl lg:text-7xl">
               {storyText.split(" ").map((word, index) => (
@@ -99,19 +103,23 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
 
         <FeatureProject project={projects[2]} label="Избранный проект 02" reverse />
 
-        <section className="snap-section portfolio-grid-section min-h-screen px-5 py-28 md:px-10 lg:px-16">
+        <section className="snap-section portfolio-grid-section relative z-[1] min-h-screen px-5 py-28 md:px-10 lg:px-16">
           <PortfolioGrid onSelectProject={setActiveProject} />
         </section>
       </div>
 
-      <ProjectShowcase project={activeProject} />
-      <AboutPage />
-      <ServicesSummary />
-      <ServicePages />
-      <Workflow />
-      <FAQ />
-      <ContentPagesOverview />
-      <ContactSection />
+      <div className="home-continuation relative overflow-hidden">
+        <div className="relative z-10">
+          <ProjectShowcase project={activeProject} />
+          <AboutPage />
+          <ServicesSummary />
+          <ServicePages />
+          <Workflow />
+          <FAQ />
+          <ContentPagesOverview />
+          <ContactSection />
+        </div>
+      </div>
     </>
   );
 }

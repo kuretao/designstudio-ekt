@@ -51,10 +51,10 @@ function ReviewsHero({ featuredReview }: { featuredReview: (typeof testimonials)
 
           <div className="grid gap-px overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/10 sm:grid-cols-3">
             {reviewStats.map((stat) => (
-              <div key={stat.value} className="bg-[#050505]/70 p-5 backdrop-blur">
+              <GlassPanel key={stat.value} className="p-5">
                 <span className="block text-2xl font-light text-[#D69A66]">{stat.value}</span>
                 <span className="mt-2 block text-xs uppercase leading-relaxed tracking-[0.16em] text-[#D6D1CA]">{stat.label}</span>
-              </div>
+              </GlassPanel>
             ))}
           </div>
         </div>

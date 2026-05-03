@@ -61,7 +61,7 @@ function FooterLogo() {
         ))}
         <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="22s" repeatCount="indefinite" />
       </g>
-      <circle cx={0} cy={0} r={0.19} fill="#050505" stroke="rgba(255,255,255,0.42)" strokeWidth="0.032" />
+      <circle cx={0} cy={0} r={0.19} fill="#0c0b09" stroke="rgba(255,255,255,0.42)" strokeWidth="0.032" />
     </svg>
   );
 }
@@ -72,10 +72,7 @@ export default function Footer() {
   const col2 = servicePageItems.slice(half);
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-[#050505]">
-      {/* Glow accent */}
-      <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full opacity-[0.07]" style={{ background: "radial-gradient(circle, #D69A66 0%, transparent 70%)", filter: "blur(60px)" }} />
-
+    <footer className="premium-footer relative overflow-hidden border-t border-white/10">
       {/* ── Main grid ── */}
       <div className="mx-auto max-w-7xl px-5 pb-12 pt-16 md:px-10 lg:px-16">
         <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr_1fr_1.2fr]">

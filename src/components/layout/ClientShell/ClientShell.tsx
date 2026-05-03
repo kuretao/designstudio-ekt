@@ -59,7 +59,7 @@ function MessengerIcon({ icon }: { icon: string }) {
           d="M20.2 4.8 3.9 11.1c-1.1.44-1.1 1.05-.2 1.33l4.18 1.3 1.6 4.9c.2.56.1.78.68.78.44 0 .64-.2.9-.44l2.16-2.1 4.5 3.32c.82.45 1.42.22 1.63-.76l2.95-13.9c.3-1.2-.45-1.74-1.78-1.23Z"
           fill="currentColor"
         />
-        <path d="m8.08 13.48 9.68-6.1c.45-.28.86-.13.52.17l-8.28 7.48-.32 3.42" stroke="#050505" strokeOpacity="0.5" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="m8.08 13.48 9.68-6.1c.45-.28.86-.13.52.17l-8.28 7.48-.32 3.42" stroke="#0c0b09" strokeOpacity="0.5" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     );
   }
@@ -228,7 +228,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
           .fromTo(
             ".hero-video",
             { scale: 1.16, filter: "brightness(0.62) contrast(1.15) saturate(0.9)" },
-            { scale: 1, filter: "brightness(0.78) contrast(1.06) saturate(0.95)", duration: 1.8, ease: "expo.out" },
+            { scale: 1, filter: "brightness(0.9) contrast(1.02) saturate(0.88)", duration: 1.8, ease: "expo.out" },
             0,
           )
           .from(
@@ -251,20 +251,8 @@ export default function ClientShell({ children }: { children: React.ReactNode })
             0.82,
           );
 
-        gsap.to(".hero-video", {
-          scale: 1.08,
-          yPercent: 10,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".hero-section",
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-
         const storyWords = gsap.utils.toArray<HTMLElement>(".story-word");
-        gsap.set(storyWords, { opacity: 0.22, y: 14, color: "rgba(245,242,236,0.42)" });
+        gsap.set(storyWords, { opacity: 0.24, y: 14, color: "rgba(245,242,236,0.38)" });
         gsap.to(storyWords, {
           opacity: 1,
           y: 0,
@@ -279,20 +267,6 @@ export default function ClientShell({ children }: { children: React.ReactNode })
           },
         });
       }
-
-      gsap.utils.toArray<HTMLElement>(".project-bg, .parallax-media").forEach((media) => {
-        gsap.to(media, {
-          scale: 1.12,
-          yPercent: 7,
-          ease: "none",
-          scrollTrigger: {
-            trigger: media.parentElement,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-      });
 
       if (finePointer) {
         const cursor = mainRef.current?.querySelector<HTMLElement>(".motion-cursor");
@@ -367,7 +341,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
   }, [pathname]);
 
   return (
-    <main ref={mainRef} className="min-h-screen bg-[#050505] text-[#F5F2EC] antialiased">
+    <main ref={mainRef} className="min-h-screen bg-[#0c0b09] text-[#F5F2EC] antialiased">
       <GlobalStyle />
       <div className="motion-progress fixed left-0 top-0 z-[100] h-px w-full origin-left scale-x-0 bg-[#D69A66]" />
       <div className="motion-curtain pointer-events-none fixed inset-0 z-[98] origin-left scale-x-0" />

@@ -40,14 +40,14 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
 
           <GlassPanel className="rounded-[2rem] p-6 md:p-8">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-[1.25rem] border border-white/10 bg-black/20 p-5">
+              <GlassPanel className="rounded-[1.25rem] p-5">
                 <span className="text-xs uppercase tracking-[0.28em] text-white/40">Стоимость</span>
                 <strong className="mt-3 block text-3xl font-light text-[#D69A66]">{item.price}</strong>
-              </div>
-              <div className="rounded-[1.25rem] border border-white/10 bg-black/20 p-5">
+              </GlassPanel>
+              <GlassPanel className="rounded-[1.25rem] p-5">
                 <span className="text-xs uppercase tracking-[0.28em] text-white/40">Срок</span>
                 <strong className="mt-3 block text-3xl font-light text-white">{item.timeline}</strong>
-              </div>
+              </GlassPanel>
             </div>
             <div className="mt-5 grid gap-3">
               {item.deliverables.map((entry) => (
@@ -86,12 +86,12 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
               Процесс коротко пересобран из старых страниц: от заявки и исходных данных до финальных файлов, чертежей или сопровождения.
             </p>
           </div>
-          <div className="grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 md:grid-cols-5">
+          <div className="grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 shadow-[0_24px_90px_rgba(0,0,0,0.24)] md:grid-cols-5">
             {item.process.map((step, index) => (
-              <div key={step} className="bg-[#050505] p-6">
+              <GlassPanel key={step} className="p-6">
                 <span className="mb-12 block text-sm text-[#D69A66]">0{index + 1}</span>
                 <h3 className="text-xl font-light">{step}</h3>
-              </div>
+              </GlassPanel>
             ))}
           </div>
         </div>

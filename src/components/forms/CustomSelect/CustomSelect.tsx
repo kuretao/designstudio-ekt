@@ -32,15 +32,15 @@ export default function CustomSelect({
   }, []);
 
   return (
-    <div ref={ref} className={`relative ${className}`}>
+    <div ref={ref} className={`relative ${open ? "z-[120]" : "z-10"} ${className}`}>
       {/* Trigger */}
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={`flex w-full cursor-pointer items-center justify-between rounded-2xl border px-5 py-4 text-sm transition-all duration-200 ${
           open
-            ? "border-[#D69A66]/55 bg-white/[0.07]"
-            : "border-white/10 bg-white/[0.04] hover:border-white/20 hover:bg-white/[0.06]"
+            ? "border-[#D69A66]/55 bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-[1px]"
+            : "border-white/10 bg-white/[0.045] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[1px] hover:border-white/20 hover:bg-white/[0.065]"
         }`}
       >
         <span className={selected ? "text-[#F5F2EC]" : "text-white/30"}>
@@ -61,7 +61,7 @@ export default function CustomSelect({
 
       {/* Dropdown panel */}
       <div
-        className="absolute left-0 right-0 top-[calc(100%+6px)] z-50 overflow-hidden rounded-2xl border border-white/10 bg-[#111111] shadow-[0_28px_70px_rgba(0,0,0,0.55),0_0_0_1px_rgba(214,154,102,0.05)] backdrop-blur-xl transition-all duration-200"
+        className="absolute left-0 right-0 top-[calc(100%+6px)] z-[140] overflow-hidden rounded-2xl border border-white/12 bg-[#171511]/86 shadow-[0_28px_70px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-[1px] transition-all duration-200"
         style={{
           opacity: open ? 1 : 0,
           transform: open ? "translateY(0) scale(1)" : "translateY(-6px) scale(0.98)",

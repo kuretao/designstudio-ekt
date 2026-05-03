@@ -266,6 +266,59 @@ export default function ClientShell({ children }: { children: React.ReactNode })
             scrub: 0.8,
           },
         });
+
+        // Card stacking effect — each section pins and scales back as the next slides over it
+        const stackSections = gsap.utils.toArray<HTMLElement>(".slides-wrap .snap-section");
+
+        stackSections.forEach((section, i) => {
+          gsap.set(section, { zIndex: i + 1 });
+        });
+
+        stackSections.forEach((section, i) => {
+          if (i === stackSections.length - 1) return;
+
+          ScrollTrigger.create({
+            trigger: section,
+            start: "top top",
+            pin: true,
+            pinSpacing: false,
+            id: `stack-pin-${i}`,
+          });
+        });
+
+        stackSections.forEach((section, i) => {
+          if (i === 0) return;
+
+          const prev = stackSections[i - 1];
+
+          gsap.to(prev, {
+            scale: 0.88,
+            borderRadius: "2rem",
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top bottom",
+              end: "top top",
+              scrub: true,
+            },
+          });
+
+          // Incoming section slides in from slight offset for depth
+          gsap.fromTo(
+            section,
+            { yPercent: 6 },
+            {
+              yPercent: 0,
+              ease: "none",
+              scrollTrigger: {
+                trigger: section,
+                start: "top bottom",
+                end: "top top",
+                scrub: true,
+              },
+            },
+          );
+        });
       }
 
       if (finePointer) {

@@ -46,7 +46,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
 
   return (
     <>
-      <div className="slides-wrap relative isolate overflow-hidden bg-[#0f0d0a]">
+      <div className="slides-wrap relative isolate overflow-x-hidden bg-[#0f0d0a]">
         <section className="hero-section snap-section relative z-[1] flex min-h-screen overflow-hidden px-5 py-28 md:px-10 lg:px-16">
           <video
             className="hero-video absolute inset-0 h-full w-full object-cover opacity-75"

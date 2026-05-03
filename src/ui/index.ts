@@ -70,6 +70,13 @@ export const GlobalStyle = createGlobalStyle`
     isolation: isolate;
   }
 
+  /* Card-stacking scroll effect */
+  .slides-wrap .snap-section {
+    transform-origin: center top;
+    border-radius: 0px;
+    will-change: transform, border-radius, opacity;
+  }
+
   .page-in {
     position: relative;
     isolation: isolate;

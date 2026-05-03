@@ -116,7 +116,13 @@ export default function ClientShell({ children }: { children: React.ReactNode })
     if (reducedMotion || coarsePointer || window.innerWidth < 900) return;
 
     let targetScroll = window.scrollY;
-    const maxScroll = () => Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    const maxScroll = () =>
+      Math.max(
+        0,
+        document.documentElement.scrollHeight - window.innerHeight,
+        document.body.scrollHeight - window.innerHeight,
+        ScrollTrigger.maxScroll(window),
+      );
     const syncTarget = () => {
       targetScroll = window.scrollY;
     };
@@ -132,7 +138,8 @@ export default function ClientShell({ children }: { children: React.ReactNode })
 
       event.preventDefault();
       const delta = event.deltaMode === 1 ? event.deltaY * 32 : event.deltaY;
-      targetScroll = gsap.utils.clamp(0, maxScroll(), targetScroll + delta);
+      const scrollBase = delta > 0 ? Math.max(targetScroll, window.scrollY) : Math.min(targetScroll, window.scrollY);
+      targetScroll = gsap.utils.clamp(0, maxScroll(), scrollBase + delta);
 
       gsap.to(window, {
         scrollTo: targetScroll,

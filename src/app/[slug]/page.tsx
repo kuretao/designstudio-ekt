@@ -6,6 +6,8 @@ import ContentPage from "@/src/modules/pages/ContentPage";
 // Slugs that have their own dedicated app routes — exclude from [slug]
 const DEDICATED_ROUTES = new Set(["novosti", "akcii-i-skidki", "otzyvy-o-nas"]);
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return [
     ...servicePageItems.map((item) => ({ slug: item.id })),

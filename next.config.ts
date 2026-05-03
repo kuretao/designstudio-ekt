@@ -4,7 +4,7 @@ import path from "path";
 const isProd = process.env.NODE_ENV === "production";
 
 const nextConfig: NextConfig = {
-  output: "export",
+  output: isProd ? "export" : undefined,
   basePath: isProd ? "/DesignStudio-EKT" : "",
   assetPrefix: isProd ? "/DesignStudio-EKT/" : "",
   images: { unoptimized: true },

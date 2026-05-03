@@ -1,9 +1,81 @@
 "use client";
 
 import Link from "next/link";
-import { servicePageItems, services } from "@/src/data";
+import { projects, servicePageItems, services } from "@/src/data";
 import { GlassPanel } from "@/src/ui";
 import SectionLabel from "@/src/components/common/SectionLabel";
+
+const serviceHeroStats = [
+  ["10 лет", "опыта в интерьерах, архитектуре и 3D"],
+  ["25+", "специалистов под масштаб проекта"],
+  ["6", "направлений в единой системе"],
+];
+
+function ServicesHero() {
+  const heroCards = servicePageItems.slice(0, 3);
+
+  return (
+    <section className="relative min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-10 lg:px-16">
+      <img src={projects[1].image} alt="Премиальный дизайн интерьера" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.96)_0%,rgba(5,5,5,.74)_48%,rgba(5,5,5,.24)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.4)_32%,transparent_72%)]" />
+
+      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl gap-10 lg:grid-cols-[0.94fr_1.06fr] lg:items-end">
+        <div className="pb-6">
+          <p className="text-xs uppercase tracking-[0.38em] text-[#C58351]">Services / 3D Smart Design</p>
+          <h1 className="mt-5 max-w-5xl text-6xl font-light leading-[0.9] tracking-[-0.065em] text-white md:text-8xl lg:text-9xl">
+            Услуги студии
+          </h1>
+          <p className="mt-7 max-w-2xl text-lg leading-relaxed text-[#E8E0D8]/85 md:text-xl">
+            Проектируем интерьеры, архитектуру, ландшафт и визуализации так, чтобы заказчик видел не набор услуг, а продуманную систему будущего пространства.
+          </p>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <Link
+              href="/kontakty"
+              className="rounded-full border border-[#C58351] bg-[#C58351] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:-translate-y-0.5 hover:bg-[#d19362]"
+            >
+              Обсудить проект
+            </Link>
+            <Link
+              href="/portfolio"
+              className="rounded-full border border-white/15 bg-black/25 px-6 py-4 text-xs uppercase tracking-[0.24em] text-white/75 backdrop-blur transition duration-300 hover:border-[#C58351]/70 hover:text-white"
+            >
+              Смотреть работы
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid gap-4 pb-8">
+          <div className="grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 sm:grid-cols-3">
+            {serviceHeroStats.map(([value, label]) => (
+              <div key={value} className="bg-[#050505]/72 p-5 backdrop-blur">
+                <strong className="block text-3xl font-light tracking-[-0.04em] text-[#C58351]">{value}</strong>
+                <span className="mt-3 block text-xs uppercase leading-relaxed tracking-[0.18em] text-[#D6D1CA]">{label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {heroCards.map((item) => (
+              <Link
+                key={item.id}
+                href={`/${item.id}`}
+                className="group relative min-h-56 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#C58351]/60"
+              >
+                <img src={item.image} alt={item.title} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/92 via-[#050505]/28 to-transparent" />
+                <div className="absolute inset-x-5 bottom-5">
+                  <p className="mb-2 text-xs uppercase tracking-[0.22em] text-[#C58351]">{item.eyebrow}</p>
+                  <h2 className="text-xl font-light leading-tight tracking-[-0.035em]">{item.title}</h2>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export function ServicesSummary() {
   return (
@@ -103,7 +175,8 @@ export function Workflow() {
 
 function ServicesPage() {
   return (
-    <div className="page-in pt-24">
+    <div className="page-in">
+      <ServicesHero />
       <ServicesSummary />
       <ServicePages />
     </div>

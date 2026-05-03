@@ -52,40 +52,61 @@ const directions = [
 export default function AboutPageFull() {
   return (
     <div className="page-in">
-      <section className="relative min-h-[calc(100vh-6rem)] overflow-hidden px-5 py-20 md:px-10 lg:px-16">
-        <img src={projects[0].image} alt="3D Smart Design Studio" className="absolute inset-0 h-full w-full object-cover opacity-45" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.98),rgba(5,5,5,.78),rgba(5,5,5,.22)),linear-gradient(0deg,#050505,transparent_42%)]" />
+      <section className="relative min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-10 lg:px-16">
+        <img src={projects[0].image} alt="3D Smart Design Studio" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.97)_0%,rgba(5,5,5,.72)_48%,rgba(5,5,5,.2)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.36)_32%,transparent_76%)]" />
 
-        <div className="relative z-10 mx-auto grid min-h-[calc(100vh-12rem)] max-w-7xl gap-10 lg:grid-cols-[1fr_0.72fr] lg:items-end">
-          <div>
+        <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl gap-10 lg:grid-cols-[0.94fr_1.06fr] lg:items-end">
+          <div className="pb-8">
             <SectionLabel>О студии</SectionLabel>
-            <h1 className="max-w-5xl text-6xl font-light leading-[0.9] tracking-[-0.065em] md:text-8xl lg:text-[8.5rem]">
+            <h1 className="mt-5 max-w-5xl text-6xl font-light leading-[0.9] tracking-[-0.065em] md:text-8xl lg:text-9xl">
               Дизайн с умом
             </h1>
-            <p className="mt-8 max-w-3xl text-lg leading-relaxed text-[#D6D1CA] md:text-xl">
-              3D Smart Design Studio проектирует интерьеры, архитектуру, ландшафт и 3D-визуализацию в Самаре и удаленно. Мы соединяем эстетику, инженерную логику и понятный процесс, чтобы проект можно было не только красиво показать, но и спокойно реализовать.
+            <p className="mt-8 max-w-3xl text-lg leading-relaxed text-[#E8E0D8]/85 md:text-xl">
+              3D Smart Design Studio соединяет эстетику, инженерную логику и понятный процесс. Заказчик видит не просто красивую картинку, а уверенный маршрут от идеи до реализации.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              <Link href="/kontakty" className="rounded-full bg-[#C58351] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition hover:bg-[#F5F2EC]">
+              <Link href="/kontakty" className="rounded-full border border-[#C58351] bg-[#C58351] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:-translate-y-0.5 hover:bg-[#d19362]">
                 Обсудить проект
               </Link>
-              <Link href="/portfolio" className="rounded-full border border-white/15 px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#D6D1CA] transition hover:border-[#C58351] hover:text-white">
+              <Link href="/portfolio" className="rounded-full border border-white/15 bg-black/25 px-6 py-4 text-xs uppercase tracking-[0.24em] text-white/75 backdrop-blur transition duration-300 hover:border-[#C58351]/70 hover:text-white">
                 Смотреть работы
               </Link>
             </div>
           </div>
 
-          <GlassPanel className="rounded-[2rem] p-6 md:p-8">
-            <p className="text-xs uppercase tracking-[0.35em] text-[#C58351]">Что внутри подхода</p>
-            <div className="mt-7 grid gap-3">
-              {directions.map((direction) => (
-                <div key={direction} className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3">
-                  <span className="text-sm text-[#F5F2EC]">{direction}</span>
-                  <span className="text-[#C58351]">→</span>
+          <div className="mb-8 grid gap-4">
+            <div className="grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 sm:grid-cols-3">
+              {stats.slice(0, 3).map((stat) => (
+                <div key={stat.value} className="bg-[#050505]/72 p-5 backdrop-blur">
+                  <strong className="block text-3xl font-light tracking-[-0.04em] text-[#C58351]">{stat.value}</strong>
+                  <span className="mt-3 block text-xs uppercase leading-relaxed tracking-[0.16em] text-[#D6D1CA]">{stat.label}</span>
                 </div>
               ))}
             </div>
-          </GlassPanel>
+
+            <GlassPanel className="overflow-hidden rounded-[2rem] p-0">
+              <div className="grid md:grid-cols-[0.95fr_1.05fr]">
+                <div className="relative min-h-72 overflow-hidden">
+                  <img src={projects[4].image} alt="Архитектурная визуализация студии" className="absolute inset-0 h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/84 via-transparent to-transparent" />
+                  <p className="absolute bottom-5 left-5 right-5 text-2xl font-light tracking-[-0.04em]">Премиальная подача начинается с точной системы</p>
+                </div>
+                <div className="p-6 md:p-7">
+                  <p className="text-xs uppercase tracking-[0.35em] text-[#C58351]">Что внутри подхода</p>
+                  <div className="mt-6 grid gap-3">
+                    {directions.map((direction) => (
+                      <div key={direction} className="flex items-center justify-between border-b border-white/10 pb-3">
+                        <span className="text-sm text-[#F5F2EC]">{direction}</span>
+                        <span className="text-[#C58351]">→</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </GlassPanel>
+          </div>
         </div>
       </section>
 

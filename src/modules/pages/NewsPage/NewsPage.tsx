@@ -7,21 +7,66 @@ function NewsPage() {
   const [featured, ...rest] = newsArticles;
 
   return (
-    <div className="page-in pt-24">
-      {/* Hero */}
-      <section className="px-5 py-28 md:px-10 lg:px-16">
+    <div className="page-in">
+      <section className="relative min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-10 lg:px-16">
+        <img src={featured.image} alt={featured.title} className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.96)_0%,rgba(5,5,5,.70)_48%,rgba(5,5,5,.18)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.35)_34%,transparent_76%)]" />
+
+        <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl gap-10 lg:grid-cols-[1fr_0.78fr] lg:items-end">
+          <div className="pb-8">
+            <p className="text-xs uppercase tracking-[0.38em] text-[#C58351]">Studio journal</p>
+            <h1 className="mt-5 max-w-5xl text-6xl font-light leading-[0.9] tracking-[-0.065em] text-white md:text-8xl lg:text-9xl">
+              Блог и новости
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-relaxed text-[#E8E0D8]/85 md:text-xl">
+              Пишем о проектах, решениях и деталях, которые делают интерьер дороже на вид, спокойнее в реализации и точнее для жизни.
+            </p>
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <Link
+                href={`/novosti/${featured.slug}`}
+                className="rounded-full border border-[#C58351] bg-[#C58351] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:-translate-y-0.5 hover:bg-[#d19362]"
+              >
+                Читать главное
+              </Link>
+              <span className="rounded-full border border-white/15 bg-black/25 px-5 py-4 text-xs uppercase tracking-[0.24em] text-white/75 backdrop-blur">
+                {newsArticles.length} материала
+              </span>
+            </div>
+          </div>
+
+          <Link
+            href={`/novosti/${featured.slug}`}
+            className="group mb-8 overflow-hidden rounded-[2rem] border border-white/10 bg-[#050505]/42 p-6 backdrop-blur transition duration-500 hover:-translate-y-2 hover:border-[#C58351]/60"
+          >
+            <div className="mb-5 flex flex-wrap items-center gap-3">
+              <span className="rounded-full border border-[#C58351]/40 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[#C58351]">
+                {featured.category}
+              </span>
+              <span className="text-xs text-white/45">{featured.date}</span>
+              <span className="text-xs text-white/35">{featured.readingTime} чтения</span>
+            </div>
+            <h2 className="text-3xl font-light leading-tight tracking-[-0.04em] transition duration-500 group-hover:translate-x-1 md:text-5xl">
+              {featured.title}
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-[#D6D1CA]">{featured.preview}</p>
+            <div className="mt-8 inline-flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-[#C58351] transition duration-300 group-hover:gap-5">
+              Открыть статью <span>→</span>
+            </div>
+          </Link>
+        </div>
+      </section>
+
+      <section className="px-5 py-24 md:px-10 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#C58351]">Studio updates</p>
           <div className="mb-16 grid gap-8 md:grid-cols-[1fr_0.6fr] md:items-end">
-            <h1 className="text-6xl font-light leading-[0.92] tracking-[-0.065em] md:text-8xl">
-              Новости
-            </h1>
+            <h2 className="text-5xl font-light leading-[0.92] tracking-[-0.055em] md:text-7xl">Все материалы</h2>
             <p className="text-lg leading-relaxed text-[#D6D1CA]">
               Обновления студии, новые услуги, советы по проектированию и тренды рынка.
             </p>
           </div>
 
-          {/* Featured article */}
           <Link
             href={`/novosti/${featured.slug}`}
             className="group relative mb-5 flex min-h-[520px] overflow-hidden rounded-[2.5rem] border border-white/10 transition duration-500 hover:-translate-y-1 hover:border-[#C58351]/50 hover:shadow-[0_34px_120px_rgba(0,0,0,0.5)]"
@@ -43,16 +88,13 @@ function NewsPage() {
               <h2 className="max-w-3xl text-4xl font-light leading-tight tracking-[-0.045em] transition duration-500 group-hover:translate-x-1 md:text-6xl">
                 {featured.title}
               </h2>
-              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[#D6D1CA]">
-                {featured.preview}
-              </p>
+              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[#D6D1CA]">{featured.preview}</p>
               <div className="mt-8 inline-flex items-center gap-3 text-sm uppercase tracking-[0.22em] text-[#C58351] transition duration-300 group-hover:gap-5">
                 Читать статью <span>→</span>
               </div>
             </div>
           </Link>
 
-          {/* Rest of articles */}
           <div className="grid gap-5 md:grid-cols-3">
             {rest.map((article) => (
               <Link
@@ -80,9 +122,7 @@ function NewsPage() {
                   <h3 className="text-xl font-light leading-snug tracking-[-0.03em] transition duration-500 group-hover:translate-x-0.5">
                     {article.title}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-[#D6D1CA] line-clamp-3">
-                    {article.preview}
-                  </p>
+                  <p className="mt-3 text-sm leading-relaxed text-[#D6D1CA] line-clamp-3">{article.preview}</p>
                   <div className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#C58351] transition duration-300 group-hover:gap-3">
                     Читать <span>→</span>
                   </div>

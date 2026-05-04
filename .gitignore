@@ -18,7 +18,6 @@ dist-ssr
 .vscode
 .idea
 .claude
-.github/workflows
 .DS_Store
 *.suo
 *.ntvs*

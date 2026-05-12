@@ -5,6 +5,7 @@ import { projects } from "@/src/data";
 import type { Project } from "@/src/types";
 import { GlassPanel } from "@/src/ui";
 import FAQ from "@/src/components/common/FAQ";
+import ProjectQuiz from "@/src/components/common/ProjectQuiz";
 import AboutPage from "@/src/modules/pages/AboutPage";
 import { ContactSection } from "@/src/modules/pages/ContactPage";
 import { ContentPagesOverview } from "@/src/modules/pages/ContentPage";
@@ -114,6 +115,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
           <AboutPage />
           <ServicesSummary />
           <ServicePages />
+          <ProjectQuiz />
           <Workflow />
           <FAQ />
           <ContentPagesOverview />

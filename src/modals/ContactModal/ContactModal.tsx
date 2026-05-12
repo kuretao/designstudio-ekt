@@ -32,21 +32,8 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
 
   if (!open) return null;
 
-  const message = encodeURIComponent(
-    [
-      "Привет! Пишу через сайт 3D Smart Design.",
-      name.trim() ? `Меня зовут ${name.trim()}.` : "",
-      contact.trim() ? `Мои контакты: ${contact.trim()}.` : "",
-      promoTitle ? `Интересует акция: ${promoTitle}.` : "",
-    ]
-      .filter(Boolean)
-      .join(" "),
-  );
-
   const messengerItems = [
     { label: "Telegram", href: messengerLinks.telegram, color: "border-[#D69A66]/35 text-[#D69A66]" },
-    { label: "WhatsApp", href: `${messengerLinks.whatsapp}?text=${message}`, color: "border-[#D69A66]/35 text-[#D69A66]" },
-    { label: "Viber", href: messengerLinks.viber, color: "border-[#D69A66]/35 text-[#D69A66]" },
     { label: "Звонок", href: messengerLinks.phoneHref, color: "border-[#D69A66]/35 text-[#D69A66]" },
   ];
 
@@ -79,7 +66,7 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
 
         <div className="px-6 pt-4">
           <p className="mb-3 text-[10px] uppercase tracking-[0.28em] text-white/30">Написать в мессенджере</p>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {messengerItems.map((item) => (
               <a
                 key={item.label}

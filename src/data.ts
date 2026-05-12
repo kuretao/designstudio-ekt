@@ -234,7 +234,29 @@ export const contentPages = [
     eyebrow: "Client feedback",
     text: "Отзывы клиентов о проектировании, визуализации, сроках, коммуникации и сопровождении на этапе реализации.",
   },
+  {
+    id: "karera",
+    title: "Карьера",
+    eyebrow: "Join the studio",
+    text: "Публикуем открытые вакансии студии, стажировки и проектные роли для дизайнеров, визуализаторов и архитекторов.",
+  },
+  {
+    id: "partneram",
+    title: "Партнерам",
+    eyebrow: "Collaboration",
+    text: "Открыты к сотрудничеству с поставщиками, подрядчиками, девелоперами, шоурумами и профильными специалистами.",
+  },
 ];
+
+export type CareerVacancy = {
+  title: string;
+  format: string;
+  workload: string;
+  description: string;
+  requirements: string[];
+};
+
+export const careerVacancies: CareerVacancy[] = [];
 
 export const testimonials = [
   {
@@ -288,7 +310,7 @@ export const reviewStats = [
 export const contactInfo = {
   phone: "+7 (987) 942-12-42",
   phoneHref: "tel:+79879421242",
-  emails: ["3dsmartdesign@bk.ru", "info@3dsmartdesign.ru"],
+  emails: ["3dsmartdesign@bk.ru - обсуждение проекта", "info@3dsmartdesign.ru - реклама, сотрудничество"],
   schedule: "Пн-Пт 9:00-20:00, Сб-Вс 10:00-19:00",
   address: "Работаем в Самаре и удаленно с другими городами и странами",
   mapSrc: "https://www.openstreetmap.org/export/embed.html?bbox=49.92%2C53.12%2C50.30%2C53.30&layer=mapnik&marker=53.1959%2C50.1002",
@@ -298,8 +320,6 @@ export const messengerLinks = {
   phoneHref: contactInfo.phoneHref,
   max: "https://max.ru/",
   telegram: "https://t.me/+79879421242",
-  whatsapp: "https://wa.me/79879421242",
-  viber: "viber://chat?number=%2B79879421242",
 };
 
 export const services = [

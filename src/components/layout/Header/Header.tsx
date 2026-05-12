@@ -14,6 +14,8 @@ const menuItems = [
   { href: "/novosti", label: "Новости" },
   { href: "/blog", label: "Блог" },
   { href: "/otzyvy-o-nas", label: "Отзывы" },
+  { href: "/karera", label: "Карьера" },
+  { href: "/partneram", label: "Партнерам" },
 ];
 
 function LogoMark() {

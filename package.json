@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npx --yes serve@latest out -l 3000",
+    "start": "npm run build && npx --yes serve@latest out -l 3000",
+    "serve": "npx --yes serve@latest out -l 3000",
     "lint": "next lint",
     "format": "prettier --write ."
   },

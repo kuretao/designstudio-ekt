@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { projects } from "@/src/data";
 import type { Project } from "@/src/types";
+import CinematicImage from "@/src/components/common/CinematicImage";
 import CustomSelect from "@/src/components/forms/CustomSelect";
 import SectionLabel from "@/src/components/common/SectionLabel";
 import { GlassPanel } from "@/src/ui";
@@ -258,7 +259,7 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
       </GlassPanel>
 
       <div ref={gridRef} className="relative z-0 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {filteredProjects.map((project) => (
+        {filteredProjects.map((project, index) => (
           <button
             type="button"
             key={project.id}
@@ -269,10 +270,17 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
             className="grid-card group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] text-left transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60"
           >
             <div className="relative h-80 overflow-hidden">
-              <img
-                src={project.image}
+              <CinematicImage
+                frames={[
+                  project.image,
+                  project.afterImage,
+                  project.beforeImage,
+                  filteredProjects[(index + 1) % filteredProjects.length]?.image,
+                  filteredProjects[(index + 2) % filteredProjects.length]?.image,
+                ]}
                 alt={project.title}
-                className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:saturate-125"
+                className="absolute inset-0"
+                hint="preview"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-[#D69A66]/10 transition duration-500 group-hover:from-black/70" />
               <div className="absolute inset-4 rounded-[1.55rem] border border-white/0 transition duration-500 group-hover:border-white/25" />
@@ -307,10 +315,17 @@ export function ProjectShowcase({ project }: { project: Project }) {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(214,154,102,.16),transparent_30%)]" />
           <div className="relative grid gap-0 lg:grid-cols-[1.08fr_0.92fr]">
             <div className="group relative min-h-[620px] overflow-hidden">
-              <img
-                src={project.image}
+              <CinematicImage
+                frames={[
+                  project.image,
+                  project.afterImage,
+                  project.beforeImage,
+                  projects[(project.id + 1) % projects.length]?.image,
+                  projects[(project.id + 3) % projects.length]?.image,
+                ]}
                 alt={project.title}
-                className="absolute inset-0 h-full w-full object-cover transition duration-[1200ms] ease-out group-hover:scale-105 group-hover:brightness-110 group-hover:saturate-125"
+                className="absolute inset-0"
+                hint="tour"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/85 via-[#050505]/10 to-transparent" />
               <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center gap-3">
@@ -355,10 +370,11 @@ export function ProjectShowcase({ project }: { project: Project }) {
               key={`${project.id}-${image}-${index}`}
               className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.42)]"
             >
-              <img
-                src={image}
+              <CinematicImage
+                frames={[image, gallery[(index + 1) % gallery.length], gallery[(index + 2) % gallery.length]]}
                 alt={`${project.title} gallery ${index + 1}`}
-                className="h-80 w-full object-cover transition duration-700 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:saturate-125"
+                className="h-80 w-full"
+                hint="frames"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/70 via-transparent to-[#D69A66]/10 opacity-0 transition duration-500 group-hover:opacity-100" />
               <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.24em] text-[#D69A66]">0{index + 1}</span>

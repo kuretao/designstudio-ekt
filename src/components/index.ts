@@ -1,8 +1,10 @@
 export { default as ClientShell } from "./layout/ClientShell";
+export { default as CinematicImage } from "./common/CinematicImage";
 export { default as Footer } from "./layout/Footer";
 export { default as Header } from "./layout/Header";
 export { default as FAQ } from "./common/FAQ";
 export { default as ProjectQuiz } from "./common/ProjectQuiz";
 export { default as SectionLabel } from "./common/SectionLabel";
+export { default as StyleLab } from "./common/StyleLab";
 export { default as CustomSelect } from "./forms/CustomSelect";
 export { default as StyledRegistry } from "./providers/StyledRegistry";

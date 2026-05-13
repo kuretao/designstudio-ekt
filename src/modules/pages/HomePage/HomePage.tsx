@@ -6,6 +6,7 @@ import type { Project } from "@/src/types";
 import { GlassPanel } from "@/src/ui";
 import FAQ from "@/src/components/common/FAQ";
 import ProjectQuiz from "@/src/components/common/ProjectQuiz";
+import StyleLab from "@/src/components/common/StyleLab";
 import AboutPage from "@/src/modules/pages/AboutPage";
 import { ContactSection } from "@/src/modules/pages/ContactPage";
 import { ContentPagesOverview } from "@/src/modules/pages/ContentPage";
@@ -108,6 +109,8 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
           <PortfolioGrid onSelectProject={setActiveProject} />
         </section>
       </div>
+
+      <StyleLab />
 
       <div className="home-continuation relative overflow-hidden">
         <div className="relative z-10">

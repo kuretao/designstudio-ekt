@@ -206,6 +206,86 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  @keyframes cinematicPan {
+    0% {
+      transform: scale(1.04) translate3d(-1.2%, -0.8%, 0);
+      filter: brightness(0.94) saturate(0.98);
+    }
+
+    45% {
+      transform: scale(1.1) translate3d(1.1%, -1.4%, 0);
+      filter: brightness(1.08) saturate(1.14);
+    }
+
+    100% {
+      transform: scale(1.07) translate3d(-0.4%, 1.1%, 0);
+      filter: brightness(1.02) saturate(1.08);
+    }
+  }
+
+  @keyframes cinematicSheen {
+    0% {
+      transform: translateX(-120%) skewX(-18deg);
+      opacity: 0;
+    }
+
+    18% {
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateX(145%) skewX(-18deg);
+      opacity: 0;
+    }
+  }
+
+  @keyframes cinematicScan {
+    0% {
+      transform: translateY(-18%);
+    }
+
+    100% {
+      transform: translateY(18%);
+    }
+  }
+
+  .cinematic-image {
+    background: #0c0b09;
+    transform: translateZ(0);
+  }
+
+  .cinematic-frame {
+    transform: scale(1.02);
+    will-change: transform, filter, opacity;
+  }
+
+  .cinematic-image:hover .cinematic-frame-active,
+  .cinematic-image:focus-within .cinematic-frame-active {
+    animation: cinematicPan 9.5s ease-in-out infinite alternate;
+  }
+
+  .cinematic-sheen::before {
+    content: "";
+    position: absolute;
+    inset: -18% -42%;
+    background: linear-gradient(100deg, transparent 28%, rgba(245,242,236,0.16) 45%, rgba(214,154,102,0.18) 50%, transparent 64%);
+    opacity: 0;
+    transform: translateX(-120%) skewX(-18deg);
+  }
+
+  .cinematic-image:hover .cinematic-sheen::before,
+  .cinematic-image:focus-within .cinematic-sheen::before {
+    animation: cinematicSheen 1.45s ease forwards;
+  }
+
+  .cinematic-scan {
+    background:
+      repeating-linear-gradient(0deg, transparent 0 18px, rgba(245,242,236,.04) 18px 19px),
+      radial-gradient(circle at 50% 50%, transparent 0%, rgba(214,154,102,.12) 100%);
+    mix-blend-mode: screen;
+    animation: cinematicScan 4.2s ease-in-out infinite alternate;
+  }
+
   .review-orbit {
     animation: reviewFloat 8s ease-in-out infinite;
   }

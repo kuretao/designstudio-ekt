@@ -1,0 +1,306 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import Link from "next/link";
+import { GlassPanel } from "@/src/ui";
+
+type StyleOption = {
+  id: string;
+  label: string;
+  headline: string;
+  image: string;
+  mood: string;
+  colors: string[];
+};
+
+type MaterialOption = {
+  id: string;
+  label: string;
+  texture: string;
+  accent: string;
+};
+
+type LightOption = {
+  id: string;
+  label: string;
+  overlay: string;
+  note: string;
+};
+
+const styles: StyleOption[] = [
+  {
+    id: "minimal",
+    label: "Современный",
+    headline: "Спокойный интерьер с чистой геометрией и воздухом",
+    image: "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1800&q=90",
+    mood: "минимализм, контемпорари, скрытое хранение",
+    colors: ["#F5F2EC", "#9EA79A", "#2A2C27", "#D69A66"],
+  },
+  {
+    id: "classic",
+    label: "Неоклассика",
+    headline: "Мягкая элегантность без перегруза и музейности",
+    image: "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=1800&q=90",
+    mood: "симметрия, уют, благородные материалы",
+    colors: ["#E8DDCE", "#BFA98A", "#604D3B", "#F5F2EC"],
+  },
+  {
+    id: "loft",
+    label: "Лофт",
+    headline: "Фактурное пространство с сильным характером",
+    image: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1800&q=90",
+    mood: "камень, металл, открытая планировка",
+    colors: ["#C2B8A5", "#6B6358", "#1E1D1B", "#9A6A43"],
+  },
+  {
+    id: "eco",
+    label: "Эко",
+    headline: "Светлый сценарий с природной палитрой и тактильностью",
+    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1800&q=90",
+    mood: "дерево, лен, зелень, естественный свет",
+    colors: ["#F2EBDD", "#A5A875", "#52634C", "#C7A987"],
+  },
+];
+
+const materials: MaterialOption[] = [
+  { id: "wood", label: "Теплое дерево", texture: "лиственница / дуб", accent: "#B78352" },
+  { id: "stone", label: "Крупный камень", texture: "травертин / кварц", accent: "#CFC3AD" },
+  { id: "textile", label: "Мягкий текстиль", texture: "лен / букле", accent: "#E1D8C8" },
+  { id: "metal", label: "Темный металл", texture: "графит / бронза", accent: "#4C4841" },
+];
+
+const lights: LightOption[] = [
+  {
+    id: "morning",
+    label: "Утро",
+    overlay: "linear-gradient(120deg, rgba(245,242,236,.22), rgba(214,154,102,.08), rgba(5,5,5,.18))",
+    note: "мягкий дневной свет",
+  },
+  {
+    id: "evening",
+    label: "Вечер",
+    overlay: "linear-gradient(120deg, rgba(214,154,102,.24), rgba(70,54,43,.12), rgba(5,5,5,.32))",
+    note: "теплые акцентные группы",
+  },
+  {
+    id: "gallery",
+    label: "Галерея",
+    overlay: "linear-gradient(120deg, rgba(245,242,236,.1), rgba(126,139,116,.14), rgba(5,5,5,.24))",
+    note: "контраст и точечные акценты",
+  },
+];
+
+export default function StyleLab() {
+  const [styleId, setStyleId] = useState(styles[0].id);
+  const [materialId, setMaterialId] = useState(materials[0].id);
+  const [lightId, setLightId] = useState(lights[0].id);
+  const [saved, setSaved] = useState(false);
+
+  const activeStyle = useMemo(() => styles.find((item) => item.id === styleId) ?? styles[0], [styleId]);
+  const activeMaterial = useMemo(() => materials.find((item) => item.id === materialId) ?? materials[0], [materialId]);
+  const activeLight = useMemo(() => lights.find((item) => item.id === lightId) ?? lights[0], [lightId]);
+
+  const saveConcept = () => {
+    const payload = {
+      style: activeStyle.label,
+      material: activeMaterial.label,
+      light: activeLight.label,
+      createdAt: new Date().toISOString(),
+    };
+
+    localStorage.setItem("homeStyleLabConcept", JSON.stringify(payload));
+    console.info("Mock style lab concept", payload);
+    setSaved(true);
+    window.setTimeout(() => setSaved(false), 2600);
+  };
+
+  return (
+    <section className="style-lab-section relative z-[2] min-h-[136vh] overflow-hidden bg-[#0c0b09] px-5 py-36 md:px-10 md:py-44 lg:px-16">
+      <div className="absolute inset-0">
+        {styles.map((item) => (
+          <img
+            key={`bg-${item.id}`}
+            src={item.image}
+            alt=""
+            aria-hidden="true"
+            className={`absolute inset-0 h-full w-full scale-110 object-cover blur-sm transition duration-700 ${
+              item.id === activeStyle.id ? "opacity-45" : "opacity-0"
+            }`}
+          />
+        ))}
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.92)_0%,rgba(13,12,10,.78)_44%,rgba(5,5,5,.54)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,#0c0b09_0%,rgba(12,11,9,.5)_18%,rgba(12,11,9,.42)_72%,#0c0b09_100%)]" />
+        <div
+          className="absolute inset-0 opacity-45"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(245,242,236,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(245,242,236,.035) 1px, transparent 1px)",
+            backgroundSize: "120px 120px",
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto grid min-h-[calc(136vh-22rem)] max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+        <div className="flex flex-col justify-between">
+          <div>
+            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Style lab</p>
+            <h2 className="max-w-3xl text-5xl font-light leading-tight text-[#F5F2EC] md:text-7xl">
+              Соберите настроение будущего интерьера
+            </h2>
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#D6D1CA]">
+              Быстрый интерактивный эскиз показывает, как меняется ощущение проекта от стиля, материала и светового сценария.
+            </p>
+          </div>
+
+          <GlassPanel className="mt-10 rounded-[2rem] p-6 md:p-7">
+            <p className="text-xs uppercase tracking-[0.3em] text-white/35">Бриф в один взгляд</p>
+            <h3 className="mt-4 text-3xl font-light leading-tight text-[#F5F2EC]">{activeStyle.headline}</h3>
+            <div className="mt-6 grid gap-4 text-sm text-[#D6D1CA] sm:grid-cols-3">
+              <div>
+                <span className="block text-white/35">Стиль</span>
+                <span className="mt-1 block text-[#F5F2EC]">{activeStyle.mood}</span>
+              </div>
+              <div>
+                <span className="block text-white/35">Материал</span>
+                <span className="mt-1 block text-[#F5F2EC]">{activeMaterial.texture}</span>
+              </div>
+              <div>
+                <span className="block text-white/35">Свет</span>
+                <span className="mt-1 block text-[#F5F2EC]">{activeLight.note}</span>
+              </div>
+            </div>
+          </GlassPanel>
+        </div>
+
+        <GlassPanel className="grid overflow-hidden rounded-[2rem] lg:grid-rows-[1fr_auto]">
+          <div className="relative min-h-[560px] overflow-hidden md:min-h-[760px]">
+            {styles.map((item) => (
+              <img
+                key={item.id}
+                src={item.image}
+                alt={item.label}
+                className={`absolute inset-0 h-full w-full object-cover transition duration-700 ${
+                  item.id === activeStyle.id ? "scale-100 opacity-100" : "scale-105 opacity-0"
+                }`}
+              />
+            ))}
+            <div className="absolute inset-0 transition duration-700" style={{ background: activeLight.overlay }} />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/82 via-[#050505]/14 to-transparent" />
+
+            <div className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-8">
+              <div className="mb-4 flex flex-wrap gap-2">
+                {activeStyle.colors.map((color) => (
+                  <span
+                    key={color}
+                    className="h-9 w-9 rounded-full border border-white/25 shadow-[0_10px_28px_rgba(0,0,0,.26)]"
+                    style={{ background: color }}
+                    aria-label={`Цвет ${color}`}
+                  />
+                ))}
+                <span
+                  className="h-9 w-9 rounded-full border border-white/25 shadow-[0_10px_28px_rgba(0,0,0,.26)]"
+                  style={{ background: activeMaterial.accent }}
+                  aria-label="Акцентный материал"
+                />
+              </div>
+              <div className="flex flex-wrap items-end justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.32em] text-[#D69A66]">{activeStyle.label}</p>
+                  <p className="mt-2 max-w-2xl text-3xl font-light leading-tight text-white md:text-5xl">{activeStyle.headline}</p>
+                </div>
+                <div className="rounded-full border border-white/15 bg-black/35 px-4 py-2 text-xs uppercase tracking-[0.2em] text-white/70 backdrop-blur">
+                  {activeMaterial.label} · {activeLight.label}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-6 border-t border-white/10 p-5 md:p-7">
+            <div>
+              <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/35">Стиль</p>
+              <div className="grid gap-2 sm:grid-cols-4">
+                {styles.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    aria-pressed={item.id === activeStyle.id}
+                    onClick={() => setStyleId(item.id)}
+                    className={`min-h-12 rounded-2xl border px-3 text-sm transition ${
+                      item.id === activeStyle.id
+                        ? "border-[#D69A66]/70 bg-[#D69A66]/12 text-[#F5F2EC]"
+                        : "border-white/10 bg-white/[0.03] text-white/50 hover:border-white/25 hover:text-white"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-5 lg:grid-cols-[1fr_0.8fr]">
+              <div>
+                <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/35">Материал</p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {materials.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      aria-pressed={item.id === activeMaterial.id}
+                      onClick={() => setMaterialId(item.id)}
+                      className={`flex min-h-12 items-center gap-3 rounded-2xl border px-3 text-left text-sm transition ${
+                        item.id === activeMaterial.id
+                          ? "border-[#D69A66]/70 bg-[#D69A66]/12 text-[#F5F2EC]"
+                          : "border-white/10 bg-white/[0.03] text-white/50 hover:border-white/25 hover:text-white"
+                      }`}
+                    >
+                      <span className="h-6 w-6 shrink-0 rounded-full border border-white/20" style={{ background: item.accent }} />
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/35">Свет</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {lights.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      aria-pressed={item.id === activeLight.id}
+                      onClick={() => setLightId(item.id)}
+                      className={`min-h-12 rounded-2xl border px-3 text-sm transition ${
+                        item.id === activeLight.id
+                          ? "border-[#D69A66]/70 bg-[#D69A66]/12 text-[#F5F2EC]"
+                          : "border-white/10 bg-white/[0.03] text-white/50 hover:border-white/25 hover:text-white"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 border-t border-white/10 pt-5">
+              <button
+                type="button"
+                onClick={saveConcept}
+                className="rounded-full bg-[#D69A66] px-6 py-3 text-xs uppercase tracking-[0.22em] text-[#050505] transition hover:bg-[#F5F2EC]"
+              >
+                Сохранить подборку
+              </button>
+              <Link
+                href="#project-quiz"
+                className="rounded-full border border-white/12 px-6 py-3 text-xs uppercase tracking-[0.22em] text-white/60 transition hover:border-[#D69A66]/55 hover:text-[#D69A66]"
+              >
+                Рассчитать проект
+              </Link>
+              {saved && <span className="text-sm text-[#D6D1CA]">Подборка сохранена в моковом режиме</span>}
+            </div>
+          </div>
+        </GlassPanel>
+      </div>
+    </section>
+  );
+}

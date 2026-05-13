@@ -1,6 +1,7 @@
 export { default as AboutPage } from "./AboutPage";
 export { default as AboutPageFull } from "./AboutPageFull";
 export { default as AgreementPage } from "./AgreementPage";
+export { default as CareerPage } from "./CareerPage";
 export { default as ContactPage } from "./ContactPage";
 export { default as ContentPage } from "./ContentPage";
 export { default as HomePage } from "./HomePage";

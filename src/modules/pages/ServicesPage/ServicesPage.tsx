@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { projects, servicePageItems, services } from "@/src/data";
+import CinematicImage from "@/src/components/common/CinematicImage";
 import { GlassPanel } from "@/src/ui";
 import SectionLabel from "@/src/components/common/SectionLabel";
 
@@ -62,7 +63,7 @@ function ServicesHero() {
                 href={`/${item.id}`}
                 className="group relative min-h-56 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60"
               >
-                <img src={item.image} alt={item.title} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-110" />
+                <CinematicImage frames={[item.image, projects[0].image, projects[2].image]} alt={item.title} className="absolute inset-0" hint="motion" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/92 via-[#050505]/28 to-transparent" />
                 <div className="absolute inset-x-5 bottom-5">
                   <p className="mb-2 text-xs uppercase tracking-[0.22em] text-[#D69A66]">{item.eyebrow}</p>
@@ -122,7 +123,7 @@ export function ServicePages() {
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {servicePageItems.map((item) => (
+          {servicePageItems.map((item, index) => (
             <Link
               key={item.id}
               id={item.id}
@@ -130,10 +131,11 @@ export function ServicePages() {
               className="group scroll-mt-28 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
             >
               <div className="relative h-72 overflow-hidden">
-                <img
-                  src={item.image}
+                <CinematicImage
+                  frames={[item.image, projects[(index + 1) % projects.length]?.image, projects[(index + 3) % projects.length]?.image]}
                   alt={item.title}
-                  className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:saturate-125"
+                  className="absolute inset-0"
+                  hint="motion"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/85 via-transparent to-[#D69A66]/10" />
                 <div className="absolute bottom-5 left-5 right-5">

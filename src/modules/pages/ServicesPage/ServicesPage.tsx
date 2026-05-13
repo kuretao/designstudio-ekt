@@ -63,8 +63,8 @@ function ServicesHero() {
                 href={`/${item.id}`}
                 className="group relative min-h-56 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-300 will-change-transform hover:-translate-y-2 hover:border-[#D69A66]/60"
               >
-                <CinematicImage frames={[item.image, projects[0].image, projects[2].image]} alt={item.title} className="absolute inset-0" hint="motion" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/92 via-[#050505]/28 to-transparent" />
+                <CinematicImage frames={[item.image, projects[0].image, projects[2].image]} alt={item.title} fill hint="motion" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/68 via-[#050505]/16 to-transparent" />
                 <div className="absolute inset-x-5 bottom-5">
                   <p className="mb-2 text-xs uppercase tracking-[0.22em] text-[#D69A66]">{item.eyebrow}</p>
                   <h2 className="text-xl font-light leading-tight tracking-[-0.035em]">{item.title}</h2>
@@ -134,10 +134,10 @@ export function ServicePages() {
                 <CinematicImage
                   frames={[item.image, projects[(index + 1) % projects.length]?.image, projects[(index + 3) % projects.length]?.image]}
                   alt={item.title}
-                  className="absolute inset-0"
+                  fill
                   hint="motion"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/85 via-transparent to-[#D69A66]/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/58 via-transparent to-[#D69A66]/10" />
                 <div className="absolute bottom-5 left-5 right-5">
                   <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#D69A66]">{item.eyebrow}</p>
                   <h3 className="text-3xl font-light tracking-[-0.04em]">{item.title}</h3>

@@ -279,10 +279,10 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
                   filteredProjects[(index + 2) % filteredProjects.length]?.image,
                 ]}
                 alt={project.title}
-                className="absolute inset-0"
+                fill
                 hint="preview"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-[#D69A66]/10 transition duration-500 group-hover:from-black/70" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/8 to-[#D69A66]/10 transition duration-500 group-hover:from-black/48" />
               <div className="absolute inset-4 rounded-[1.55rem] border border-white/0 transition duration-500 group-hover:border-white/25" />
               <div className="absolute bottom-5 left-5 right-5">
                 <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#D69A66]">{project.category}</p>
@@ -324,10 +324,10 @@ export function ProjectShowcase({ project }: { project: Project }) {
                   projects[(project.id + 3) % projects.length]?.image,
                 ]}
                 alt={project.title}
-                className="absolute inset-0"
+                fill
                 hint="tour"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/85 via-[#050505]/10 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/68 via-[#050505]/8 to-transparent" />
               <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center gap-3">
                 <span className="rounded-full border border-[#D69A66]/40 bg-[#050505]/55 px-4 py-2 text-xs uppercase tracking-[0.24em] text-[#D69A66] backdrop-blur">
                   {project.category}
@@ -376,7 +376,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
                 className="h-80 w-full"
                 hint="frames"
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/70 via-transparent to-[#D69A66]/10 opacity-0 transition duration-500 group-hover:opacity-100" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/45 via-transparent to-[#D69A66]/10 opacity-0 transition duration-500 group-hover:opacity-100" />
               <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.24em] text-[#D69A66]">0{index + 1}</span>
             </div>
           ))}

@@ -5,6 +5,7 @@ type CinematicImageProps = {
   imageClassName?: string;
   overlayClassName?: string;
   hint?: string;
+  fill?: boolean;
 };
 
 export default function CinematicImage({
@@ -14,6 +15,7 @@ export default function CinematicImage({
   imageClassName = "",
   overlayClassName = "",
   hint = "motion",
+  fill = false,
 }: CinematicImageProps) {
   const frameKey = frames.filter(Boolean).join("|");
   const cleanFrames = Array.from(new Set(frameKey.split("|").filter(Boolean)));
@@ -23,7 +25,9 @@ export default function CinematicImage({
 
   return (
     <div
-      className={`cinematic-image group/cinema relative overflow-hidden bg-cover bg-center ${className}`}
+      className={`cinematic-image group/cinema overflow-hidden bg-cover bg-center ${
+        fill ? "absolute inset-0" : "relative"
+      } ${className}`}
       style={{ backgroundImage: `url(${baseFrame})` }}
     >
       <img

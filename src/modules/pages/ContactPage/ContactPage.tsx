@@ -84,6 +84,12 @@ function FadeUp({ children, delay = 0, className = "" }: { children: React.React
 
 const inputCls = "w-full rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-sm text-[#F5F2EC] outline-none transition placeholder:text-white/25 focus:border-[#D69A66]/60 focus:bg-white/[0.07]";
 
+const contactStats = [
+  { val: 1, suffix: " день", label: "время ответа" },
+  { val: 3, suffix: " страны", label: "география проектов" },
+  { val: 7, suffix: " лет", label: "на рынке дизайна" },
+];
+
 function ContactMapPanel() {
   return (
     <div className="flex flex-col gap-4">
@@ -111,7 +117,64 @@ function ContactMapPanel() {
   );
 }
 
-export function ContactSection() {
+function ContactHero() {
+  return (
+    <section className="relative min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-10 lg:px-16">
+      <HeroBackdropSlider
+        slides={[
+          { image: projects[3].image, alt: "Студия 3D Smart Design" },
+          { image: projects[0].image, alt: "Интерьерный проект" },
+          { image: projects[4].image, alt: "Архитектурная визуализация" },
+        ]}
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.96)_0%,rgba(5,5,5,.72)_48%,rgba(5,5,5,.2)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.4)_34%,transparent_78%)]" />
+
+      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl items-end pb-24">
+        <div className="max-w-6xl">
+          <p className="mb-5 text-xs uppercase tracking-[0.38em] text-[#D69A66]">Contacts / 3D Smart Design</p>
+          <h1 className="max-w-5xl text-6xl font-light leading-[0.9] tracking-[-0.065em] text-white md:text-8xl lg:text-9xl">
+            Свяжитесь с нами
+          </h1>
+          <p className="mt-7 max-w-2xl text-lg leading-relaxed text-[#E8E0D8]/85 md:text-xl">
+            Расскажите о проекте, сроках и формате работы. Ответим в течение рабочего дня и предложим понятный следующий шаг.
+          </p>
+          <div className="mt-10 flex flex-wrap gap-3">
+            <a
+              href="#contact"
+              className="rounded-full border border-[#D69A66] bg-[#D69A66] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:-translate-y-0.5 hover:bg-[#E3AD7B]"
+            >
+              Оставить заявку
+            </a>
+            <a
+              href={contactInfo.phoneHref}
+              className="rounded-full border border-white/15 bg-black/25 px-6 py-4 text-xs uppercase tracking-[0.24em] text-white/75 backdrop-blur transition duration-300 hover:border-[#D69A66]/70 hover:text-white"
+            >
+              Позвонить
+            </a>
+          </div>
+          <div className="mt-12 flex flex-wrap gap-8 border-t border-white/12 pt-8 md:gap-16">
+            {contactStats.map((stat) => (
+              <div key={stat.label}>
+                <p className="text-3xl font-light tracking-[-0.04em] text-white md:text-4xl">
+                  <Counter to={stat.val} suffix={stat.suffix} />
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-[0.25em] text-white/40">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+type ContactSectionProps = {
+  showIntro?: boolean;
+  compactTop?: boolean;
+};
+
+export function ContactSection({ showIntro = true, compactTop = false }: ContactSectionProps) {
   const [name, setName] = useState("");
   const [contactVal, setContactVal] = useState("");
   const [service, setService] = useState("");
@@ -136,18 +199,7 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="relative overflow-hidden px-5 pb-28 pt-20 md:px-10 lg:px-16">
-      <HeroBackdropSlider
-        slides={[
-          { image: projects[3].image, alt: "Студия 3D Smart Design" },
-          { image: projects[0].image, alt: "Интерьерный проект" },
-          { image: projects[4].image, alt: "Архитектурная визуализация" },
-        ]}
-        className="bottom-auto h-[780px]"
-        controlsClassName="bottom-auto top-[700px]"
-      />
-      <div className="pointer-events-none absolute left-0 right-0 top-0 h-[780px] bg-[linear-gradient(90deg,rgba(5,5,5,.96)_0%,rgba(5,5,5,.76)_52%,rgba(5,5,5,.34)_100%)]" />
-      <div className="pointer-events-none absolute left-0 right-0 top-0 h-[780px] bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.48)_32%,transparent_74%)]" />
+    <section id="contact" className={`relative overflow-hidden px-5 pb-28 ${compactTop ? "pt-16" : "pt-20"} md:px-10 lg:px-16`}>
       {/* Background glow orbs */}
       <div className="pointer-events-none absolute -left-32 top-0 h-[600px] w-[600px] rounded-full opacity-20" style={{ background: "radial-gradient(circle, rgba(214,154,102,0.35) 0%, transparent 70%)", filter: "blur(80px)" }} />
       <div className="pointer-events-none absolute -right-24 bottom-32 h-[500px] w-[500px] rounded-full opacity-15" style={{ background: "radial-gradient(circle, rgba(214,154,102,0.35) 0%, transparent 70%)", filter: "blur(80px)" }} />
@@ -155,34 +207,36 @@ export function ContactSection() {
       <div className="relative z-10 mx-auto max-w-7xl">
 
         {/* ── Hero heading ── */}
-        <FadeUp delay={0}>
-          <SectionLabel>Контакты</SectionLabel>
-        </FadeUp>
-        <FadeUp delay={80}>
-          <h1 className="text-6xl font-light leading-[0.9] tracking-[-0.065em] md:text-8xl lg:text-[10rem]">
-            Свяжитесь<br />
-            <span className="text-[#D69A66]">с нами</span>
-          </h1>
-        </FadeUp>
+        {showIntro && (
+          <>
+            <FadeUp delay={0}>
+              <SectionLabel>Контакты</SectionLabel>
+            </FadeUp>
+            <FadeUp delay={80}>
+              <h1 className="text-6xl font-light leading-[0.9] tracking-[-0.065em] md:text-8xl lg:text-[10rem]">
+                Свяжитесь<br />
+                <span className="text-[#D69A66]">с нами</span>
+              </h1>
+            </FadeUp>
+          </>
+        )}
 
         {/* ── Stats strip ── */}
-        <FadeUp delay={200} className="mt-12 flex flex-wrap gap-8 border-t border-white/8 pt-8 md:gap-16">
-          {[
-            { val: 1, suffix: " день", label: "время ответа" },
-            { val: 3, suffix: " страны", label: "география проектов" },
-            { val: 7, suffix: " лет", label: "на рынке дизайна" },
-          ].map((s) => (
-            <div key={s.label}>
-              <p className="text-3xl font-light tracking-[-0.04em] text-white md:text-4xl">
-                <Counter to={s.val} suffix={s.suffix} />
-              </p>
-              <p className="mt-1 text-xs uppercase tracking-[0.25em] text-white/35">{s.label}</p>
-            </div>
-          ))}
-        </FadeUp>
+        {showIntro && (
+          <FadeUp delay={200} className="mt-12 flex flex-wrap gap-8 border-t border-white/8 pt-8 md:gap-16">
+            {contactStats.map((s) => (
+              <div key={s.label}>
+                <p className="text-3xl font-light tracking-[-0.04em] text-white md:text-4xl">
+                  <Counter to={s.val} suffix={s.suffix} />
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-[0.25em] text-white/35">{s.label}</p>
+              </div>
+            ))}
+          </FadeUp>
+        )}
 
         {/* ── Contact info cards ── */}
-        <div className="mt-16 grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className={`${showIntro ? "mt-16" : "mt-0"} grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4`}>
           {[
             {
               label: "Телефон",
@@ -357,8 +411,9 @@ export function ContactSection() {
 
 export default function ContactPage() {
   return (
-    <div className="page-in pt-24">
-      <ContactSection />
+    <div className="page-in">
+      <ContactHero />
+      <ContactSection showIntro={false} compactTop />
     </div>
   );
 }

@@ -1,7 +1,8 @@
 ﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
-import { contactInfo, servicePageItems } from "@/src/data";
+import { contactInfo, projects, servicePageItems } from "@/src/data";
+import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import SectionLabel from "@/src/components/common/SectionLabel";
 import CustomSelect from "@/src/components/forms/CustomSelect";
 
@@ -136,6 +137,17 @@ export function ContactSection() {
 
   return (
     <section id="contact" className="relative overflow-hidden px-5 pb-28 pt-20 md:px-10 lg:px-16">
+      <HeroBackdropSlider
+        slides={[
+          { image: projects[3].image, alt: "Студия 3D Smart Design" },
+          { image: projects[0].image, alt: "Интерьерный проект" },
+          { image: projects[4].image, alt: "Архитектурная визуализация" },
+        ]}
+        className="bottom-auto h-[780px]"
+        controlsClassName="bottom-auto top-[700px]"
+      />
+      <div className="pointer-events-none absolute left-0 right-0 top-0 h-[780px] bg-[linear-gradient(90deg,rgba(5,5,5,.96)_0%,rgba(5,5,5,.76)_52%,rgba(5,5,5,.34)_100%)]" />
+      <div className="pointer-events-none absolute left-0 right-0 top-0 h-[780px] bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.48)_32%,transparent_74%)]" />
       {/* Background glow orbs */}
       <div className="pointer-events-none absolute -left-32 top-0 h-[600px] w-[600px] rounded-full opacity-20" style={{ background: "radial-gradient(circle, rgba(214,154,102,0.35) 0%, transparent 70%)", filter: "blur(80px)" }} />
       <div className="pointer-events-none absolute -right-24 bottom-32 h-[500px] w-[500px] rounded-full opacity-15" style={{ background: "radial-gradient(circle, rgba(214,154,102,0.35) 0%, transparent 70%)", filter: "blur(80px)" }} />

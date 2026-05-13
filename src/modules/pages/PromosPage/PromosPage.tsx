@@ -1,7 +1,9 @@
 ﻿"use client";
 
 import { useState } from "react";
-import { promos } from "@/src/data";
+import { projects, promos } from "@/src/data";
+import CinematicImage from "@/src/components/common/CinematicImage";
+import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import ContactModal from "@/src/modals/ContactModal";
 
 const badgeColors: Record<string, string> = {
@@ -35,8 +37,18 @@ export default function PromosPage() {
     <>
       <div className="page-in pt-24">
         {/* Hero */}
-        <section className="px-5 pb-10 pt-20 md:px-10 lg:px-16">
-          <div className="mx-auto max-w-7xl">
+        <section className="relative min-h-[72vh] overflow-hidden px-5 pb-24 pt-20 md:px-10 lg:px-16">
+          <HeroBackdropSlider
+            slides={[
+              { image: promos[0]?.image, alt: promos[0]?.title },
+              { image: promos[1]?.image, alt: promos[1]?.title },
+              { image: projects[2].image, alt: "Ландшафтный проект" },
+            ]}
+            controlsClassName="bottom-6"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.94)_0%,rgba(5,5,5,.72)_52%,rgba(5,5,5,.26)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.42)_32%,transparent_74%)]" />
+          <div className="relative z-10 mx-auto max-w-7xl">
             <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Special offers</p>
             <div className="grid gap-8 md:grid-cols-[1fr_0.55fr] md:items-end">
               <h1 className="text-6xl font-light leading-[0.92] tracking-[-0.065em] md:text-8xl">
@@ -122,10 +134,15 @@ export default function PromosPage() {
 
                   {/* Image */}
                   <div className="relative hidden min-h-[400px] overflow-hidden lg:block">
-                    <img
-                      src={promo.image}
+                    <CinematicImage
+                      frames={[
+                        promo.image,
+                        projects[(idx + 1) % projects.length]?.image,
+                        projects[(idx + 3) % projects.length]?.image,
+                      ]}
                       alt={promo.title}
-                      className="absolute inset-0 h-full w-full object-cover transition duration-[1200ms] group-hover:scale-105 group-hover:brightness-110"
+                      fill
+                      hint="motion"
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/20 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/50 to-transparent" />

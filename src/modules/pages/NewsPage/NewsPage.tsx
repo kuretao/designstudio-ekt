@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { newsArticles } from "@/src/data";
+import CinematicImage from "@/src/components/common/CinematicImage";
+import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 
 function NewsPage() {
   const [featured, ...rest] = newsArticles;
@@ -9,7 +11,13 @@ function NewsPage() {
   return (
     <div className="page-in">
       <section className="relative min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-10 lg:px-16">
-        <img src={featured.image} alt={featured.title} className="absolute inset-0 h-full w-full object-cover" />
+        <HeroBackdropSlider
+          slides={[
+            { image: featured.image, alt: featured.title },
+            { image: rest[0]?.image, alt: rest[0]?.title },
+            { image: rest[1]?.image, alt: rest[1]?.title },
+          ]}
+        />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.96)_0%,rgba(5,5,5,.70)_48%,rgba(5,5,5,.18)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.35)_34%,transparent_76%)]" />
 
@@ -71,11 +79,7 @@ function NewsPage() {
             href={`/novosti/${featured.slug}`}
             className="group relative mb-5 flex min-h-[520px] overflow-hidden rounded-[2.5rem] border border-white/10 transition duration-500 hover:-translate-y-1 hover:border-[#D69A66]/50 hover:shadow-[0_34px_120px_rgba(0,0,0,0.5)]"
           >
-            <img
-              src={featured.image}
-              alt={featured.title}
-              className="absolute inset-0 h-full w-full object-cover transition duration-[1200ms] group-hover:scale-105 group-hover:brightness-110"
-            />
+            <CinematicImage frames={[featured.image, rest[0]?.image, rest[1]?.image]} alt={featured.title} fill hint="story" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent" />
             <div className="relative mt-auto p-8 md:p-12">
               <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -96,17 +100,22 @@ function NewsPage() {
           </Link>
 
           <div className="grid gap-5 md:grid-cols-3">
-            {rest.map((article) => (
+            {rest.map((article, index) => (
               <Link
                 key={article.slug}
                 href={`/novosti/${article.slug}`}
                 className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.02] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/55 hover:shadow-[0_24px_80px_rgba(0,0,0,0.42)]"
               >
                 <div className="relative h-56 overflow-hidden">
-                  <img
-                    src={article.image}
+                  <CinematicImage
+                    frames={[
+                      article.image,
+                      newsArticles[(index + 2) % newsArticles.length]?.image,
+                      newsArticles[(index + 3) % newsArticles.length]?.image,
+                    ]}
                     alt={article.title}
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-110 group-hover:brightness-110"
+                    fill
+                    hint="read"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-[#050505]/20 to-[#D69A66]/10" />
                   <span className="absolute left-5 top-5 rounded-full border border-[#D69A66]/35 bg-[#050505]/60 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-[#D69A66] backdrop-blur">

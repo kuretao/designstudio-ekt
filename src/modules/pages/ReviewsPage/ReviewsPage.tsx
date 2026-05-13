@@ -2,12 +2,20 @@
 
 import Link from "next/link";
 import { reviewStats, testimonials } from "@/src/data";
+import CinematicImage from "@/src/components/common/CinematicImage";
+import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import { GlassPanel } from "@/src/ui";
 
 function ReviewsHero({ featuredReview }: { featuredReview: (typeof testimonials)[number] }) {
   return (
     <section className="relative min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-10 lg:px-16">
-      <img src={featuredReview.image} alt={featuredReview.title} className="absolute inset-0 h-full w-full object-cover" />
+      <HeroBackdropSlider
+        slides={[
+          { image: featuredReview.image, alt: featuredReview.title },
+          { image: testimonials[1]?.image, alt: testimonials[1]?.title },
+          { image: testimonials[2]?.image, alt: testimonials[2]?.title },
+        ]}
+      />
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.97)_0%,rgba(5,5,5,.72)_50%,rgba(5,5,5,.18)_100%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.42)_34%,transparent_78%)]" />
 
@@ -89,11 +97,7 @@ function ReviewsPage() {
           <div className="mt-16 grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
             <GlassPanel className="review-card review-sheen relative overflow-hidden rounded-[2.5rem] p-0">
               <div className="relative min-h-[620px] overflow-hidden">
-                <img
-                  src={featuredReview.image}
-                  alt={featuredReview.title}
-                  className="absolute inset-0 h-full w-full object-cover transition duration-[1200ms] hover:scale-105"
-                />
+                <CinematicImage frames={[featuredReview.image, testimonials[1]?.image, testimonials[2]?.image]} alt={featuredReview.title} fill hint="review" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/58 to-[#050505]/10" />
                 <div className="absolute inset-x-6 bottom-6 md:inset-x-9 md:bottom-9">
                   <div className="mb-8 inline-flex rounded-full border border-[#D69A66]/45 bg-[#050505]/60 px-4 py-2 text-xs uppercase tracking-[0.24em] text-[#D69A66] backdrop-blur">
@@ -120,8 +124,8 @@ function ReviewsPage() {
                   className="review-card review-sheen relative overflow-hidden rounded-[2rem] p-6 transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60 hover:shadow-[0_24px_90px_rgba(0,0,0,0.38)]"
                 >
                   <div className="flex gap-5">
-                    <div className="hidden h-28 w-24 shrink-0 overflow-hidden rounded-[1.25rem] sm:block">
-                      <img src={review.image} alt={review.title} className="h-full w-full object-cover" />
+                    <div className="relative hidden h-28 w-24 shrink-0 overflow-hidden rounded-[1.25rem] sm:block">
+                      <CinematicImage frames={[review.image, testimonials[0]?.image, testimonials[2]?.image]} alt={review.title} fill hint="view" />
                     </div>
                     <div>
                       <div className="mb-5 flex flex-wrap items-center gap-3">
@@ -181,7 +185,7 @@ function ReviewsPage() {
           <GlassPanel className="review-card overflow-hidden rounded-[2.5rem] p-0">
             <div className="grid lg:grid-cols-[0.95fr_1.05fr]">
               <div className="relative min-h-[420px] overflow-hidden">
-                <img src={testimonials[1].image} alt="Оставить отзыв" className="absolute inset-0 h-full w-full object-cover" />
+                <CinematicImage frames={[testimonials[1].image, testimonials[2]?.image, testimonials[0]?.image]} alt="Оставить отзыв" fill hint="review" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/35 to-transparent" />
                 <div className="absolute bottom-8 left-8 right-8">
                   <p className="mb-4 text-xs uppercase tracking-[0.36em] text-[#D69A66]">Оставить отзыв</p>

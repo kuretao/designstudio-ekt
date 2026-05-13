@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { projects, servicePageItems, services } from "@/src/data";
 import CinematicImage from "@/src/components/common/CinematicImage";
+import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import { GlassPanel } from "@/src/ui";
 import SectionLabel from "@/src/components/common/SectionLabel";
 
@@ -17,7 +18,13 @@ function ServicesHero() {
 
   return (
     <section className="relative min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-10 lg:px-16">
-      <img src={projects[1].image} alt="Премиальный дизайн интерьера" className="absolute inset-0 h-full w-full object-cover" />
+      <HeroBackdropSlider
+        slides={[
+          { image: projects[1].image, alt: "Премиальный дизайн интерьера" },
+          { image: projects[0].image, alt: "Интерьерный проект" },
+          { image: projects[4].image, alt: "Архитектурная визуализация" },
+        ]}
+      />
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.96)_0%,rgba(5,5,5,.74)_48%,rgba(5,5,5,.24)_100%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.4)_32%,transparent_72%)]" />
 

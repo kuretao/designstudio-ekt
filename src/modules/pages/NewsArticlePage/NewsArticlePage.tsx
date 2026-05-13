@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { newsArticles, type NewsArticle } from "@/src/data";
+import CinematicImage from "@/src/components/common/CinematicImage";
+import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import { GlassPanel } from "@/src/ui";
 
 function BodyBlock({ block }: { block: NewsArticle["body"][number] }) {
@@ -36,10 +38,13 @@ function NewsArticlePage({ article }: { article: NewsArticle }) {
     <article className="page-in">
       {/* Hero */}
       <section className="relative flex min-h-[70vh] items-end overflow-hidden px-5 pb-16 md:px-10 lg:px-16">
-        <img
-          src={article.image}
-          alt={article.title}
-          className="absolute inset-0 h-full w-full object-cover"
+        <HeroBackdropSlider
+          slides={[
+            { image: article.image, alt: article.title },
+            { image: related[0]?.image, alt: related[0]?.title },
+            { image: related[1]?.image, alt: related[1]?.title },
+          ]}
+          controlsClassName="bottom-6"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/55 to-[#050505]/10" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/60 to-transparent" />
@@ -116,17 +121,22 @@ function NewsArticlePage({ article }: { article: NewsArticle }) {
               Другие новости
             </h2>
             <div className="grid gap-5 md:grid-cols-3">
-              {related.map((a) => (
+              {related.map((a, index) => (
                 <Link
                   key={a.slug}
                   href={`/novosti/${a.slug}`}
                   className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.02] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/55 hover:shadow-[0_24px_80px_rgba(0,0,0,0.42)]"
                 >
                   <div className="relative h-52 overflow-hidden">
-                    <img
-                      src={a.image}
+                    <CinematicImage
+                      frames={[
+                        a.image,
+                        related[(index + 1) % related.length]?.image,
+                        related[(index + 2) % related.length]?.image,
+                      ]}
                       alt={a.title}
-                      className="h-full w-full object-cover transition duration-700 group-hover:scale-110 group-hover:brightness-110"
+                      fill
+                      hint="read"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-transparent to-[#D69A66]/10" />
                     <span className="absolute left-4 top-4 rounded-full border border-[#D69A66]/35 bg-[#050505]/60 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-[#D69A66] backdrop-blur">

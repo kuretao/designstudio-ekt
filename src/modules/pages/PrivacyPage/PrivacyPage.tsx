@@ -1,5 +1,8 @@
 ﻿"use client";
 
+import { projects } from "@/src/data";
+import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
+
 const sections = [
   {
     num: "01",
@@ -184,8 +187,19 @@ function renderBody(text: string) {
 export default function PrivacyPage() {
   return (
     <div className="page-in pt-24">
-      <section className="px-5 pb-10 pt-20 md:px-10 lg:px-16">
-        <div className="mx-auto max-w-4xl">
+      <section className="relative overflow-hidden px-5 pb-10 pt-20 md:px-10 lg:px-16">
+        <HeroBackdropSlider
+          slides={[
+            { image: projects[0].image, alt: "3D Smart Design Studio" },
+            { image: projects[3].image, alt: "Коммерческий интерьер" },
+            { image: projects[5].image, alt: "Архитектурный проект" },
+          ]}
+          className="bottom-auto h-[580px]"
+          controlsClassName="bottom-auto top-[500px]"
+        />
+        <div className="pointer-events-none absolute left-0 right-0 top-0 h-[580px] bg-[linear-gradient(90deg,rgba(5,5,5,.96)_0%,rgba(5,5,5,.78)_52%,rgba(5,5,5,.34)_100%)]" />
+        <div className="pointer-events-none absolute left-0 right-0 top-0 h-[580px] bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.48)_32%,transparent_74%)]" />
+        <div className="relative z-10 mx-auto max-w-4xl">
           <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Документ</p>
           <h1 className="mb-4 text-5xl font-light leading-[0.92] tracking-[-0.055em] md:text-7xl">
             Политика конфиденциальности

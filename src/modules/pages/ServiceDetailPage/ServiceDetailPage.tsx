@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { servicePageItems } from "@/src/data";
 import { GlassPanel } from "@/src/ui";
+import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import { ContactSection } from "@/src/modules/pages/ContactPage";
 import { Workflow } from "@/src/modules/pages/ServicesPage";
 
@@ -12,7 +13,14 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
   return (
     <div className="page-in">
       <section className="relative min-h-screen overflow-hidden px-5 pb-20 pt-28 md:px-10 lg:px-16">
-        <img src={item.image} alt={item.title} className="absolute inset-0 h-full w-full object-cover opacity-45" />
+        <HeroBackdropSlider
+          slides={[
+            { image: item.image, alt: item.title },
+            { image: servicePageItems[1]?.image, alt: servicePageItems[1]?.title },
+            { image: servicePageItems[2]?.image, alt: servicePageItems[2]?.title },
+          ]}
+        />
+        <div className="absolute inset-0 bg-[#050505]/45" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.98),rgba(5,5,5,.70),rgba(5,5,5,.28)),radial-gradient(circle_at_72%_18%,rgba(214,154,102,.22),transparent_34%)]" />
 
         <div className="relative z-10 mx-auto grid min-h-[calc(100vh-8rem)] max-w-7xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">

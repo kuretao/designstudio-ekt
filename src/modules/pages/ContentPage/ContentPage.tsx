@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { careerVacancies, contentPages, newsArticles, projects } from "@/src/data";
 import { GlassPanel } from "@/src/ui";
+import CinematicImage from "@/src/components/common/CinematicImage";
+import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import SectionLabel from "@/src/components/common/SectionLabel";
 
 type ContentPageItem = (typeof contentPages)[number];
@@ -71,7 +73,14 @@ function ContentPage({ page }: { page: ContentPageItem }) {
   return (
     <div className="page-in">
       <section className="relative overflow-hidden px-5 py-28 md:px-10 lg:px-16">
-        <img src={projects[0].image} alt={page.title} className="absolute inset-0 h-full w-full object-cover opacity-25" />
+        <HeroBackdropSlider
+          slides={[
+            { image: projects[0].image, alt: page.title },
+            { image: projects[1].image, alt: "Интерьерный проект" },
+            { image: projects[2].image, alt: "Ландшафтный проект" },
+          ]}
+        />
+        <div className="absolute inset-0 bg-[#050505]/70" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,#050505,rgba(5,5,5,.82),rgba(5,5,5,.45))]" />
         <div className="relative mx-auto max-w-7xl">
           <SectionLabel>{page.eyebrow}</SectionLabel>
@@ -175,14 +184,23 @@ function ContentPage({ page }: { page: ContentPageItem }) {
             </div>
           ) : isBlog ? (
             <div className="grid gap-5 md:grid-cols-3">
-              {newsArticles.slice(1).map((article) => (
+              {newsArticles.slice(1).map((article, index) => (
                 <Link
                   key={article.slug}
                   href={`/novosti/${article.slug}`}
                   className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60"
                 >
                   <div className="relative h-64 overflow-hidden">
-                    <img src={article.image} alt={article.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
+                    <CinematicImage
+                      frames={[
+                        article.image,
+                        newsArticles[(index + 2) % newsArticles.length]?.image,
+                        newsArticles[(index + 3) % newsArticles.length]?.image,
+                      ]}
+                      alt={article.title}
+                      fill
+                      hint="read"
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/85 via-transparent to-transparent" />
                     <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.28em] text-[#D69A66]">{article.category}</span>
                   </div>
@@ -198,7 +216,16 @@ function ContentPage({ page }: { page: ContentPageItem }) {
               {[projects[0], projects[1], projects[2]].map((project, index) => (
                 <GlassPanel key={`${page.id}-${project.id}`} className="group overflow-hidden rounded-[2rem] p-0 transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60">
                   <div className="relative h-72 overflow-hidden">
-                    <img src={project.image} alt={project.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
+                    <CinematicImage
+                      frames={[
+                        project.image,
+                        projects[(index + 1) % projects.length]?.image,
+                        projects[(index + 2) % projects.length]?.image,
+                      ]}
+                      alt={project.title}
+                      fill
+                      hint="motion"
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-transparent to-transparent" />
                     <span className="absolute bottom-5 left-5 text-sm text-[#D69A66]">0{index + 1}</span>
                   </div>

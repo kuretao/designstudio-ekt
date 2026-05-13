@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { projects } from "@/src/data";
 import { GlassPanel } from "@/src/ui";
+import CinematicImage from "@/src/components/common/CinematicImage";
+import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import SectionLabel from "@/src/components/common/SectionLabel";
 
 const stats = [
@@ -53,7 +55,13 @@ export default function AboutPageFull() {
   return (
     <div className="page-in">
       <section className="relative min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-10 lg:px-16">
-        <img src={projects[0].image} alt="3D Smart Design Studio" className="absolute inset-0 h-full w-full object-cover" />
+        <HeroBackdropSlider
+          slides={[
+            { image: projects[0].image, alt: "3D Smart Design Studio" },
+            { image: projects[1].image, alt: "Интерьерный проект студии" },
+            { image: projects[4].image, alt: "Архитектурная визуализация студии" },
+          ]}
+        />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.97)_0%,rgba(5,5,5,.72)_48%,rgba(5,5,5,.2)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.36)_32%,transparent_76%)]" />
 
@@ -89,7 +97,7 @@ export default function AboutPageFull() {
             <GlassPanel className="overflow-hidden rounded-[2rem] p-0">
               <div className="grid md:grid-cols-[0.95fr_1.05fr]">
                 <div className="relative min-h-72 overflow-hidden">
-                  <img src={projects[4].image} alt="Архитектурная визуализация студии" className="absolute inset-0 h-full w-full object-cover" />
+                  <CinematicImage frames={[projects[4].image, projects[5].image, projects[0].image]} alt="Архитектурная визуализация студии" fill hint="system" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/84 via-transparent to-transparent" />
                   <p className="absolute bottom-5 left-5 right-5 text-2xl font-light tracking-[-0.04em]">Премиальная подача начинается с точной системы</p>
                 </div>
@@ -146,18 +154,18 @@ export default function AboutPageFull() {
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div className="grid gap-5 md:grid-cols-2">
             <div className="group relative min-h-[540px] overflow-hidden rounded-[2rem] border border-white/10">
-              <img src={projects[1].image} alt="Интерьерный проект" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+              <CinematicImage frames={[projects[1].image, projects[0].image, projects[3].image]} alt="Интерьерный проект" fill hint="motion" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/85 via-transparent to-transparent" />
               <p className="absolute bottom-6 left-6 right-6 text-2xl font-light">Интерьер как рабочий сценарий жизни</p>
             </div>
             <div className="grid gap-5">
               <div className="group relative min-h-[260px] overflow-hidden rounded-[2rem] border border-white/10">
-                <img src={projects[5].image} alt="Архитектурный проект" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                <CinematicImage frames={[projects[5].image, projects[4].image, projects[1].image]} alt="Архитектурный проект" fill hint="motion" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-transparent to-transparent" />
                 <p className="absolute bottom-5 left-5 right-5 text-xl font-light">Архитектура и визуализация</p>
               </div>
               <div className="group relative min-h-[260px] overflow-hidden rounded-[2rem] border border-white/10">
-                <img src={projects[2].image} alt="Ландшафтный дизайн" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                <CinematicImage frames={[projects[2].image, projects[3].image, projects[0].image]} alt="Ландшафтный дизайн" fill hint="motion" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-transparent to-transparent" />
                 <p className="absolute bottom-5 left-5 right-5 text-xl font-light">Ландшафт как продолжение дома</p>
               </div>

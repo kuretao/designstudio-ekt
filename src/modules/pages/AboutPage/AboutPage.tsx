@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { projects } from "@/src/data";
+import CinematicImage from "@/src/components/common/CinematicImage";
 import { GlassPanel } from "@/src/ui";
 import SectionLabel from "@/src/components/common/SectionLabel";
 
@@ -67,10 +68,11 @@ function AboutPage() {
           </div>
 
           <div className="group relative min-h-[620px] overflow-hidden rounded-[2.5rem] border border-white/10">
-            <img
-              src={projects[0].image}
+            <CinematicImage
+              frames={[projects[0].image, projects[1].image, projects[4].image]}
               alt="Интерьерный проект 3D Smart Design Studio"
-              className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105 group-hover:brightness-110"
+              fill
+              hint="studio"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/20 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6">

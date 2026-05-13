@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { projects } from "@/src/data";
+import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 
 const quickLinks = [
   { href: "/portfolio", label: "Портфолио", text: "посмотреть уровень работ" },
@@ -12,7 +13,13 @@ const quickLinks = [
 function NotFoundPage() {
   return (
     <section className="page-in relative min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-10 lg:px-16">
-      <img src={projects[0].image} alt="3D Smart Design Studio" className="absolute inset-0 h-full w-full object-cover" />
+      <HeroBackdropSlider
+        slides={[
+          { image: projects[0].image, alt: "3D Smart Design Studio" },
+          { image: projects[1].image, alt: "Интерьерный проект" },
+          { image: projects[2].image, alt: "Ландшафтный проект" },
+        ]}
+      />
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.97)_0%,rgba(5,5,5,.72)_48%,rgba(5,5,5,.2)_100%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.38)_34%,transparent_76%)]" />
 

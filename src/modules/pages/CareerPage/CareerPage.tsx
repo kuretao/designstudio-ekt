@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import CinematicImage from "@/src/components/common/CinematicImage";
+import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import { GlassPanel } from "@/src/ui";
 
 type Vacancy = {
@@ -222,11 +224,22 @@ function ApplyModal({ vacancy, onClose }: { vacancy: Vacancy | null; onClose: ()
 }
 
 function VacancyCard({ vacancy, onApply }: { vacancy: Vacancy; onApply: (vacancy: Vacancy) => void }) {
+  const currentIndex = vacancies.findIndex((item) => item.id === vacancy.id);
+
   return (
     <GlassPanel className="group overflow-hidden rounded-[2rem] transition duration-500 hover:-translate-y-1 hover:border-[#D69A66]/55 hover:shadow-[0_24px_90px_rgba(0,0,0,0.38)]">
       <div className="grid lg:grid-cols-[0.72fr_1fr]">
         <div className="relative min-h-72 overflow-hidden">
-          <img src={vacancy.image} alt={vacancy.title} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+          <CinematicImage
+            frames={[
+              vacancy.image,
+              vacancies[(currentIndex + 1) % vacancies.length]?.image,
+              vacancies[(currentIndex + 2) % vacancies.length]?.image,
+            ]}
+            alt={vacancy.title}
+            fill
+            hint="role"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/88 via-[#050505]/28 to-transparent" />
           <div className="absolute left-5 top-5 rounded-full border border-[#D69A66]/40 bg-[#050505]/55 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-[#D69A66] backdrop-blur">
             {vacancy.department}
@@ -298,10 +311,15 @@ export default function CareerPage() {
     <>
       <div className="page-in">
         <section className="relative min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-10 lg:px-16">
-          <img
-            src="https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?auto=format&fit=crop&w=2200&q=90"
-            alt="Команда дизайн-студии за рабочим столом"
-            className="absolute inset-0 h-full w-full object-cover"
+          <HeroBackdropSlider
+            slides={[
+              {
+                image: "https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?auto=format&fit=crop&w=2200&q=90",
+                alt: "Команда дизайн-студии за рабочим столом",
+              },
+              { image: vacancies[0]?.image, alt: vacancies[0]?.title },
+              { image: vacancies[1]?.image, alt: vacancies[1]?.title },
+            ]}
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.96)_0%,rgba(5,5,5,.74)_48%,rgba(5,5,5,.24)_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.42)_34%,transparent_78%)]" />

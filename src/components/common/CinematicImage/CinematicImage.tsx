@@ -23,10 +23,9 @@ export default function CinematicImage({
   const [playing, setPlaying] = useState(false);
   const [loadedFrames, setLoadedFrames] = useState<Set<number>>(() => new Set([0]));
 
-  const cleanFrames = useMemo(
-    () => Array.from(new Set(frames.filter((frame): frame is string => Boolean(frame)))),
-    [frames],
-  );
+  const frameKey = frames.filter(Boolean).join("|");
+  const cleanFrames = useMemo(() => Array.from(new Set(frameKey.split("|").filter(Boolean))), [frameKey]);
+  const baseFrame = cleanFrames[0];
 
   useEffect(() => {
     setActiveFrame(0);
@@ -47,7 +46,7 @@ export default function CinematicImage({
     return () => window.clearInterval(interval);
   }, [cleanFrames.length, loadedFrames, playing]);
 
-  if (!cleanFrames.length) return null;
+  if (!baseFrame) return null;
 
   const stop = () => {
     setPlaying(false);
@@ -62,13 +61,32 @@ export default function CinematicImage({
       onFocus={() => setPlaying(true)}
       onBlur={stop}
     >
-      {cleanFrames.map((frame, index) => (
+      <img
+        src={baseFrame}
+        alt={alt}
+        loading="eager"
+        decoding="async"
+        onLoad={() => {
+          setLoadedFrames((current) => {
+            if (current.has(0)) return current;
+            const next = new Set(current);
+            next.add(0);
+            return next;
+          });
+        }}
+        className={`cinematic-frame cinematic-frame-active h-full w-full object-cover transition duration-700 ease-out ${imageClassName}`}
+      />
+
+      {cleanFrames.slice(1).map((frame, frameIndex) => {
+        const index = frameIndex + 1;
+
+        return (
         <img
           key={frame}
           src={frame}
-          alt={index === 0 ? alt : ""}
-          aria-hidden={index !== 0}
-          loading={index === 0 ? "eager" : "lazy"}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
           decoding="async"
           onLoad={() => {
             setLoadedFrames((current) => {
@@ -79,10 +97,11 @@ export default function CinematicImage({
             });
           }}
           className={`cinematic-frame absolute inset-0 h-full w-full object-cover transition duration-700 ease-out ${
-            index === activeFrame ? "cinematic-frame-active opacity-100" : "opacity-0"
+            playing && index === activeFrame ? "cinematic-frame-active opacity-100" : "opacity-0"
           } ${imageClassName}`}
         />
-      ))}
+        );
+      })}
 
       <div className={`pointer-events-none absolute inset-0 ${overlayClassName}`} />
       <div className="cinematic-sheen pointer-events-none absolute inset-0" />

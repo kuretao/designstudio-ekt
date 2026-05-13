@@ -13,6 +13,8 @@ import { ContentPagesOverview } from "@/src/modules/pages/ContentPage";
 import { PortfolioGrid, ProjectShowcase } from "@/src/modules/pages/PortfolioPage";
 import { ServicePages, ServicesSummary, Workflow } from "@/src/modules/pages/ServicesPage";
 
+const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 type HomePageProps = {
   activeProject: Project;
   setActiveProject: (project: Project) => void;
@@ -52,7 +54,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
         <section className="hero-section snap-section relative z-[1] flex min-h-screen overflow-hidden px-5 py-28 md:px-10 lg:px-16">
           <video
             className="hero-video absolute inset-0 h-full w-full object-cover opacity-75"
-            src={`${process.env.NODE_ENV === 'production' ? '/DesignStudio-EKT' : ''}/background.mp4`}
+            src={`${assetPrefix}/background.mp4`}
             autoPlay
             muted
             loop

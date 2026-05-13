@@ -250,7 +250,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .cinematic-image {
-    background: #0c0b09;
+    background-color: #0c0b09;
     transform: translateZ(0);
   }
 

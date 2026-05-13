@@ -3,11 +3,15 @@ import path from "path";
 
 const isProd = process.env.NODE_ENV === "production";
 const isGithubPages = process.env.GITHUB_PAGES === "true";
+const basePath = isGithubPages ? "/DesignStudio-EKT" : "";
 
 const nextConfig: NextConfig = {
   output: isProd ? "export" : undefined,
-  basePath: isGithubPages ? "/DesignStudio-EKT" : "",
-  assetPrefix: isGithubPages ? "/DesignStudio-EKT/" : "",
+  basePath,
+  assetPrefix: basePath ? `${basePath}/` : "",
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
   images: { unoptimized: true },
   compiler: {
     styledComponents: true,

@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 type CinematicImageProps = {
   frames: Array<string | undefined>;
   alt: string;
@@ -18,13 +16,16 @@ export default function CinematicImage({
   hint = "motion",
 }: CinematicImageProps) {
   const frameKey = frames.filter(Boolean).join("|");
-  const cleanFrames = useMemo(() => Array.from(new Set(frameKey.split("|").filter(Boolean))), [frameKey]);
+  const cleanFrames = Array.from(new Set(frameKey.split("|").filter(Boolean)));
   const baseFrame = cleanFrames[0];
 
   if (!baseFrame) return null;
 
   return (
-    <div className={`cinematic-image group/cinema relative overflow-hidden ${className}`}>
+    <div
+      className={`cinematic-image group/cinema relative overflow-hidden bg-cover bg-center ${className}`}
+      style={{ backgroundImage: `url(${baseFrame})` }}
+    >
       <img
         src={baseFrame}
         alt={alt}

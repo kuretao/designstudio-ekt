@@ -6,6 +6,7 @@ type CinematicImageProps = {
   overlayClassName?: string;
   hint?: string;
   fill?: boolean;
+  mode?: "preview" | "frames";
 };
 
 export default function CinematicImage({
@@ -16,6 +17,7 @@ export default function CinematicImage({
   overlayClassName = "",
   hint = "motion",
   fill = false,
+  mode = "preview",
 }: CinematicImageProps) {
   const frameKey = frames.filter(Boolean).join("|");
   const cleanFrames = Array.from(new Set(frameKey.split("|").filter(Boolean)));
@@ -27,7 +29,7 @@ export default function CinematicImage({
     <div
       className={`cinematic-image group/cinema overflow-hidden bg-cover bg-center ${
         fill ? "absolute inset-0" : "relative"
-      } ${className}`}
+      } ${mode === "frames" ? "cinematic-image-frames" : "cinematic-image-preview"} ${className}`}
       style={{ backgroundImage: `url(${baseFrame})` }}
     >
       <img
@@ -49,7 +51,7 @@ export default function CinematicImage({
           aria-hidden="true"
           loading="lazy"
           decoding="async"
-          className={`cinematic-frame cinematic-frame-layer cinematic-frame-layer-${index} absolute inset-0 h-full w-full object-cover opacity-0 transition duration-500 ease-out ${imageClassName}`}
+          className={`cinematic-frame cinematic-frame-layer cinematic-frame-layer-${index} absolute inset-0 h-full w-full object-cover opacity-0 transition duration-300 ease-out ${imageClassName}`}
         />
         );
       })}

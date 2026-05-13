@@ -363,17 +363,17 @@ export default function ClientShell({ children }: { children: React.ReactNode })
             const x = (event.clientX - rect.left) / rect.width - 0.5;
             const y = (event.clientY - rect.top) / rect.height - 0.5;
             gsap.to(card, {
-              rotationY: x * 5,
-              rotationX: y * -5,
-              y: -6,
+              rotationY: x * 3.5,
+              rotationX: y * -3.5,
+              y: -4,
               transformPerspective: 900,
-              duration: 0.45,
-              ease: "power3.out",
+              duration: 0.12,
+              ease: "power1.out",
               overwrite: "auto",
             });
           };
           const onLeave = () => {
-            gsap.to(card, { rotationX: 0, rotationY: 0, y: 0, duration: 0.65, ease: "elastic.out(1, 0.55)", overwrite: "auto" });
+            gsap.to(card, { rotationX: 0, rotationY: 0, y: 0, duration: 0.24, ease: "power2.out", overwrite: "auto" });
           };
 
           card.addEventListener("pointermove", onMove);

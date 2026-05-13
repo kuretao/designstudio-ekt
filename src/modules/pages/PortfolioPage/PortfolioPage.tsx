@@ -375,6 +375,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
                 alt={`${project.title} gallery ${index + 1}`}
                 className="h-80 w-full"
                 hint="frames"
+                mode="frames"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/45 via-transparent to-[#D69A66]/10 opacity-0 transition duration-500 group-hover:opacity-100" />
               <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.24em] text-[#D69A66]">0{index + 1}</span>

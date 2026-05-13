@@ -61,7 +61,7 @@ function ServicesHero() {
               <Link
                 key={item.id}
                 href={`/${item.id}`}
-                className="group relative min-h-56 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60"
+                className="group relative min-h-56 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-300 will-change-transform hover:-translate-y-2 hover:border-[#D69A66]/60"
               >
                 <CinematicImage frames={[item.image, projects[0].image, projects[2].image]} alt={item.title} className="absolute inset-0" hint="motion" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/92 via-[#050505]/28 to-transparent" />
@@ -128,7 +128,7 @@ export function ServicePages() {
               key={item.id}
               id={item.id}
               href={`/${item.id}`}
-              className="group scroll-mt-28 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
+              className="group scroll-mt-28 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-300 will-change-transform hover:-translate-y-2 hover:border-[#D69A66]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
             >
               <div className="relative h-72 overflow-hidden">
                 <CinematicImage

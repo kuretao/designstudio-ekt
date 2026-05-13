@@ -1,6 +1,4 @@
-"use client";
-
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 type CinematicImageProps = {
   frames: Array<string | undefined>;
@@ -19,62 +17,20 @@ export default function CinematicImage({
   overlayClassName = "",
   hint = "motion",
 }: CinematicImageProps) {
-  const [activeFrame, setActiveFrame] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const [loadedFrames, setLoadedFrames] = useState<Set<number>>(() => new Set([0]));
-
   const frameKey = frames.filter(Boolean).join("|");
   const cleanFrames = useMemo(() => Array.from(new Set(frameKey.split("|").filter(Boolean))), [frameKey]);
   const baseFrame = cleanFrames[0];
 
-  useEffect(() => {
-    setActiveFrame(0);
-    setLoadedFrames(new Set([0]));
-  }, [cleanFrames]);
-
-  useEffect(() => {
-    if (!playing || cleanFrames.length < 2 || loadedFrames.size < 2) return;
-
-    const interval = window.setInterval(() => {
-      setActiveFrame((current) => {
-        const readyFrames = Array.from(loadedFrames).sort((a, b) => a - b);
-        const currentReadyIndex = readyFrames.indexOf(current);
-        return readyFrames[(currentReadyIndex + 1) % readyFrames.length] ?? 0;
-      });
-    }, 1800);
-
-    return () => window.clearInterval(interval);
-  }, [cleanFrames.length, loadedFrames, playing]);
-
   if (!baseFrame) return null;
 
-  const stop = () => {
-    setPlaying(false);
-    window.setTimeout(() => setActiveFrame(0), 220);
-  };
-
   return (
-    <div
-      className={`cinematic-image group/cinema relative overflow-hidden ${className}`}
-      onMouseEnter={() => setPlaying(true)}
-      onMouseLeave={stop}
-      onFocus={() => setPlaying(true)}
-      onBlur={stop}
-    >
+    <div className={`cinematic-image group/cinema relative overflow-hidden ${className}`}>
       <img
         src={baseFrame}
         alt={alt}
         loading="eager"
         decoding="async"
-        onLoad={() => {
-          setLoadedFrames((current) => {
-            if (current.has(0)) return current;
-            const next = new Set(current);
-            next.add(0);
-            return next;
-          });
-        }}
-        className={`cinematic-frame cinematic-frame-active h-full w-full object-cover transition duration-700 ease-out ${imageClassName}`}
+        className={`cinematic-frame cinematic-frame-base absolute inset-0 h-full w-full object-cover transition duration-500 ease-out ${imageClassName}`}
       />
 
       {cleanFrames.slice(1).map((frame, frameIndex) => {
@@ -88,17 +44,7 @@ export default function CinematicImage({
           aria-hidden="true"
           loading="lazy"
           decoding="async"
-          onLoad={() => {
-            setLoadedFrames((current) => {
-              if (current.has(index)) return current;
-              const next = new Set(current);
-              next.add(index);
-              return next;
-            });
-          }}
-          className={`cinematic-frame absolute inset-0 h-full w-full object-cover transition duration-700 ease-out ${
-            playing && index === activeFrame ? "cinematic-frame-active opacity-100" : "opacity-0"
-          } ${imageClassName}`}
+          className={`cinematic-frame cinematic-frame-layer cinematic-frame-layer-${index} absolute inset-0 h-full w-full object-cover opacity-0 transition duration-500 ease-out ${imageClassName}`}
         />
         );
       })}

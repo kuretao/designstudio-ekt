@@ -259,9 +259,31 @@ export const GlobalStyle = createGlobalStyle`
     will-change: transform, filter, opacity;
   }
 
-  .cinematic-image:hover .cinematic-frame-active,
-  .cinematic-image:focus-within .cinematic-frame-active {
+  .cinematic-image:hover .cinematic-frame,
+  .cinematic-image:focus-within .cinematic-frame {
     animation: cinematicPan 9.5s ease-in-out infinite alternate;
+  }
+
+  .cinematic-image:hover .cinematic-frame-base,
+  .cinematic-image:focus-within .cinematic-frame-base {
+    filter: brightness(1.03) saturate(1.08);
+  }
+
+  .cinematic-image:hover .cinematic-frame-layer-1,
+  .cinematic-image:focus-within .cinematic-frame-layer-1 {
+    opacity: 1;
+  }
+
+  .cinematic-image:hover .cinematic-frame-layer-2,
+  .cinematic-image:focus-within .cinematic-frame-layer-2 {
+    opacity: 0.78;
+    animation-delay: 1.9s;
+  }
+
+  .cinematic-image:hover .cinematic-frame-layer-3,
+  .cinematic-image:focus-within .cinematic-frame-layer-3 {
+    opacity: 0.52;
+    animation-delay: 3.8s;
   }
 
   .cinematic-sheen::before {

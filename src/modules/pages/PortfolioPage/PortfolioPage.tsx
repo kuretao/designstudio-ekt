@@ -267,7 +267,7 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
               onSelectProject(project);
               scrollToProjectShowcase();
             }}
-            className="grid-card group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] text-left transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60"
+            className="grid-card group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] text-left transition duration-300 will-change-transform hover:-translate-y-2 hover:border-[#D69A66]/60"
           >
             <div className="relative h-80 overflow-hidden">
               <CinematicImage
@@ -368,7 +368,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
           {gallery.map((image, index) => (
             <div
               key={`${project.id}-${image}-${index}`}
-              className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.42)]"
+              className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-300 will-change-transform hover:-translate-y-2 hover:border-[#D69A66]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.42)]"
             >
               <CinematicImage
                 frames={[image, gallery[(index + 1) % gallery.length], gallery[(index + 2) % gallery.length]]}

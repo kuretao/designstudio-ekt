@@ -206,20 +206,20 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  @keyframes cinematicPan {
+  @keyframes cinematicPreviewZoom {
     0% {
-      transform: scale(1.04) translate3d(-1.2%, -0.8%, 0);
-      filter: brightness(0.94) saturate(0.98);
+      transform: scale(1) translate3d(0, 0, 0);
+      filter: brightness(0.98) saturate(1);
     }
 
-    45% {
-      transform: scale(1.1) translate3d(1.1%, -1.4%, 0);
-      filter: brightness(1.08) saturate(1.14);
+    50% {
+      transform: scale(1.12) translate3d(0.25%, -0.25%, 0);
+      filter: brightness(1.04) saturate(1.06);
     }
 
     100% {
-      transform: scale(1.07) translate3d(-0.4%, 1.1%, 0);
-      filter: brightness(1.02) saturate(1.08);
+      transform: scale(1) translate3d(0, 0, 0);
+      filter: brightness(0.98) saturate(1);
     }
   }
 
@@ -250,48 +250,53 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   @keyframes cinematicFlipOne {
-    0%, 28% {
+    0%, 24% {
       opacity: 1;
       transform: translate3d(0, 0, 0) scale(1.02);
     }
 
-    33%, 100% {
+    32%, 92% {
       opacity: 0;
-      transform: translate3d(-5%, 0, 0) scale(1.04);
+      transform: translate3d(-4%, 0, 0) scale(1.04);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1.02);
     }
   }
 
   @keyframes cinematicFlipTwo {
-    0%, 30% {
+    0%, 24% {
       opacity: 0;
-      transform: translate3d(5%, 0, 0) scale(1.04);
+      transform: translate3d(4%, 0, 0) scale(1.04);
     }
 
-    33%, 61% {
+    32%, 56% {
       opacity: 1;
       transform: translate3d(0, 0, 0) scale(1.02);
     }
 
-    66%, 100% {
+    64%, 100% {
       opacity: 0;
-      transform: translate3d(-5%, 0, 0) scale(1.04);
+      transform: translate3d(-4%, 0, 0) scale(1.04);
     }
   }
 
   @keyframes cinematicFlipThree {
-    0%, 63% {
+    0%, 56% {
       opacity: 0;
-      transform: translate3d(5%, 0, 0) scale(1.04);
+      transform: translate3d(4%, 0, 0) scale(1.04);
     }
 
-    66%, 94% {
+    64%, 88% {
       opacity: 1;
       transform: translate3d(0, 0, 0) scale(1.02);
     }
 
     100% {
       opacity: 0;
-      transform: translate3d(-5%, 0, 0) scale(1.04);
+      transform: translate3d(-4%, 0, 0) scale(1.04);
     }
   }
 
@@ -301,50 +306,65 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .cinematic-frame {
-    transform: scale(1.02);
+    transform: scale(1);
     will-change: transform, filter, opacity;
   }
 
-  .cinematic-image-preview:hover .cinematic-frame,
-  .cinematic-image-preview:focus-within .cinematic-frame {
-    animation: cinematicPan 9.5s ease-in-out infinite alternate;
+  .cinematic-image-preview:hover .cinematic-frame-base,
+  .cinematic-image-preview:focus-within .cinematic-frame-base,
+  .group:hover .cinematic-image-preview .cinematic-frame-base,
+  .group:focus-within .cinematic-image-preview .cinematic-frame-base {
+    animation: cinematicPreviewZoom 13s ease-in-out infinite;
   }
 
-  .cinematic-image-preview:hover .cinematic-frame-base,
-  .cinematic-image-preview:focus-within .cinematic-frame-base {
-    filter: brightness(1.03) saturate(1.08);
+  .cinematic-image-preview:hover .cinematic-frame-layer,
+  .cinematic-image-preview:focus-within .cinematic-frame-layer,
+  .group:hover .cinematic-image-preview .cinematic-frame-layer,
+  .group:focus-within .cinematic-image-preview .cinematic-frame-layer {
+    opacity: 0;
+    animation: none;
   }
 
   .cinematic-image-preview:hover .cinematic-frame-layer-1,
-  .cinematic-image-preview:focus-within .cinematic-frame-layer-1 {
-    opacity: 1;
+  .cinematic-image-preview:focus-within .cinematic-frame-layer-1,
+  .group:hover .cinematic-image-preview .cinematic-frame-layer-1,
+  .group:focus-within .cinematic-image-preview .cinematic-frame-layer-1 {
+    opacity: 0;
   }
 
   .cinematic-image-preview:hover .cinematic-frame-layer-2,
-  .cinematic-image-preview:focus-within .cinematic-frame-layer-2 {
-    opacity: 0.78;
-    animation-delay: 1.9s;
+  .cinematic-image-preview:focus-within .cinematic-frame-layer-2,
+  .group:hover .cinematic-image-preview .cinematic-frame-layer-2,
+  .group:focus-within .cinematic-image-preview .cinematic-frame-layer-2 {
+    opacity: 0;
   }
 
   .cinematic-image-preview:hover .cinematic-frame-layer-3,
-  .cinematic-image-preview:focus-within .cinematic-frame-layer-3 {
-    opacity: 0.52;
-    animation-delay: 3.8s;
+  .cinematic-image-preview:focus-within .cinematic-frame-layer-3,
+  .group:hover .cinematic-image-preview .cinematic-frame-layer-3,
+  .group:focus-within .cinematic-image-preview .cinematic-frame-layer-3 {
+    opacity: 0;
   }
 
   .cinematic-image-frames:hover .cinematic-frame-base,
-  .cinematic-image-frames:focus-within .cinematic-frame-base {
-    animation: cinematicFlipOne 3.9s steps(1, end) infinite;
+  .cinematic-image-frames:focus-within .cinematic-frame-base,
+  .group:hover .cinematic-image-frames .cinematic-frame-base,
+  .group:focus-within .cinematic-image-frames .cinematic-frame-base {
+    animation: cinematicFlipOne 5.4s ease-in-out infinite;
   }
 
   .cinematic-image-frames:hover .cinematic-frame-layer-1,
-  .cinematic-image-frames:focus-within .cinematic-frame-layer-1 {
-    animation: cinematicFlipTwo 3.9s steps(1, end) infinite;
+  .cinematic-image-frames:focus-within .cinematic-frame-layer-1,
+  .group:hover .cinematic-image-frames .cinematic-frame-layer-1,
+  .group:focus-within .cinematic-image-frames .cinematic-frame-layer-1 {
+    animation: cinematicFlipTwo 5.4s ease-in-out infinite;
   }
 
   .cinematic-image-frames:hover .cinematic-frame-layer-2,
-  .cinematic-image-frames:focus-within .cinematic-frame-layer-2 {
-    animation: cinematicFlipThree 3.9s steps(1, end) infinite;
+  .cinematic-image-frames:focus-within .cinematic-frame-layer-2,
+  .group:hover .cinematic-image-frames .cinematic-frame-layer-2,
+  .group:focus-within .cinematic-image-frames .cinematic-frame-layer-2 {
+    animation: cinematicFlipThree 5.4s ease-in-out infinite;
   }
 
   .cinematic-sheen::before {

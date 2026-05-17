@@ -249,7 +249,7 @@ class CmsController extends Controller
 
     private function lines(?string $value): array
     {
-        return collect(preg_split('/\R/', (string) $value) ?: [])
+        return collect(preg_split('/\R/u', (string) $value) ?: [])
             ->map(fn (string $line) => trim($line))
             ->filter()
             ->values()

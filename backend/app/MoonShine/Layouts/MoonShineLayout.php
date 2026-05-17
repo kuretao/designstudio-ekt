@@ -6,6 +6,7 @@ namespace App\MoonShine\Layouts;
 
 use MoonShine\Laravel\Layouts\AppLayout;
 use MoonShine\ColorManager\Palettes\PurplePalette;
+use MoonShine\UI\Components\Layout\Footer;
 use MoonShine\ColorManager\ColorManager;
 use MoonShine\Contracts\ColorManager\ColorManagerContract;
 use MoonShine\Contracts\ColorManager\PaletteContract;
@@ -41,19 +42,29 @@ final class MoonShineLayout extends AppLayout
     {
         return [
             ...parent::menu(),
-            MenuItem::make(SiteSettingResource::class, 'Settings'),
-            MenuItem::make(MenuItemResource::class, 'Menu'),
-            MenuItem::make(PageResource::class, 'Pages'),
-            MenuItem::make(PageBlockResource::class, 'Page blocks'),
-            MenuItem::make(ProjectResource::class, 'Projects'),
-            MenuItem::make(ServiceResource::class, 'Services'),
-            MenuItem::make(NewsArticleResource::class, 'News'),
-            MenuItem::make(PromoResource::class, 'Promos'),
-            MenuItem::make(ReviewResource::class, 'Reviews'),
-            MenuItem::make(FaqResource::class, 'FAQ'),
-            MenuItem::make(VacancyResource::class, 'Vacancies'),
-            MenuItem::make(LeadResource::class, 'Leads'),
+            MenuItem::make(SiteSettingResource::class, 'Настройки')->icon('cog-6-tooth'),
+            MenuItem::make(MenuItemResource::class, 'Меню сайта')->icon('bars-3'),
+            MenuItem::make(PageResource::class, 'Страницы')->icon('document-text'),
+            MenuItem::make(PageBlockResource::class, 'Блоки страниц')->icon('squares-2x2'),
+            MenuItem::make(ProjectResource::class, 'Проекты')->icon('photo'),
+            MenuItem::make(ServiceResource::class, 'Услуги')->icon('wrench-screwdriver'),
+            MenuItem::make(NewsArticleResource::class, 'Новости')->icon('newspaper'),
+            MenuItem::make(PromoResource::class, 'Акции')->icon('tag'),
+            MenuItem::make(ReviewResource::class, 'Отзывы')->icon('star'),
+            MenuItem::make(FaqResource::class, 'FAQ')->icon('question-mark-circle'),
+            MenuItem::make(VacancyResource::class, 'Вакансии')->icon('briefcase'),
+            MenuItem::make(LeadResource::class, 'Заявки')->icon('inbox'),
         ];
+    }
+
+    protected function getFooterCopyright(): string
+    {
+        return '&copy; 2026 Сделано с ❤️ для <a href="#" class="font-semibold text-primary">3dsmartdesign.ru</a>';
+    }
+
+    protected function getFooterMenu(): array
+    {
+        return [];
     }
 
     /**

@@ -116,29 +116,43 @@ function normalizePayload(payload: any): CmsData {
   };
 }
 
+const POLL_INTERVAL = 30_000;
+
 export function CmsProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<CmsData>(fallbackData);
 
   useEffect(() => {
-    const controller = new AbortController();
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "/api/v1";
 
-    fetch(`${baseUrl}/all`, {
-      signal: controller.signal,
-      headers: { Accept: "application/json" },
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error(`CMS request failed: ${response.status}`);
-        return response.json();
+    const load = (signal: AbortSignal) =>
+      fetch(`${baseUrl}/all`, {
+        signal,
+        headers: { Accept: "application/json" },
+        cache: "no-store",
       })
-      .then((payload) => setData(normalizePayload(payload)))
-      .catch((error) => {
-        if (error.name !== "AbortError") {
-          console.warn("CMS fallback data is active", error);
-        }
-      });
+        .then((response) => {
+          if (!response.ok) throw new Error(`CMS request failed: ${response.status}`);
+          return response.json();
+        })
+        .then((payload) => setData(normalizePayload(payload)))
+        .catch((error) => {
+          if (error.name !== "AbortError") {
+            console.warn("CMS fallback data is active", error);
+          }
+        });
 
-    return () => controller.abort();
+    const controller = new AbortController();
+    load(controller.signal);
+
+    const timer = setInterval(() => {
+      const c = new AbortController();
+      load(c.signal);
+    }, POLL_INTERVAL);
+
+    return () => {
+      controller.abort();
+      clearInterval(timer);
+    };
   }, []);
 
   const value = useMemo(() => data, [data]);

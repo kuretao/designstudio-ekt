@@ -3,17 +3,6 @@
 import Link from "next/link";
 import { useCms } from "@/src/cms";
 
-const navLinks = [
-  { href: "/o-nas",           label: "О нас" },
-  { href: "/portfolio",       label: "Портфолио" },
-  { href: "/kontakty",        label: "Контакты" },
-  { href: "/akcii-i-skidki",  label: "Акции и скидки" },
-  { href: "/novosti",         label: "Новости" },
-  { href: "/blog",            label: "Блог" },
-  { href: "/otzyvy-o-nas",    label: "Отзывы" },
-  { href: "/karera",          label: "Карьера" },
-  { href: "/partneram",       label: "Партнерам" },
-];
 
 const socials = [
   {
@@ -59,7 +48,7 @@ function FooterLogo() {
 }
 
 export default function Footer() {
-  const { contactInfo, servicePageItems } = useCms();
+  const { contactInfo, servicePageItems, menuItems } = useCms();
   const half = Math.ceil(servicePageItems.length / 2);
   const col1 = servicePageItems.slice(0, half);
   const col2 = servicePageItems.slice(half);
@@ -133,7 +122,7 @@ export default function Footer() {
           <div>
             <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#D69A66]">Разделы</p>
             <ul className="space-y-2.5">
-              {navLinks.map((l) => (
+              {menuItems.map((l) => (
                 <li key={l.href}>
                   <Link
                     href={l.href}

@@ -1,73 +1,39 @@
-# React + TypeScript + Vite
+# DesignStudio EKT
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dockerized Next frontend + Laravel MoonShine CMS.
 
-Currently, two official plugins are available:
+## Run
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler 
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+docker compose up --build -d
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Public site:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- `http://localhost:8080`
+- `http://localhost:8088` if `127.0.0.1:8080` is already occupied on the host
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Admin panel:
+
+- `http://localhost:8080/admin`
+- `http://localhost:8088/admin`
+
+Default local admin credentials:
+
+- email: `admin@example.com`
+- password: `password`
+
+Change them through `ADMIN_NAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` in `docker-compose.yml` or environment overrides before first boot.
+
+## Structure
+
+- `frontend/` - existing Next/React design. It fetches CMS data from `/api/v1/all` and falls back to `src/data.ts`.
+- `backend/` - Laravel 13 + MoonShine 4 CMS and public API.
+- `infra/nginx/` - reverse proxy. `/admin`, `/api`, `/storage`, and MoonShine assets go to Laravel; everything else goes to Next.
+
+## Checks
+
+```bash
+cd frontend && npm run build
+cd backend && php artisan migrate:fresh --seed && php artisan test
 ```

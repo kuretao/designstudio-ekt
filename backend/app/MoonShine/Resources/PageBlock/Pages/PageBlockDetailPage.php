@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\MoonShine\Resources\PageBlock\Pages;
+
+use App\MoonShine\Resources\PageBlock\PageBlockResource;
+use App\MoonShine\Support\CmsFieldSets;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Laravel\Pages\Crud\DetailPage;
+
+/**
+ * @extends DetailPage<PageBlockResource>
+ */
+class PageBlockDetailPage extends DetailPage
+{
+    /**
+     * @return list<FieldContract>
+     */
+    protected function fields(): iterable
+    {
+        return CmsFieldSets::for('page_block');
+    }
+}

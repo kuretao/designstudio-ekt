@@ -1,0 +1,59 @@
+"use client";
+
+import { useEffect } from "react";
+import { useCms } from "@/src/cms";
+
+function upsertMeta(selector: string, attributes: Record<string, string>) {
+  let element = document.head.querySelector<HTMLMetaElement>(selector);
+
+  if (!element) {
+    element = document.createElement("meta");
+    document.head.appendChild(element);
+  }
+
+  Object.entries(attributes).forEach(([name, value]) => element?.setAttribute(name, value));
+}
+
+function upsertLink(rel: string, href: string) {
+  let element = document.head.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`);
+
+  if (!element) {
+    element = document.createElement("link");
+    element.rel = rel;
+    document.head.appendChild(element);
+  }
+
+  element.href = href;
+}
+
+export default function SiteMetadata() {
+  const { siteSettings } = useCms();
+
+  useEffect(() => {
+    document.title = siteSettings.seoTitle || siteSettings.siteName;
+
+    if (siteSettings.seoDescription) {
+      upsertMeta('meta[name="description"]', {
+        name: "description",
+        content: siteSettings.seoDescription,
+      });
+    }
+
+    if (siteSettings.socialPreviewImage) {
+      upsertMeta('meta[property="og:image"]', {
+        property: "og:image",
+        content: siteSettings.socialPreviewImage,
+      });
+    }
+
+    if (siteSettings.favicon) {
+      upsertLink("icon", siteSettings.favicon);
+    }
+
+    if (siteSettings.appleTouchIcon) {
+      upsertLink("apple-touch-icon", siteSettings.appleTouchIcon);
+    }
+  }, [siteSettings]);
+
+  return null;
+}

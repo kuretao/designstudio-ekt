@@ -20,7 +20,7 @@ class ServiceResource extends ModelResource
 {
     protected string $model = Service::class;
 
-    protected string $title = 'Services';
+    protected string $title = 'Услуги';
     
     /**
      * @return list<class-string<PageContract>>

@@ -33,7 +33,10 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
             <h1 className="max-w-4xl text-5xl font-light leading-[0.94] tracking-[-0.06em] md:text-7xl lg:text-8xl">
               {currentItem.title}
             </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-relaxed text-[#D6D1CA] md:text-xl">{currentItem.text}</p>
+            <div
+              className="cms-rich-text mt-7 max-w-2xl text-lg leading-relaxed text-[#D6D1CA] md:text-xl"
+              dangerouslySetInnerHTML={{ __html: currentItem.text }}
+            />
             <div className="mt-10 flex flex-wrap gap-3">
               <Link
                 href="/kontakty"

@@ -16,7 +16,19 @@ import {
   testimonials,
 } from "@/src/data";
 
+type SiteSettings = {
+  siteName: string;
+  seoTitle: string;
+  seoDescription: string;
+  logo: string | null;
+  logoSmall: string | null;
+  favicon: string | null;
+  appleTouchIcon: string | null;
+  socialPreviewImage: string | null;
+};
+
 type CmsData = {
+  siteSettings: SiteSettings;
   projects: typeof projects;
   servicePageItems: typeof servicePageItems;
   services: typeof services;
@@ -34,6 +46,16 @@ type CmsData = {
 };
 
 const fallbackData: CmsData = {
+  siteSettings: {
+    siteName: "3D Smart Design Studio",
+    seoTitle: "3D Smart Design Studio",
+    seoDescription: "Студия концептуального дизайна. Интерьеры, архитектура, ландшафт.",
+    logo: null,
+    logoSmall: null,
+    favicon: null,
+    appleTouchIcon: null,
+    socialPreviewImage: null,
+  },
   projects,
   servicePageItems,
   services,
@@ -74,14 +96,26 @@ function normalizePayload(payload: any): CmsData {
           return {
             id: page.id ?? page.slug,
             title: page.title,
+            template: page.template,
+            body: page.body,
             eyebrow: hero.eyebrow ?? "3D Smart Design",
-            text: hero.text ?? hero.subtitle ?? "",
+            text: hero.text ?? hero.subtitle ?? page.seoDescription ?? "",
             image: hero.image ?? apiProjects[0]?.image,
           };
         })
       : contentPages;
 
   return {
+    siteSettings: {
+      siteName: settings.siteName ?? fallbackData.siteSettings.siteName,
+      seoTitle: settings.seoTitle ?? fallbackData.siteSettings.seoTitle,
+      seoDescription: settings.seoDescription ?? fallbackData.siteSettings.seoDescription,
+      logo: settings.logo ?? null,
+      logoSmall: settings.logoSmall ?? null,
+      favicon: settings.favicon ?? null,
+      appleTouchIcon: settings.appleTouchIcon ?? null,
+      socialPreviewImage: settings.socialPreviewImage ?? null,
+    },
     projects: apiProjects,
     servicePageItems: apiServices,
     services: apiServices.map((item: any) => ({

@@ -20,7 +20,7 @@ class ReviewResource extends ModelResource
 {
     protected string $model = Review::class;
 
-    protected string $title = 'Reviews';
+    protected string $title = 'Отзывы';
     
     /**
      * @return list<class-string<PageContract>>

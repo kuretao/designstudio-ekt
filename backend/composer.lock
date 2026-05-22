@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a48b01e026dd9fdc2789cd2c4dbcffeb",
+    "content-hash": "c4116c9ab243cff317f2e7cf2653e555",
     "packages": [
         {
             "name": "brick/math",
@@ -2224,6 +2224,71 @@
                 }
             ],
             "time": "2026-01-02T08:56:05+00:00"
+        },
+        {
+            "name": "moonshine/ckeditor",
+            "version": "3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/moonshine-software/ckeditor.git",
+                "reference": "dc2edb8e7d88c94e8cfc07360a4e850592e23e61"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/moonshine-software/ckeditor/zipball/dc2edb8e7d88c94e8cfc07360a4e850592e23e61",
+                "reference": "dc2edb8e7d88c94e8cfc07360a4e850592e23e61",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": "^8.0|^8.1|^8.2"
+            },
+            "conflict": {
+                "moonshine/moonshine": "<3.0"
+            },
+            "require-dev": {
+                "brianium/paratest": "^6.8",
+                "mockery/mockery": "^1.4.4",
+                "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0|^8.0",
+                "phpstan/phpstan": "^1.4.7",
+                "phpunit/phpunit": "^9.5.8"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MoonShine\\CKEditor\\Providers\\CKEditorServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MoonShine\\CKEditor\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Danil Shutsky",
+                    "email": "info@cutcode.ru",
+                    "homepage": "https://cutcode.dev"
+                }
+            ],
+            "description": "CKEditor for MoonShine",
+            "homepage": "https://moonshine.cutcode.dev",
+            "keywords": [
+                "CKEditor",
+                "moonshine"
+            ],
+            "support": {
+                "issues": "https://github.com/moonshine-software/ckeditor/issues",
+                "source": "https://github.com/moonshine-software/ckeditor"
+            },
+            "time": "2024-11-29T15:31:45+00:00"
         },
         {
             "name": "moonshine/moonshine",
@@ -8692,5 +8757,5 @@
         "php": "^8.3"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }

@@ -9,7 +9,10 @@ import CinematicImage from "@/src/components/common/CinematicImage";
 import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import SectionLabel from "@/src/components/common/SectionLabel";
 
-type ContentPageItem = (typeof fallbackContentPages)[number];
+type ContentPageItem = (typeof fallbackContentPages)[number] & {
+  body?: string | null;
+  template?: string | null;
+};
 
 export function ContentPagesOverview() {
   const { contentPages } = useCms();
@@ -43,10 +46,11 @@ export function ContentPagesOverview() {
 
 function ContentPage({ page }: { page: ContentPageItem }) {
   const { careerVacancies, contentPages, newsArticles, projects } = useCms();
-  const currentPage = contentPages.find((item) => item.id === page.id) ?? page;
+  const currentPage: ContentPageItem = (contentPages.find((item) => item.id === page.id) as ContentPageItem | undefined) ?? page;
   const isBlog = currentPage.id === "blog";
   const isCareer = currentPage.id === "karera";
   const isPartners = currentPage.id === "partneram";
+  const isTextPage = currentPage.template === "text" && Boolean(currentPage.body?.trim());
   const [partnerName, setPartnerName] = useState("");
   const [partnerContact, setPartnerContact] = useState("");
   const [partnerCompany, setPartnerCompany] = useState("");
@@ -91,7 +95,11 @@ function ContentPage({ page }: { page: ContentPageItem }) {
 
       <section className="px-5 py-24 md:px-10 lg:px-16">
         <div className="mx-auto max-w-7xl">
-          {isCareer ? (
+          {isTextPage ? (
+            <GlassPanel className="rounded-[2rem] p-7 md:p-10">
+              <div className="cms-rich-text" dangerouslySetInnerHTML={{ __html: currentPage.body ?? "" }} />
+            </GlassPanel>
+          ) : isCareer ? (
             <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
               <GlassPanel className="rounded-[2rem] p-7 md:p-9">
                 <SectionLabel className="mb-5">Вакансии</SectionLabel>

@@ -20,7 +20,7 @@ class VacancyResource extends ModelResource
 {
     protected string $model = Vacancy::class;
 
-    protected string $title = 'Vacancies';
+    protected string $title = 'Вакансии';
     
     /**
      * @return list<class-string<PageContract>>

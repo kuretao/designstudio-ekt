@@ -26,10 +26,7 @@ class CmsController extends Controller
 
         return response()->json([
             'settings' => $this->settings($settings),
-            'menuItems' => MenuItem::query()
-                ->where('is_active', true)
-                ->orderBy('position')
-                ->get(['label', 'href']),
+            'menuItems' => $this->menuItems(),
         ]);
     }
 
@@ -37,7 +34,7 @@ class CmsController extends Controller
     {
         return response()->json([
             'settings' => $this->settings(SiteSetting::query()->first()),
-            'menuItems' => MenuItem::query()->where('is_active', true)->orderBy('position')->get(['label', 'href']),
+            'menuItems' => $this->menuItems(),
             'pages' => Page::query()->where('is_published', true)->with(['blocks' => fn ($query) => $query->where('is_active', true)])->get()->map(fn (Page $page) => $this->pagePayload($page))->values(),
             'projects' => Project::query()->where('is_published', true)->orderBy('position')->get()->map(fn (Project $project) => $this->projectPayload($project))->values(),
             'services' => Service::query()->where('is_published', true)->orderBy('position')->get()->map(fn (Service $service) => $this->servicePayload($service))->values(),
@@ -124,6 +121,11 @@ class CmsController extends Controller
     {
         return [
             'siteName' => $settings?->site_name ?? '3D Smart Design Studio',
+            'logo' => $this->storageAsset($settings?->site_logo),
+            'logoSmall' => $this->storageAsset($settings?->site_logo_small),
+            'favicon' => $this->storageAsset($settings?->favicon),
+            'appleTouchIcon' => $this->storageAsset($settings?->apple_touch_icon),
+            'socialPreviewImage' => $this->storageAsset($settings?->social_preview_image),
             'phone' => $settings?->phone,
             'phoneHref' => $settings?->phone_href,
             'emails' => $this->lines($settings?->emails),
@@ -145,6 +147,21 @@ class CmsController extends Controller
         ];
     }
 
+    private function menuItems(): array
+    {
+        return MenuItem::query()
+            ->where('is_active', true)
+            ->orderBy('position')
+            ->get()
+            ->map(static fn (MenuItem $item): array => [
+                'label' => $item->label,
+                'href' => $item->siteHref(),
+            ])
+            ->filter(static fn (array $item): bool => filled($item['href']))
+            ->values()
+            ->all();
+    }
+
     private function pagePayload(Page $page): array
     {
         return [
@@ -152,6 +169,7 @@ class CmsController extends Controller
             'slug' => $page->slug,
             'title' => $page->title,
             'template' => $page->template,
+            'body' => $page->body,
             'seoTitle' => $page->seo_title,
             'seoDescription' => $page->seo_description,
             'blocks' => $page->blocks->map(fn ($block) => [
@@ -254,5 +272,10 @@ class CmsController extends Controller
             ->filter()
             ->values()
             ->all();
+    }
+
+    private function storageAsset(?string $path): ?string
+    {
+        return filled($path) ? '/storage/' . ltrim($path, '/') : null;
     }
 }

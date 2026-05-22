@@ -11,6 +11,7 @@ use MoonShine\ColorManager\ColorManager;
 use MoonShine\Contracts\ColorManager\ColorManagerContract;
 use MoonShine\Contracts\ColorManager\PaletteContract;
 use App\MoonShine\Resources\SiteSetting\SiteSettingResource;
+use MoonShine\MenuManager\MenuGroup;
 use MoonShine\MenuManager\MenuItem;
 use App\MoonShine\Resources\MenuItem\MenuItemResource;
 use App\MoonShine\Resources\Page\PageResource;
@@ -31,29 +32,28 @@ final class MoonShineLayout extends AppLayout
      */
     protected ?string $palette = PurplePalette::class;
 
-    protected function assets(): array
-    {
-        return [
-            ...parent::assets(),
-        ];
-    }
-
     protected function menu(): array
     {
         return [
             ...parent::menu(),
-            MenuItem::make(SiteSettingResource::class, 'Настройки')->icon('cog-6-tooth'),
-            MenuItem::make(MenuItemResource::class, 'Меню сайта')->icon('bars-3'),
-            MenuItem::make(PageResource::class, 'Страницы')->icon('document-text'),
-            MenuItem::make(PageBlockResource::class, 'Блоки страниц')->icon('squares-2x2'),
-            MenuItem::make(ProjectResource::class, 'Проекты')->icon('photo'),
-            MenuItem::make(ServiceResource::class, 'Услуги')->icon('wrench-screwdriver'),
-            MenuItem::make(NewsArticleResource::class, 'Новости')->icon('newspaper'),
-            MenuItem::make(PromoResource::class, 'Акции')->icon('tag'),
-            MenuItem::make(ReviewResource::class, 'Отзывы')->icon('star'),
-            MenuItem::make(FaqResource::class, 'FAQ')->icon('question-mark-circle'),
-            MenuItem::make(VacancyResource::class, 'Вакансии')->icon('briefcase'),
-            MenuItem::make(LeadResource::class, 'Заявки')->icon('inbox'),
+            MenuGroup::make('Сайт', [
+                MenuItem::make(SiteSettingResource::class, 'Настройки')->icon('cog-6-tooth'),
+                MenuItem::make(MenuItemResource::class, 'Меню сайта')->icon('bars-3'),
+                MenuItem::make(PageResource::class, 'Страницы')->icon('document-text'),
+                MenuItem::make(PageBlockResource::class, 'Блоки страниц')->icon('squares-2x2'),
+            ], 'globe-alt'),
+            MenuGroup::make('Контент', [
+                MenuItem::make(ProjectResource::class, 'Проекты')->icon('photo'),
+                MenuItem::make(ServiceResource::class, 'Услуги')->icon('wrench-screwdriver'),
+                MenuItem::make(NewsArticleResource::class, 'Новости')->icon('newspaper'),
+                MenuItem::make(PromoResource::class, 'Акции')->icon('tag'),
+            ], 'document-text'),
+            MenuGroup::make('Обратная связь', [
+                MenuItem::make(LeadResource::class, 'Заявки')->icon('inbox'),
+                MenuItem::make(ReviewResource::class, 'Отзывы')->icon('star'),
+                MenuItem::make(FaqResource::class, 'FAQ')->icon('question-mark-circle'),
+                MenuItem::make(VacancyResource::class, 'Вакансии')->icon('briefcase'),
+            ], 'chat-bubble-left-right'),
         ];
     }
 

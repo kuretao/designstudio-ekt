@@ -20,7 +20,7 @@ class LeadResource extends ModelResource
 {
     protected string $model = Lead::class;
 
-    protected string $title = 'Leads';
+    protected string $title = 'Заявки';
     
     /**
      * @return list<class-string<PageContract>>

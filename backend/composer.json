@@ -9,6 +9,7 @@
         "php": "^8.3",
         "laravel/framework": "^13.8",
         "laravel/tinker": "^3.0",
+        "moonshine/ckeditor": "^3.0",
         "moonshine/moonshine": "^4.13",
         "moonshine/ru": "^1.0"
     },

@@ -48,7 +48,7 @@ function FooterLogo() {
 }
 
 export default function Footer() {
-  const { contactInfo, servicePageItems, menuItems } = useCms();
+  const { contactInfo, servicePageItems, menuItems, siteSettings } = useCms();
   const half = Math.ceil(servicePageItems.length / 2);
   const col1 = servicePageItems.slice(0, half);
   const col2 = servicePageItems.slice(half);
@@ -62,9 +62,13 @@ export default function Footer() {
           {/* ── Col 1 · Brand ── */}
           <div>
             <div className="mb-5 flex items-center gap-3">
-              <FooterLogo />
+              {siteSettings.logo ? (
+                <img src={siteSettings.logo} alt={siteSettings.siteName} className="block max-h-14 max-w-[220px] object-contain" />
+              ) : (
+                <FooterLogo />
+              )}
               <div>
-                <p className="text-sm uppercase tracking-[0.32em] text-white">3D Smart Design</p>
+                <p className="text-sm uppercase tracking-[0.32em] text-white">{siteSettings.siteName}</p>
                 <p className="text-[10px] uppercase tracking-[0.22em] text-white/35">Studio</p>
               </div>
             </div>

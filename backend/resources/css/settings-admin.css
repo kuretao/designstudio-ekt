@@ -1,0 +1,220 @@
+/* Site settings form */
+.settings-overview {
+    display: grid;
+    grid-template-columns: minmax(280px, 1.1fr) minmax(300px, 1fr);
+    gap: 20px;
+    padding: 28px;
+    border: 1px solid rgba(15, 118, 110, 0.2);
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(15, 118, 110, 0.16), rgba(14, 116, 144, 0.08));
+    color: var(--ms-cm-base-text, #0f172a);
+}
+
+.settings-overview__intro {
+    min-width: 0;
+}
+
+.settings-overview__eyebrow {
+    margin-bottom: 8px;
+    color: #0f766e;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.settings-overview h1 {
+    margin: 0 0 8px;
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+}
+
+.settings-overview p {
+    max-width: 54ch;
+    margin: 0;
+    color: rgba(15, 23, 42, 0.76);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.settings-overview__saved {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    margin-top: 16px;
+    padding: 5px 11px;
+    border: 1px solid rgba(15, 118, 110, 0.2);
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.7);
+    color: #115e59;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.settings-guide {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.settings-guide__card {
+    display: flex;
+    min-width: 0;
+    min-height: 136px;
+    flex-direction: column;
+    gap: 7px;
+    padding: 16px;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.82);
+}
+
+.settings-guide__card strong {
+    color: #0f172a;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.settings-guide__card span {
+    color: rgba(15, 23, 42, 0.68);
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.settings-guide__icon {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border-radius: 8px;
+    background: #0f766e;
+    color: #fff;
+}
+
+.settings-guide__icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.settings-tabs > .tabs-list {
+    gap: 8px;
+    min-width: 220px;
+}
+
+.settings-tabs .tabs-button {
+    min-height: 46px;
+    border-radius: 8px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.settings-tabs .tabs-button svg {
+    flex-shrink: 0;
+}
+
+.settings-section {
+    border: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+.settings-section .box-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0;
+}
+
+.settings-note {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    padding: 13px 15px;
+    border-left: 4px solid #0f766e;
+    border-radius: 8px;
+    background: rgba(15, 118, 110, 0.08);
+    line-height: 1.5;
+}
+
+.settings-note strong {
+    color: #115e59;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.settings-note span {
+    color: rgba(15, 23, 42, 0.72);
+    font-size: 13px;
+}
+
+.settings-section .form-hint {
+    max-width: 72ch;
+    color: rgba(15, 23, 42, 0.64);
+    line-height: 1.45;
+}
+
+.dark .settings-overview {
+    border-color: rgba(45, 212, 191, 0.24);
+    background: linear-gradient(135deg, rgba(15, 118, 110, 0.34), rgba(14, 116, 144, 0.18));
+}
+
+.dark .settings-overview__eyebrow,
+.dark .settings-note strong {
+    color: #5eead4;
+}
+
+.dark .settings-overview p,
+.dark .settings-guide__card span,
+.dark .settings-note span,
+.dark .settings-section .form-hint {
+    color: rgba(226, 232, 240, 0.74);
+}
+
+.dark .settings-overview__saved,
+.dark .settings-guide__card {
+    border-color: rgba(148, 163, 184, 0.24);
+    background: rgba(15, 23, 42, 0.54);
+}
+
+.dark .settings-overview__saved {
+    color: #ccfbf1;
+}
+
+.dark .settings-guide__card strong {
+    color: #f8fafc;
+}
+
+.dark .settings-section {
+    border-color: rgba(148, 163, 184, 0.2);
+}
+
+.dark .settings-note {
+    background: rgba(20, 184, 166, 0.12);
+}
+
+@media (max-width: 1100px) {
+    .settings-overview {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .settings-overview {
+        padding: 20px;
+    }
+
+    .settings-guide {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-guide__card {
+        min-height: 0;
+    }
+
+    .settings-overview h1 {
+        font-size: 20px;
+    }
+}

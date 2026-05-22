@@ -52,7 +52,7 @@ function CloseIcon() {
 
 export default function Header() {
   const currentPath = usePathname();
-  const { menuItems } = useCms();
+  const { menuItems, siteSettings } = useCms();
   const [modalOpen, setModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -92,8 +92,16 @@ export default function Header() {
             <span>Menu</span>
           </button>
 
-          <Link href="/" aria-label="3D Smart Design" onClick={closeMenu} className="justify-self-center transition duration-300 hover:opacity-75">
-            <LogoMark />
+          <Link href="/" aria-label={siteSettings.siteName} onClick={closeMenu} className="justify-self-center transition duration-300 hover:opacity-75">
+            {siteSettings.logoSmall || siteSettings.logo ? (
+              <img
+                src={siteSettings.logoSmall ?? siteSettings.logo ?? ""}
+                alt={siteSettings.siteName}
+                className="block max-h-12 max-w-[180px] object-contain"
+              />
+            ) : (
+              <LogoMark />
+            )}
           </Link>
 
           <button

@@ -20,7 +20,7 @@ class PageBlockResource extends ModelResource
 {
     protected string $model = PageBlock::class;
 
-    protected string $title = 'Page blocks';
+    protected string $title = 'Блоки страниц';
     
     /**
      * @return list<class-string<PageContract>>

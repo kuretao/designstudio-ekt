@@ -1,1 +1,58 @@
 @import "tailwindcss";
+
+.cms-rich-text > :first-child {
+  margin-top: 0;
+}
+
+.cms-rich-text > :last-child {
+  margin-bottom: 0;
+}
+
+.cms-rich-text p,
+.cms-rich-text ul,
+.cms-rich-text ol,
+.cms-rich-text blockquote {
+  margin: 0 0 0.9em;
+}
+
+.cms-rich-text ul,
+.cms-rich-text ol {
+  padding-left: 1.4em;
+}
+
+.cms-rich-text ul {
+  list-style: disc;
+}
+
+.cms-rich-text ol {
+  list-style: decimal;
+}
+
+.cms-rich-text blockquote {
+  border-left: 2px solid rgba(214, 154, 102, 0.65);
+  padding-left: 1em;
+}
+
+.cms-rich-text a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+.cms-rich-text h2,
+.cms-rich-text h3,
+.cms-rich-text h4 {
+  margin: 1.25em 0 0.5em;
+  color: #f5f2ec;
+  font-weight: 300;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.cms-rich-text h2 {
+  font-size: 2rem;
+}
+
+.cms-rich-text h3 {
+  font-size: 1.5rem;
+}

@@ -3,6 +3,7 @@ import StyledRegistry from "@/src/components/providers/StyledRegistry";
 import ClientShell from "@/src/components/layout/ClientShell";
 import Header from "@/src/components/layout/Header";
 import Footer from "@/src/components/layout/Footer";
+import SiteMetadata from "@/src/components/layout/SiteMetadata/SiteMetadata";
 import { CmsProvider } from "@/src/cms";
 import "./globals.css";
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <StyledRegistry>
           <CmsProvider>
+            <SiteMetadata />
             <ClientShell>
               <Header />
               {children}

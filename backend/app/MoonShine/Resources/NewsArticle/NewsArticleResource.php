@@ -20,7 +20,7 @@ class NewsArticleResource extends ModelResource
 {
     protected string $model = NewsArticle::class;
 
-    protected string $title = 'News';
+    protected string $title = 'Новости';
     
     /**
      * @return list<class-string<PageContract>>

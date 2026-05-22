@@ -108,7 +108,10 @@ export function ServicesSummary() {
                   {service.price}
                 </span>
               </div>
-              <p className="leading-relaxed text-[#D6D1CA]">{service.text}</p>
+              <div
+                className="cms-rich-text leading-relaxed text-[#D6D1CA]"
+                dangerouslySetInnerHTML={{ __html: service.text }}
+              />
             </GlassPanel>
           ))}
         </div>
@@ -153,7 +156,10 @@ export function ServicePages() {
                   <h3 className="text-3xl font-light tracking-[-0.04em]">{item.title}</h3>
                 </div>
               </div>
-              <p className="p-6 leading-relaxed text-[#D6D1CA]">{item.text}</p>
+              <div
+                className="cms-rich-text p-6 leading-relaxed text-[#D6D1CA]"
+                dangerouslySetInnerHTML={{ __html: item.text }}
+              />
             </Link>
           ))}
         </div>

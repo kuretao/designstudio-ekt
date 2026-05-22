@@ -20,7 +20,7 @@ class PromoResource extends ModelResource
 {
     protected string $model = Promo::class;
 
-    protected string $title = 'Promos';
+    protected string $title = 'Акции';
     
     /**
      * @return list<class-string<PageContract>>

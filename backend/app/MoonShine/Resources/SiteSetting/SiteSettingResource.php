@@ -20,7 +20,19 @@ class SiteSettingResource extends ModelResource
 {
     protected string $model = SiteSetting::class;
 
-    protected string $title = 'Settings';
+    protected string $title = 'Настройки';
+
+    public function getUrl(): string
+    {
+        return $this->getFormPageUrl($this->singleton()->getKey());
+    }
+
+    public function singleton(): SiteSetting
+    {
+        return SiteSetting::query()->firstOrCreate([], [
+            'site_name' => '3D Smart Design Studio',
+        ]);
+    }
     
     /**
      * @return list<class-string<PageContract>>

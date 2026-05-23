@@ -1,0 +1,307 @@
+/* Page block admin pages */
+.page-block-overview,
+.page-block-form-overview {
+    display: grid;
+    gap: 18px;
+    padding: 26px;
+    border: 1px solid rgba(180, 83, 9, 0.22);
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(180, 83, 9, 0.14), rgba(14, 116, 144, 0.09));
+    color: var(--ms-cm-base-text, #0f172a);
+}
+
+.page-block-overview {
+    grid-template-columns: minmax(280px, 1fr) minmax(330px, 1fr);
+}
+
+.page-block-form-overview {
+    grid-template-columns: minmax(280px, 1fr) minmax(360px, 1fr);
+}
+
+.page-block-overview__intro,
+.page-block-form-overview__intro {
+    min-width: 0;
+}
+
+.page-block-overview__eyebrow {
+    margin-bottom: 8px;
+    color: #9a3412;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.page-block-overview h1,
+.page-block-form-overview h1 {
+    margin: 0 0 8px;
+    font-size: 25px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+}
+
+.page-block-overview p,
+.page-block-form-overview p {
+    max-width: 60ch;
+    margin: 0;
+    color: rgba(15, 23, 42, 0.74);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.page-block-form-overview code {
+    display: inline-block;
+    max-width: 36ch;
+    padding: 3px 7px;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.07);
+    color: #0f172a;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.page-block-form-overview__saved {
+    display: inline-flex;
+    min-height: 30px;
+    align-items: center;
+    margin-top: 15px;
+    padding: 5px 11px;
+    border: 1px solid rgba(180, 83, 9, 0.18);
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.72);
+    color: #9a3412;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.page-block-overview__stats,
+.page-block-overview__steps,
+.page-block-form-overview__steps {
+    display: grid;
+    gap: 10px;
+}
+
+.page-block-overview__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.page-block-overview__steps {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.page-block-form-overview__steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.page-block-stat,
+.page-block-guide {
+    min-width: 0;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.84);
+}
+
+.page-block-stat {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 0 10px;
+    min-height: 78px;
+    align-items: center;
+    padding: 14px;
+}
+
+.page-block-stat__icon,
+.page-block-guide__icon {
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: #9a3412;
+    color: #fff;
+}
+
+.page-block-stat__icon {
+    grid-row: span 2;
+    width: 38px;
+    height: 38px;
+}
+
+.page-block-guide__icon {
+    width: 34px;
+    height: 34px;
+    background: #0f766e;
+}
+
+.page-block-stat__icon svg,
+.page-block-guide__icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.page-block-stat strong {
+    color: #0f172a;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0;
+}
+
+.page-block-stat > span:last-child,
+.page-block-guide > span:last-child {
+    color: rgba(15, 23, 42, 0.66);
+    font-size: 12px;
+    line-height: 1.42;
+}
+
+.page-block-guide {
+    display: flex;
+    min-height: 116px;
+    flex-direction: column;
+    gap: 7px;
+    padding: 15px;
+}
+
+.page-block-guide strong {
+    color: #0f172a;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.page-block-tabs > .tabs-list {
+    gap: 8px;
+    min-width: 220px;
+}
+
+.page-block-tabs .tabs-button {
+    min-height: 46px;
+    border-radius: 8px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.page-block-section {
+    border: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+.page-block-note {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    padding: 13px 15px;
+    border-left: 4px solid #9a3412;
+    border-radius: 8px;
+    background: rgba(180, 83, 9, 0.09);
+    line-height: 1.5;
+}
+
+.page-block-note strong {
+    color: #9a3412;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.page-block-note span,
+.page-block-section .form-hint {
+    color: rgba(15, 23, 42, 0.68);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.page-block-badge {
+    display: inline-flex;
+    min-height: 24px;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 7px;
+    background: rgba(14, 116, 144, 0.12);
+    color: #075985;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.dark .page-block-overview,
+.dark .page-block-form-overview {
+    border-color: rgba(251, 146, 60, 0.24);
+    background: linear-gradient(135deg, rgba(154, 52, 18, 0.3), rgba(14, 116, 144, 0.18));
+}
+
+.dark .page-block-overview__eyebrow,
+.dark .page-block-note strong {
+    color: #fdba74;
+}
+
+.dark .page-block-overview p,
+.dark .page-block-form-overview p,
+.dark .page-block-stat > span:last-child,
+.dark .page-block-guide > span:last-child,
+.dark .page-block-note span,
+.dark .page-block-section .form-hint {
+    color: rgba(226, 232, 240, 0.74);
+}
+
+.dark .page-block-stat,
+.dark .page-block-guide,
+.dark .page-block-form-overview__saved {
+    border-color: rgba(148, 163, 184, 0.22);
+    background: rgba(15, 23, 42, 0.56);
+}
+
+.dark .page-block-stat strong,
+.dark .page-block-guide strong,
+.dark .page-block-form-overview code {
+    color: #f8fafc;
+}
+
+.dark .page-block-form-overview__saved {
+    color: #fed7aa;
+}
+
+.dark .page-block-section {
+    border-color: rgba(148, 163, 184, 0.2);
+}
+
+.dark .page-block-note {
+    background: rgba(180, 83, 9, 0.18);
+}
+
+.dark .page-block-badge {
+    color: #bae6fd;
+    background: rgba(56, 189, 248, 0.14);
+}
+
+.dark .page-block-form-overview code {
+    background: rgba(148, 163, 184, 0.12);
+}
+
+@media (max-width: 1100px) {
+    .page-block-overview,
+    .page-block-form-overview {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    .page-block-overview,
+    .page-block-form-overview {
+        padding: 20px;
+    }
+
+    .page-block-overview__stats,
+    .page-block-overview__steps,
+    .page-block-form-overview__steps {
+        grid-template-columns: 1fr;
+    }
+
+    .page-block-overview h1,
+    .page-block-form-overview h1 {
+        font-size: 20px;
+    }
+
+    .page-block-guide {
+        min-height: 0;
+    }
+}

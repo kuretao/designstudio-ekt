@@ -7,6 +7,7 @@ namespace App\MoonShine\Resources\Lead\Pages;
 use App\MoonShine\Resources\Lead\LeadResource;
 use MoonShine\AssetManager\InlineCss;
 use MoonShine\Contracts\AssetManager\AssetElementContract;
+use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Pages\Crud\DetailPage;
 use MoonShine\UI\Components\FlexibleRender;
@@ -39,10 +40,19 @@ class LeadDetailPage extends DetailPage
      */
     protected function fields(): iterable
     {
+        return [];
+    }
+
+    /**
+     * @return list<ComponentContract>
+     */
+    protected function topLayer(): array
+    {
         $item = $this->getResource()->getItem();
 
         return [
             FlexibleRender::make($this->buildDetailHtml($item)),
+            ...parent::topLayer(),
         ];
     }
 

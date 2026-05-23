@@ -6,6 +6,7 @@ namespace App\MoonShine\Support;
 
 use App\Models\MenuItem;
 use App\Models\Page;
+use App\Models\PageBlock;
 use App\MoonShine\Resources\Page\PageResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use MoonShine\CKEditor\Fields\CKEditor;
@@ -361,24 +362,118 @@ final class CmsFieldSets
 
     private static function pageBlock(bool $compact): array
     {
-        $fields = [
-            ID::make()->sortable(),
-            Number::make('ID страницы', 'page_id')->required(),
-            Text::make('Тип', 'type')->required(),
-            Text::make('Заголовок', 'title'),
-            Number::make('Позиция', 'position')->sortable(),
-            Switcher::make('Активно', 'is_active'),
-        ];
+        if ($compact) {
+            return [
+                ID::make()->sortable(),
+                self::pageBlockPageField(),
+                Preview::make('Блок', 'type', static function (mixed $item): string {
+                    $type = $item instanceof PageBlock ? $item->type : (string) $item;
 
-        return $compact ? $fields : [
-            ...$fields,
-            Text::make('Надзаголовок', 'eyebrow'),
-            Textarea::make('Подзаголовок', 'subtitle'),
-            Textarea::make('Текст', 'text'),
-            Textarea::make('URL изображения или путь в хранилище', 'image'),
-            Text::make('Текст ссылки', 'link_label'),
-            Text::make('Ссылка', 'link_href'),
+                    return sprintf(
+                        '<span class="page-block-badge">%s</span>',
+                        e(self::pageBlockTypeLabel($type)),
+                    );
+                }),
+                Text::make('Заголовок', 'title')->sortable(),
+                Number::make('Порядок', 'position')->sortable(),
+                Switcher::make('Показывать', 'is_active'),
+            ];
+        }
+
+        return [
+            ...self::pageBlockSection('target'),
+            ...self::pageBlockSection('content'),
+            ...self::pageBlockSection('link'),
+            ...self::pageBlockSection('display'),
         ];
+    }
+
+    public static function pageBlockSection(string $section): array
+    {
+        return match ($section) {
+            'target' => [
+                self::pageBlockPageField(),
+                Select::make('Вид блока', 'type')
+                    ->options([
+                        'hero' => 'Первый экран / крупный заголовок',
+                        'text' => 'Текстовый блок',
+                    ])
+                    ->default('hero')
+                    ->required()
+                    ->hint('Для главной и шапок страниц выбирайте "Первый экран". Это блок с маленькой строкой, большим заголовком, описанием и кнопкой.'),
+            ],
+            'content' => [
+                Text::make('Маленькая строка над заголовком', 'eyebrow')
+                    ->placeholder('Студия дизайна интерьера и архитектуры в Самаре')
+                    ->hint('На первом экране это тонкая подпись над крупным заголовком. Можно оставить пустой.'),
+                Text::make('Главный заголовок блока', 'title')
+                    ->placeholder('Дизайн с умом.')
+                    ->hint('Самый заметный текст блока. На главной это большая фраза на первом экране.'),
+                Textarea::make('Описание под заголовком', 'subtitle')
+                    ->placeholder('Создаем интерьеры, архитектуру, 3D-визуализацию и ландшафтные проекты...')
+                    ->hint('Короткий абзац рядом с кнопкой или сразу под заголовком. Для главного блока заполняйте именно это поле.'),
+                Textarea::make('Дополнительный текст блока', 'text')
+                    ->hint('Нужен для страниц, где блок показывает более длинное пояснение или текст карточки. Если на первом экране достаточно описания выше, поле можно оставить пустым.'),
+            ],
+            'link' => [
+                Text::make('Текст кнопки', 'link_label')
+                    ->placeholder('Обсудить проект')
+                    ->hint('Надпись на кнопке. Если кнопка в этом блоке не нужна, оставьте поле пустым.'),
+                Text::make('Куда ведет кнопка', 'link_href')
+                    ->placeholder('/kontakty')
+                    ->hint('Для страницы сайта укажите путь с /. Например: /kontakty. Можно вставить и полную внешнюю ссылку.'),
+                Textarea::make('Фоновое изображение или URL', 'image')
+                    ->hint('Необязательное поле для блоков, которые используют отдельное изображение. Можно указать полный URL или путь из хранилища.'),
+            ],
+            'display' => [
+                Number::make('Порядок на странице', 'position')
+                    ->default(1)
+                    ->sortable()
+                    ->hint('Меньшее число ставит блок раньше. Для первого экрана обычно указывают 1.'),
+                Switcher::make('Показывать блок на сайте', 'is_active')
+                    ->default(true)
+                    ->hint('Выключите, чтобы временно скрыть блок без удаления текста.'),
+            ],
+            default => [],
+        };
+    }
+
+    public static function pageBlockTypeLabel(?string $type): string
+    {
+        return match ($type) {
+            'hero' => 'Первый экран',
+            'text' => 'Текстовый блок',
+            default => filled($type) ? $type : 'Не задан',
+        };
+    }
+
+    private static function pageBlockPageField(): BelongsTo
+    {
+        return BelongsTo::make(
+            'Страница сайта',
+            'page',
+            formatted: static function (Page $page): string {
+                if (! $page->exists) {
+                    return '';
+                }
+
+                $path = $page->slug === 'home' ? 'Главная' : '/' . ltrim((string) $page->slug, '/');
+
+                return sprintf(
+                    '%s - %s%s',
+                    $page->title,
+                    $path,
+                    $page->is_published ? '' : ' (не опубликована)',
+                );
+            },
+            resource: PageResource::class,
+        )
+            ->searchable()
+            ->valuesQuery(static fn (Builder $query): Builder => $query
+                ->select(['id', 'title', 'slug', 'is_published'])
+                ->orderBy('title'))
+            ->required()
+            ->hint('Выберите страницу, на которой должен появиться блок. Для первого экрана сайта выбирайте страницу "Главная".');
     }
 
     private static function project(bool $compact): array

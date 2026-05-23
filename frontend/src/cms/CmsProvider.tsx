@@ -27,8 +27,17 @@ type SiteSettings = {
   socialPreviewImage: string | null;
 };
 
+type HomeHero = {
+  eyebrow: string;
+  title: string;
+  text: string;
+  linkLabel: string;
+  linkHref: string;
+};
+
 type CmsData = {
   siteSettings: SiteSettings;
+  homeHero: HomeHero;
   projects: typeof projects;
   servicePageItems: typeof servicePageItems;
   services: typeof services;
@@ -55,6 +64,14 @@ const fallbackData: CmsData = {
     favicon: null,
     appleTouchIcon: null,
     socialPreviewImage: null,
+  },
+  homeHero: {
+    eyebrow: "Студия дизайна интерьера и архитектуры в Самаре",
+    title: "Дизайн с умом.",
+    text:
+      "Создаем интерьеры, архитектуру, 3D-визуализацию и ландшафтные проекты: от концепции до рабочей документации, комплектации и сопровождения.",
+    linkLabel: "Обсудить проект",
+    linkHref: "/kontakty",
   },
   projects,
   servicePageItems,
@@ -89,9 +106,13 @@ function normalizePayload(payload: any): CmsData {
   const settings = payload?.settings ?? {};
   const apiServices = Array.isArray(payload?.services) && payload.services.length ? payload.services : servicePageItems;
   const apiProjects = Array.isArray(payload?.projects) && payload.projects.length ? payload.projects : projects;
+  const payloadPages = Array.isArray(payload?.pages) ? payload.pages : [];
+  const homePage = payloadPages.find((page: any) => page.slug === "home" || page.id === "home");
+  const homeBlock = homePage?.blocks?.find((block: any) => block.type === "hero") ?? homePage?.blocks?.[0] ?? {};
+  const contentPayloadPages = payloadPages.filter((page: any) => page.slug !== "home" && page.id !== "home");
   const apiPages =
-    Array.isArray(payload?.pages) && payload.pages.length
-      ? payload.pages.map((page: any) => {
+    contentPayloadPages.length
+      ? contentPayloadPages.map((page: any) => {
           const hero = page.blocks?.[0] ?? {};
           return {
             id: page.id ?? page.slug,
@@ -116,6 +137,15 @@ function normalizePayload(payload: any): CmsData {
       appleTouchIcon: settings.appleTouchIcon ?? null,
       socialPreviewImage: settings.socialPreviewImage ?? null,
     },
+    homeHero: homePage
+      ? {
+          eyebrow: homeBlock.eyebrow ?? "",
+          title: homeBlock.title ?? fallbackData.homeHero.title,
+          text: homeBlock.subtitle ?? homeBlock.text ?? "",
+          linkLabel: homeBlock.linkLabel ?? "",
+          linkHref: homeBlock.linkHref ?? "",
+        }
+      : fallbackData.homeHero,
     projects: apiProjects,
     servicePageItems: apiServices,
     services: apiServices.map((item: any) => ({

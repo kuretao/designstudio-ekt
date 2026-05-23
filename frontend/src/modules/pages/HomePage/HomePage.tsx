@@ -45,7 +45,7 @@ function FeatureProject({ project, label, reverse = false }: { project: Project;
 }
 
 function HomePage({ activeProject, setActiveProject }: HomePageProps) {
-  const { projects } = useCms();
+  const { homeHero, projects } = useCms();
   const storyText =
     "Мы проектируем не стены, а сценарии жизни: утренний свет, маршрут взгляда, тишину материалов и точную документацию для реализации.";
 
@@ -67,23 +67,29 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
 
           <div className="relative z-10 flex w-full items-end">
             <div className="max-w-6xl">
-              <p className="hero-reveal mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">
-                Студия дизайна интерьера и архитектуры в Самаре
-              </p>
+              {homeHero.eyebrow ? (
+                <p className="hero-reveal mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">
+                  {homeHero.eyebrow}
+                </p>
+              ) : null}
               <h1 className="hero-reveal max-w-5xl text-6xl font-light leading-[0.92] tracking-[-0.07em] md:text-8xl lg:text-[9.5rem]">
-                Дизайн с умом.
+                {homeHero.title}
               </h1>
               <div className="hero-reveal mt-8 grid max-w-4xl gap-6 md:grid-cols-[1fr_auto] md:items-end">
-                <p className="text-lg leading-relaxed text-[#D6D1CA] md:text-xl">
-                  Создаем интерьеры, архитектуру, 3D-визуализацию и ландшафтные проекты: от концепции до рабочей документации, комплектации и сопровождения.
-                </p>
-                <Link
-                  href="/kontakty"
-                  className="group inline-flex h-14 items-center justify-center rounded-full border border-[#D69A66]/50 px-7 text-sm uppercase tracking-[0.22em] text-[#F5F2EC] transition hover:bg-[#D69A66] hover:text-[#0c0b09]"
-                >
-                  Обсудить проект
-                  <span className="ml-3 transition group-hover:translate-x-1">→</span>
-                </Link>
+                {homeHero.text ? (
+                  <p className="text-lg leading-relaxed text-[#D6D1CA] md:text-xl">
+                    {homeHero.text}
+                  </p>
+                ) : null}
+                {homeHero.linkHref && homeHero.linkLabel ? (
+                  <Link
+                    href={homeHero.linkHref}
+                    className="group inline-flex h-14 items-center justify-center rounded-full border border-[#D69A66]/50 px-7 text-sm uppercase tracking-[0.22em] text-[#F5F2EC] transition hover:bg-[#D69A66] hover:text-[#0c0b09]"
+                  >
+                    {homeHero.linkLabel}
+                    <span className="ml-3 transition group-hover:translate-x-1">→</span>
+                  </Link>
+                ) : null}
               </div>
             </div>
           </div>

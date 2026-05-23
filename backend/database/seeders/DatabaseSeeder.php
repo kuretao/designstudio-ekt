@@ -120,6 +120,24 @@ class DatabaseSeeder extends Seeder
             ],
         ));
 
+        $homePage = Page::query()->updateOrCreate(
+            ['slug' => 'home'],
+            ['title' => 'Главная', 'template' => 'content', 'is_published' => true],
+        );
+
+        PageBlock::query()->updateOrCreate(
+            ['page_id' => $homePage->id, 'position' => 1],
+            [
+                'type' => 'hero',
+                'eyebrow' => 'Студия дизайна интерьера и архитектуры в Самаре',
+                'title' => 'Дизайн с умом.',
+                'subtitle' => 'Создаем интерьеры, архитектуру, 3D-визуализацию и ландшафтные проекты: от концепции до рабочей документации, комплектации и сопровождения.',
+                'link_label' => 'Обсудить проект',
+                'link_href' => '/kontakty',
+                'is_active' => true,
+            ],
+        );
+
         collect([
             ['o-nas', 'О нас', 'about'],
             ['partneram', 'Партнерам', 'content'],

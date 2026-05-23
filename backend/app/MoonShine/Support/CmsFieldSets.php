@@ -318,7 +318,6 @@ final class CmsFieldSets
                     ->hint('Главный заголовок страницы. Он будет виден посетителю и поможет создать адрес.'),
                 Slug::make('Адрес страницы', 'slug')
                     ->from('title')
-                    ->live(lazy: true)
                     ->unique()
                     ->required()
                     ->placeholder('dostavka-i-oplata')

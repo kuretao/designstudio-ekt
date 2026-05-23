@@ -8,6 +8,7 @@ use App\MoonShine\Resources\Page\PageResource;
 use App\MoonShine\Support\CmsFieldSets;
 use Illuminate\Validation\Rule;
 use MoonShine\AssetManager\InlineCss;
+use MoonShine\AssetManager\InlineJs;
 use MoonShine\Contracts\AssetManager\AssetElementContract;
 use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
 use MoonShine\Contracts\UI\ComponentContract;
@@ -35,6 +36,7 @@ class PageFormPage extends FormPage
         return [
             ...parent::assets(),
             InlineCss::make((string) file_get_contents(resource_path('css/page-admin.css'))),
+            InlineJs::make((string) file_get_contents(resource_path('js/page-slug-autofill.js'))),
         ];
     }
 
@@ -43,6 +45,8 @@ class PageFormPage extends FormPage
      */
     protected function fields(): iterable
     {
+        $mainFields = CmsFieldSets::pageSection('main');
+
         return [
             FlexibleRender::make($this->overviewHtml()),
             Alert::make('information-circle', 'info')
@@ -55,8 +59,13 @@ class PageFormPage extends FormPage
                             'Заголовок и текст достаточно заполнить в этой форме. Блоки страниц нужны только для сложных макетов.'
                         ),
                         Grid::make([
-                            Column::make(array_slice(CmsFieldSets::pageSection('main'), 0, 3))->columnSpan(5),
-                            Column::make(array_slice(CmsFieldSets::pageSection('main'), 3))->columnSpan(7),
+                            Column::make([
+                                $mainFields[0],
+                                $mainFields[1],
+                                $this->slugAutofillControl(),
+                                $mainFields[2],
+                            ])->columnSpan(5),
+                            Column::make(array_slice($mainFields, 3))->columnSpan(7),
                         ]),
                     ])->icon('pencil-square')->customAttributes(['class' => 'page-section']),
                 ])->icon('document-text')->active(),
@@ -77,6 +86,19 @@ class PageFormPage extends FormPage
                 ])->icon('bars-3'),
             ])->vertical()->customAttributes(['class' => 'page-tabs']),
         ];
+    }
+
+    private function slugAutofillControl(): ComponentContract
+    {
+        return FlexibleRender::make(<<<'HTML'
+            <div class="page-slug-autofill" data-page-slug-autofill-control>
+                <label class="page-slug-autofill__label">
+                    <input class="page-slug-autofill__checkbox" type="checkbox" checked data-page-slug-autofill-toggle>
+                    <span>Автозаполнение</span>
+                </label>
+                <div class="page-slug-autofill__hint">Включено: адрес обновляется из заголовка. Снимите, чтобы заполнить адрес вручную.</div>
+            </div>
+        HTML);
     }
 
     protected function rules(DataWrapperContract $item): array

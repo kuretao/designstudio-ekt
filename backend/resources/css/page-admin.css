@@ -211,6 +211,47 @@
     line-height: 1.45;
 }
 
+.page-slug-autofill {
+    display: grid;
+    gap: 6px;
+    margin-top: -2px;
+    padding: 11px 13px;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    border-radius: 8px;
+    background: rgba(248, 250, 252, 0.82);
+}
+
+.page-slug-autofill__label {
+    display: inline-flex;
+    width: max-content;
+    max-width: 100%;
+    align-items: center;
+    gap: 8px;
+    color: #0f172a;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0;
+    cursor: pointer;
+}
+
+.page-slug-autofill__checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: #166534;
+}
+
+.page-slug-autofill__hint {
+    color: rgba(15, 23, 42, 0.62);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.page-slug-autofill-field--enabled .field-slug-element {
+    background: rgba(248, 250, 252, 0.78);
+    color: rgba(15, 23, 42, 0.72);
+    cursor: not-allowed;
+}
+
 .page-badge {
     display: inline-flex;
     min-height: 24px;
@@ -255,9 +296,23 @@
 
 .dark .page-stat,
 .dark .page-guide,
-.dark .page-form-overview__saved {
+.dark .page-form-overview__saved,
+.dark .page-slug-autofill {
     border-color: rgba(148, 163, 184, 0.22);
     background: rgba(15, 23, 42, 0.56);
+}
+
+.dark .page-slug-autofill__label {
+    color: #e2e8f0;
+}
+
+.dark .page-slug-autofill__hint {
+    color: rgba(226, 232, 240, 0.68);
+}
+
+.dark .page-slug-autofill-field--enabled .field-slug-element {
+    background: rgba(15, 23, 42, 0.62);
+    color: rgba(226, 232, 240, 0.68);
 }
 
 .dark .page-stat strong,

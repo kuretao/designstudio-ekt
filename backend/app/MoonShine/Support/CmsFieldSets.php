@@ -62,6 +62,7 @@ final class CmsFieldSets
         return [
             ...self::siteSettingSection('main'),
             ...self::siteSettingSection('branding'),
+            ...self::siteSettingSection('animations'),
             ...self::siteSettingSection('contacts'),
             ...self::siteSettingSection('links'),
             ...self::siteSettingSection('seo'),
@@ -103,6 +104,17 @@ final class CmsFieldSets
                     ->removable()
                     ->hint('Квадратная картинка для сохранения сайта на экран устройства. Рекомендуется PNG 180x180.'),
             ],
+            'animations' => [
+                Switcher::make('Включить анимации сайта', 'animations_enabled')
+                    ->default(true)
+                    ->hint('Главный переключатель GSAP-анимаций, появления блоков и декоративной анимации.'),
+                Switcher::make('Масляный скролл', 'smooth_scroll_enabled')
+                    ->default(true)
+                    ->hint('Плавная прокрутка колесом мыши на desktop. Выключите, если нужен более привычный скролл.'),
+                Switcher::make('Появление блоков при скролле', 'page_reveal_enabled')
+                    ->default(true)
+                    ->hint('Анимация появления карточек и секций при прокрутке страницы.'),
+            ],
             'contacts' => [
                 Text::make('Телефон для показа', 'phone')
                     ->placeholder('+7 (987) 942-12-42')
@@ -130,6 +142,9 @@ final class CmsFieldSets
                 Url::make('MAX', 'max_url')
                     ->placeholder('https://max.ru/company')
                     ->hint('Ссылка на страницу в MAX.'),
+                Url::make('VK', 'vk_url')
+                    ->placeholder('https://vk.com/company')
+                    ->hint('Ссылка на сообщество или профиль VK.'),
                 Url::make('LinkedIn', 'linkedin_url')
                     ->placeholder('https://www.linkedin.com/in/company')
                     ->hint('Оставьте пустым, если ссылка не нужна на сайте.'),

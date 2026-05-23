@@ -1,10 +1,17 @@
 ﻿"use client";
 
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useCms } from "@/src/cms";
+import { menuKeyByHref } from "@/src/i18n";
 
 
 const socials = [
+  {
+    label: "VK", href: "https://vk.com/3dsmartdesign",
+    color: "#D69A66", bg: "rgba(214,154,102,0.12)", border: "rgba(214,154,102,0.35)",
+    icon: <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5"><path d="M12.9 17.2c-5.47 0-8.6-3.75-8.73-9.99h2.74c.09 4.58 2.11 6.52 3.71 6.92V7.21h2.58v3.95c1.58-.17 3.24-1.97 3.8-3.95h2.58a7.62 7.62 0 0 1-3.51 4.98 7.91 7.91 0 0 1 4.11 5.01h-2.84c-.61-1.9-2.13-3.37-4.14-3.57v3.57h-.3Z" /></svg>,
+  },
   {
     label: "Telegram", href: "https://t.me/+79879421242",
     color: "#D69A66", bg: "rgba(214,154,102,0.12)", border: "rgba(214,154,102,0.35)",
@@ -48,10 +55,12 @@ function FooterLogo() {
 }
 
 export default function Footer() {
-  const { contactInfo, servicePageItems, menuItems, siteSettings } = useCms();
+  const { contactInfo, servicePageItems, menuItems, messengerLinks, siteSettings } = useCms();
+  const { t } = useTranslation();
   const half = Math.ceil(servicePageItems.length / 2);
   const col1 = servicePageItems.slice(0, half);
   const col2 = servicePageItems.slice(half);
+  const socialItems = socials.map((social) => (social.label === "VK" ? { ...social, href: messengerLinks.vk } : social));
 
   return (
     <footer className="premium-footer relative overflow-hidden border-t border-white/10">
@@ -73,12 +82,12 @@ export default function Footer() {
               </div>
             </div>
             <p className="max-w-xs text-sm leading-relaxed text-white/45">
-              Студия концептуального дизайна интерьеров, архитектурных проектов и 3D‑визуализаций. Самара и весь мир.
+              {t("footer.brandText")}
             </p>
 
             {/* Social pills with icons */}
             <div className="mt-6 flex flex-wrap gap-2">
-              {socials.map((s) => (
+              {socialItems.map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
@@ -95,7 +104,7 @@ export default function Footer() {
 
           {/* ── Col 2 · Услуги ── */}
           <div>
-            <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#D69A66]">Услуги</p>
+            <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#D69A66]">{t("footer.services")}</p>
             <ul className="space-y-2.5">
               {col1.map((item) => (
                 <li key={item.id}>
@@ -104,7 +113,7 @@ export default function Footer() {
                     className="group flex items-center gap-2 text-sm text-white/45 transition-colors duration-200 hover:text-white"
                   >
                     <span className="h-px w-3 shrink-0 bg-white/15 transition-all duration-200 group-hover:w-4 group-hover:bg-[#D69A66]" />
-                    {item.title}
+                    {t(`services.${item.id}`, item.title)}
                   </Link>
                 </li>
               ))}
@@ -115,7 +124,7 @@ export default function Footer() {
                     className="group flex items-center gap-2 text-sm text-white/45 transition-colors duration-200 hover:text-white"
                   >
                     <span className="h-px w-3 shrink-0 bg-white/15 transition-all duration-200 group-hover:w-4 group-hover:bg-[#D69A66]" />
-                    {item.title}
+                    {t(`services.${item.id}`, item.title)}
                   </Link>
                 </li>
               ))}
@@ -124,9 +133,23 @@ export default function Footer() {
 
           {/* ── Col 3 · Навигация ── */}
           <div>
-            <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#D69A66]">Разделы</p>
+            <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#D69A66]">{t("footer.sections")}</p>
             <ul className="space-y-2.5">
               {menuItems.map((l) => (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className="group flex items-center gap-2 text-sm text-white/45 transition-colors duration-200 hover:text-white"
+                  >
+                    <span className="h-px w-3 shrink-0 bg-white/15 transition-all duration-200 group-hover:w-4 group-hover:bg-[#D69A66]" />
+                    {menuKeyByHref(l.href) ? t(menuKeyByHref(l.href) as string) : l.label}
+                  </Link>
+                </li>
+              ))}
+              {[
+                { href: "/karera", label: t("footer.career") },
+                { href: "/partneram", label: t("footer.partners") },
+              ].map((l) => (
                 <li key={l.href}>
                   <Link
                     href={l.href}
@@ -142,11 +165,11 @@ export default function Footer() {
 
           {/* ── Col 4 · Контакты ── */}
           <div>
-            <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#D69A66]">Контакты</p>
+            <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#D69A66]">{t("footer.contacts")}</p>
             <div className="space-y-5">
               {/* Phone */}
               <div>
-                <p className="mb-1 text-[10px] uppercase tracking-[0.22em] text-white/25">Телефон</p>
+                <p className="mb-1 text-[10px] uppercase tracking-[0.22em] text-white/25">{t("footer.phone")}</p>
                 <a
                   href={contactInfo.phoneHref}
                   className="text-base font-light text-white transition-colors duration-200 hover:text-[#D69A66]"
@@ -173,16 +196,16 @@ export default function Footer() {
 
               {/* Schedule */}
               <div>
-                <p className="mb-1 text-[10px] uppercase tracking-[0.22em] text-white/25">График</p>
+                <p className="mb-1 text-[10px] uppercase tracking-[0.22em] text-white/25">{t("footer.schedule")}</p>
                 <p className="text-sm text-white/55">Пн–Пт: 9:00 – 20:00</p>
                 <p className="text-sm text-white/55">Сб–Вс: 10:00 – 19:00</p>
               </div>
 
               {/* Location */}
               <div>
-                <p className="mb-1 text-[10px] uppercase tracking-[0.22em] text-white/25">Адрес</p>
+                <p className="mb-1 text-[10px] uppercase tracking-[0.22em] text-white/25">{t("footer.address")}</p>
                 <p className="text-sm text-white/55">Самара, Россия</p>
-                <p className="text-xs text-white/30">Работаем удалённо по всему миру</p>
+                <p className="text-xs text-white/30">{t("footer.remote")}</p>
               </div>
             </div>
           </div>
@@ -202,13 +225,13 @@ export default function Footer() {
               href="/politika-konfidencialnosti"
               className="transition-colors duration-200 hover:text-white/60"
             >
-              Политика конфиденциальности
+              {t("footer.privacy")}
             </Link>
             <Link
               href="/user/agreement"
               className="transition-colors duration-200 hover:text-white/60"
             >
-              Пользовательское соглашение
+              {t("footer.agreement")}
             </Link>
           </div>
         </div>

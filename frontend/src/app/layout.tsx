@@ -5,6 +5,7 @@ import Header from "@/src/components/layout/Header";
 import Footer from "@/src/components/layout/Footer";
 import SiteMetadata from "@/src/components/layout/SiteMetadata/SiteMetadata";
 import { CmsProvider } from "@/src/cms";
+import { SiteI18nProvider } from "@/src/i18n";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,14 +18,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ru">
       <body>
         <StyledRegistry>
-          <CmsProvider>
-            <SiteMetadata />
-            <ClientShell>
-              <Header />
-              {children}
-              <Footer />
-            </ClientShell>
-          </CmsProvider>
+          <SiteI18nProvider>
+            <CmsProvider>
+              <SiteMetadata />
+              <ClientShell>
+                <Header />
+                {children}
+                <Footer />
+              </ClientShell>
+            </CmsProvider>
+          </SiteI18nProvider>
         </StyledRegistry>
       </body>
     </html>

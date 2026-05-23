@@ -6,7 +6,7 @@ import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 export default function AgreementPage() {
   const { projects } = useCms();
   return (
-    <div className="page-in pt-24">
+    <div className="page-in">
       <section className="relative overflow-hidden px-5 pb-10 pt-20 md:px-10 lg:px-16">
         <HeroBackdropSlider
           slides={[

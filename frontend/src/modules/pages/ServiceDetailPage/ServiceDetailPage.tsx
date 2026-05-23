@@ -4,6 +4,7 @@ import Link from "next/link";
 import { servicePageItems as fallbackServicePageItems } from "@/src/data";
 import { useCms } from "@/src/cms";
 import { GlassPanel } from "@/src/ui";
+import BrandStrip from "@/src/components/common/BrandStrip";
 import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import { ContactSection } from "@/src/modules/pages/ContactPage";
 import { Workflow } from "@/src/modules/pages/ServicesPage";
@@ -75,6 +76,8 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
           </GlassPanel>
         </div>
       </section>
+
+      <BrandStrip />
 
       <section className="border-t border-white/10 px-5 py-24 md:px-10 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.8fr_1.2fr]">

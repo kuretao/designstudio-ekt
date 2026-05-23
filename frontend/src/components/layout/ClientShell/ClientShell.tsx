@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
@@ -28,6 +29,10 @@ const routeLabels: Record<string, string> = {
 
 const floatingMessengers = [
   {
+    label: "VK",
+    icon: "vk",
+  },
+  {
     label: "MAX",
     icon: "max",
   },
@@ -52,6 +57,14 @@ function getRouteLabel(path: string) {
 }
 
 function MessengerIcon({ icon }: { icon: string }) {
+  if (icon === "vk") {
+    return (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
+        <path d="M12.9 17.2c-5.47 0-8.6-3.75-8.73-9.99h2.74c.09 4.58 2.11 6.52 3.71 6.92V7.21h2.58v3.95c1.58-.17 3.24-1.97 3.8-3.95h2.58a7.62 7.62 0 0 1-3.51 4.98 7.91 7.91 0 0 1 4.11 5.01h-2.84c-.61-1.9-2.13-3.37-4.14-3.57v3.57h-.3Z" />
+      </svg>
+    );
+  }
+
   if (icon === "telegram") {
     return (
       <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
@@ -81,7 +94,8 @@ export default function ClientShell({ children }: { children: React.ReactNode })
   const mainRef = useRef<HTMLDivElement | null>(null);
   const previousPathRef = useRef<string | null>(null);
   const [backLabel, setBackLabel] = useState("Home");
-  const { messengerLinks } = useCms();
+  const { animationControls, messengerLinks } = useCms();
+  const { t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
   const showBackHome = pathname !== "/";
@@ -114,7 +128,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
 
-    if (reducedMotion || coarsePointer || window.innerWidth < 900) return;
+    if (!animationControls.smoothScroll || reducedMotion || coarsePointer || window.innerWidth < 900) return;
 
     let targetScroll = window.scrollY;
     const maxScroll = () =>
@@ -158,10 +172,12 @@ export default function ClientShell({ children }: { children: React.ReactNode })
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("scroll", syncTarget);
     };
-  }, []);
+  }, [animationControls.smoothScroll]);
 
   useEffect(() => {
     const cleanups: Array<() => void> = [];
+    if (!animationControls.enabled) return;
+
     const ctx = gsap.context(() => {
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const finePointer = window.matchMedia("(pointer: fine)").matches;
@@ -192,28 +208,30 @@ export default function ClientShell({ children }: { children: React.ReactNode })
         { y: 0, autoAlpha: 1, duration: 0.9, delay: 0.22, ease: "power3.out" },
       );
 
-      const revealTargets = gsap.utils.toArray<HTMLElement>(
-        ".section-in, .grid-card, .review-card, .page-in section > div, footer .grid > div",
-      );
+      if (animationControls.pageReveal) {
+        const revealTargets = gsap.utils.toArray<HTMLElement>(
+          ".section-in, .grid-card, .review-card, .page-in section > div, footer .grid > div",
+        );
 
-      gsap.set(revealTargets, { autoAlpha: 0, y: 48, clipPath: "inset(12% 0 0 0)" });
-      ScrollTrigger.batch(revealTargets, {
-        start: "top 86%",
-        once: true,
-        interval: 0.08,
-        batchMax: 8,
-        onEnter: (batch) => {
-          gsap.to(batch, {
-            autoAlpha: 1,
-            y: 0,
-            clipPath: "inset(0% 0 0 0)",
-            duration: 1,
-            stagger: 0.08,
-            ease: "power3.out",
-            clearProps: "opacity,visibility,transform,clipPath",
-          });
-        },
-      });
+        gsap.set(revealTargets, { autoAlpha: 0, y: 48, clipPath: "inset(12% 0 0 0)" });
+        ScrollTrigger.batch(revealTargets, {
+          start: "top 86%",
+          once: true,
+          interval: 0.08,
+          batchMax: 8,
+          onEnter: (batch) => {
+            gsap.to(batch, {
+              autoAlpha: 1,
+              y: 0,
+              clipPath: "inset(0% 0 0 0)",
+              duration: 1,
+              stagger: 0.08,
+              ease: "power3.out",
+              clearProps: "opacity,visibility,transform,clipPath",
+            });
+          },
+        });
+      }
 
       if (pathname !== "/") {
         gsap.fromTo(
@@ -392,7 +410,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
       cleanups.forEach((cleanup) => cleanup());
       ctx.revert();
     };
-  }, [pathname]);
+  }, [animationControls.enabled, animationControls.pageReveal, animationControls.smoothScroll, pathname]);
 
   return (
     <main ref={mainRef} className="min-h-screen bg-[#0c0b09] text-[#F5F2EC] antialiased">
@@ -407,27 +425,31 @@ export default function ClientShell({ children }: { children: React.ReactNode })
         <button
           type="button"
           onClick={goBackHome}
-          className="fixed left-5 top-24 z-[45] flex h-10 items-center gap-3 rounded-full border border-white/10 bg-[#171717]/72 px-5 text-sm font-medium text-white/86 backdrop-blur-md transition duration-300 hover:border-white/20 hover:bg-[#202020]/82 hover:text-white md:left-12 md:top-28"
+          className="fixed bottom-5 left-5 z-[46] flex h-10 items-center gap-3 rounded-full border border-white/10 bg-[#171717]/72 px-5 text-sm font-medium text-white/86 backdrop-blur-md transition duration-300 hover:border-white/20 hover:bg-[#202020]/82 hover:text-white md:bottom-8 md:left-8"
         >
           <span className="text-lg leading-none text-white/76">‹</span>
           <span>{backLabel}</span>
         </button>
       )}
-      <div className="fixed bottom-5 right-5 z-[45] flex flex-col gap-2 md:bottom-8 md:right-8">
-        {floatingMessengers.map((messenger) => (
-          <a
-            key={messenger.label}
-            href={messenger.icon === "telegram" ? messengerLinks.telegram : messengerLinks.max}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={messenger.label}
-            className="grid h-12 w-12 place-items-center rounded-full border border-white/18 bg-white/12 text-white backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-white/34 hover:bg-white/18"
-          >
-            <MessengerIcon icon={messenger.icon} />
-          </a>
-        ))}
-      </div>
       {children}
+      <div className="fixed bottom-5 right-5 z-[70] flex flex-col gap-2 md:bottom-8 md:right-8">
+        {floatingMessengers.map((messenger) => {
+          const href = messenger.icon === "telegram" ? messengerLinks.telegram : messenger.icon === "vk" ? messengerLinks.vk : messengerLinks.max;
+
+          return (
+            <a
+              key={messenger.label}
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={t(`fixed.${messenger.icon}`, messenger.label)}
+              className="grid h-12 w-12 place-items-center rounded-full border border-white/18 bg-white/12 text-white backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-white/34 hover:bg-white/18"
+            >
+              <MessengerIcon icon={messenger.icon} />
+            </a>
+          );
+        })}
+      </div>
     </main>
   );
 }

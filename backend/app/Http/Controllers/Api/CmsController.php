@@ -137,9 +137,16 @@ class CmsController extends Controller
             'messengers' => [
                 'telegram' => $settings?->telegram_url,
                 'max' => $settings?->max_url,
+                'vk' => $settings?->vk_url,
                 'phoneHref' => $settings?->phone_href,
             ],
+            'animations' => [
+                'enabled' => $settings?->animations_enabled ?? true,
+                'smoothScroll' => $settings?->smooth_scroll_enabled ?? true,
+                'pageReveal' => $settings?->page_reveal_enabled ?? true,
+            ],
             'socials' => [
+                'vk' => $settings?->vk_url,
                 'linkedin' => $settings?->linkedin_url,
                 'behance' => $settings?->behance_url,
                 'pinterest' => $settings?->pinterest_url,

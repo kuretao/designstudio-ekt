@@ -36,7 +36,7 @@ export default function PromosPage() {
 
   return (
     <>
-      <div className="page-in pt-24">
+      <div className="page-in">
         {/* Hero */}
         <section className="relative min-h-[72vh] overflow-hidden px-5 pb-24 pt-20 md:px-10 lg:px-16">
           <HeroBackdropSlider

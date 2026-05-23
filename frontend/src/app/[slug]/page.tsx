@@ -52,7 +52,7 @@ async function loadCmsPage(slug: string) {
       title: page.title,
       template: page.template,
       body: page.body,
-      eyebrow: hero.eyebrow ?? "3D Smart Design",
+      eyebrow: hero.eyebrow ?? "3D Smart Design Studio",
       text: hero.text ?? hero.subtitle ?? page.seoDescription ?? "",
       image: hero.image,
     };

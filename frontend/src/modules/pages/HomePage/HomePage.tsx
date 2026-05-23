@@ -5,6 +5,7 @@ import { useCms } from "@/src/cms";
 import type { Project } from "@/src/types";
 import { GlassPanel } from "@/src/ui";
 import FAQ from "@/src/components/common/FAQ";
+import BrandStrip from "@/src/components/common/BrandStrip";
 import ProjectQuiz from "@/src/components/common/ProjectQuiz";
 import StyleLab from "@/src/components/common/StyleLab";
 import AboutPage from "@/src/modules/pages/AboutPage";
@@ -125,6 +126,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
         <div className="relative z-10">
           <ProjectShowcase project={activeProject} />
           <AboutPage />
+          <BrandStrip />
           <ServicesSummary />
           <ServicePages />
           <ProjectQuiz />

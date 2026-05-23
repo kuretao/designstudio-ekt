@@ -326,7 +326,7 @@ export default function CareerPage() {
 
           <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
             <div className="pb-8">
-              <p className="text-xs uppercase tracking-[0.38em] text-[#D69A66]">Careers / 3D Smart Design</p>
+              <p className="text-xs uppercase tracking-[0.38em] text-[#D69A66]">Careers / 3D Smart Design Studio</p>
               <h1 className="mt-5 max-w-5xl text-6xl font-light leading-[0.9] tracking-[-0.065em] text-white md:text-8xl lg:text-9xl">
                 Карьера в студии
               </h1>

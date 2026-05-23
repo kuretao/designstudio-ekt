@@ -35,6 +35,12 @@ type HomeHero = {
   linkHref: string;
 };
 
+type AnimationControls = {
+  enabled: boolean;
+  smoothScroll: boolean;
+  pageReveal: boolean;
+};
+
 type CmsData = {
   siteSettings: SiteSettings;
   homeHero: HomeHero;
@@ -47,6 +53,7 @@ type CmsData = {
   faq: typeof faq;
   contactInfo: typeof contactInfo;
   messengerLinks: typeof messengerLinks;
+  animationControls: AnimationControls;
   contentPages: typeof contentPages;
   careerVacancies: typeof careerVacancies;
   reviewStats: typeof reviewStats;
@@ -82,6 +89,11 @@ const fallbackData: CmsData = {
   faq,
   contactInfo,
   messengerLinks,
+  animationControls: {
+    enabled: true,
+    smoothScroll: true,
+    pageReveal: true,
+  },
   contentPages,
   careerVacancies,
   reviewStats,
@@ -89,23 +101,33 @@ const fallbackData: CmsData = {
     { href: "/o-nas", label: "О нас" },
     { href: "/portfolio", label: "Портфолио" },
     { href: "/services", label: "Услуги" },
-    { href: "/kontakty", label: "Контакты" },
-    { href: "/akcii-i-skidki", label: "Акции" },
-    { href: "/novosti", label: "Новости" },
     { href: "/blog", label: "Блог" },
-    { href: "/otzyvy-o-nas", label: "Отзывы" },
-    { href: "/karera", label: "Карьера" },
-    { href: "/partneram", label: "Партнерам" },
+    { href: "/kontakty", label: "Контакты" },
   ],
   ready: false,
 };
 
 const CmsContext = createContext<CmsData>(fallbackData);
+const primaryMenuHrefs = new Set(fallbackData.menuItems.map((item) => item.href));
+
+function makeProjectSlug(project: { slug?: string; title?: string; id?: number }) {
+  if (project.slug) return project.slug;
+
+  const base = project.title || `project-${project.id ?? ""}`;
+  return base
+    .toLowerCase()
+    .replace(/["'«»]/g, "")
+    .replace(/[^a-z0-9а-яё]+/gi, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 function normalizePayload(payload: any): CmsData {
   const settings = payload?.settings ?? {};
   const apiServices = Array.isArray(payload?.services) && payload.services.length ? payload.services : servicePageItems;
-  const apiProjects = Array.isArray(payload?.projects) && payload.projects.length ? payload.projects : projects;
+  const apiProjects = (Array.isArray(payload?.projects) && payload.projects.length ? payload.projects : projects).map((project: any) => ({
+    ...project,
+    slug: makeProjectSlug(project),
+  }));
   const payloadPages = Array.isArray(payload?.pages) ? payload.pages : [];
   const homePage = payloadPages.find((page: any) => page.slug === "home" || page.id === "home");
   const homeBlock = homePage?.blocks?.find((block: any) => block.type === "hero") ?? homePage?.blocks?.[0] ?? {};
@@ -119,7 +141,7 @@ function normalizePayload(payload: any): CmsData {
             title: page.title,
             template: page.template,
             body: page.body,
-            eyebrow: hero.eyebrow ?? "3D Smart Design",
+            eyebrow: hero.eyebrow ?? "3D Smart Design Studio",
             text: hero.text ?? hero.subtitle ?? page.seoDescription ?? "",
             image: hero.image ?? apiProjects[0]?.image,
           };
@@ -171,11 +193,22 @@ function normalizePayload(payload: any): CmsData {
       phoneHref: settings.messengers?.phoneHref ?? messengerLinks.phoneHref,
       max: settings.messengers?.max ?? messengerLinks.max,
       telegram: settings.messengers?.telegram ?? messengerLinks.telegram,
+      vk: settings.messengers?.vk ?? messengerLinks.vk,
+    },
+    animationControls: {
+      enabled: settings.animations?.enabled ?? fallbackData.animationControls.enabled,
+      smoothScroll: settings.animations?.smoothScroll ?? fallbackData.animationControls.smoothScroll,
+      pageReveal: settings.animations?.pageReveal ?? fallbackData.animationControls.pageReveal,
     },
     contentPages: apiPages,
     careerVacancies: Array.isArray(payload?.vacancies) ? payload.vacancies : careerVacancies,
     reviewStats,
-    menuItems: Array.isArray(payload?.menuItems) && payload.menuItems.length ? payload.menuItems : fallbackData.menuItems,
+    menuItems: (() => {
+      if (!Array.isArray(payload?.menuItems) || !payload.menuItems.length) return fallbackData.menuItems;
+
+      const menuItems = payload.menuItems.filter((item: { href?: string }) => primaryMenuHrefs.has(item.href ?? ""));
+      return menuItems.length ? menuItems : fallbackData.menuItems;
+    })(),
     ready: true,
   };
 }

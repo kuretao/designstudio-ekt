@@ -31,7 +31,7 @@ function ServicesHero() {
 
       <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl gap-10 lg:grid-cols-[0.94fr_1.06fr] lg:items-end">
         <div className="pb-6">
-          <p className="text-xs uppercase tracking-[0.38em] text-[#D69A66]">Services / 3D Smart Design</p>
+          <p className="text-xs uppercase tracking-[0.38em] text-[#D69A66]">Services / 3D Smart Design Studio</p>
           <h1 className="mt-5 max-w-5xl text-6xl font-light leading-[0.9] tracking-[-0.065em] text-white md:text-8xl lg:text-9xl">
             Услуги студии
           </h1>
@@ -128,7 +128,7 @@ export function ServicePages() {
         <div className="mb-12 grid gap-8 md:grid-cols-[1fr_0.8fr] md:items-end">
           <div>
             <SectionLabel>Все страницы услуг</SectionLabel>
-            <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">Направления 3D Smart Design</h2>
+            <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">Направления 3D Smart Design Studio</h2>
           </div>
           <p className="text-lg leading-relaxed text-[#D6D1CA]">
             Перенесены все направления из старого меню: интерьер, коммерческие пространства, комплектация, 3D, ландшафт, архитектура и документация.

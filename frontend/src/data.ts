@@ -3,6 +3,7 @@ import type { FilterCategory, Project } from "./types";
 export const projects: Project[] = [
   {
     id: 1,
+    slug: "kp-pavlovy-ozera",
     title: 'КП "Павловы Озера"',
     category: "Интерьеры",
     location: "Москва",
@@ -15,6 +16,7 @@ export const projects: Project[] = [
   },
   {
     id: 2,
+    slug: "zhk-river-park",
     title: 'ЖК "River Park"',
     category: "Интерьеры",
     location: "Самара",
@@ -27,6 +29,7 @@ export const projects: Project[] = [
   },
   {
     id: 3,
+    slug: "landshaftnyj-proekt",
     title: "Ландшафтный проект",
     category: "Ландшафт",
     location: "Висловка",
@@ -37,6 +40,7 @@ export const projects: Project[] = [
   },
   {
     id: 4,
+    slug: "ofisnoe-prostranstvo",
     title: "Офисное пространство",
     category: "Интерьеры",
     location: "Белгородская область",
@@ -47,6 +51,7 @@ export const projects: Project[] = [
   },
   {
     id: 5,
+    slug: "villa-austria",
     title: "Villa Austria",
     category: "Архитектура",
     location: "Вена",
@@ -57,6 +62,7 @@ export const projects: Project[] = [
   },
   {
     id: 6,
+    slug: "kp-greenwood-2",
     title: "КП GreenWood-2",
     category: "Архитектура",
     location: "Москва",
@@ -303,8 +309,8 @@ export const testimonials = [
 
 export const reviewStats = [
   { value: "10 лет", label: "практики в дизайне, архитектуре и визуализации" },
-  { value: "90%", label: "клиентов возвращаются с новыми задачами" },
-  { value: "25+", label: "специалистов в проектной команде" },
+  { value: "7 стран", label: "география удаленной работы и проектов" },
+  { value: "1 час", label: "среднее время первого ответа в рабочие часы" },
 ];
 
 export const contactInfo = {
@@ -320,6 +326,7 @@ export const messengerLinks = {
   phoneHref: contactInfo.phoneHref,
   max: "https://max.ru/",
   telegram: "https://t.me/+79879421242",
+  vk: "https://vk.com/3dsmartdesign",
 };
 
 export const services = [

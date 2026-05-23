@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { useCms } from "@/src/cms";
+import { menuKeyByHref } from "@/src/i18n";
 import ContactModal from "@/src/modals/ContactModal";
 
 function LogoMark() {
@@ -53,6 +55,7 @@ function CloseIcon() {
 export default function Header() {
   const currentPath = usePathname();
   const { menuItems, siteSettings } = useCms();
+  const { i18n, t } = useTranslation();
   const [modalOpen, setModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -70,6 +73,10 @@ export default function Header() {
   const openContact = () => {
     setMenuOpen(false);
     setModalOpen(true);
+  };
+  const changeLanguage = (locale: "ru" | "en") => {
+    i18n.changeLanguage(locale);
+    setMenuOpen(false);
   };
 
   const menuLinkCls = (path: string) =>
@@ -89,7 +96,7 @@ export default function Header() {
             className="flex w-[142px] cursor-pointer items-center gap-[18px] justify-self-start text-[10px] font-semibold uppercase tracking-[0.24em] transition duration-300 hover:text-white/68"
           >
             <MenuIcon />
-            <span>Menu</span>
+            <span>{t("header.menu")}</span>
           </button>
 
           <Link href="/" aria-label={siteSettings.siteName} onClick={closeMenu} className="justify-self-center transition duration-300 hover:opacity-75">
@@ -109,7 +116,7 @@ export default function Header() {
             onClick={openContact}
             className="w-[142px] justify-self-end text-right text-[10px] font-semibold uppercase tracking-[0.24em] transition duration-300 hover:text-white/68"
           >
-            Написать нам
+            {t("header.contact")}
           </button>
         </div>
       </header>
@@ -133,7 +140,7 @@ export default function Header() {
           className="absolute left-6 top-8 z-10 flex cursor-pointer items-center gap-4 text-[11px] font-bold uppercase tracking-[0.18em] text-white transition hover:text-white/66 md:left-[75px] md:top-[50px]"
         >
           <CloseIcon />
-          Close
+          {t("header.close")}
         </button>
 
         <div className="flex h-screen flex-col items-end justify-center px-8 pb-24 pt-28 md:pr-[145px]">
@@ -151,7 +158,7 @@ export default function Header() {
                   transitionProperty: "opacity, transform",
                 }}
               >
-                {item.label}
+                {menuKeyByHref(item.href) ? t(menuKeyByHref(item.href) as string) : item.label}
               </Link>
             ))}
           </nav>
@@ -161,10 +168,20 @@ export default function Header() {
               menuOpen ? "translate-x-0 opacity-100 delay-[760ms]" : "-translate-x-8 opacity-0"
             }`}
           >
-            <span className="text-white/78">РУ</span>
-            <Link href="#" className="text-white/34 transition hover:text-white/78">
+            <button
+              type="button"
+              onClick={() => changeLanguage("ru")}
+              className={`transition hover:text-white/78 ${i18n.language === "ru" ? "text-white/78" : "text-white/34"}`}
+            >
+              РУ
+            </button>
+            <button
+              type="button"
+              onClick={() => changeLanguage("en")}
+              className={`transition hover:text-white/78 ${i18n.language === "en" ? "text-white/78" : "text-white/34"}`}
+            >
               ENG
-            </Link>
+            </button>
           </div>
         </div>
       </section>

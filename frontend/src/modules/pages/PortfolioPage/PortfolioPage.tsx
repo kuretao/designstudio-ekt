@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 import gsap from "gsap";
 import { useCms } from "@/src/cms";
 import type { Project } from "@/src/types";
@@ -170,8 +170,6 @@ function PortfolioHeroSlider({ onSelectProject }: PortfolioGridProps) {
 
 export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
   const { projects } = useCms();
-  const pathname = usePathname();
-  const router = useRouter();
   const directionOptions = ["All projects", ...Array.from(new Set(projects.map((project) => project.category)))];
   const directionSelectOptions = directionOptions.slice(1).map((direction) => ({ value: direction, label: direction }));
   const [searchQuery, setSearchQuery] = useState("");
@@ -269,10 +267,6 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
             key={project.id}
             onClick={() => {
               onSelectProject(project);
-              if (pathname === "/portfolio") {
-                router.push(`/portfolio/${project.slug}`);
-                return;
-              }
               scrollToProjectShowcase();
             }}
             className="grid-card group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] text-left transition duration-300 will-change-transform hover:-translate-y-2 hover:border-[#D69A66]/60"
@@ -302,7 +296,7 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
             <div className="p-6">
               <p className="text-sm leading-relaxed text-[#D6D1CA]">{project.description}</p>
               <span className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-[#D69A66] transition group-hover:gap-3">
-                Смотреть проект <span>→</span>
+                Предпросмотр <span>→</span>
               </span>
             </div>
           </button>
@@ -316,7 +310,11 @@ export function ProjectShowcase({ project }: { project: Project }) {
   const { projects } = useCms();
   const [compare, setCompare] = useState(52);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const gallery = [project.image, project.afterImage || projects[1].image, project.beforeImage || projects[2].image];
+  const fallbackImages = [project.image, ...projects.map((item) => item.image)].filter(Boolean);
+  const fallbackImage = fallbackImages[0] || "";
+  const fallbackAfterImage = project.afterImage || projects[1]?.image || projects[0]?.afterImage || fallbackImage;
+  const fallbackBeforeImage = project.beforeImage || projects[2]?.image || projects[0]?.beforeImage || fallbackImage;
+  const gallery = Array.from(new Set([project.image || fallbackImage, fallbackAfterImage, fallbackBeforeImage].filter(Boolean)));
   const lightboxImage = lightboxIndex === null ? null : gallery[lightboxIndex];
   const currentLightboxIndex = lightboxIndex ?? 0;
 
@@ -376,6 +374,12 @@ export function ProjectShowcase({ project }: { project: Project }) {
                 <SectionLabel>Выбранный проект</SectionLabel>
                 <h2 className="text-5xl font-light leading-[0.95] tracking-[-0.055em] md:text-7xl">{project.title}</h2>
                 <p className="mt-7 text-lg leading-relaxed text-[#D6D1CA]">{project.description}</p>
+                <Link
+                  href={`/portfolio/${project.slug}`}
+                  className="mt-8 inline-flex rounded-full border border-[#D69A66] bg-[#D69A66] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:-translate-y-0.5 hover:bg-[#F5F2EC]"
+                >
+                  Подробная информация
+                </Link>
               </div>
 
               <div className="mt-10 grid gap-4">
@@ -479,13 +483,13 @@ export function ProjectShowcase({ project }: { project: Project }) {
 
           <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.025] transition duration-500 hover:-translate-y-1 hover:border-[#D69A66]/55 hover:shadow-[0_28px_90px_rgba(214,154,102,0.12)]">
             <img
-              src={project.beforeImage || projects[4].image}
+              src={fallbackBeforeImage}
               alt="before"
               className="h-[520px] w-full object-cover transition duration-700 group-hover:scale-[1.03] group-hover:saturate-125"
             />
             <div className="absolute inset-y-0 left-0 overflow-hidden" style={{ width: `${compare}%` }}>
               <img
-                src={project.afterImage || project.image}
+                src={fallbackAfterImage}
                 alt="after"
                 className="h-[520px] w-[calc(100vw-40px)] max-w-none object-cover transition duration-700 group-hover:scale-[1.03] group-hover:brightness-110 group-hover:saturate-125 lg:w-[760px]"
               />

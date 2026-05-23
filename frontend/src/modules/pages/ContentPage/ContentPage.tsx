@@ -139,7 +139,7 @@ function ContentPage({ page }: { page: ContentPageItem }) {
                 <SectionLabel className="mb-5">Отклик</SectionLabel>
                 <h2 className="text-3xl font-light tracking-[-0.04em]">Прислать портфолио</h2>
                 <p className="mt-4 leading-relaxed text-[#D6D1CA]">
-                  Напишите пару строк о себе, приложите ссылку на портфолио и укажите направление: интерьер, архитектура, 3D или комплектация.
+                  Напишите пару строк о себе, приложите ссылку на портфолио и укажите направление: интерьер, архитектура или ландшафт.
                 </p>
                 <a
                   href="mailto:3dsmartdesign@bk.ru?subject=Отклик%20на%20вакансию%20с%20сайта"

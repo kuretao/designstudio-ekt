@@ -3,6 +3,7 @@ export type FilterCategory = ProjectCategory | "Все";
 
 export type Project = {
   id: number;
+  slug: string;
   title: string;
   category: ProjectCategory;
   location: string;

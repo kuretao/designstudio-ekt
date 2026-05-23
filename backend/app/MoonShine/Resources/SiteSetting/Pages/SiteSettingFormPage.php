@@ -73,6 +73,17 @@ class SiteSettingFormPage extends FormPage
                         ]),
                     ])->icon('photo')->customAttributes(['class' => 'settings-section']),
                 ])->icon('photo'),
+                Tab::make('Анимации', [
+                    Box::make('Поведение интерфейса', [
+                        $this->sectionNote(
+                            'Контроль движения',
+                            'Здесь можно быстро выключить тяжелые эффекты, масляный скролл или появления блоков без изменения кода.'
+                        ),
+                        Grid::make([
+                            Column::make(CmsFieldSets::siteSettingSection('animations'))->columnSpan(12),
+                        ]),
+                    ])->icon('sparkles')->customAttributes(['class' => 'settings-section']),
+                ])->icon('sparkles'),
                 Tab::make('Контакты', [
                     Box::make('Контакты на сайте', [
                         $this->sectionNote(
@@ -118,11 +129,15 @@ class SiteSettingFormPage extends FormPage
             'map_src' => ['nullable', 'url', 'max:2048'],
             'telegram_url' => ['nullable', 'url', 'max:2048'],
             'max_url' => ['nullable', 'url', 'max:2048'],
+            'vk_url' => ['nullable', 'url', 'max:2048'],
             'linkedin_url' => ['nullable', 'url', 'max:2048'],
             'behance_url' => ['nullable', 'url', 'max:2048'],
             'pinterest_url' => ['nullable', 'url', 'max:2048'],
             'seo_title' => ['nullable', 'string', 'max:120'],
             'seo_description' => ['nullable', 'string', 'max:320'],
+            'animations_enabled' => ['boolean'],
+            'smooth_scroll_enabled' => ['boolean'],
+            'page_reveal_enabled' => ['boolean'],
         ];
     }
 

@@ -27,12 +27,18 @@ const PinIcon = () => (
     <path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z" />
   </svg>
 );
+const VkIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+    <path d="M12.9 17.2c-5.47 0-8.6-3.75-8.73-9.99h2.74c.09 4.58 2.11 6.52 3.71 6.92V7.21h2.58v3.95c1.58-.17 3.24-1.97 3.8-3.95h2.58a7.62 7.62 0 0 1-3.51 4.98 7.91 7.91 0 0 1 4.11 5.01h-2.84c-.61-1.9-2.13-3.37-4.14-3.57v3.57h-.3Z" />
+  </svg>
+);
 
 /* ─── social links ───────────────────────────────────────────── */
 const socials = [
   { label: "Telegram",  href: "https://t.me/+79879421242",                              icon: <TgIcon />,  color: "#D69A66", bg: "rgba(214,154,102,0.12)",  border: "rgba(214,154,102,0.35)" },
   { label: "LinkedIn",  href: "https://www.linkedin.com/in/3dsmartdesignstudio",        icon: <LiIcon />,  color: "#D69A66", bg: "rgba(214,154,102,0.12)",  border: "rgba(214,154,102,0.35)" },
   { label: "Behance",   href: "https://www.behance.net/3dsmartdesign",                  icon: <BeIcon />,  color: "#D69A66", bg: "rgba(214,154,102,0.12)",  border: "rgba(214,154,102,0.35)" },
+  { label: "VK",        href: "https://vk.com/3dsmartdesign",                           icon: <VkIcon />,  color: "#D69A66", bg: "rgba(214,154,102,0.12)",  border: "rgba(214,154,102,0.35)" },
   { label: "Pinterest", href: "https://ru.pinterest.com/3D_SMART_DESIGN_STUDIO/",       icon: <PinIcon />, color: "#D69A66", bg: "rgba(214,154,102,0.12)",    border: "rgba(214,154,102,0.35)"  },
 ];
 
@@ -85,9 +91,9 @@ function FadeUp({ children, delay = 0, className = "" }: { children: React.React
 const inputCls = "w-full rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-sm text-[#F5F2EC] outline-none transition placeholder:text-white/25 focus:border-[#D69A66]/60 focus:bg-white/[0.07]";
 
 const contactStats = [
-  { val: 1, suffix: " день", label: "время ответа" },
-  { val: 3, suffix: " страны", label: "география проектов" },
-  { val: 7, suffix: " лет", label: "на рынке дизайна" },
+  { val: 1, suffix: " час", label: "среднее время ответа" },
+  { val: 7, suffix: " стран", label: "география проектов" },
+  { val: 10, suffix: " лет", label: "на рынке дизайна" },
 ];
 
 function ContactMapPanel() {
@@ -124,7 +130,7 @@ function ContactHero() {
     <section className="relative min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-10 lg:px-16">
       <HeroBackdropSlider
         slides={[
-          { image: projects[3].image, alt: "Студия 3D Smart Design" },
+          { image: projects[3].image, alt: "Студия 3D Smart Design Studio" },
           { image: projects[0].image, alt: "Интерьерный проект" },
           { image: projects[4].image, alt: "Архитектурная визуализация" },
         ]}
@@ -134,7 +140,7 @@ function ContactHero() {
 
       <div className="relative z-10 mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl items-end pb-24">
         <div className="max-w-6xl">
-          <p className="mb-5 text-xs uppercase tracking-[0.38em] text-[#D69A66]">Contacts / 3D Smart Design</p>
+          <p className="mb-5 text-xs uppercase tracking-[0.38em] text-[#D69A66]">Contacts / 3D Smart Design Studio</p>
           <h1 className="max-w-5xl text-6xl font-light leading-[0.9] tracking-[-0.065em] text-white md:text-8xl lg:text-9xl">
             Свяжитесь с нами
           </h1>
@@ -143,7 +149,7 @@ function ContactHero() {
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <a
-              href="#contact"
+              href="#contact-form"
               className="rounded-full border border-[#D69A66] bg-[#D69A66] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:-translate-y-0.5 hover:bg-[#E3AD7B]"
             >
               Оставить заявку
@@ -177,12 +183,13 @@ type ContactSectionProps = {
 };
 
 export function ContactSection({ showIntro = true, compactTop = false }: ContactSectionProps) {
-  const { contactInfo, servicePageItems } = useCms();
+  const { contactInfo, messengerLinks, servicePageItems } = useCms();
   const [name, setName] = useState("");
   const [contactVal, setContactVal] = useState("");
   const [service, setService] = useState("");
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
+  const socialItems = socials.map((social) => (social.label === "VK" ? { ...social, href: messengerLinks.vk } : social));
 
   const handleSubmit = async () => {
     if (!contactVal.trim()) return;
@@ -328,7 +335,7 @@ export function ContactSection({ showIntro = true, compactTop = false }: Contact
         {/* ── Social / Messenger row ── */}
         <FadeUp delay={100} className="mt-8">
           <div className="flex flex-wrap gap-3">
-            {socials.map((s) => (
+            {socialItems.map((s) => (
               <a
                 key={s.label}
                 href={s.href}
@@ -349,7 +356,7 @@ export function ContactSection({ showIntro = true, compactTop = false }: Contact
         </FadeUp>
 
         {/* ── Form ── */}
-        <div className="mt-16 w-full">
+        <div id="contact-form" className="mt-16 w-full scroll-mt-24 md:scroll-mt-28">
           {/* Form */}
           <FadeUp delay={0}>
             <div className="rounded-[2.5rem] border border-white/10 bg-white/[0.025] p-8 md:p-10">

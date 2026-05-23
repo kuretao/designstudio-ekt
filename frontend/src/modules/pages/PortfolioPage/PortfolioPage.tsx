@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useCms } from "@/src/cms";
 import type { Project } from "@/src/types";
@@ -169,6 +170,8 @@ function PortfolioHeroSlider({ onSelectProject }: PortfolioGridProps) {
 
 export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
   const { projects } = useCms();
+  const pathname = usePathname();
+  const router = useRouter();
   const directionOptions = ["All projects", ...Array.from(new Set(projects.map((project) => project.category)))];
   const directionSelectOptions = directionOptions.slice(1).map((direction) => ({ value: direction, label: direction }));
   const [searchQuery, setSearchQuery] = useState("");
@@ -266,6 +269,10 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
             key={project.id}
             onClick={() => {
               onSelectProject(project);
+              if (pathname === "/portfolio") {
+                router.push(`/portfolio/${project.slug}`);
+                return;
+              }
               scrollToProjectShowcase();
             }}
             className="grid-card group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] text-left transition duration-300 will-change-transform hover:-translate-y-2 hover:border-[#D69A66]/60"
@@ -308,7 +315,28 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
 export function ProjectShowcase({ project }: { project: Project }) {
   const { projects } = useCms();
   const [compare, setCompare] = useState(52);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const gallery = [project.image, project.afterImage || projects[1].image, project.beforeImage || projects[2].image];
+  const lightboxImage = lightboxIndex === null ? null : gallery[lightboxIndex];
+  const currentLightboxIndex = lightboxIndex ?? 0;
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setLightboxIndex(null);
+      if (event.key === "ArrowRight") setLightboxIndex((current) => (current === null ? current : (current + 1) % gallery.length));
+      if (event.key === "ArrowLeft") setLightboxIndex((current) => (current === null ? current : (current - 1 + gallery.length) % gallery.length));
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [gallery.length, lightboxIndex]);
 
   return (
     <section id="project-showcase" className="scroll-mt-28 px-5 py-28 md:px-10 lg:px-16">
@@ -368,8 +396,10 @@ export function ProjectShowcase({ project }: { project: Project }) {
 
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           {gallery.map((image, index) => (
-            <div
+            <button
+              type="button"
               key={`${project.id}-${image}-${index}`}
+              onClick={() => setLightboxIndex(index)}
               className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-300 will-change-transform hover:-translate-y-2 hover:border-[#D69A66]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.42)]"
             >
               <CinematicImage
@@ -381,9 +411,62 @@ export function ProjectShowcase({ project }: { project: Project }) {
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/45 via-transparent to-[#D69A66]/10 opacity-0 transition duration-500 group-hover:opacity-100" />
               <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.24em] text-[#D69A66]">0{index + 1}</span>
-            </div>
+              <span className="absolute bottom-5 right-5 rounded-full border border-white/15 bg-black/35 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white/70 opacity-0 backdrop-blur transition group-hover:opacity-100">
+                Смотреть
+              </span>
+            </button>
           ))}
         </div>
+
+        {lightboxImage && (
+          <div
+            className="fixed inset-0 z-[140] flex items-center justify-center bg-[#050505]/88 p-4 backdrop-blur-xl md:p-8"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Просмотр изображения проекта ${project.title}`}
+            onClick={() => setLightboxIndex(null)}
+          >
+            <button
+              type="button"
+              aria-label="Закрыть просмотр"
+              onClick={() => setLightboxIndex(null)}
+              className="absolute right-5 top-5 z-10 grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/10 text-2xl leading-none text-white transition hover:border-[#D69A66]/60 hover:text-[#D69A66]"
+            >
+              ×
+            </button>
+            <button
+              type="button"
+              aria-label="Предыдущее изображение"
+              onClick={(event) => {
+                event.stopPropagation();
+                setLightboxIndex((current) => (current === null ? current : (current - 1 + gallery.length) % gallery.length));
+              }}
+              className="absolute left-5 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-white/10 text-2xl text-white transition hover:border-[#D69A66]/60 hover:text-[#D69A66]"
+            >
+              ‹
+            </button>
+            <img
+              src={lightboxImage}
+              alt={`${project.title} ${currentLightboxIndex + 1}`}
+              className="max-h-[88vh] w-full max-w-6xl rounded-[1.5rem] object-contain shadow-[0_40px_140px_rgba(0,0,0,0.55)]"
+              onClick={(event) => event.stopPropagation()}
+            />
+            <button
+              type="button"
+              aria-label="Следующее изображение"
+              onClick={(event) => {
+                event.stopPropagation();
+                setLightboxIndex((current) => (current === null ? current : (current + 1) % gallery.length));
+              }}
+              className="absolute right-5 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-white/10 text-2xl text-white transition hover:border-[#D69A66]/60 hover:text-[#D69A66]"
+            >
+              ›
+            </button>
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.2em] text-white/65 backdrop-blur">
+              {currentLightboxIndex + 1} / {gallery.length}
+            </div>
+          </div>
+        )}
 
         <div className="mt-20 grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <div>

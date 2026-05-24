@@ -80,7 +80,7 @@ class PageBlockFormPage extends FormPage
     {
         return [
             'page_id' => ['required', 'integer', 'exists:pages,id'],
-            'type' => ['required', Rule::in(['hero', 'text'])],
+            'type' => ['required', Rule::in(['hero', 'text', 'media', 'gallery', 'quote', 'cta'])],
             'eyebrow' => ['nullable', 'string', 'max:255'],
             'title' => ['nullable', 'string', 'max:255'],
             'subtitle' => ['nullable', 'string'],

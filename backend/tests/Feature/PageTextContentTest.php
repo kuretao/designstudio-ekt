@@ -39,6 +39,7 @@ class PageTextContentTest extends TestCase
         PageBlock::query()->create([
             'page_id' => $page->id,
             'type' => 'hero',
+            'image' => "page-blocks/hero-1.webp\nhttps://example.com/hero-2.webp",
             'title' => 'Заголовок блока',
             'subtitle' => 'Описание блока',
             'link_label' => 'Открыть',
@@ -49,6 +50,8 @@ class PageTextContentTest extends TestCase
 
         $this->getJson('/api/v1/pages/pervyj-ekran')
             ->assertOk()
+            ->assertJsonPath('blocks.0.image', '/storage/page-blocks/hero-1.webp')
+            ->assertJsonPath('blocks.0.images.1', 'https://example.com/hero-2.webp')
             ->assertJsonPath('blocks.0.title', 'Заголовок блока')
             ->assertJsonPath('blocks.0.subtitle', 'Описание блока')
             ->assertJsonPath('blocks.0.linkLabel', 'Открыть')

@@ -1,8 +1,6 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { useCms } from "@/src/cms";
-import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 
 const quickLinks = [
   { href: "/portfolio", label: "Портфолио", text: "посмотреть уровень работ" },
@@ -11,26 +9,19 @@ const quickLinks = [
 ];
 
 function NotFoundPage() {
-  const { projects } = useCms();
   return (
     <section className="page-in relative min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-10 lg:px-16">
-      <HeroBackdropSlider
-        slides={[
-          { image: projects[0].image, alt: "3D Smart Design Studio" },
-          { image: projects[1].image, alt: "Интерьерный проект" },
-          { image: projects[2].image, alt: "Ландшафтный проект" },
-        ]}
-      />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_74%_22%,rgba(214,154,102,.18),transparent_30rem),radial-gradient(circle_at_18%_74%,rgba(126,139,116,.14),transparent_28rem)]" />
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.97)_0%,rgba(5,5,5,.72)_48%,rgba(5,5,5,.2)_100%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.38)_34%,transparent_76%)]" />
 
       <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
         <div className="pb-8">
           <p className="text-xs uppercase tracking-[0.45em] text-[#D69A66]">Error / 404</p>
-          <h1 className="mt-5 max-w-5xl text-7xl font-light leading-[0.82] tracking-[-0.075em] text-white md:text-9xl lg:text-[11rem]">
+          <h1 className="mt-5 max-w-5xl text-7xl font-light leading-[0.82] tracking-normal text-white md:text-9xl lg:text-[11rem]">
             404
           </h1>
-          <h2 className="mt-7 max-w-3xl text-4xl font-light leading-[0.95] tracking-[-0.055em] md:text-6xl">
+          <h2 className="mt-7 max-w-3xl text-4xl font-light leading-[0.95] tracking-normal [overflow-wrap:anywhere] md:text-6xl">
             Такой страницы нет, но хороший проект можно начать отсюда.
           </h2>
           <p className="mt-7 max-w-2xl text-lg leading-relaxed text-[#E8E0D8]/85 md:text-xl">
@@ -64,7 +55,7 @@ function NotFoundPage() {
                   className="group flex items-center justify-between gap-5 border-b border-white/10 pb-4 transition duration-300 last:border-b-0 last:pb-0 hover:border-[#D69A66]/55"
                 >
                   <span>
-                    <span className="block text-2xl font-light tracking-[-0.035em] text-white">{item.label}</span>
+                    <span className="block text-2xl font-light tracking-normal text-white">{item.label}</span>
                     <span className="mt-2 block text-sm leading-relaxed text-[#D6D1CA]">{item.text}</span>
                   </span>
                   <span className="text-2xl text-[#D69A66] transition duration-300 group-hover:translate-x-1">→</span>

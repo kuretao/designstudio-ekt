@@ -179,16 +179,21 @@ class CmsController extends Controller
             'body' => $page->body,
             'seoTitle' => $page->seo_title,
             'seoDescription' => $page->seo_description,
-            'blocks' => $page->blocks->map(fn ($block) => [
-                'type' => $block->type,
-                'eyebrow' => $block->eyebrow,
-                'title' => $block->title,
-                'subtitle' => $block->subtitle,
-                'text' => $block->text,
-                'image' => $block->image,
-                'linkLabel' => $block->link_label,
-                'linkHref' => $block->link_href,
-            ])->values(),
+            'blocks' => $page->blocks->map(function ($block): array {
+                $images = $this->imageList($block->image);
+
+                return [
+                    'type' => $block->type,
+                    'eyebrow' => $block->eyebrow,
+                    'title' => $block->title,
+                    'subtitle' => $block->subtitle,
+                    'text' => $block->text,
+                    'image' => $images[0] ?? null,
+                    'images' => $images,
+                    'linkLabel' => $block->link_label,
+                    'linkHref' => $block->link_href,
+                ];
+            })->values(),
         ];
     }
 
@@ -281,8 +286,36 @@ class CmsController extends Controller
             ->all();
     }
 
+    private function imageList(?string $value): array
+    {
+        return collect(preg_split('/\R/u', (string) $value) ?: [])
+            ->map(fn (string $line) => $this->assetUrl(trim($line)))
+            ->filter()
+            ->values()
+            ->all();
+    }
+
     private function storageAsset(?string $path): ?string
     {
-        return filled($path) ? '/storage/' . ltrim($path, '/') : null;
+        return $this->assetUrl($path);
+    }
+
+    private function assetUrl(?string $path): ?string
+    {
+        if (blank($path)) {
+            return null;
+        }
+
+        $path = trim($path);
+
+        if (
+            preg_match('/^(https?:)?\/\//i', $path) === 1
+            || str_starts_with($path, 'data:')
+            || str_starts_with($path, '/')
+        ) {
+            return $path;
+        }
+
+        return '/storage/' . ltrim($path, '/');
     }
 }

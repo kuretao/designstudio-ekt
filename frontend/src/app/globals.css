@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+.cms-rich-panel,
+.cms-rich-text,
+.cms-copy {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.cms-rich-text * {
+  max-width: 100%;
+}
+
 .cms-rich-text > :first-child {
   margin-top: 0;
 }
@@ -37,6 +50,31 @@
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 0.16em;
+  overflow-wrap: anywhere;
+}
+
+.cms-rich-text img,
+.cms-rich-text video,
+.cms-rich-text iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+.cms-rich-text iframe {
+  width: 100%;
+}
+
+.cms-rich-text table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.cms-rich-text pre,
+.cms-rich-text code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .cms-rich-text h2,

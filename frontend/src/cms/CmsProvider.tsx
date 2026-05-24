@@ -121,6 +121,49 @@ function makeProjectSlug(project: { slug?: string; title?: string; id?: number }
     .replace(/^-+|-+$/g, "");
 }
 
+function normalizeAsset(path?: string | null) {
+  const value = path?.trim();
+  if (!value) return null;
+
+  if (/^(https?:)?\/\//i.test(value) || value.startsWith("data:") || value.startsWith("/")) {
+    return value;
+  }
+
+  return `/storage/${value.replace(/^\/+/, "")}`;
+}
+
+function normalizeImageList(value: unknown): string[] {
+  const rawItems = Array.isArray(value)
+    ? value
+    : typeof value === "string"
+      ? value.split(/\r?\n/u)
+      : [];
+
+  return Array.from(
+    new Set(
+      rawItems
+        .map((item) => normalizeAsset(typeof item === "string" ? item : ""))
+        .filter((item): item is string => Boolean(item)),
+    ),
+  );
+}
+
+function normalizeBlock(block: any) {
+  const images = normalizeImageList(block?.images?.length ? block.images : block?.image);
+
+  return {
+    type: block?.type ?? "text",
+    eyebrow: block?.eyebrow ?? null,
+    title: block?.title ?? null,
+    subtitle: block?.subtitle ?? null,
+    text: block?.text ?? null,
+    image: images[0] ?? null,
+    images,
+    linkLabel: block?.linkLabel ?? null,
+    linkHref: block?.linkHref ?? null,
+  };
+}
+
 function normalizePayload(payload: any): CmsData {
   const settings = payload?.settings ?? {};
   const apiServices = Array.isArray(payload?.services) && payload.services.length ? payload.services : servicePageItems;
@@ -130,20 +173,25 @@ function normalizePayload(payload: any): CmsData {
   }));
   const payloadPages = Array.isArray(payload?.pages) ? payload.pages : [];
   const homePage = payloadPages.find((page: any) => page.slug === "home" || page.id === "home");
-  const homeBlock = homePage?.blocks?.find((block: any) => block.type === "hero") ?? homePage?.blocks?.[0] ?? {};
+  const homeBlocks = Array.isArray(homePage?.blocks) ? homePage.blocks.map(normalizeBlock) : [];
+  const homeBlock = homeBlocks.find((block: any) => block.type === "hero") ?? homeBlocks[0] ?? {};
   const contentPayloadPages = payloadPages.filter((page: any) => page.slug !== "home" && page.id !== "home");
   const apiPages =
     contentPayloadPages.length
       ? contentPayloadPages.map((page: any) => {
-          const hero = page.blocks?.[0] ?? {};
+          const blocks = Array.isArray(page.blocks) ? page.blocks.map(normalizeBlock) : [];
+          const hero = blocks.find((block: any) => block.type === "hero") ?? {};
           return {
             id: page.id ?? page.slug,
+            slug: page.slug,
             title: page.title,
             template: page.template,
             body: page.body,
             eyebrow: hero.eyebrow ?? "3D Smart Design Studio",
             text: hero.text ?? hero.subtitle ?? page.seoDescription ?? "",
             image: hero.image ?? apiProjects[0]?.image,
+            images: hero.images ?? [],
+            blocks,
           };
         })
       : contentPages;

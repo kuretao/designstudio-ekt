@@ -1,5 +1,6 @@
-﻿"use client";
+"use client";
 
+import type { ReactNode } from "react";
 import { useState } from "react";
 import Link from "next/link";
 import { contentPages as fallbackContentPages } from "@/src/data";
@@ -9,9 +10,24 @@ import CinematicImage from "@/src/components/common/CinematicImage";
 import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import SectionLabel from "@/src/components/common/SectionLabel";
 
+type ContentBlock = {
+  type?: string | null;
+  eyebrow?: string | null;
+  title?: string | null;
+  subtitle?: string | null;
+  text?: string | null;
+  image?: string | null;
+  images?: string[];
+  linkLabel?: string | null;
+  linkHref?: string | null;
+};
+
 type ContentPageItem = (typeof fallbackContentPages)[number] & {
   body?: string | null;
   template?: string | null;
+  image?: string | null;
+  images?: string[];
+  blocks?: ContentBlock[];
 };
 
 export function ContentPagesOverview() {
@@ -20,7 +36,7 @@ export function ContentPagesOverview() {
     <section className="border-t border-white/10 px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
         <SectionLabel>Информационные страницы</SectionLabel>
-        <h2 className="mb-12 max-w-4xl text-5xl font-light tracking-[-0.055em] md:text-7xl">
+        <h2 className="mb-12 max-w-4xl text-5xl font-light tracking-normal md:text-7xl">
           Акции, новости, блог, отзывы и новые разделы
         </h2>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -29,13 +45,13 @@ export function ContentPagesOverview() {
               key={page.id}
               id={page.id}
               href={`/${page.id}`}
-              className="group scroll-mt-28 rounded-[2rem] border border-white/10 bg-white/[0.03] p-7 transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60"
+              className="group min-w-0 scroll-mt-28 rounded-[2rem] border border-white/10 bg-white/[0.03] p-7 transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60"
             >
-              <p className="mb-8 text-xs uppercase tracking-[0.32em] text-[#D69A66]">{page.eyebrow}</p>
-              <h3 className="text-3xl font-light tracking-[-0.04em] transition duration-500 group-hover:translate-x-1">
+              <p className="mb-8 text-xs uppercase tracking-[0.32em] text-[#D69A66] [overflow-wrap:anywhere]">{page.eyebrow}</p>
+              <h3 className="text-3xl font-light tracking-normal [overflow-wrap:anywhere] transition duration-500 group-hover:translate-x-1">
                 {page.title}
               </h3>
-              <p className="mt-5 leading-relaxed text-[#D6D1CA]">{page.text}</p>
+              <p className="mt-5 leading-relaxed text-[#D6D1CA] [overflow-wrap:anywhere]">{page.text}</p>
             </Link>
           ))}
         </div>
@@ -47,15 +63,30 @@ export function ContentPagesOverview() {
 function ContentPage({ page }: { page: ContentPageItem }) {
   const { careerVacancies, contentPages, newsArticles, projects } = useCms();
   const currentPage: ContentPageItem = (contentPages.find((item) => item.id === page.id) as ContentPageItem | undefined) ?? page;
+  const allBlocks = currentPage.blocks?.filter(hasVisibleBlock) ?? [];
+  const heroBlock = allBlocks.find((block) => block.type === "hero");
+  const contentBlocks = allBlocks.filter((block) => block !== heroBlock);
   const isBlog = currentPage.id === "blog";
   const isCareer = currentPage.id === "karera";
   const isPartners = currentPage.id === "partneram";
-  const isTextPage = currentPage.template === "text" && Boolean(currentPage.body?.trim());
+  const hasBody = Boolean(currentPage.body?.trim());
   const [partnerName, setPartnerName] = useState("");
   const [partnerContact, setPartnerContact] = useState("");
   const [partnerCompany, setPartnerCompany] = useState("");
   const [partnerMessage, setPartnerMessage] = useState("");
   const [sent, setSent] = useState(false);
+
+  const heroImages = uniqueImages([
+    ...imagesFromBlock(heroBlock),
+    ...(currentPage.images ?? []),
+    currentPage.image,
+    ...contentBlocks.flatMap(imagesFromBlock),
+  ]);
+  const fallbackSlides = projects.slice(0, 3).map((project) => project.image);
+  const sliderImages = heroImages.length ? heroImages : fallbackSlides;
+  const heroTitle = heroBlock?.title || currentPage.title;
+  const heroEyebrow = heroBlock?.eyebrow || currentPage.eyebrow;
+  const heroText = heroBlock?.subtitle || heroBlock?.text || currentPage.text;
 
   const handlePartnerSubmit = async () => {
     if (!partnerContact.trim()) return;
@@ -77,178 +108,397 @@ function ContentPage({ page }: { page: ContentPageItem }) {
   return (
     <div className="page-in">
       <section className="relative overflow-hidden px-5 py-28 md:px-10 lg:px-16">
-        <HeroBackdropSlider
-          slides={[
-            { image: projects[0].image, alt: currentPage.title },
-            { image: projects[1].image, alt: "Интерьерный проект" },
-            { image: projects[2].image, alt: "Ландшафтный проект" },
-          ]}
-        />
+        <HeroBackdropSlider slides={sliderImages.map((image) => ({ image, alt: heroTitle }))} />
         <div className="absolute inset-0 bg-[#050505]/70" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,#050505,rgba(5,5,5,.82),rgba(5,5,5,.45))]" />
         <div className="relative mx-auto max-w-7xl">
-          <SectionLabel>{currentPage.eyebrow}</SectionLabel>
-          <h1 className="max-w-5xl text-6xl font-light tracking-[-0.06em] md:text-8xl">{currentPage.title}</h1>
-          <p className="mt-8 max-w-3xl text-xl leading-relaxed text-[#D6D1CA]">{currentPage.text}</p>
+          <SectionLabel>{heroEyebrow}</SectionLabel>
+          <h1 className="max-w-5xl text-6xl font-light leading-[0.95] tracking-normal [overflow-wrap:anywhere] md:text-8xl">
+            {heroTitle}
+          </h1>
+          {heroText ? <p className="mt-8 max-w-3xl text-xl leading-relaxed text-[#D6D1CA] [overflow-wrap:anywhere]">{heroText}</p> : null}
+          {heroBlock?.linkHref && heroBlock.linkLabel ? (
+            <SmartLink
+              href={heroBlock.linkHref}
+              className="mt-9 inline-flex rounded-full bg-[#D69A66] px-7 py-4 text-sm font-medium uppercase tracking-[0.22em] text-[#050505] transition hover:bg-[#F5F2EC]"
+            >
+              {heroBlock.linkLabel}
+            </SmartLink>
+          ) : null}
         </div>
       </section>
 
       <section className="px-5 py-24 md:px-10 lg:px-16">
-        <div className="mx-auto max-w-7xl">
-          {isTextPage ? (
-            <GlassPanel className="rounded-[2rem] p-7 md:p-10">
+        <div className="mx-auto max-w-7xl space-y-8">
+          {hasBody ? (
+            <GlassPanel className={`cms-rich-panel rounded-[2rem] p-7 md:p-10 ${currentPage.template === "legal" ? "mx-auto max-w-4xl" : ""}`}>
               <div className="cms-rich-text" dangerouslySetInnerHTML={{ __html: currentPage.body ?? "" }} />
             </GlassPanel>
-          ) : isCareer ? (
-            <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-              <GlassPanel className="rounded-[2rem] p-7 md:p-9">
-                <SectionLabel className="mb-5">Вакансии</SectionLabel>
-                {careerVacancies.length > 0 ? (
-                  <div className="space-y-4">
-                    {careerVacancies.map((vacancy) => (
-                      <article key={vacancy.title} className="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-6">
-                        <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.22em] text-[#D69A66]">
-                          <span>{vacancy.format}</span>
-                          <span className="h-1 w-1 rounded-full bg-white/25" />
-                          <span>{vacancy.workload}</span>
-                        </div>
-                        <h2 className="mt-4 text-3xl font-light tracking-[-0.04em]">{vacancy.title}</h2>
-                        <p className="mt-4 leading-relaxed text-[#D6D1CA]">{vacancy.description}</p>
-                        <ul className="mt-5 space-y-2 text-sm text-white/55">
-                          {vacancy.requirements.map((item) => (
-                            <li key={item} className="flex gap-3">
-                              <span className="mt-2 h-px w-4 shrink-0 bg-[#D69A66]" />
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </article>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-7">
-                    <h2 className="text-3xl font-light tracking-[-0.04em]">Открытых вакансий пока нет</h2>
-                    <p className="mt-4 max-w-2xl leading-relaxed text-[#D6D1CA]">
-                      Когда появятся новые роли, их можно будет добавить в `careerVacancies` в `src/data.ts`.
-                      Резюме и портфолио можно отправить на почту студии.
-                    </p>
-                  </div>
-                )}
-              </GlassPanel>
-              <GlassPanel className="rounded-[2rem] p-7 md:p-9">
-                <SectionLabel className="mb-5">Отклик</SectionLabel>
-                <h2 className="text-3xl font-light tracking-[-0.04em]">Прислать портфолио</h2>
-                <p className="mt-4 leading-relaxed text-[#D6D1CA]">
-                  Напишите пару строк о себе, приложите ссылку на портфолио и укажите направление: интерьер, архитектура или ландшафт.
-                </p>
-                <a
-                  href="mailto:3dsmartdesign@bk.ru?subject=Отклик%20на%20вакансию%20с%20сайта"
-                  className="mt-8 inline-flex rounded-full bg-[#D69A66] px-7 py-4 text-sm font-medium uppercase tracking-[0.22em] text-[#050505] transition hover:bg-[#F5F2EC]"
-                >
-                  Отправить отклик
-                </a>
-              </GlassPanel>
-            </div>
+          ) : null}
+
+          {contentBlocks.length ? (
+            <CmsBlocks blocks={contentBlocks} pageTitle={currentPage.title} />
+          ) : hasBody ? null : isCareer ? (
+            <CareerContent careerVacancies={careerVacancies} />
           ) : isPartners ? (
-            <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-              <GlassPanel className="rounded-[2rem] p-7 md:p-9">
-                <SectionLabel className="mb-5">Форматы</SectionLabel>
-                <div className="space-y-5">
-                  {[
-                    "Материалы, мебель, свет и декор для комплектации проектов",
-                    "Подрядные команды для ремонта, строительства и монтажа",
-                    "Девелоперские и коммерческие проекты для визуализации",
-                    "Коллаборации с шоурумами, брендами и профильными специалистами",
-                  ].map((item, index) => (
-                    <div key={item} className="flex gap-4 rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
-                      <span className="text-sm text-[#D69A66]">0{index + 1}</span>
-                      <p className="leading-relaxed text-[#D6D1CA]">{item}</p>
-                    </div>
-                  ))}
-                </div>
-              </GlassPanel>
-              <GlassPanel className="rounded-[2rem] p-7 md:p-9">
-                <SectionLabel className="mb-5">Обратная связь</SectionLabel>
-                <h2 className="text-3xl font-light tracking-[-0.04em]">Предложить сотрудничество</h2>
-                <div className="mt-8 grid gap-3">
-                  <input className={inputCls} placeholder="Ваше имя" value={partnerName} onChange={(event) => setPartnerName(event.target.value)} />
-                  <input className={inputCls} placeholder="Компания или направление" value={partnerCompany} onChange={(event) => setPartnerCompany(event.target.value)} />
-                  <input className={inputCls} placeholder="Телефон, e-mail или Telegram" value={partnerContact} onChange={(event) => setPartnerContact(event.target.value)} />
-                  <textarea
-                    className={`${inputCls} min-h-[140px] resize-none`}
-                    placeholder="Коротко о предложении"
-                    value={partnerMessage}
-                    onChange={(event) => setPartnerMessage(event.target.value)}
-                  />
-                  <button
-                    type="button"
-                    onClick={handlePartnerSubmit}
-                    className="h-14 rounded-full bg-[#D69A66] text-sm font-medium uppercase tracking-[0.22em] text-[#050505] transition hover:bg-[#F5F2EC]"
-                  >
-                    {sent ? "Заявка подготовлена" : "Отправить"}
-                  </button>
-                </div>
-              </GlassPanel>
-            </div>
+            <PartnersContent
+              inputCls={inputCls}
+              partnerName={partnerName}
+              partnerCompany={partnerCompany}
+              partnerContact={partnerContact}
+              partnerMessage={partnerMessage}
+              sent={sent}
+              onNameChange={setPartnerName}
+              onCompanyChange={setPartnerCompany}
+              onContactChange={setPartnerContact}
+              onMessageChange={setPartnerMessage}
+              onSubmit={handlePartnerSubmit}
+            />
           ) : isBlog ? (
-            <div className="grid gap-5 md:grid-cols-3">
-              {newsArticles.slice(1).map((article, index) => (
-                <Link
-                  key={article.slug}
-                  href={`/novosti/${article.slug}`}
-                  className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60"
-                >
-                  <div className="relative h-64 overflow-hidden">
-                    <CinematicImage
-                      frames={[
-                        article.image,
-                        newsArticles[(index + 2) % newsArticles.length]?.image,
-                        newsArticles[(index + 3) % newsArticles.length]?.image,
-                      ]}
-                      alt={article.title}
-                      fill
-                      hint="read"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/85 via-transparent to-transparent" />
-                    <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.28em] text-[#D69A66]">{article.category}</span>
-                  </div>
-                  <div className="p-6">
-                    <h2 className="text-2xl font-light leading-tight">{article.title}</h2>
-                    <p className="mt-4 text-sm leading-relaxed text-[#D6D1CA]">{article.preview}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
+            <BlogContent newsArticles={newsArticles} />
           ) : (
-            <div className="grid gap-5 md:grid-cols-3">
-              {[projects[0], projects[1], projects[2]].map((project, index) => (
-                <GlassPanel key={`${page.id}-${project.id}`} className="group overflow-hidden rounded-[2rem] p-0 transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60">
-                  <div className="relative h-72 overflow-hidden">
-                    <CinematicImage
-                      frames={[
-                        project.image,
-                        projects[(index + 1) % projects.length]?.image,
-                        projects[(index + 2) % projects.length]?.image,
-                      ]}
-                      alt={project.title}
-                      fill
-                      hint="motion"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-transparent to-transparent" />
-                    <span className="absolute bottom-5 left-5 text-sm text-[#D69A66]">0{index + 1}</span>
-                  </div>
-                  <div className="p-6">
-                    <h2 className="text-2xl font-light">{project.title}</h2>
-                    <p className="mt-3 text-sm leading-relaxed text-[#D6D1CA]">{project.description}</p>
-                  </div>
-                </GlassPanel>
-              ))}
-            </div>
+            <EmptyContent page={currentPage} />
           )}
         </div>
       </section>
     </div>
   );
+}
+
+function CmsBlocks({ blocks, pageTitle }: { blocks: ContentBlock[]; pageTitle: string }) {
+  return (
+    <div className="space-y-8">
+      {blocks.map((block, index) => {
+        const key = `${block.type ?? "block"}-${index}-${block.title ?? ""}`;
+
+        if (block.type === "gallery") {
+          return <GalleryBlock key={key} block={block} pageTitle={pageTitle} />;
+        }
+
+        if (block.type === "quote") {
+          return <QuoteBlock key={key} block={block} />;
+        }
+
+        if (block.type === "cta") {
+          return <CtaBlock key={key} block={block} />;
+        }
+
+        return <MediaBlock key={key} block={block} index={index} pageTitle={pageTitle} />;
+      })}
+    </div>
+  );
+}
+
+function MediaBlock({ block, index, pageTitle }: { block: ContentBlock; index: number; pageTitle: string }) {
+  const images = imagesFromBlock(block);
+  const hasImage = images.length > 0;
+  const imageFirst = index % 2 === 1;
+  const copy = (
+    <div className="min-w-0 self-center p-7 md:p-9">
+      {block.eyebrow ? <SectionLabel className="mb-5">{block.eyebrow}</SectionLabel> : null}
+      {block.title ? <h2 className="text-4xl font-light leading-tight tracking-normal [overflow-wrap:anywhere] md:text-5xl">{block.title}</h2> : null}
+      {block.subtitle ? <p className="mt-5 text-lg leading-relaxed text-[#D6D1CA] [overflow-wrap:anywhere]">{block.subtitle}</p> : null}
+      {block.text ? <p className="cms-copy mt-5 whitespace-pre-line leading-relaxed text-[#E8E0D8]/80 [overflow-wrap:anywhere]">{block.text}</p> : null}
+      {block.linkHref && block.linkLabel ? (
+        <SmartLink
+          href={block.linkHref}
+          className="mt-7 inline-flex rounded-full border border-[#D69A66]/70 px-6 py-3 text-xs uppercase tracking-[0.22em] text-[#D69A66] transition hover:bg-[#D69A66] hover:text-[#050505]"
+        >
+          {block.linkLabel}
+        </SmartLink>
+      ) : null}
+    </div>
+  );
+  const media = hasImage ? (
+    <div className="relative min-h-[320px] overflow-hidden rounded-[1.5rem] lg:min-h-[440px]">
+      <CinematicImage
+        frames={images}
+        alt={block.title || pageTitle}
+        fill
+        mode={images.length > 1 ? "frames" : "preview"}
+        hint="slides"
+        overlayClassName="bg-gradient-to-t from-[#050505]/55 via-transparent to-transparent"
+      />
+    </div>
+  ) : null;
+
+  return (
+    <GlassPanel className="overflow-hidden rounded-[2rem]">
+      <div className={`grid min-w-0 gap-0 ${hasImage ? "lg:grid-cols-[0.92fr_1.08fr]" : ""}`}>
+        {imageFirst ? media : copy}
+        {imageFirst ? copy : media}
+      </div>
+    </GlassPanel>
+  );
+}
+
+function GalleryBlock({ block, pageTitle }: { block: ContentBlock; pageTitle: string }) {
+  const images = imagesFromBlock(block);
+  if (!images.length) return <MediaBlock block={block} index={0} pageTitle={pageTitle} />;
+
+  return (
+    <section className="min-w-0">
+      <div className="mb-6 max-w-3xl">
+        {block.eyebrow ? <SectionLabel className="mb-5">{block.eyebrow}</SectionLabel> : null}
+        {block.title ? <h2 className="text-4xl font-light leading-tight tracking-normal [overflow-wrap:anywhere] md:text-5xl">{block.title}</h2> : null}
+        {block.subtitle || block.text ? (
+          <p className="mt-5 whitespace-pre-line text-lg leading-relaxed text-[#D6D1CA] [overflow-wrap:anywhere]">{block.subtitle || block.text}</p>
+        ) : null}
+      </div>
+      <div className="grid gap-4 md:grid-cols-3">
+        {images.map((image, index) => (
+          <div key={image} className={`relative min-h-[260px] overflow-hidden rounded-[1.5rem] border border-white/10 ${index === 0 ? "md:col-span-2 md:min-h-[360px]" : ""}`}>
+            <img src={image} alt={index === 0 ? block.title || pageTitle : ""} className="h-full w-full object-cover" loading={index === 0 ? "eager" : "lazy"} decoding="async" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/65 via-transparent to-transparent" />
+            <span className="absolute bottom-5 left-5 text-sm text-[#D69A66]">0{index + 1}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function QuoteBlock({ block }: { block: ContentBlock }) {
+  const quote = block.text || block.subtitle;
+
+  return (
+    <GlassPanel className="rounded-[2rem] p-8 md:p-12">
+      {block.eyebrow ? <SectionLabel className="mb-6">{block.eyebrow}</SectionLabel> : null}
+      {quote ? <blockquote className="max-w-5xl text-3xl font-light leading-tight tracking-normal [overflow-wrap:anywhere] md:text-5xl">{quote}</blockquote> : null}
+      {block.title ? <p className="mt-7 text-lg text-[#D69A66] [overflow-wrap:anywhere]">{block.title}</p> : null}
+    </GlassPanel>
+  );
+}
+
+function CtaBlock({ block }: { block: ContentBlock }) {
+  return (
+    <section className="rounded-[2rem] border border-[#D69A66]/35 bg-[#D69A66]/10 p-8 md:p-12">
+      {block.eyebrow ? <SectionLabel className="mb-6">{block.eyebrow}</SectionLabel> : null}
+      {block.title ? <h2 className="max-w-4xl text-4xl font-light leading-tight tracking-normal [overflow-wrap:anywhere] md:text-6xl">{block.title}</h2> : null}
+      {block.subtitle || block.text ? (
+        <p className="mt-6 max-w-3xl whitespace-pre-line text-lg leading-relaxed text-[#E8E0D8]/85 [overflow-wrap:anywhere]">{block.subtitle || block.text}</p>
+      ) : null}
+      {block.linkHref && block.linkLabel ? (
+        <SmartLink
+          href={block.linkHref}
+          className="mt-8 inline-flex rounded-full bg-[#D69A66] px-7 py-4 text-sm font-medium uppercase tracking-[0.22em] text-[#050505] transition hover:bg-[#F5F2EC]"
+        >
+          {block.linkLabel}
+        </SmartLink>
+      ) : null}
+    </section>
+  );
+}
+
+function CareerContent({ careerVacancies }: { careerVacancies: any[] }) {
+  return (
+    <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+      <GlassPanel className="rounded-[2rem] p-7 md:p-9">
+        <SectionLabel className="mb-5">Вакансии</SectionLabel>
+        {careerVacancies.length > 0 ? (
+          <div className="space-y-4">
+            {careerVacancies.map((vacancy) => {
+              const requirements = Array.isArray(vacancy.requirements)
+                ? vacancy.requirements
+                : String(vacancy.requirements ?? "")
+                    .split(/\r?\n/u)
+                    .filter(Boolean);
+              const format = vacancy.format ?? vacancy.employment ?? vacancy.location;
+              const workload = vacancy.workload ?? vacancy.salary;
+
+              return (
+                <article key={vacancy.title} className="min-w-0 rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-6">
+                  <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.22em] text-[#D69A66]">
+                    {format ? <span>{format}</span> : null}
+                    {format && workload ? <span className="h-1 w-1 rounded-full bg-white/25" /> : null}
+                    {workload ? <span>{workload}</span> : null}
+                  </div>
+                  <h2 className="mt-4 text-3xl font-light tracking-normal [overflow-wrap:anywhere]">{vacancy.title}</h2>
+                  <p className="mt-4 leading-relaxed text-[#D6D1CA] [overflow-wrap:anywhere]">{vacancy.description}</p>
+                  {requirements.length ? (
+                    <ul className="mt-5 space-y-2 text-sm text-white/55">
+                      {requirements.map((item: string) => (
+                        <li key={item} className="flex gap-3 [overflow-wrap:anywhere]">
+                          <span className="mt-2 h-px w-4 shrink-0 bg-[#D69A66]" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-7">
+            <h2 className="text-3xl font-light tracking-normal">Открытых вакансий пока нет</h2>
+            <p className="mt-4 max-w-2xl leading-relaxed text-[#D6D1CA]">Резюме и портфолио можно отправить на почту студии.</p>
+          </div>
+        )}
+      </GlassPanel>
+      <GlassPanel className="rounded-[2rem] p-7 md:p-9">
+        <SectionLabel className="mb-5">Отклик</SectionLabel>
+        <h2 className="text-3xl font-light tracking-normal">Прислать портфолио</h2>
+        <p className="mt-4 leading-relaxed text-[#D6D1CA]">
+          Напишите пару строк о себе, приложите ссылку на портфолио и укажите направление: интерьер, архитектура или ландшафт.
+        </p>
+        <a
+          href="mailto:3dsmartdesign@bk.ru?subject=Отклик%20на%20вакансию%20с%20сайта"
+          className="mt-8 inline-flex rounded-full bg-[#D69A66] px-7 py-4 text-sm font-medium uppercase tracking-[0.22em] text-[#050505] transition hover:bg-[#F5F2EC]"
+        >
+          Отправить отклик
+        </a>
+      </GlassPanel>
+    </div>
+  );
+}
+
+function PartnersContent({
+  inputCls,
+  partnerName,
+  partnerCompany,
+  partnerContact,
+  partnerMessage,
+  sent,
+  onNameChange,
+  onCompanyChange,
+  onContactChange,
+  onMessageChange,
+  onSubmit,
+}: {
+  inputCls: string;
+  partnerName: string;
+  partnerCompany: string;
+  partnerContact: string;
+  partnerMessage: string;
+  sent: boolean;
+  onNameChange: (value: string) => void;
+  onCompanyChange: (value: string) => void;
+  onContactChange: (value: string) => void;
+  onMessageChange: (value: string) => void;
+  onSubmit: () => void;
+}) {
+  return (
+    <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+      <GlassPanel className="rounded-[2rem] p-7 md:p-9">
+        <SectionLabel className="mb-5">Форматы</SectionLabel>
+        <div className="space-y-5">
+          {[
+            "Материалы, мебель, свет и декор для комплектации проектов",
+            "Подрядные команды для ремонта, строительства и монтажа",
+            "Девелоперские и коммерческие проекты для визуализации",
+            "Коллаборации с шоурумами, брендами и профильными специалистами",
+          ].map((item, index) => (
+            <div key={item} className="flex min-w-0 gap-4 rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+              <span className="text-sm text-[#D69A66]">0{index + 1}</span>
+              <p className="leading-relaxed text-[#D6D1CA] [overflow-wrap:anywhere]">{item}</p>
+            </div>
+          ))}
+        </div>
+      </GlassPanel>
+      <GlassPanel className="rounded-[2rem] p-7 md:p-9">
+        <SectionLabel className="mb-5">Обратная связь</SectionLabel>
+        <h2 className="text-3xl font-light tracking-normal">Предложить сотрудничество</h2>
+        <div className="mt-8 grid gap-3">
+          <input className={inputCls} placeholder="Ваше имя" value={partnerName} onChange={(event) => onNameChange(event.target.value)} />
+          <input className={inputCls} placeholder="Компания или направление" value={partnerCompany} onChange={(event) => onCompanyChange(event.target.value)} />
+          <input className={inputCls} placeholder="Телефон, e-mail или Telegram" value={partnerContact} onChange={(event) => onContactChange(event.target.value)} />
+          <textarea
+            className={`${inputCls} min-h-[140px] resize-none`}
+            placeholder="Коротко о предложении"
+            value={partnerMessage}
+            onChange={(event) => onMessageChange(event.target.value)}
+          />
+          <button
+            type="button"
+            onClick={onSubmit}
+            className="h-14 rounded-full bg-[#D69A66] text-sm font-medium uppercase tracking-[0.22em] text-[#050505] transition hover:bg-[#F5F2EC]"
+          >
+            {sent ? "Заявка подготовлена" : "Отправить"}
+          </button>
+        </div>
+      </GlassPanel>
+    </div>
+  );
+}
+
+function BlogContent({ newsArticles }: { newsArticles: any[] }) {
+  return (
+    <div className="grid gap-5 md:grid-cols-3">
+      {newsArticles.slice(1).map((article, index) => (
+        <Link
+          key={article.slug}
+          href={`/novosti/${article.slug}`}
+          className="group min-w-0 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-2 hover:border-[#D69A66]/60"
+        >
+          <div className="relative h-64 overflow-hidden">
+            <CinematicImage
+              frames={[
+                article.image,
+                newsArticles[(index + 2) % newsArticles.length]?.image,
+                newsArticles[(index + 3) % newsArticles.length]?.image,
+              ]}
+              alt={article.title}
+              fill
+              hint="read"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/85 via-transparent to-transparent" />
+            <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.28em] text-[#D69A66]">{article.category}</span>
+          </div>
+          <div className="p-6">
+            <h2 className="text-2xl font-light leading-tight tracking-normal [overflow-wrap:anywhere]">{article.title}</h2>
+            <p className="mt-4 text-sm leading-relaxed text-[#D6D1CA] [overflow-wrap:anywhere]">{article.preview}</p>
+          </div>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+function EmptyContent({ page }: { page: ContentPageItem }) {
+  return (
+    <GlassPanel className="rounded-[2rem] p-7 md:p-10">
+      <SectionLabel className="mb-5">{page.eyebrow}</SectionLabel>
+      <h2 className="text-4xl font-light tracking-normal [overflow-wrap:anywhere]">{page.title}</h2>
+      <p className="mt-5 max-w-3xl leading-relaxed text-[#D6D1CA] [overflow-wrap:anywhere]">{page.text}</p>
+    </GlassPanel>
+  );
+}
+
+function SmartLink({ href, className, children }: { href: string; className: string; children: ReactNode }) {
+  if (/^https?:\/\//i.test(href)) {
+    return (
+      <a href={href} className={className} target="_blank" rel="noreferrer">
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} className={className}>
+      {children}
+    </Link>
+  );
+}
+
+function hasVisibleBlock(block: ContentBlock) {
+  return Boolean(
+    block.eyebrow?.trim() ||
+      block.title?.trim() ||
+      block.subtitle?.trim() ||
+      block.text?.trim() ||
+      imagesFromBlock(block).length ||
+      block.linkLabel?.trim(),
+  );
+}
+
+function imagesFromBlock(block?: ContentBlock | null) {
+  if (!block) return [];
+  return uniqueImages([...(block.images ?? []), block.image]);
+}
+
+function uniqueImages(images: Array<string | null | undefined>) {
+  return Array.from(new Set(images.map((image) => image?.trim()).filter((image): image is string => Boolean(image))));
 }
 
 export default ContentPage;

@@ -514,9 +514,30 @@ final class CmsFieldSets
             Text::make('Локация', 'location'),
             Text::make('Год', 'year'),
             Textarea::make('Описание', 'description'),
-            Textarea::make('URL изображения или путь в хранилище', 'image'),
-            Textarea::make('Изображение до', 'before_image'),
-            Textarea::make('Изображение после', 'after_image'),
+            Image::make('Загрузить главное изображение', 'image_file')
+                ->disk('public')
+                ->dir('projects')
+                ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'avif'])
+                ->removable()
+                ->hint('Загрузите файл на сервер. Имеет приоритет над URL ниже.'),
+            Textarea::make('Или URL главного изображения', 'image')
+                ->hint('Вставьте внешнюю ссылку. Используется если файл выше не загружен.'),
+            Image::make('Загрузить изображение «До»', 'before_image_file')
+                ->disk('public')
+                ->dir('projects')
+                ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'avif'])
+                ->removable()
+                ->hint('Загрузите файл на сервер. Имеет приоритет над URL ниже.'),
+            Textarea::make('Или URL изображения «До»', 'before_image')
+                ->hint('Вставьте внешнюю ссылку. Используется если файл выше не загружен.'),
+            Image::make('Загрузить изображение «После»', 'after_image_file')
+                ->disk('public')
+                ->dir('projects')
+                ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'avif'])
+                ->removable()
+                ->hint('Загрузите файл на сервер. Имеет приоритет над URL ниже.'),
+            Textarea::make('Или URL изображения «После»', 'after_image')
+                ->hint('Вставьте внешнюю ссылку. Используется если файл выше не загружен.'),
             Switcher::make('Избранный', 'is_featured'),
         ];
     }
@@ -583,7 +604,14 @@ final class CmsFieldSets
             Text::make('Действует до', 'valid_until'),
             Textarea::make('Описание', 'description'),
             Textarea::make('Условия, по одному в строке', 'conditions'),
-            Textarea::make('URL изображения или путь в хранилище', 'image'),
+            Image::make('Загрузить изображение на сервер', 'image_file')
+                ->disk('public')
+                ->dir('promo')
+                ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'avif'])
+                ->removable()
+                ->hint('Загрузите файл — он сохранится в хранилище. Если загружен файл, он имеет приоритет над URL ниже.'),
+            Textarea::make('Или URL изображения', 'image')
+                ->hint('Вставьте внешнюю ссылку (например, Unsplash). Используется только если файл выше не загружен.'),
         ];
     }
 

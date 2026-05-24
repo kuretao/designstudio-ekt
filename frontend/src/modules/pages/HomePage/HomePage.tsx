@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useCms } from "@/src/cms";
 import type { Project } from "@/src/types";
 import { GlassPanel } from "@/src/ui";
@@ -13,6 +14,7 @@ import { ContactSection } from "@/src/modules/pages/ContactPage";
 import { ContentPagesOverview } from "@/src/modules/pages/ContentPage";
 import { PortfolioGrid, ProjectShowcase } from "@/src/modules/pages/PortfolioPage";
 import { ServicePages, ServicesSummary, Workflow } from "@/src/modules/pages/ServicesPage";
+import ContactModal from "@/src/modals/ContactModal";
 
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -47,8 +49,10 @@ function FeatureProject({ project, label, reverse = false }: { project: Project;
 
 function HomePage({ activeProject, setActiveProject }: HomePageProps) {
   const { homeHero, projects } = useCms();
+  const [contactModalOpen, setContactModalOpen] = useState(false);
   const storyText =
     "Мы проектируем не стены, а сценарии жизни: утренний свет, маршрут взгляда, тишину материалов и точную документацию для реализации.";
+  const heroLinkOpensModal = homeHero.linkHref === "/kontakty" || homeHero.linkLabel.toLowerCase().includes("обсудить");
 
   return (
     <>
@@ -83,13 +87,24 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
                   </p>
                 ) : null}
                 {homeHero.linkHref && homeHero.linkLabel ? (
-                  <Link
-                    href={homeHero.linkHref}
-                    className="group inline-flex h-14 items-center justify-center rounded-full border border-[#D69A66]/50 px-7 text-sm uppercase tracking-[0.22em] text-[#F5F2EC] transition hover:bg-[#D69A66] hover:text-[#0c0b09]"
-                  >
-                    {homeHero.linkLabel}
-                    <span className="ml-3 transition group-hover:translate-x-1">→</span>
-                  </Link>
+                  heroLinkOpensModal ? (
+                    <button
+                      type="button"
+                      onClick={() => setContactModalOpen(true)}
+                      className="group inline-flex h-14 items-center justify-center rounded-full border border-[#D69A66]/50 px-7 text-sm uppercase tracking-[0.22em] text-[#F5F2EC] transition hover:bg-[#D69A66] hover:text-[#0c0b09]"
+                    >
+                      {homeHero.linkLabel}
+                      <span className="ml-3 transition group-hover:translate-x-1">→</span>
+                    </button>
+                  ) : (
+                    <Link
+                      href={homeHero.linkHref}
+                      className="group inline-flex h-14 items-center justify-center rounded-full border border-[#D69A66]/50 px-7 text-sm uppercase tracking-[0.22em] text-[#F5F2EC] transition hover:bg-[#D69A66] hover:text-[#0c0b09]"
+                    >
+                      {homeHero.linkLabel}
+                      <span className="ml-3 transition group-hover:translate-x-1">→</span>
+                    </Link>
+                  )
                 ) : null}
               </div>
             </div>
@@ -136,6 +151,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
           <ContactSection />
         </div>
       </div>
+      <ContactModal open={contactModalOpen} onClose={() => setContactModalOpen(false)} />
     </>
   );
 }

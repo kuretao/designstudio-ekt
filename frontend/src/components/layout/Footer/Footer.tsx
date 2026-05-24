@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { useCms } from "@/src/cms";
-import { menuKeyByHref } from "@/src/i18n";
 
 
 const socials = [
@@ -136,20 +135,6 @@ export default function Footer() {
             <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#D69A66]">{t("footer.sections")}</p>
             <ul className="space-y-2.5">
               {menuItems.map((l) => (
-                <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    className="group flex items-center gap-2 text-sm text-white/45 transition-colors duration-200 hover:text-white"
-                  >
-                    <span className="h-px w-3 shrink-0 bg-white/15 transition-all duration-200 group-hover:w-4 group-hover:bg-[#D69A66]" />
-                    {menuKeyByHref(l.href) ? t(menuKeyByHref(l.href) as string) : l.label}
-                  </Link>
-                </li>
-              ))}
-              {[
-                { href: "/karera", label: t("footer.career") },
-                { href: "/partneram", label: t("footer.partners") },
-              ].map((l) => (
                 <li key={l.href}>
                   <Link
                     href={l.href}

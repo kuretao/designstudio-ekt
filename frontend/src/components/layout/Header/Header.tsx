@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useCms } from "@/src/cms";
-import { menuKeyByHref } from "@/src/i18n";
 import ContactModal from "@/src/modals/ContactModal";
 
 function LogoMark() {
@@ -158,7 +157,7 @@ export default function Header() {
                   transitionProperty: "opacity, transform",
                 }}
               >
-                {menuKeyByHref(item.href) ? t(menuKeyByHref(item.href) as string) : item.label}
+                {item.label}
               </Link>
             ))}
           </nav>

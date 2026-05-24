@@ -108,7 +108,6 @@ const fallbackData: CmsData = {
 };
 
 const CmsContext = createContext<CmsData>(fallbackData);
-const primaryMenuHrefs = new Set(fallbackData.menuItems.map((item) => item.href));
 
 function makeProjectSlug(project: { slug?: string; title?: string; id?: number }) {
   if (project.slug) return project.slug;
@@ -251,12 +250,7 @@ function normalizePayload(payload: any): CmsData {
     contentPages: apiPages,
     careerVacancies: Array.isArray(payload?.vacancies) ? payload.vacancies : careerVacancies,
     reviewStats,
-    menuItems: (() => {
-      if (!Array.isArray(payload?.menuItems) || !payload.menuItems.length) return fallbackData.menuItems;
-
-      const menuItems = payload.menuItems.filter((item: { href?: string }) => primaryMenuHrefs.has(item.href ?? ""));
-      return menuItems.length ? menuItems : fallbackData.menuItems;
-    })(),
+    menuItems: Array.isArray(payload?.menuItems) && payload.menuItems.length ? payload.menuItems : fallbackData.menuItems,
     ready: true,
   };
 }

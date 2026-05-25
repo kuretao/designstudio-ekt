@@ -207,9 +207,9 @@ class CmsController extends Controller
             'location' => $project->location,
             'year' => $project->year,
             'description' => $project->description,
-            'image' => $project->image,
-            'beforeImage' => $project->before_image,
-            'afterImage' => $project->after_image,
+            'image' => $project->effective_image,
+            'beforeImage' => $project->effective_before_image,
+            'afterImage' => $project->effective_after_image,
             'isFeatured' => $project->is_featured,
         ];
     }
@@ -260,7 +260,7 @@ class CmsController extends Controller
             'validUntil' => $promo->valid_until,
             'description' => $promo->description,
             'conditions' => $this->lines($promo->conditions),
-            'image' => $promo->image,
+            'image' => $promo->effective_image,
         ];
     }
 

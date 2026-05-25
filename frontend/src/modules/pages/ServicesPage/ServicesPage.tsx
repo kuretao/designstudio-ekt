@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
+import { serviceNavigationGroups } from "@/src/data";
 import { useCms } from "@/src/cms";
 import CinematicImage from "@/src/components/common/CinematicImage";
 import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
@@ -87,7 +88,11 @@ function ServicesHero() {
 }
 
 export function ServicesSummary() {
-  const { projects, services } = useCms();
+  const { servicePageItems } = useCms();
+  const mainServices = serviceNavigationGroups
+    .map((group) => servicePageItems.find((item) => `/${item.id}` === group.href))
+    .filter((service): service is NonNullable<typeof service> => Boolean(service));
+
   return (
     <section id="services" className="border-t border-white/10 px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
@@ -100,7 +105,7 @@ export function ServicesSummary() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
-          {services.map((service) => (
+          {mainServices.map((service) => (
             <GlassPanel key={service.title} className="rounded-[2rem] p-7">
               <div className="mb-8 flex items-start justify-between gap-4">
                 <h3 className="text-3xl font-light tracking-[-0.04em]">{service.title}</h3>
@@ -122,6 +127,8 @@ export function ServicesSummary() {
 
 export function ServicePages() {
   const { projects, servicePageItems } = useCms();
+  const serviceByHref = new Map(servicePageItems.map((item) => [`/${item.id}`, item]));
+
   return (
     <section className="border-t border-white/10 px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
@@ -131,37 +138,50 @@ export function ServicePages() {
             <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">Направления 3D Smart Design Studio</h2>
           </div>
           <p className="text-lg leading-relaxed text-[#D6D1CA]">
-            Перенесены все направления из старого меню: интерьер, коммерческие пространства, комплектация, 3D, ландшафт, архитектура и документация.
+            Основные направления держат SEO-вес, а посадочные страницы вложены как подпункты: так клиент быстрее ориентируется в услугах.
           </p>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {servicePageItems.map((item, index) => (
-            <Link
-              key={item.id}
-              id={item.id}
-              href={`/${item.id}`}
-              className="group scroll-mt-28 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-300 will-change-transform hover:-translate-y-2 hover:border-[#D69A66]/60 hover:shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
-            >
-              <div className="relative h-72 overflow-hidden">
-                <CinematicImage
-                  frames={[item.image, projects[(index + 1) % projects.length]?.image, projects[(index + 3) % projects.length]?.image]}
-                  alt={item.title}
-                  fill
-                  hint="motion"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/58 via-transparent to-[#D69A66]/10" />
-                <div className="absolute bottom-5 left-5 right-5">
-                  <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#D69A66]">{item.eyebrow}</p>
-                  <h3 className="text-3xl font-light tracking-[-0.04em]">{item.title}</h3>
+        <div className="grid gap-5 md:grid-cols-2">
+          {serviceNavigationGroups.map((group, index) => {
+            const mainService = serviceByHref.get(group.href);
+            const image = mainService?.image ?? projects[index % projects.length]?.image;
+
+            return (
+              <GlassPanel key={group.id} className="overflow-hidden rounded-[2rem]">
+                <Link href={group.href} className="group block">
+                  <div className="relative h-72 overflow-hidden">
+                    <CinematicImage
+                      frames={[image, projects[(index + 1) % projects.length]?.image, projects[(index + 3) % projects.length]?.image]}
+                      alt={group.title}
+                      fill
+                      hint="motion"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/68 via-[#050505]/12 to-[#D69A66]/10" />
+                    <div className="absolute bottom-5 left-5 right-5">
+                      <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#D69A66]">Основная категория</p>
+                      <h3 className="text-3xl font-light tracking-[-0.04em]">{group.title}</h3>
+                    </div>
+                  </div>
+                </Link>
+                <div className="grid gap-5 p-6">
+                  <p className="leading-relaxed text-[#D6D1CA]">{group.description}</p>
+                  <div className="grid gap-2">
+                    {group.items.map((child) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        className="group flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-white/62 transition hover:border-[#D69A66]/45 hover:text-white"
+                      >
+                        <span>{child.label}</span>
+                        <span className="text-[#D69A66] transition group-hover:translate-x-1">→</span>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div
-                className="cms-rich-text p-6 leading-relaxed text-[#D6D1CA]"
-                dangerouslySetInnerHTML={{ __html: item.text }}
-              />
-            </Link>
-          ))}
+              </GlassPanel>
+            );
+          })}
         </div>
       </div>
     </section>

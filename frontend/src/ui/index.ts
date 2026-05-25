@@ -368,25 +368,16 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .cinematic-sheen::before {
-    content: "";
-    position: absolute;
-    inset: -18% -42%;
-    background: linear-gradient(100deg, transparent 28%, rgba(245,242,236,0.16) 45%, rgba(214,154,102,0.18) 50%, transparent 64%);
-    opacity: 0;
-    transform: translateX(-120%) skewX(-18deg);
+    content: none;
   }
 
   .cinematic-image:hover .cinematic-sheen::before,
   .cinematic-image:focus-within .cinematic-sheen::before {
-    animation: cinematicSheen 1.45s ease forwards;
+    animation: none;
   }
 
   .cinematic-scan {
-    background:
-      repeating-linear-gradient(0deg, transparent 0 18px, rgba(245,242,236,.04) 18px 19px),
-      radial-gradient(circle at 50% 50%, transparent 0%, rgba(214,154,102,.12) 100%);
-    mix-blend-mode: screen;
-    animation: cinematicScan 4.2s ease-in-out infinite alternate;
+    display: none;
   }
 
   .review-orbit {

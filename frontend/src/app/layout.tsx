@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import StyledRegistry from "@/src/components/providers/StyledRegistry";
 import ClientShell from "@/src/components/layout/ClientShell";
 import Header from "@/src/components/layout/Header";
+import Breadcrumbs from "@/src/components/layout/Breadcrumbs";
 import Footer from "@/src/components/layout/Footer";
 import SiteMetadata from "@/src/components/layout/SiteMetadata/SiteMetadata";
 import { CmsProvider } from "@/src/cms";
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <SiteMetadata />
               <ClientShell>
                 <Header />
+                <Breadcrumbs />
                 {children}
                 <Footer />
               </ClientShell>

@@ -1,7 +1,7 @@
 ﻿"use client";
 
-import { useEffect, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -10,22 +10,6 @@ import { useCms } from "@/src/cms";
 import { GlobalStyle, Noise } from "@/src/ui";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-
-const routeLabels: Record<string, string> = {
-  "/": "Home",
-  "/akcii-i-skidki": "Акции",
-  "/blog": "Блог",
-  "/kontakty": "Контакты",
-  "/karera": "Карьера",
-  "/novosti": "Новости",
-  "/o-nas": "О нас",
-  "/otzyvy-o-nas": "Отзывы",
-  "/partneram": "Партнерам",
-  "/politika-konfidencialnosti": "Политика",
-  "/portfolio": "Портфолио",
-  "/services": "Услуги",
-  "/user/agreement": "Соглашение",
-};
 
 const floatingMessengers = [
   {
@@ -41,20 +25,6 @@ const floatingMessengers = [
     icon: "telegram",
   },
 ];
-
-function getRouteLabel(path: string) {
-  if (routeLabels[path]) return routeLabels[path];
-  if (path.startsWith("/novosti/")) return "Новости";
-
-  const slug = path.split("/").filter(Boolean).at(-1);
-  if (!slug) return "Home";
-
-  return slug
-    .split("-")
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-}
 
 function MessengerIcon({ icon }: { icon: string }) {
   if (icon === "vk") {
@@ -92,37 +62,9 @@ function MessengerIcon({ icon }: { icon: string }) {
 
 export default function ClientShell({ children }: { children: React.ReactNode }) {
   const mainRef = useRef<HTMLDivElement | null>(null);
-  const previousPathRef = useRef<string | null>(null);
-  const [backLabel, setBackLabel] = useState("Home");
   const { animationControls, messengerLinks } = useCms();
   const { t } = useTranslation();
   const pathname = usePathname();
-  const router = useRouter();
-  const showBackHome = pathname !== "/";
-
-  const goBackHome = () => {
-    if (window.history.length > 1) {
-      router.back();
-      return;
-    }
-
-    router.push("/");
-  };
-
-  useEffect(() => {
-    const storedPreviousPath = window.sessionStorage.getItem("previousPath");
-    if (storedPreviousPath && storedPreviousPath !== pathname) {
-      setBackLabel(getRouteLabel(storedPreviousPath));
-    }
-
-    const previousPath = previousPathRef.current;
-    if (previousPath && previousPath !== pathname) {
-      window.sessionStorage.setItem("previousPath", previousPath);
-      setBackLabel(getRouteLabel(previousPath));
-    }
-
-    previousPathRef.current = pathname;
-  }, [pathname]);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -421,16 +363,6 @@ export default function ClientShell({ children }: { children: React.ReactNode })
         <div className="motion-cursor-core h-full w-full rounded-full border border-[rgba(214,154,102,0.5)] bg-[rgba(214,154,102,0.1)]" />
       </div>
       <Noise />
-      {showBackHome && (
-        <button
-          type="button"
-          onClick={goBackHome}
-          className="fixed bottom-5 left-5 z-[46] flex h-10 items-center gap-3 rounded-full border border-white/10 bg-[#171717]/72 px-5 text-sm font-medium text-white/86 backdrop-blur-md transition duration-300 hover:border-white/20 hover:bg-[#202020]/82 hover:text-white md:bottom-8 md:left-8"
-        >
-          <span className="text-lg leading-none text-white/76">‹</span>
-          <span>{backLabel}</span>
-        </button>
-      )}
       {children}
       <div className="fixed bottom-5 right-5 z-[70] flex flex-col gap-2 md:bottom-8 md:right-8">
         {floatingMessengers.map((messenger) => {

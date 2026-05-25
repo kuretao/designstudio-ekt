@@ -305,7 +305,7 @@ function VacancyCard({ vacancy, onApply }: { vacancy: Vacancy; onApply: (vacancy
 
 export default function CareerPage() {
   const [activeVacancy, setActiveVacancy] = useState<Vacancy | null>(null);
-  const departments = useMemo(() => Array.from(new Set(vacancies.map((vacancy) => vacancy.department))), []);
+  const departments = useMemo(() => ["Интерьеры", "3D-визуализация", "Комплектация", "Архитектура", "Ландшафт"], []);
 
   return (
     <>

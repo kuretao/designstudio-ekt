@@ -1,30 +1,245 @@
-﻿"use client";
+"use client";
 
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { servicePageItems as fallbackServicePageItems } from "@/src/data";
 import { useCms } from "@/src/cms";
 import { GlassPanel } from "@/src/ui";
 import BrandStrip from "@/src/components/common/BrandStrip";
 import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
+import ProjectQuiz from "@/src/components/common/ProjectQuiz";
+import SectionLabel from "@/src/components/common/SectionLabel";
 import { ContactSection } from "@/src/modules/pages/ContactPage";
-import { Workflow } from "@/src/modules/pages/ServicesPage";
+import type { Project, ProjectCategory } from "@/src/types";
 
 type ServicePageItem = (typeof fallbackServicePageItems)[number];
 
+function getPortfolioCategory(item: ServicePageItem): ProjectCategory {
+  const value = `${item.id} ${item.title}`.toLowerCase();
+
+  if (value.includes("landshaft") || value.includes("ландшафт") || value.includes("озелен")) return "Ландшафт";
+  if (value.includes("arhitektur") || value.includes("архитект") || value.includes("3d")) return "Архитектура";
+
+  return "Интерьеры";
+}
+
+function ServiceCompareBlock({ item, projects }: { item: ServicePageItem; projects: Project[] }) {
+  const [compare, setCompare] = useState(52);
+  const category = getPortfolioCategory(item);
+  const project = projects.find((entry) => entry.category === category) ?? projects[0];
+  const beforeImage = project?.beforeImage ?? projects[2]?.image ?? item.image;
+  const afterImage = project?.afterImage ?? item.image;
+
+  return (
+    <section className="border-t border-white/10 px-5 py-24 md:px-10 lg:px-16">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
+        <div>
+          <SectionLabel>До / После</SectionLabel>
+          <h2 className="mt-4 text-4xl font-light tracking-[-0.045em] md:text-6xl">Как идея превращается в готовое пространство</h2>
+          <p className="mt-5 text-lg leading-relaxed text-[#D6D1CA]">
+            Здесь можно поставить реальные пары изображений по услуге: исходное состояние и итоговый результат после проектирования.
+          </p>
+        </div>
+
+        <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.025]">
+          <img src={beforeImage} alt="До проектирования" className="h-[520px] w-full object-cover" />
+          <div className="absolute inset-y-0 left-0 overflow-hidden" style={{ width: `${compare}%` }}>
+            <img src={afterImage} alt="После проектирования" className="h-[520px] w-[calc(100vw-40px)] max-w-none object-cover lg:w-[760px]" />
+          </div>
+          <div className="absolute left-5 top-5 rounded-full border border-white/15 bg-[#050505]/62 px-4 py-2 text-xs uppercase tracking-[0.2em] text-white/72 backdrop-blur">
+            До
+          </div>
+          <div className="absolute right-5 top-5 rounded-full border border-[#D69A66]/40 bg-[#050505]/62 px-4 py-2 text-xs uppercase tracking-[0.2em] text-[#D69A66] backdrop-blur">
+            После
+          </div>
+          <div className="absolute inset-y-0 w-px bg-[#D69A66] shadow-[0_0_28px_rgba(214,154,102,0.9)]" style={{ left: `${compare}%` }} />
+          <div
+            className="pointer-events-none absolute top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#D69A66]/80 bg-[#050505]/70 shadow-[0_0_30px_rgba(214,154,102,0.35)] backdrop-blur"
+            style={{ left: `${compare}%` }}
+          />
+          <input
+            aria-label="Сравнение до и после"
+            type="range"
+            min="0"
+            max="100"
+            value={compare}
+            onChange={(event) => setCompare(Number(event.target.value))}
+            className="absolute inset-x-8 bottom-8 accent-[#D69A66]"
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ServicePortfolioBlock({ item, projects }: { item: ServicePageItem; projects: Project[] }) {
+  const category = getPortfolioCategory(item);
+  const targetProjects = projects.filter((project) => project.category === category);
+  const visibleProjects = (targetProjects.length ? targetProjects : projects).slice(0, 9);
+
+  return (
+    <section className="border-t border-white/10 px-5 py-24 md:px-10 lg:px-16">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-10 grid gap-6 md:grid-cols-[1fr_0.75fr] md:items-end">
+          <div>
+            <SectionLabel>Тематическое портфолио</SectionLabel>
+            <h2 className="mt-4 text-4xl font-light tracking-[-0.045em] md:text-6xl">Целевые проекты по услуге</h2>
+          </div>
+          <p className="text-lg leading-relaxed text-[#D6D1CA]">
+            Карточки ведут на индивидуальные страницы проектов с уникальным URL. После наполнения CMS здесь останутся только релевантные кейсы.
+          </p>
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {visibleProjects.map((project) => (
+            <Link
+              key={project.slug}
+              href={`/portfolio/${project.slug}`}
+              className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-300 hover:-translate-y-2 hover:border-[#D69A66]/60"
+            >
+              <div className="relative h-72 overflow-hidden">
+                <img src={project.image} alt={project.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/68 via-transparent to-transparent" />
+                <div className="absolute bottom-5 left-5 right-5">
+                  <p className="mb-2 text-xs uppercase tracking-[0.24em] text-[#D69A66]">{project.category}</p>
+                  <h3 className="text-2xl font-light tracking-[-0.035em]">{project.title}</h3>
+                </div>
+              </div>
+              <p className="p-6 text-sm leading-relaxed text-[#D6D1CA]">{project.description}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ServiceDocumentsBlock({ item, projects }: { item: ServicePageItem; projects: Project[] }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [zoomImage, setZoomImage] = useState<string | null>(null);
+  const docs = item.deliverables.map((title, index) => ({
+    title,
+    image: projects[(index + 2) % projects.length]?.image ?? item.image,
+  }));
+  const activeDoc = docs[activeIndex] ?? docs[0];
+
+  return (
+    <section className="border-t border-white/10 px-5 py-24 md:px-10 lg:px-16">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-10 grid gap-6 md:grid-cols-[1fr_0.75fr] md:items-end">
+          <div>
+            <SectionLabel>Документация</SectionLabel>
+            <h2 className="mt-4 text-4xl font-light tracking-[-0.045em] md:text-6xl">Что входит в состав рабочей документации</h2>
+          </div>
+          <p className="text-lg leading-relaxed text-[#D6D1CA]">
+            Блок готов под реальные чертежи, ведомости, дендропланы и схемы инженерии. Изображение можно открыть крупно.
+          </p>
+        </div>
+
+        <div className="grid gap-5 lg:grid-cols-[0.42fr_0.58fr]">
+          <div className="grid gap-3">
+            {docs.map((doc, index) => (
+              <button
+                key={`${doc.title}-${index}`}
+                type="button"
+                onClick={() => setActiveIndex(index)}
+                className={`flex items-center justify-between gap-4 rounded-2xl border px-5 py-4 text-left transition ${
+                  index === activeIndex
+                    ? "border-[#D69A66]/60 bg-[#D69A66]/10 text-white"
+                    : "border-white/10 bg-white/[0.035] text-white/55 hover:border-white/22 hover:text-white"
+                }`}
+              >
+                <span>{doc.title}</span>
+                <span className="text-[#D69A66]">0{index + 1}</span>
+              </button>
+            ))}
+          </div>
+
+          {activeDoc && (
+            <button
+              type="button"
+              onClick={() => setZoomImage(activeDoc.image)}
+              className="group relative min-h-[520px] overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] text-left"
+            >
+              <img src={activeDoc.image} alt={activeDoc.title} className="absolute inset-0 h-full w-full object-cover opacity-62 grayscale transition duration-700 group-hover:scale-[1.03] group-hover:opacity-78" />
+              <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(5,5,5,.88),rgba(5,5,5,.42)),linear-gradient(rgba(245,242,236,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(245,242,236,.08)_1px,transparent_1px)] bg-[length:auto,42px_42px,42px_42px]" />
+              <div className="absolute inset-6 flex flex-col justify-between rounded-[1.5rem] border border-white/16 p-6">
+                <span className="text-xs uppercase tracking-[0.28em] text-[#D69A66]">Лист 0{activeIndex + 1}</span>
+                <div>
+                  <h3 className="max-w-xl text-4xl font-light tracking-[-0.045em]">{activeDoc.title}</h3>
+                  <p className="mt-4 text-sm uppercase tracking-[0.22em] text-white/48">Нажмите, чтобы увеличить</p>
+                </div>
+              </div>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {zoomImage && (
+        <div
+          className="fixed inset-0 z-[140] flex items-center justify-center bg-[#050505]/88 p-4 backdrop-blur-xl md:p-8"
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setZoomImage(null)}
+        >
+          <button
+            type="button"
+            aria-label="Закрыть просмотр"
+            onClick={() => setZoomImage(null)}
+            className="absolute right-5 top-5 z-10 grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/10 text-2xl leading-none text-white transition hover:border-[#D69A66]/60 hover:text-[#D69A66]"
+          >
+            ×
+          </button>
+          <img src={zoomImage} alt="Увеличенный лист документации" className="max-h-[88vh] w-full max-w-6xl rounded-[1.5rem] object-contain shadow-[0_40px_140px_rgba(0,0,0,0.55)]" />
+        </div>
+      )}
+    </section>
+  );
+}
+
+function ExpertFooter() {
+  const { reviewStats } = useCms();
+
+  return (
+    <section className="border-t border-white/10 px-5 py-24 md:px-10 lg:px-16">
+      <div className="mx-auto max-w-7xl">
+        <GlassPanel className="overflow-hidden rounded-[2rem] p-7 md:p-10">
+          <div className="grid gap-8 lg:grid-cols-[0.72fr_1fr] lg:items-end">
+            <div>
+              <SectionLabel>Экспертность</SectionLabel>
+              <h2 className="mt-4 text-4xl font-light tracking-[-0.045em] md:text-6xl">Остались вопросы по проекту? Давайте обсудим</h2>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {reviewStats.slice(0, 3).map((stat) => (
+                <div key={stat.value} className="rounded-2xl border border-white/10 bg-white/[0.035] p-5">
+                  <strong className="block text-3xl font-light text-[#D69A66]">{stat.value}</strong>
+                  <span className="mt-3 block text-sm leading-relaxed text-[#D6D1CA]">{stat.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </GlassPanel>
+      </div>
+    </section>
+  );
+}
+
 function ServiceDetailPage({ item }: { item: ServicePageItem }) {
-  const { servicePageItems } = useCms();
+  const { servicePageItems, projects } = useCms();
   const currentItem = servicePageItems.find((service) => service.id === item.id) ?? item;
+  const heroSlides = useMemo(
+    () => [
+      { image: currentItem.image, alt: currentItem.title },
+      { image: projects[1]?.image, alt: projects[1]?.title },
+      { image: projects[2]?.image, alt: projects[2]?.title },
+    ],
+    [currentItem.image, currentItem.title, projects],
+  );
 
   return (
     <div className="page-in">
       <section className="relative min-h-screen overflow-hidden px-5 pb-20 pt-28 md:px-10 lg:px-16">
-        <HeroBackdropSlider
-          slides={[
-            { image: currentItem.image, alt: currentItem.title },
-            { image: servicePageItems[1]?.image, alt: servicePageItems[1]?.title },
-            { image: servicePageItems[2]?.image, alt: servicePageItems[2]?.title },
-          ]}
-        />
+        <HeroBackdropSlider slides={heroSlides} />
         <div className="absolute inset-0 bg-[#050505]/45" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.98),rgba(5,5,5,.70),rgba(5,5,5,.28)),radial-gradient(circle_at_72%_18%,rgba(214,154,102,.22),transparent_34%)]" />
 
@@ -40,10 +255,10 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
             />
             <div className="mt-10 flex flex-wrap gap-3">
               <Link
-                href="/kontakty"
+                href="#project-quiz"
                 className="rounded-full bg-[#D69A66] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition hover:bg-[#F5F2EC]"
               >
-                Обсудить проект
+                Рассчитать стоимость проекта
               </Link>
               <Link
                 href="/services"
@@ -78,6 +293,9 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
       </section>
 
       <BrandStrip />
+      <ServiceCompareBlock item={currentItem} projects={projects} />
+      <ServicePortfolioBlock item={currentItem} projects={projects} />
+      <ServiceDocumentsBlock item={currentItem} projects={projects} />
 
       <section className="border-t border-white/10 px-5 py-24 md:px-10 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.8fr_1.2fr]">
@@ -115,7 +333,8 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
         </div>
       </section>
 
-      <Workflow />
+      <ProjectQuiz />
+      <ExpertFooter />
       <ContactSection />
     </div>
   );

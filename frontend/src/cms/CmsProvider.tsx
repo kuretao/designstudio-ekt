@@ -11,7 +11,7 @@ import {
   projects,
   promos,
   reviewStats,
-  servicePageItems,
+  servicePageItems as fallbackServicePageItems,
   services,
   testimonials,
 } from "@/src/data";
@@ -45,7 +45,7 @@ type CmsData = {
   siteSettings: SiteSettings;
   homeHero: HomeHero;
   projects: typeof projects;
-  servicePageItems: typeof servicePageItems;
+  servicePageItems: typeof fallbackServicePageItems;
   services: typeof services;
   newsArticles: typeof newsArticles;
   promos: typeof promos;
@@ -81,7 +81,7 @@ const fallbackData: CmsData = {
     linkHref: "/kontakty",
   },
   projects,
-  servicePageItems,
+  servicePageItems: fallbackServicePageItems,
   services,
   newsArticles,
   promos,
@@ -163,9 +163,41 @@ function normalizeBlock(block: any) {
   };
 }
 
+function mergeServiceItems(payloadServices: any[]) {
+  const byId = new Map(
+    payloadServices
+      .map((service: any) => ({ ...service, id: service.id ?? service.slug }))
+      .filter((service: any) => service.id)
+      .map((service: any) => [service.id, service]),
+  );
+
+  const merged = fallbackServicePageItems.map((fallback) => {
+    const service = byId.get(fallback.id);
+
+    if (!service) return fallback;
+
+    byId.delete(fallback.id);
+
+    return {
+      ...fallback,
+      ...service,
+      deliverables: Array.isArray(service.deliverables) && service.deliverables.length ? service.deliverables : fallback.deliverables,
+      benefits: Array.isArray(service.benefits) && service.benefits.length ? service.benefits : fallback.benefits,
+      process: Array.isArray(service.process) && service.process.length ? service.process : fallback.process,
+      image: service.image || fallback.image,
+      price: service.price || fallback.price,
+      timeline: service.timeline || fallback.timeline,
+      eyebrow: service.eyebrow || fallback.eyebrow,
+      text: service.text || fallback.text,
+    };
+  });
+
+  return [...merged, ...Array.from(byId.values())];
+}
+
 function normalizePayload(payload: any): CmsData {
   const settings = payload?.settings ?? {};
-  const apiServices = Array.isArray(payload?.services) && payload.services.length ? payload.services : servicePageItems;
+  const apiServices = Array.isArray(payload?.services) && payload.services.length ? mergeServiceItems(payload.services) : fallbackServicePageItems;
   const apiProjects = (Array.isArray(payload?.projects) && payload.projects.length ? payload.projects : projects).map((project: any) => ({
     ...project,
     slug: makeProjectSlug(project),

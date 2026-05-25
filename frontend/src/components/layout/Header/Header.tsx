@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { serviceNavigationGroups } from "@/src/data";
 import { useCms } from "@/src/cms";
 import ContactModal from "@/src/modals/ContactModal";
 
@@ -78,9 +79,27 @@ export default function Header() {
     setMenuOpen(false);
   };
 
+  const serviceHrefs = new Set([
+    "/services",
+    ...serviceNavigationGroups.flatMap((group) => [group.href, ...group.items.map((item) => item.href)]),
+  ]);
+  const menuByHref = new Map(menuItems.filter((item) => !serviceHrefs.has(item.href)).map((item) => [item.href, item]));
+  const featuredMenuLinks = ["/o-nas", "/portfolio", "/kontakty"]
+    .map((href) => menuByHref.get(href) ?? (href === "/o-nas" ? { href, label: "О нас" } : href === "/portfolio" ? { href, label: "Портфолио" } : { href, label: "Контакты" }));
+  const featuredHrefs = new Set(featuredMenuLinks.map((item) => item.href));
+  const secondaryMenuLinks = menuItems.filter((item) => !serviceHrefs.has(item.href) && !featuredHrefs.has(item.href));
+  const primaryMenuLinks = [
+    featuredMenuLinks[0],
+    featuredMenuLinks[1],
+    { href: "/services", label: "Услуги" },
+    featuredMenuLinks[2],
+    ...secondaryMenuLinks,
+  ];
+  const isServicesActive = currentPath === "/services" || Array.from(serviceHrefs).some((href) => currentPath === href);
+
   const menuLinkCls = (path: string) =>
     `block text-right text-[13px] font-semibold uppercase tracking-[0.17em] transition-[opacity,transform] duration-[820ms] ease-[cubic-bezier(.19,1,.22,1)] hover:text-[#D69A66] md:text-[17px] ${
-      currentPath === path ? "text-white/78" : "text-white/40"
+      currentPath === path || (path === "/services" && isServicesActive) ? "text-white/78" : "text-white/40"
     }`;
 
   return (
@@ -129,7 +148,7 @@ export default function Header() {
 
       <section
         id="rolls-menu"
-        className={`fixed left-0 top-0 z-[70] h-screen w-full max-w-[650px] overflow-hidden bg-[#050505]/18 text-white shadow-[38px_0_120px_rgba(0,0,0,0.18)] backdrop-blur-[18px] transition-transform duration-[760ms] ease-[cubic-bezier(.77,0,.18,1)] ${
+        className={`fixed left-0 top-0 z-[70] h-screen w-full max-w-[720px] overflow-hidden bg-[#050505]/18 text-white shadow-[38px_0_120px_rgba(0,0,0,0.18)] backdrop-blur-[18px] transition-transform duration-[760ms] ease-[cubic-bezier(.77,0,.18,1)] ${
           menuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -142,24 +161,70 @@ export default function Header() {
           {t("header.close")}
         </button>
 
-        <div className="flex h-screen flex-col items-end justify-center px-8 pb-24 pt-28 md:pr-[145px]">
-          <nav aria-label="Основное меню" className="flex w-full max-w-[380px] flex-col items-end gap-[24px] md:gap-[31px]">
-            {menuItems.map((item, index) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={closeMenu}
-                className={menuLinkCls(item.href)}
-                style={{
-                  opacity: menuOpen ? 1 : 0,
-                  transform: menuOpen ? "translate3d(0, 0, 0)" : "translate3d(-96px, 0, 0)",
-                  transitionDelay: menuOpen ? `${560 + index * 85}ms` : "0ms",
-                  transitionProperty: "opacity, transform",
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
+        <div className="flex h-screen flex-col items-end overflow-y-auto px-8 pb-24 pt-28 md:pr-[92px] lg:pr-[118px]" data-native-scroll>
+          <nav aria-label="Основное меню" className="flex w-full max-w-[520px] flex-col items-end gap-[20px] md:gap-[25px]">
+            {primaryMenuLinks.map((item, index) =>
+              item.href === "/services" ? (
+                <div
+                  key="services-menu"
+                  className="w-full text-right transition-[opacity,transform] duration-[820ms] ease-[cubic-bezier(.19,1,.22,1)]"
+                  style={{
+                    opacity: menuOpen ? 1 : 0,
+                    transform: menuOpen ? "translate3d(0, 0, 0)" : "translate3d(-96px, 0, 0)",
+                    transitionDelay: menuOpen ? `${560 + index * 85}ms` : "0ms",
+                    transitionProperty: "opacity, transform",
+                  }}
+                >
+                  <Link href="/services" onClick={closeMenu} className={menuLinkCls("/services")}>
+                    Услуги
+                  </Link>
+                  <div className="mt-5 grid gap-3 border-r border-white/12 pr-4">
+                    {serviceNavigationGroups.map((group) => (
+                      <div key={group.id} className="grid gap-2">
+                        <Link
+                          href={group.href}
+                          onClick={closeMenu}
+                          className={`text-[12px] font-semibold uppercase tracking-[0.18em] transition hover:text-[#D69A66] ${
+                            currentPath === group.href ? "text-white/82" : "text-white/58"
+                          }`}
+                        >
+                          {group.title}
+                        </Link>
+                        <div className="grid gap-1.5">
+                          {group.items.map((child) => (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              onClick={closeMenu}
+                              className={`text-[12px] leading-snug transition hover:text-[#D69A66] ${
+                                currentPath === child.href ? "text-white/72" : "text-white/36"
+                              }`}
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={closeMenu}
+                  className={menuLinkCls(item.href)}
+                  style={{
+                    opacity: menuOpen ? 1 : 0,
+                    transform: menuOpen ? "translate3d(0, 0, 0)" : "translate3d(-96px, 0, 0)",
+                    transitionDelay: menuOpen ? `${560 + index * 85}ms` : "0ms",
+                    transitionProperty: "opacity, transform",
+                  }}
+                >
+                  {item.label}
+                </Link>
+              ),
+            )}
           </nav>
 
           <div

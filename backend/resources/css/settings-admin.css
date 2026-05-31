@@ -218,3 +218,218 @@
         font-size: 20px;
     }
 }
+
+/* Social links form */
+.social-overview {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.1fr);
+    gap: 20px;
+    padding: 28px;
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    border-radius: 14px;
+    background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(20, 184, 166, 0.1)),
+        #ffffff;
+    color: var(--ms-cm-base-text, #0f172a);
+}
+
+.social-overview__copy {
+    min-width: 0;
+}
+
+.social-overview__eyebrow {
+    margin-bottom: 8px;
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.social-overview h1 {
+    margin: 0 0 10px;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+}
+
+.social-overview p {
+    margin: 0;
+    color: rgba(15, 23, 42, 0.72);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.social-overview__saved {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    margin-top: 16px;
+    padding: 5px 11px;
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.76);
+    color: #1d4ed8;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.social-overview__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.social-status {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 10px;
+    min-width: 0;
+    padding: 13px;
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.84);
+}
+
+.social-status__icon,
+.social-channel-note__icon {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    place-items: center;
+    border-radius: 9px;
+    color: #ffffff;
+}
+
+.social-status__icon {
+    background: #64748b;
+}
+
+.social-status.is-active .social-status__icon {
+    background: #0f766e;
+}
+
+.social-status.is-empty .social-status__icon {
+    background: #94a3b8;
+}
+
+.social-status svg,
+.social-channel-note svg {
+    width: 21px;
+    height: 21px;
+}
+
+.social-status strong,
+.social-channel-note strong {
+    display: block;
+    color: #0f172a;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.social-status span {
+    display: block;
+    margin-top: 2px;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.social-status.is-active span {
+    color: #0f766e;
+}
+
+.social-status p {
+    grid-column: 1 / -1;
+    min-width: 0;
+    color: rgba(15, 23, 42, 0.62);
+    font-size: 12px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.social-form-section {
+    border: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+.social-channel-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    min-height: 76px;
+    margin-bottom: 12px;
+    padding: 14px;
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(20, 184, 166, 0.06));
+}
+
+.social-channel-note__icon {
+    background: #2563eb;
+}
+
+.social-channel-note span {
+    display: block;
+    margin-top: 4px;
+    color: rgba(15, 23, 42, 0.66);
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.dark .social-overview {
+    border-color: rgba(96, 165, 250, 0.24);
+    background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.22), rgba(20, 184, 166, 0.12)),
+        rgba(15, 23, 42, 0.54);
+}
+
+.dark .social-overview__eyebrow,
+.dark .social-overview__saved {
+    color: #93c5fd;
+}
+
+.dark .social-overview p,
+.dark .social-status p,
+.dark .social-channel-note span {
+    color: rgba(226, 232, 240, 0.72);
+}
+
+.dark .social-overview__saved,
+.dark .social-status {
+    border-color: rgba(148, 163, 184, 0.22);
+    background: rgba(15, 23, 42, 0.56);
+}
+
+.dark .social-status strong,
+.dark .social-channel-note strong {
+    color: #f8fafc;
+}
+
+.dark .social-channel-note {
+    border-color: rgba(96, 165, 250, 0.2);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.18), rgba(20, 184, 166, 0.1));
+}
+
+@media (max-width: 1100px) {
+    .social-overview {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .social-overview {
+        padding: 20px;
+    }
+
+    .social-overview__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .social-overview h1 {
+        font-size: 21px;
+    }
+}

@@ -70,9 +70,78 @@ class DatabaseSeeder extends Seeder
             ['/karera', 'Карьера'],
             ['/partneram', 'Партнерам'],
         ])->each(fn (array $item, int $index) => MenuItem::query()->updateOrCreate(
-            ['href' => $item[0]],
-            ['label' => $item[1], 'position' => $index + 1, 'is_active' => true],
+            ['menu_area' => MenuItem::AREA_MAIN, 'href' => $item[0]],
+            ['label' => $item[1], 'parent_id' => null, 'position' => $index + 1, 'is_active' => true],
         ));
+
+        collect([
+            [
+                'label' => 'Архитектурное проектирование',
+                'href' => '/arhitekturnoe-proektirovanie',
+                'description' => 'Концепция, фасады, объемы здания и рабочая документация для строителей.',
+                'items' => [
+                    ['label' => 'Эскизный проект', 'href' => '/eskiznyj-proekt'],
+                    ['label' => 'Рабочая документация', 'href' => '/rabochaya-dokumentaciya'],
+                ],
+            ],
+            [
+                'label' => 'Дизайн интерьера',
+                'href' => '/dizajn-interyera',
+                'description' => 'Жилые и коммерческие интерьеры, комплектация и авторский надзор.',
+                'items' => [
+                    ['label' => 'Дизайн интерьера частных пространств', 'href' => '/dizajn-interyera-chastnyh-prostranstv'],
+                    ['label' => 'Дизайн интерьера коммерческого пространства', 'href' => '/dizajn-interera-kommercheskogo-prostranstva'],
+                    ['label' => 'Комплектация объекта', 'href' => '/komplektaciya-ob-ekta'],
+                    ['label' => 'Авторский надзор', 'href' => '/avtorskij-nadzor'],
+                ],
+            ],
+            [
+                'label' => '3D-визуализация',
+                'href' => '/3d-vizualizaciya',
+                'description' => 'Рендеры, архитектурная и интерьерная визуализация, интерактивные 360°-туры.',
+                'items' => [
+                    ['label' => 'Архитектурная 3D-визуализация ЖК и девелопмента', 'href' => '/arhitekturnaya-3d-vizualizaciya'],
+                    ['label' => 'Архитектурная 3D-визуализация коттеджей', 'href' => '/arhitekturnaya-3d-vizualizaciya-kottedzhej'],
+                    ['label' => 'Интерьерная 3D-визуализация', 'href' => '/interernaya-3d-vizualizaciya'],
+                    ['label' => 'Виртуальные 3D-туры 360°', 'href' => '/virtualnyj-3d-tur-360'],
+                ],
+            ],
+            [
+                'label' => 'Ландшафтный дизайн',
+                'href' => '/landshaftnyj-dizajn',
+                'description' => 'Генплан, инженерные решения, озеленение и авторский надзор реализации.',
+                'items' => [
+                    ['label' => 'Ландшафтное проектирование и генплан', 'href' => '/landshaftnoe-proektirovanie-i-genplan'],
+                    ['label' => 'Проектирование инженерных систем', 'href' => '/proektirovanie-inzhenernyh-sistem'],
+                    ['label' => 'Озеленение и дендроплан', 'href' => '/ozelenenie-i-dendroplan'],
+                    ['label' => 'Авторский надзор и реализация', 'href' => '/avtorskij-nadzor-i-realizaciya'],
+                ],
+            ],
+        ])->each(function (array $group, int $index): void {
+            $groupItem = MenuItem::query()->updateOrCreate(
+                ['menu_area' => MenuItem::AREA_SERVICES, 'href' => $group['href']],
+                [
+                    'label' => $group['label'],
+                    'parent_id' => null,
+                    'description' => $group['description'],
+                    'position' => ($index + 1) * 10,
+                    'is_active' => true,
+                ],
+            );
+
+            collect($group['items'])->each(static function (array $item, int $childIndex) use ($groupItem): void {
+                MenuItem::query()->updateOrCreate(
+                    ['menu_area' => MenuItem::AREA_SERVICES, 'href' => $item['href']],
+                    [
+                        'label' => $item['label'],
+                        'parent_id' => $groupItem->id,
+                        'description' => null,
+                        'position' => $childIndex + 1,
+                        'is_active' => true,
+                    ],
+                );
+            });
+        });
 
         $projects = collect([
             ['kp-pavlovy-ozera', 'КП "Павловы Озера"', 'Интерьеры', 'Москва', '2026', 'Авторский интерьер загородного дома: мягкая неоклассика, продуманная кухня-гостиная, приватные спальни и спокойная палитра натуральных материалов.', 'https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=2200&q=90'],

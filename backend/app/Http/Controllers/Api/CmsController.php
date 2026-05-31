@@ -27,6 +27,7 @@ class CmsController extends Controller
         return response()->json([
             'settings' => $this->settings($settings),
             'menuItems' => $this->menuItems(),
+            'serviceNavigationGroups' => $this->serviceNavigationGroups(),
         ]);
     }
 
@@ -35,6 +36,7 @@ class CmsController extends Controller
         return response()->json([
             'settings' => $this->settings(SiteSetting::query()->first()),
             'menuItems' => $this->menuItems(),
+            'serviceNavigationGroups' => $this->serviceNavigationGroups(),
             'pages' => Page::query()->where('is_published', true)->with(['blocks' => fn ($query) => $query->where('is_active', true)])->get()->map(fn (Page $page) => $this->pagePayload($page))->values(),
             'projects' => Project::query()->where('is_published', true)->orderBy('position')->get()->map(fn (Project $project) => $this->projectPayload($project))->values(),
             'services' => Service::query()->where('is_published', true)->orderBy('position')->get()->map(fn (Service $service) => $this->servicePayload($service))->values(),
@@ -157,6 +159,8 @@ class CmsController extends Controller
     private function menuItems(): array
     {
         return MenuItem::query()
+            ->where('menu_area', MenuItem::AREA_MAIN)
+            ->whereNull('parent_id')
             ->where('is_active', true)
             ->orderBy('position')
             ->get()
@@ -165,6 +169,55 @@ class CmsController extends Controller
                 'href' => $item->siteHref(),
             ])
             ->filter(static fn (array $item): bool => filled($item['href']))
+            ->values()
+            ->all();
+    }
+
+    private function serviceNavigationGroups(): array
+    {
+        return MenuItem::query()
+            ->with(['children' => fn ($query) => $query
+                ->where('menu_area', MenuItem::AREA_SERVICES)
+                ->where('is_active', true)
+                ->orderBy('position')])
+            ->where('menu_area', MenuItem::AREA_SERVICES)
+            ->whereNull('parent_id')
+            ->where('is_active', true)
+            ->orderBy('position')
+            ->get()
+            ->map(function (MenuItem $group): ?array {
+                $href = $group->siteHref();
+
+                if ($href === null) {
+                    return null;
+                }
+
+                $items = $group->children
+                    ->map(static function (MenuItem $item): ?array {
+                        $href = $item->siteHref();
+
+                        if ($href === null) {
+                            return null;
+                        }
+
+                        return [
+                            'label' => $item->label,
+                            'href' => $href,
+                        ];
+                    })
+                    ->filter()
+                    ->values()
+                    ->all();
+
+                return [
+                    'id' => 'service-nav-' . $group->id,
+                    'title' => $group->label,
+                    'href' => $href,
+                    'description' => $group->description ?? '',
+                    'items' => $items,
+                ];
+            })
+            ->filter()
             ->values()
             ->all();
     }
@@ -222,7 +275,7 @@ class CmsController extends Controller
             'title' => $service->title,
             'eyebrow' => $service->eyebrow,
             'text' => $service->text,
-            'image' => $service->image,
+            'image' => $service->effective_image,
             'price' => $service->price,
             'timeline' => $service->timeline,
             'deliverables' => $this->lines($service->deliverables),
@@ -240,7 +293,7 @@ class CmsController extends Controller
             'dateIso' => $article->date_iso?->toDateString(),
             'category' => $article->category,
             'preview' => $article->preview,
-            'image' => $article->image,
+            'image' => $article->effective_image,
             'readingTime' => $article->reading_time,
             'body' => collect(preg_split('/\R{2,}/', (string) $article->body) ?: [])
                 ->filter()

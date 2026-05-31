@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Service extends Model
 {
@@ -13,5 +14,14 @@ class Service extends Model
         return [
             'is_published' => 'boolean',
         ];
+    }
+
+    public function getEffectiveImageAttribute(): ?string
+    {
+        if (! empty($this->image_file)) {
+            return Storage::disk('public')->url($this->image_file);
+        }
+
+        return $this->image ?: null;
     }
 }

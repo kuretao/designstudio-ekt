@@ -11,6 +11,7 @@ import {
   projects,
   promos,
   reviewStats,
+  serviceNavigationGroups as fallbackServiceNavigationGroups,
   servicePageItems as fallbackServicePageItems,
   services,
   testimonials,
@@ -46,6 +47,7 @@ type CmsData = {
   homeHero: HomeHero;
   projects: typeof projects;
   servicePageItems: typeof fallbackServicePageItems;
+  serviceNavigationGroups: typeof fallbackServiceNavigationGroups;
   services: typeof services;
   newsArticles: typeof newsArticles;
   promos: typeof promos;
@@ -82,6 +84,7 @@ const fallbackData: CmsData = {
   },
   projects,
   servicePageItems: fallbackServicePageItems,
+  serviceNavigationGroups: fallbackServiceNavigationGroups,
   services,
   newsArticles,
   promos,
@@ -195,6 +198,38 @@ function mergeServiceItems(payloadServices: any[]) {
   return [...merged, ...Array.from(byId.values())];
 }
 
+function normalizeServiceNavigationGroups(payloadGroups: any[]) {
+  const groups = payloadGroups
+    .map((group: any, index: number) => {
+      const href = typeof group?.href === "string" ? group.href : "";
+      const title = typeof group?.title === "string" ? group.title : "";
+
+      if (!href || !title) {
+        return null;
+      }
+
+      const items = Array.isArray(group?.items)
+        ? group.items
+            .map((item: any) => ({
+              label: typeof item?.label === "string" ? item.label : "",
+              href: typeof item?.href === "string" ? item.href : "",
+            }))
+            .filter((item: any) => item.label && item.href)
+        : [];
+
+      return {
+        id: String(group.id ?? href ?? `service-group-${index}`),
+        title,
+        href,
+        description: typeof group?.description === "string" ? group.description : "",
+        items,
+      };
+    })
+    .filter((group): group is typeof fallbackServiceNavigationGroups[number] => Boolean(group));
+
+  return groups;
+}
+
 function normalizePayload(payload: any): CmsData {
   const settings = payload?.settings ?? {};
   const apiServices = Array.isArray(payload?.services) && payload.services.length ? mergeServiceItems(payload.services) : fallbackServicePageItems;
@@ -249,6 +284,9 @@ function normalizePayload(payload: any): CmsData {
       : fallbackData.homeHero,
     projects: apiProjects,
     servicePageItems: apiServices,
+    serviceNavigationGroups: Array.isArray(payload?.serviceNavigationGroups)
+      ? normalizeServiceNavigationGroups(payload.serviceNavigationGroups)
+      : fallbackServiceNavigationGroups,
     services: apiServices.map((item: any) => ({
       title: item.title,
       price: item.price,

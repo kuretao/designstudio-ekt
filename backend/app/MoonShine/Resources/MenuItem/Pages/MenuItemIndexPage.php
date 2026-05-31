@@ -56,26 +56,36 @@ class MenuItemIndexPage extends IndexPage
     {
         $total = MenuItem::query()->count();
         $active = MenuItem::query()->where('is_active', true)->count();
-        $pageLinks = MenuItem::query()->whereNotNull('page_id')->count();
-        $customLinks = MenuItem::query()->whereNull('page_id')->count();
+        $mainLinks = MenuItem::query()
+            ->where('menu_area', MenuItem::AREA_MAIN)
+            ->whereNull('parent_id')
+            ->count();
+        $serviceGroups = MenuItem::query()
+            ->where('menu_area', MenuItem::AREA_SERVICES)
+            ->whereNull('parent_id')
+            ->count();
+        $serviceChildren = MenuItem::query()
+            ->where('menu_area', MenuItem::AREA_SERVICES)
+            ->whereNotNull('parent_id')
+            ->count();
 
         return <<<HTML
         <section class="menu-overview">
             <div class="menu-overview__intro">
                 <div class="menu-overview__eyebrow">Меню сайта</div>
                 <h1>Пункты навигации</h1>
-                <p>Для обычной страницы достаточно создать пункт и выбрать ее из списка. Адрес страницы подставится сам, поэтому slug и ссылку вручную трогать не нужно.</p>
+                <p>Здесь редактируются обычные ссылки сайта и вложенная структура услуг. Для верхнего раздела услуг оставьте родителя пустым, для подпункта выберите нужный раздел.</p>
             </div>
             <div class="menu-overview__stats">
                 {$this->statCard('bars-3', $total, 'Всего пунктов')}
                 {$this->statCard('check-circle', $active, 'Показываются')}
-                {$this->statCard('document-text', $pageLinks, 'Привязаны к страницам')}
-                {$this->statCard('link', $customLinks, 'Свои ссылки')}
+                {$this->statCard('globe-alt', $mainLinks, 'Главное меню')}
+                {$this->statCard('squares-2x2', $serviceGroups, 'Разделы услуг')}
             </div>
             <div class="menu-overview__steps">
-                {$this->guideCard('document-plus', '1. Добавить', 'Создайте пункт меню и дайте ему понятное название.')}
-                {$this->guideCard('document-text', '2. Выбрать страницу', 'Выберите страницу, которую посетитель должен открыть.')}
-                {$this->guideCard('arrows-up-down', '3. Расставить', 'Порядок меняется числом: 1 идет раньше 2 и 3.')}
+                {$this->guideCard('document-plus', '1. Добавить', 'Создайте пункт и выберите, где он будет показываться.')}
+                {$this->guideCard('squares-2x2', '2. Собрать услуги', 'Группы услуг оставляйте без родителя, подпункты привязывайте к группе.')}
+                {$this->guideCard('arrows-up-down', '3. Расставить', 'Порядок меняется числом внутри своего уровня меню. Подпунктов сейчас: ' . $serviceChildren)}
             </div>
         </section>
         HTML;

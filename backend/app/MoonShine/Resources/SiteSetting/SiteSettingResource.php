@@ -9,6 +9,7 @@ use App\Models\SiteSetting;
 use App\MoonShine\Resources\SiteSetting\Pages\SiteSettingIndexPage;
 use App\MoonShine\Resources\SiteSetting\Pages\SiteSettingFormPage;
 use App\MoonShine\Resources\SiteSetting\Pages\SiteSettingDetailPage;
+use App\MoonShine\Resources\SiteSetting\Pages\SocialLinksFormPage;
 
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Contracts\Core\PageContract;
@@ -42,6 +43,7 @@ class SiteSettingResource extends ModelResource
         return [
             SiteSettingIndexPage::class,
             SiteSettingFormPage::class,
+            SocialLinksFormPage::class,
             SiteSettingDetailPage::class,
         ];
     }

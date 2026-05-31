@@ -4,9 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MenuItem extends Model
 {
+    public const AREA_MAIN = 'main';
+
+    public const AREA_SERVICES = 'services';
+
     protected $guarded = [];
 
     protected $with = ['page'];
@@ -14,6 +19,18 @@ class MenuItem extends Model
     protected static function booted(): void
     {
         static::saving(static function (MenuItem $menuItem): void {
+            if (blank($menuItem->menu_area)) {
+                $menuItem->menu_area = self::AREA_MAIN;
+            }
+
+            if ($menuItem->parent_id !== null) {
+                $parent = self::query()->find($menuItem->parent_id);
+
+                if ($parent !== null) {
+                    $menuItem->menu_area = $parent->menu_area;
+                }
+            }
+
             if ($menuItem->page_id === null) {
                 return;
             }
@@ -39,6 +56,16 @@ class MenuItem extends Model
         return [
             'is_active' => 'boolean',
         ];
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id')->orderBy('position');
     }
 
     public function page(): BelongsTo

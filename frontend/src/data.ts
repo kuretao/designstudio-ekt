@@ -318,7 +318,20 @@ export const servicePageItems = [
   },
 ];
 
-export const serviceNavigationGroups = [
+export type ServiceNavigationChild = {
+  label: string;
+  href: string;
+};
+
+export type ServiceNavigationGroup = {
+  id: string;
+  title: string;
+  href: string;
+  description: string;
+  items: ServiceNavigationChild[];
+};
+
+export const serviceNavigationGroups: ServiceNavigationGroup[] = [
   {
     id: "architecture",
     title: "Архитектурное проектирование",

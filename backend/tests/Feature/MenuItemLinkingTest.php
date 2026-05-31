@@ -58,4 +58,68 @@ class MenuItemLinkingTest extends TestCase
             ->assertOk()
             ->assertJsonPath('menuItems', []);
     }
+
+    public function test_service_navigation_groups_are_nested_separately_from_main_menu(): void
+    {
+        MenuItem::query()
+            ->where('menu_area', MenuItem::AREA_SERVICES)
+            ->whereNotNull('parent_id')
+            ->delete();
+        MenuItem::query()
+            ->where('menu_area', MenuItem::AREA_SERVICES)
+            ->whereNull('parent_id')
+            ->delete();
+
+        $groupPage = Page::query()->create([
+            'slug' => 'dizajn-interyera',
+            'title' => 'Дизайн интерьера',
+            'is_published' => true,
+        ]);
+
+        $childPage = Page::query()->create([
+            'slug' => 'komplektaciya-ob-ekta',
+            'title' => 'Комплектация объекта',
+            'is_published' => true,
+        ]);
+
+        $hiddenChildPage = Page::query()->create([
+            'slug' => 'hidden-service',
+            'title' => 'Скрытая услуга',
+            'is_published' => false,
+        ]);
+
+        $group = MenuItem::query()->create([
+            'menu_area' => MenuItem::AREA_SERVICES,
+            'page_id' => $groupPage->id,
+            'description' => 'Жилые и коммерческие интерьеры.',
+            'position' => 1,
+            'is_active' => true,
+        ]);
+
+        MenuItem::query()->create([
+            'menu_area' => MenuItem::AREA_SERVICES,
+            'parent_id' => $group->id,
+            'page_id' => $childPage->id,
+            'position' => 1,
+            'is_active' => true,
+        ]);
+
+        MenuItem::query()->create([
+            'menu_area' => MenuItem::AREA_SERVICES,
+            'parent_id' => $group->id,
+            'page_id' => $hiddenChildPage->id,
+            'position' => 2,
+            'is_active' => true,
+        ]);
+
+        $this->getJson('/api/v1/bootstrap')
+            ->assertOk()
+            ->assertJsonPath('menuItems', [])
+            ->assertJsonPath('serviceNavigationGroups.0.title', 'Дизайн интерьера')
+            ->assertJsonPath('serviceNavigationGroups.0.href', '/dizajn-interyera')
+            ->assertJsonPath('serviceNavigationGroups.0.description', 'Жилые и коммерческие интерьеры.')
+            ->assertJsonPath('serviceNavigationGroups.0.items.0.label', 'Комплектация объекта')
+            ->assertJsonPath('serviceNavigationGroups.0.items.0.href', '/komplektaciya-ob-ekta')
+            ->assertJsonCount(1, 'serviceNavigationGroups.0.items');
+    }
 }

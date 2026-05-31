@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { serviceNavigationGroups } from "@/src/data";
 import { useCms } from "@/src/cms";
 import ContactModal from "@/src/modals/ContactModal";
 
@@ -54,7 +53,7 @@ function CloseIcon() {
 
 export default function Header() {
   const currentPath = usePathname();
-  const { menuItems, siteSettings } = useCms();
+  const { menuItems, serviceNavigationGroups, siteSettings } = useCms();
   const { i18n, t } = useTranslation();
   const [modalOpen, setModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);

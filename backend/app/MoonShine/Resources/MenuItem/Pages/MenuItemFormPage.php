@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\MenuItem\Pages;
 
+use App\Models\MenuItem;
 use App\MoonShine\Resources\MenuItem\MenuItemResource;
 use App\MoonShine\Support\CmsFieldSets;
+use Illuminate\Validation\Rule;
 use MoonShine\AssetManager\InlineCss;
 use MoonShine\Contracts\AssetManager\AssetElementContract;
 use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
@@ -47,6 +49,18 @@ class MenuItemFormPage extends FormPage
             Alert::make('information-circle', 'info')
                 ->content('Основной сценарий: выберите страницу сайта. Поле "Другая ссылка" нужно только для внешних сайтов, якорей и готовых разделов, которых нет в разделе "Страницы".'),
             Tabs::make([
+                Tab::make('Где показывать', [
+                    Box::make('Место и уровень пункта', [
+                        $this->sectionNote(
+                            'Структуру услуг собирайте как дерево',
+                            'Верхний раздел оставьте без родителя. Для подпункта выберите родительский раздел услуг. Описание нужно только верхним разделам и показывается на странице "Услуги".'
+                        ),
+                        Grid::make([
+                            Column::make(array_slice(CmsFieldSets::menuItemSection('placement'), 0, 2))->columnSpan(6),
+                            Column::make(array_slice(CmsFieldSets::menuItemSection('placement'), 2))->columnSpan(6),
+                        ]),
+                    ])->icon('squares-2x2')->customAttributes(['class' => 'menu-section']),
+                ])->icon('squares-2x2')->active(),
                 Tab::make('Куда ведет', [
                     Box::make('Привязка пункта меню', [
                         $this->sectionNote(
@@ -58,7 +72,7 @@ class MenuItemFormPage extends FormPage
                             Column::make(array_slice(CmsFieldSets::menuItemSection('target'), 1))->columnSpan(5),
                         ]),
                     ])->icon('link')->customAttributes(['class' => 'menu-section']),
-                ])->icon('document-text')->active(),
+                ])->icon('document-text'),
                 Tab::make('Название и показ', [
                     Box::make('Как пункт выглядит в меню', [
                         $this->sectionNote(
@@ -77,10 +91,39 @@ class MenuItemFormPage extends FormPage
 
     protected function rules(DataWrapperContract $item): array
     {
+        $original = $item->getOriginal();
+        $currentId = $original instanceof MenuItem ? $original->id : null;
+        $notCurrent = $currentId === null ? [] : [Rule::notIn([$currentId])];
+
         return [
+            'menu_area' => ['required', 'string', Rule::in([MenuItem::AREA_MAIN, MenuItem::AREA_SERVICES])],
+            'parent_id' => [
+                'nullable',
+                'integer',
+                'exists:menu_items,id',
+                ...$notCurrent,
+                static function (string $attribute, mixed $value, \Closure $fail): void {
+                    if (blank($value)) {
+                        return;
+                    }
+
+                    if (request()->input('menu_area') !== MenuItem::AREA_SERVICES) {
+                        $fail('Подпункт можно добавить только в структуру услуг.');
+
+                        return;
+                    }
+
+                    $parent = MenuItem::query()->find($value);
+
+                    if ($parent === null || $parent->menu_area !== MenuItem::AREA_SERVICES || $parent->parent_id !== null) {
+                        $fail('Выберите верхний раздел услуг как родителя.');
+                    }
+                },
+            ],
             'label' => ['nullable', 'string', 'max:255', 'required_without:page_id'],
             'page_id' => ['nullable', 'integer', 'exists:pages,id', 'required_without:href'],
             'href' => ['nullable', 'string', 'max:2048', 'required_without:page_id', 'regex:/^(\/(?!\/)|#|https?:\/\/|mailto:|tel:)/i'],
+            'description' => ['nullable', 'string', 'max:2000'],
             'position' => ['required', 'integer', 'min:0', 'max:9999'],
             'is_active' => ['nullable', 'boolean'],
         ];
@@ -89,6 +132,10 @@ class MenuItemFormPage extends FormPage
     public function validationMessages(): array
     {
         return [
+            'menu_area.required' => 'Выберите, где показывать пункт.',
+            'menu_area.in' => 'Выберите один из доступных разделов меню.',
+            'parent_id.exists' => 'Выбранный родительский раздел больше недоступен.',
+            'parent_id.not_in' => 'Пункт не может быть родителем самому себе.',
             'label.required_without' => 'Напишите название пункта меню или выберите страницу, чтобы взять ее заголовок.',
             'label.max' => 'Название пункта меню должно быть короче 255 символов.',
             'page_id.required_without' => 'Выберите страницу или заполните поле "Другая ссылка".',
@@ -96,6 +143,7 @@ class MenuItemFormPage extends FormPage
             'href.required_without' => 'Выберите страницу или укажите другую ссылку.',
             'href.regex' => 'Другая ссылка должна начинаться с /, #, http://, https://, mailto: или tel:.',
             'href.max' => 'Ссылка слишком длинная. Проверьте, что вставлен именно адрес.',
+            'description.max' => 'Описание раздела услуг должно быть короче 2000 символов.',
             'position.required' => 'Укажите порядок пункта в меню.',
             'position.integer' => 'Порядок должен быть целым числом.',
             'position.min' => 'Порядок не может быть отрицательным.',
@@ -118,6 +166,10 @@ class MenuItemFormPage extends FormPage
         $label = e($item?->label ?: 'Новый пункт меню');
         $updatedAt = $item?->updated_at?->format('d.m.Y, H:i') ?? 'еще не сохранялся';
         $target = 'Сначала выберите страницу или ссылку.';
+        $area = CmsFieldSets::menuAreaLabel($item?->menu_area);
+        $level = $item?->parent_id === null
+            ? 'Верхний раздел'
+            : 'Подпункт раздела: ' . e($item->parent?->label ?? 'родитель не найден');
 
         if ($item?->page_id !== null) {
             $target = $item->page?->title
@@ -133,12 +185,16 @@ class MenuItemFormPage extends FormPage
                 <div class="menu-overview__eyebrow">Редактирование меню</div>
                 <h1>{$label}</h1>
                 <p>{$target}</p>
-                <div class="menu-form-overview__saved">Последнее сохранение: {$updatedAt}</div>
+                <div class="menu-form-overview__meta">
+                    <span>{$area}</span>
+                    <span>{$level}</span>
+                    <span>Последнее сохранение: {$updatedAt}</span>
+                </div>
             </div>
             <div class="menu-form-overview__steps">
-                {$this->guideCard('document-text', 'Страница', 'Обычный пункт меню привязывайте к странице из списка.')}
-                {$this->guideCard('link', 'Своя ссылка', 'Полный адрес нужен только для особых переходов.')}
-                {$this->guideCard('check-circle', 'Показ', 'Проверьте порядок и включите пункт на сайте.')}
+                {$this->guideCard('squares-2x2', 'Место', 'Выберите обычное меню или структуру услуг.')}
+                {$this->guideCard('link', 'Ссылка', 'Привяжите страницу или укажите готовый адрес.')}
+                {$this->guideCard('arrows-up-down', 'Порядок', 'Меньшее число ставит пункт выше в своем списке.')}
             </div>
         </section>
         HTML;

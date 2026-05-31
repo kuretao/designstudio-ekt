@@ -1,7 +1,6 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { serviceNavigationGroups } from "@/src/data";
 import { useCms } from "@/src/cms";
 import CinematicImage from "@/src/components/common/CinematicImage";
 import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
@@ -88,7 +87,7 @@ function ServicesHero() {
 }
 
 export function ServicesSummary() {
-  const { servicePageItems } = useCms();
+  const { serviceNavigationGroups, servicePageItems } = useCms();
   const mainServices = serviceNavigationGroups
     .map((group) => servicePageItems.find((item) => `/${item.id}` === group.href))
     .filter((service): service is NonNullable<typeof service> => Boolean(service));
@@ -126,7 +125,7 @@ export function ServicesSummary() {
 }
 
 export function ServicePages() {
-  const { projects, servicePageItems } = useCms();
+  const { projects, serviceNavigationGroups, servicePageItems } = useCms();
   const serviceByHref = new Map(servicePageItems.map((item) => [`/${item.id}`, item]));
 
   return (

@@ -83,12 +83,14 @@ final class CmsFieldSets
                     ->disk('public')
                     ->dir('site/branding')
                     ->allowedExtensions(['svg', 'png', 'jpg', 'jpeg', 'webp'])
+                    ->disableDeleteFiles()
                     ->removable()
                     ->hint('Основной логотип для подвала сайта. Подойдут SVG, PNG, JPG или WEBP до 4 МБ.'),
                 Image::make('Компактный логотип', 'site_logo_small')
                     ->disk('public')
                     ->dir('site/branding')
                     ->allowedExtensions(['svg', 'png', 'jpg', 'jpeg', 'webp'])
+                    ->disableDeleteFiles()
                     ->removable()
                     ->hint('Логотип для верхней панели. Если оставить пустым, будет использован основной логотип.'),
                 File::make('Фавикон', 'favicon')
@@ -101,6 +103,7 @@ final class CmsFieldSets
                     ->disk('public')
                     ->dir('site/branding')
                     ->allowedExtensions(['png', 'jpg', 'jpeg', 'webp'])
+                    ->disableDeleteFiles()
                     ->removable()
                     ->hint('Квадратная картинка для сохранения сайта на экран устройства. Рекомендуется PNG 180x180.'),
             ],
@@ -166,6 +169,7 @@ final class CmsFieldSets
                     ->disk('public')
                     ->dir('site/branding')
                     ->allowedExtensions(['png', 'jpg', 'jpeg', 'webp'])
+                    ->disableDeleteFiles()
                     ->removable()
                     ->hint('Картинка для превью ссылки в соцсетях. Рекомендуется горизонтальный PNG или JPG.'),
             ],
@@ -178,6 +182,27 @@ final class CmsFieldSets
         if ($compact) {
             return [
                 ID::make()->sortable(),
+                Preview::make('Где показывается', 'menu_area', static function (mixed $item): string {
+                    $area = $item instanceof MenuItem ? $item->menu_area : (string) $item;
+                    $label = self::menuAreaLabel($area);
+                    $modifier = $area === MenuItem::AREA_SERVICES ? ' menu-link-badge--services' : '';
+
+                    return sprintf('<span class="menu-link-badge%s">%s</span>', $modifier, e($label));
+                }),
+                Preview::make('Уровень', 'parent_id', static function (mixed $item): string {
+                    if (! $item instanceof MenuItem) {
+                        return '';
+                    }
+
+                    if ($item->parent_id === null) {
+                        return '<span class="menu-tree-badge">Верхний раздел</span>';
+                    }
+
+                    return sprintf(
+                        '<span class="menu-tree-badge menu-tree-badge--child">Подпункт</span><span class="menu-parent-label">%s</span>',
+                        e($item->parent?->label ?? 'Родитель не найден'),
+                    );
+                }),
                 Text::make('Название', 'label')->sortable(),
                 self::menuPageField(),
                 Preview::make('Ссылка на сайте', 'href', static function (mixed $item): string {
@@ -205,6 +230,7 @@ final class CmsFieldSets
         }
 
         return [
+            ...self::menuItemSection('placement'),
             ...self::menuItemSection('text'),
             ...self::menuItemSection('target'),
             ...self::menuItemSection('display'),
@@ -214,6 +240,32 @@ final class CmsFieldSets
     public static function menuItemSection(string $section): array
     {
         return match ($section) {
+            'placement' => [
+                Select::make('Где показывать', 'menu_area')
+                    ->options([
+                        MenuItem::AREA_MAIN => 'Главное меню сайта',
+                        MenuItem::AREA_SERVICES => 'Структура услуг',
+                    ])
+                    ->default(MenuItem::AREA_MAIN)
+                    ->required()
+                    ->hint('Главное меню - обычные ссылки сайта. Структура услуг - группы и подпункты в раскрытии "Услуги" и на странице услуг.'),
+                Select::make('Родительский раздел услуг', 'parent_id')
+                    ->options(static fn (): array => MenuItem::query()
+                        ->where('menu_area', MenuItem::AREA_SERVICES)
+                        ->whereNull('parent_id')
+                        ->orderBy('position')
+                        ->get()
+                        ->mapWithKeys(static fn (MenuItem $item): array => [
+                            $item->id => sprintf('%s (%s)', $item->label, $item->siteHref() ?? 'без ссылки'),
+                        ])
+                        ->all())
+                    ->nullable()
+                    ->searchable()
+                    ->hint('Заполняйте только для подпунктов. Если оставить пустым, запись станет верхним разделом структуры услуг.'),
+                Textarea::make('Описание раздела услуг', 'description')
+                    ->nullable()
+                    ->hint('Показывается на странице "Услуги" у верхнего раздела. Для обычного меню и подпунктов можно оставить пустым.'),
+            ],
             'text' => [
                 Text::make('Название в меню', 'label')
                     ->placeholder('О нас')
@@ -236,6 +288,15 @@ final class CmsFieldSets
                     ->hint('Выключите, чтобы временно скрыть пункт меню без удаления.'),
             ],
             default => [],
+        };
+    }
+
+    public static function menuAreaLabel(?string $area): string
+    {
+        return match ($area) {
+            MenuItem::AREA_SERVICES => 'Структура услуг',
+            MenuItem::AREA_MAIN => 'Главное меню',
+            default => filled($area) ? $area : 'Главное меню',
         };
     }
 
@@ -518,6 +579,7 @@ final class CmsFieldSets
                 ->disk('public')
                 ->dir('projects')
                 ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'avif'])
+                ->disableDeleteFiles()
                 ->removable()
                 ->hint('Загрузите файл на сервер. Имеет приоритет над URL ниже.'),
             Textarea::make('Или URL главного изображения', 'image')
@@ -526,6 +588,7 @@ final class CmsFieldSets
                 ->disk('public')
                 ->dir('projects')
                 ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'avif'])
+                ->disableDeleteFiles()
                 ->removable()
                 ->hint('Загрузите файл на сервер. Имеет приоритет над URL ниже.'),
             Textarea::make('Или URL изображения «До»', 'before_image')
@@ -534,6 +597,7 @@ final class CmsFieldSets
                 ->disk('public')
                 ->dir('projects')
                 ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'avif'])
+                ->disableDeleteFiles()
                 ->removable()
                 ->hint('Загрузите файл на сервер. Имеет приоритет над URL ниже.'),
             Textarea::make('Или URL изображения «После»', 'after_image')
@@ -558,7 +622,15 @@ final class CmsFieldSets
             ...$fields,
             Text::make('Надзаголовок', 'eyebrow'),
             CKEditor::make('Текст', 'text'),
-            Textarea::make('URL изображения или путь в хранилище', 'image'),
+            Image::make('Загрузить изображение на сервер', 'image_file')
+                ->disk('public')
+                ->dir('services')
+                ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'avif'])
+                ->disableDeleteFiles()
+                ->removable()
+                ->hint('Загрузите файл — он сохранится в хранилище. Если загружен файл, он имеет приоритет над URL ниже.'),
+            Textarea::make('Или URL изображения', 'image')
+                ->hint('Вставьте внешнюю ссылку. Используется только если файл выше не загружен.'),
             Textarea::make('Результаты, по одному в строке', 'deliverables'),
             Textarea::make('Преимущества, по одному в строке', 'benefits'),
             Textarea::make('Этапы, по одному в строке', 'process'),
@@ -581,7 +653,15 @@ final class CmsFieldSets
             ...$fields,
             Text::make('Дата для показа', 'date'),
             Textarea::make('Анонс', 'preview'),
-            Textarea::make('URL изображения или путь в хранилище', 'image'),
+            Image::make('Загрузить изображение на сервер', 'image_file')
+                ->disk('public')
+                ->dir('news')
+                ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'avif'])
+                ->disableDeleteFiles()
+                ->removable()
+                ->hint('Загрузите файл — он сохранится в хранилище. Если загружен файл, он имеет приоритет над URL ниже.'),
+            Textarea::make('Или URL изображения', 'image')
+                ->hint('Вставьте внешнюю ссылку. Используется только если файл выше не загружен.'),
             Text::make('Время чтения', 'reading_time'),
             Textarea::make('Текст статьи', 'body'),
         ];
@@ -608,6 +688,7 @@ final class CmsFieldSets
                 ->disk('public')
                 ->dir('promo')
                 ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'avif'])
+                ->disableDeleteFiles()
                 ->removable()
                 ->hint('Загрузите файл — он сохранится в хранилище. Если загружен файл, он имеет приоритет над URL ниже.'),
             Textarea::make('Или URL изображения', 'image')

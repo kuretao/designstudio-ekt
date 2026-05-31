@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace App\MoonShine\Layouts;
 
 use MoonShine\Laravel\Layouts\AppLayout;
+use MoonShine\AssetManager\InlineCss;
+use MoonShine\AssetManager\InlineJs;
 use MoonShine\ColorManager\Palettes\PurplePalette;
 use MoonShine\UI\Components\Layout\Footer;
+use MoonShine\Contracts\AssetManager\AssetElementContract;
 use MoonShine\ColorManager\ColorManager;
 use MoonShine\Contracts\ColorManager\ColorManagerContract;
 use MoonShine\Contracts\ColorManager\PaletteContract;
+use App\MoonShine\Pages\ImageGalleryPage;
 use App\MoonShine\Resources\SiteSetting\SiteSettingResource;
+use App\MoonShine\Resources\SiteSetting\Pages\SocialLinksFormPage;
 use MoonShine\MenuManager\MenuGroup;
 use MoonShine\MenuManager\MenuItem;
+use MoonShine\Support\UriKey;
 use App\MoonShine\Resources\MenuItem\MenuItemResource;
 use App\MoonShine\Resources\Page\PageResource;
 use App\MoonShine\Resources\PageBlock\PageBlockResource;
@@ -24,6 +30,7 @@ use App\MoonShine\Resources\Review\ReviewResource;
 use App\MoonShine\Resources\Faq\FaqResource;
 use App\MoonShine\Resources\Vacancy\VacancyResource;
 use App\MoonShine\Resources\Lead\LeadResource;
+use App\Models\SiteSetting;
 
 final class MoonShineLayout extends AppLayout
 {
@@ -32,12 +39,30 @@ final class MoonShineLayout extends AppLayout
      */
     protected ?string $palette = PurplePalette::class;
 
+    /**
+     * @return list<AssetElementContract>
+     */
+    protected function assets(): array
+    {
+        $galleryEndpoint = '/' . trim((string) config('moonshine.prefix', 'admin'), '/') . '/image-gallery';
+
+        return [
+            ...parent::assets(),
+            InlineCss::make((string) file_get_contents(resource_path('css/image-gallery-admin.css'))),
+            InlineJs::make('window.AdminImageGallery = ' . json_encode([
+                'endpoint' => $galleryEndpoint,
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ';'),
+            InlineJs::make((string) file_get_contents(resource_path('js/admin-image-gallery.js'))),
+        ];
+    }
+
     protected function menu(): array
     {
         return [
             ...parent::menu(),
             MenuGroup::make('Сайт', [
                 MenuItem::make(SiteSettingResource::class, 'Настройки')->icon('cog-6-tooth'),
+                MenuItem::make(ImageGalleryPage::class, 'Галерея')->icon('photo'),
                 MenuItem::make(MenuItemResource::class, 'Меню сайта')->icon('bars-3'),
                 MenuItem::make(PageResource::class, 'Страницы')->icon('document-text'),
                 MenuItem::make(PageBlockResource::class, 'Блоки страниц')->icon('squares-2x2'),
@@ -50,6 +75,7 @@ final class MoonShineLayout extends AppLayout
             ], 'document-text'),
             MenuGroup::make('Обратная связь', [
                 MenuItem::make(LeadResource::class, 'Заявки')->icon('inbox'),
+                MenuItem::make(fn (): string => $this->siteSettingPageUrl(SocialLinksFormPage::class), 'Меседжеры и сотсети')->icon('share'),
                 MenuItem::make(ReviewResource::class, 'Отзывы')->icon('star'),
                 MenuItem::make(FaqResource::class, 'FAQ')->icon('question-mark-circle'),
                 MenuItem::make(VacancyResource::class, 'Вакансии')->icon('briefcase'),
@@ -65,6 +91,22 @@ final class MoonShineLayout extends AppLayout
     protected function getFooterMenu(): array
     {
         return [];
+    }
+
+    /**
+     * @param class-string $pageClass
+     */
+    private function siteSettingPageUrl(string $pageClass): string
+    {
+        $setting = SiteSetting::query()->firstOrCreate([], [
+            'site_name' => '3D Smart Design Studio',
+        ]);
+
+        return route('moonshine.resource.page', [
+            'resourceUri' => (new UriKey(SiteSettingResource::class))->generate(),
+            'pageUri' => (new UriKey($pageClass))->generate(),
+            'resourceItem' => $setting->getKey(),
+        ]);
     }
 
     /**

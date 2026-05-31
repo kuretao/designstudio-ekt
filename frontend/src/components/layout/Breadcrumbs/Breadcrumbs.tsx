@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { serviceNavigationGroups } from "@/src/data";
 import { useCms } from "@/src/cms";
 
 type Crumb = {
@@ -35,7 +34,7 @@ function slugToLabel(slug: string) {
 
 export default function Breadcrumbs() {
   const pathname = usePathname();
-  const { newsArticles, projects, servicePageItems } = useCms();
+  const { newsArticles, projects, serviceNavigationGroups, servicePageItems } = useCms();
 
   if (pathname === "/") return null;
 

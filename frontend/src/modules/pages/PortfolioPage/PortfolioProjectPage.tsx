@@ -154,7 +154,7 @@ function ProjectHero({ project, gallery, copy }: { project: Project; gallery: st
             ← Портфолио
           </Link>
           <p className="text-xs uppercase text-[#D69A66]">{copy.focus}</p>
-          <h1 className="mt-5 max-w-5xl text-5xl font-light leading-[0.94] text-white md:text-7xl lg:text-8xl">
+          <h1 className="mt-5 max-w-5xl text-[clamp(2.75rem,5.4vw,5.6rem)] font-light leading-[0.96] text-white">
             {project.title}
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-relaxed text-[#E8E0D8]/85 md:text-xl">

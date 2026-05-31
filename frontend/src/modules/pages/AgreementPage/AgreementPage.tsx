@@ -21,7 +21,7 @@ export default function AgreementPage() {
         <div className="pointer-events-none absolute left-0 right-0 top-0 h-[580px] bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.48)_32%,transparent_74%)]" />
         <div className="relative z-10 mx-auto max-w-4xl">
           <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Документ</p>
-          <h1 className="mb-12 text-5xl font-light leading-[0.92] tracking-[-0.055em] md:text-7xl">
+          <h1 className="mb-12 text-[clamp(2.7rem,5.2vw,5.3rem)] font-light leading-[0.98] tracking-[-0.04em]">
             Согласие на обработку<br />персональных данных
           </h1>
 

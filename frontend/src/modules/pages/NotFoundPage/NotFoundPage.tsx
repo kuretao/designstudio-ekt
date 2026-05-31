@@ -18,7 +18,7 @@ function NotFoundPage() {
       <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
         <div className="pb-8">
           <p className="text-xs uppercase tracking-[0.45em] text-[#D69A66]">Error / 404</p>
-          <h1 className="mt-5 max-w-5xl text-7xl font-light leading-[0.82] tracking-normal text-white md:text-9xl lg:text-[11rem]">
+          <h1 className="mt-5 max-w-5xl text-[clamp(4rem,9vw,7rem)] font-light leading-[0.9] tracking-normal text-white">
             404
           </h1>
           <h2 className="mt-7 max-w-3xl text-4xl font-light leading-[0.95] tracking-normal [overflow-wrap:anywhere] md:text-6xl">

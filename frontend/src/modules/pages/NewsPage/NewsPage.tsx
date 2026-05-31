@@ -25,7 +25,7 @@ function NewsPage() {
         <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl gap-10 lg:grid-cols-[1fr_0.78fr] lg:items-end">
           <div className="pb-8">
             <p className="text-xs uppercase tracking-[0.38em] text-[#D69A66]">Studio journal</p>
-            <h1 className="mt-5 max-w-5xl text-6xl font-light leading-[0.9] tracking-[-0.065em] text-white md:text-8xl lg:text-9xl">
+            <h1 className="mt-5 max-w-5xl text-[clamp(3rem,6.4vw,6.2rem)] font-light leading-[0.94] tracking-[-0.045em] text-white">
               Блог и новости
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-relaxed text-[#E8E0D8]/85 md:text-xl">

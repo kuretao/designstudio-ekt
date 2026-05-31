@@ -69,7 +69,7 @@ export default function AboutPageFull() {
         <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl gap-10 lg:grid-cols-[0.94fr_1.06fr] lg:items-end">
           <div className="pb-8">
             <SectionLabel>О студии</SectionLabel>
-            <h1 className="mt-5 max-w-5xl text-6xl font-light leading-[0.9] tracking-[-0.065em] md:text-8xl lg:text-9xl">
+            <h1 className="mt-5 max-w-5xl text-[clamp(3rem,6.4vw,6.2rem)] font-light leading-[0.94] tracking-[-0.045em]">
               Дизайн с умом
             </h1>
             <p className="mt-8 max-w-3xl text-lg leading-relaxed text-[#E8E0D8]/85 md:text-xl">

@@ -113,7 +113,7 @@ function ContentPage({ page }: { page: ContentPageItem }) {
         <div className="absolute inset-0 bg-[linear-gradient(90deg,#050505,rgba(5,5,5,.82),rgba(5,5,5,.45))]" />
         <div className="relative mx-auto max-w-7xl">
           <SectionLabel>{heroEyebrow}</SectionLabel>
-          <h1 className="max-w-5xl text-6xl font-light leading-[0.95] tracking-normal [overflow-wrap:anywhere] md:text-8xl">
+          <h1 className="max-w-5xl text-[clamp(2.9rem,6.1vw,5.9rem)] font-light leading-[0.98] tracking-normal [overflow-wrap:anywhere]">
             {heroTitle}
           </h1>
           {heroText ? <p className="mt-8 max-w-3xl text-xl leading-relaxed text-[#D6D1CA] [overflow-wrap:anywhere]">{heroText}</p> : null}

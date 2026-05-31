@@ -107,7 +107,7 @@ function PortfolioHeroSlider({ onSelectProject }: PortfolioGridProps) {
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl items-end pb-24 pt-36 md:items-center md:pb-0">
         <div className="hero-copy max-w-4xl">
           <p className="text-xs uppercase tracking-[0.32em] text-[#D69A66]">{slide.kicker}</p>
-          <h1 className="mt-5 max-w-4xl text-6xl font-light leading-[0.9] tracking-[-0.065em] text-white md:text-8xl lg:text-9xl">
+          <h1 className="mt-5 max-w-4xl text-[clamp(3rem,6.4vw,6.2rem)] font-light leading-[0.94] tracking-[-0.045em] text-white">
             {slide.project.title}
           </h1>
           <p className="mt-7 max-w-2xl text-base leading-relaxed text-[#E8E0D8]/82 md:text-xl">{slide.project.description}</p>

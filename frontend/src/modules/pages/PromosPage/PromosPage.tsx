@@ -52,7 +52,7 @@ export default function PromosPage() {
           <div className="relative z-10 mx-auto max-w-7xl">
             <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Special offers</p>
             <div className="grid gap-8 md:grid-cols-[1fr_0.55fr] md:items-end">
-              <h1 className="text-6xl font-light leading-[0.92] tracking-[-0.065em] md:text-8xl">
+              <h1 className="text-[clamp(3rem,6.2vw,6rem)] font-light leading-[0.96] tracking-[-0.045em]">
                 Акции&nbsp;и скидки
               </h1>
               <div>

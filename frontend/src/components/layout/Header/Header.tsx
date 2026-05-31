@@ -10,20 +10,58 @@ import ContactModal from "@/src/modals/ContactModal";
 function LogoMark() {
   return (
     <span className="flex min-w-[128px] flex-col items-center gap-1 text-center">
-      <svg viewBox="-1.12 -1.12 2.24 2.24" className="mx-auto block h-7 w-7 shrink-0" fill="none" aria-hidden="true">
+      <svg
+        viewBox="-1.12 -1.12 2.24 2.24"
+        className="mx-auto block h-7 w-7 shrink-0"
+        fill="none"
+        aria-hidden="true"
+      >
         <g stroke="rgba(255,255,255,0.82)" strokeWidth="0.038">
           {[0, 60, 120, 180, 240, 300].map((a) => (
-            <circle key={a} cx={0.52} cy={0} r={0.52} transform={`rotate(${a})`} />
+            <circle
+              key={a}
+              cx={0.52}
+              cy={0}
+              r={0.52}
+              transform={`rotate(${a})`}
+            />
           ))}
-          <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="32s" repeatCount="indefinite" />
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from="0"
+            to="360"
+            dur="32s"
+            repeatCount="indefinite"
+          />
         </g>
         <g stroke="rgba(255,255,255,0.52)" strokeWidth="0.028">
           {[30, 90, 150, 210, 270, 330].map((a) => (
-            <circle key={a} cx={0.34} cy={0} r={0.34} transform={`rotate(${a})`} />
+            <circle
+              key={a}
+              cx={0.34}
+              cy={0}
+              r={0.34}
+              transform={`rotate(${a})`}
+            />
           ))}
-          <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="22s" repeatCount="indefinite" />
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from="0"
+            to="-360"
+            dur="22s"
+            repeatCount="indefinite"
+          />
         </g>
-        <circle cx={0} cy={0} r={0.19} fill="rgba(7,7,7,0.62)" stroke="rgba(255,255,255,0.7)" strokeWidth="0.032" />
+        <circle
+          cx={0}
+          cy={0}
+          r={0.19}
+          fill="rgba(7,7,7,0.62)"
+          stroke="rgba(255,255,255,0.7)"
+          strokeWidth="0.032"
+        />
       </svg>
       <span className="text-center text-[9px] font-medium uppercase leading-none tracking-[0.42em] text-white">
         3D Smart
@@ -35,7 +73,10 @@ function LogoMark() {
 
 function MenuIcon() {
   return (
-    <span className="relative block h-[12px] w-[27px] text-white" aria-hidden="true">
+    <span
+      className="relative block h-[12px] w-[27px] text-white"
+      aria-hidden="true"
+    >
       <span className="absolute left-0 top-[2px] h-px w-[27px] bg-current" />
       <span className="absolute left-0 top-[10px] h-px w-[27px] bg-current" />
     </span>
@@ -44,7 +85,10 @@ function MenuIcon() {
 
 function CloseIcon() {
   return (
-    <span className="relative block h-[14px] w-[14px] text-white" aria-hidden="true">
+    <span
+      className="relative block h-[14px] w-[14px] text-white"
+      aria-hidden="true"
+    >
       <span className="absolute left-1/2 top-1/2 h-px w-[15px] -translate-x-1/2 -translate-y-1/2 rotate-45 bg-current" />
       <span className="absolute left-1/2 top-1/2 h-px w-[15px] -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-current" />
     </span>
@@ -57,9 +101,16 @@ export default function Header() {
   const { i18n, t } = useTranslation();
   const [modalOpen, setModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuView, setMenuView] = useState<
+    "main" | "services" | "serviceGroup"
+  >("main");
+  const [activeServiceGroupId, setActiveServiceGroupId] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
-    const onKey = (event: KeyboardEvent) => event.key === "Escape" && setMenuOpen(false);
+    const onKey = (event: KeyboardEvent) =>
+      event.key === "Escape" && setMenuOpen(false);
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => {
@@ -68,38 +119,71 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  const closeMenu = () => setMenuOpen(false);
-  const openContact = () => {
+  const closeMenu = () => {
     setMenuOpen(false);
+    setMenuView("main");
+    setActiveServiceGroupId(null);
+  };
+  const openMenu = () => {
+    setMenuView("main");
+    setActiveServiceGroupId(null);
+    setMenuOpen(true);
+  };
+  const openContact = () => {
+    closeMenu();
     setModalOpen(true);
   };
   const changeLanguage = (locale: "ru" | "en") => {
     i18n.changeLanguage(locale);
-    setMenuOpen(false);
+    closeMenu();
   };
 
   const serviceHrefs = new Set([
     "/services",
-    ...serviceNavigationGroups.flatMap((group) => [group.href, ...group.items.map((item) => item.href)]),
+    ...serviceNavigationGroups.flatMap((group) => [
+      group.href,
+      ...group.items.map((item) => item.href),
+    ]),
   ]);
-  const menuByHref = new Map(menuItems.filter((item) => !serviceHrefs.has(item.href)).map((item) => [item.href, item]));
-  const featuredMenuLinks = ["/o-nas", "/portfolio", "/kontakty"]
-    .map((href) => menuByHref.get(href) ?? (href === "/o-nas" ? { href, label: "О нас" } : href === "/portfolio" ? { href, label: "Портфолио" } : { href, label: "Контакты" }));
-  const featuredHrefs = new Set(featuredMenuLinks.map((item) => item.href));
-  const secondaryMenuLinks = menuItems.filter((item) => !serviceHrefs.has(item.href) && !featuredHrefs.has(item.href));
-  const primaryMenuLinks = [
-    featuredMenuLinks[0],
-    featuredMenuLinks[1],
+  const menuByHref = new Map(
+    menuItems
+      .filter((item) => !serviceHrefs.has(item.href))
+      .map((item) => [item.href, item]),
+  );
+  const mainMenuLinks = [
+    menuByHref.get("/o-nas") ?? { href: "/o-nas", label: "О нас" },
+    menuByHref.get("/portfolio") ?? { href: "/portfolio", label: "Портфолио" },
     { href: "/services", label: "Услуги" },
-    featuredMenuLinks[2],
-    ...secondaryMenuLinks,
+    menuByHref.get("/blog") ?? { href: "/blog", label: "Блог" },
+    menuByHref.get("/kontakty") ?? { href: "/kontakty", label: "Контакты" },
   ];
-  const isServicesActive = currentPath === "/services" || Array.from(serviceHrefs).some((href) => currentPath === href);
+  const primaryMenuLinks = [...mainMenuLinks];
+  const isServicesActive =
+    currentPath === "/services" ||
+    Array.from(serviceHrefs).some((href) => currentPath === href);
+  const activeServiceGroup =
+    serviceNavigationGroups.find(
+      (group) => group.id === activeServiceGroupId,
+    ) ??
+    serviceNavigationGroups.find(
+      (group) =>
+        group.href === currentPath ||
+        group.items.some((item) => item.href === currentPath),
+    ) ??
+    serviceNavigationGroups[0];
 
   const menuLinkCls = (path: string) =>
     `block text-right text-[13px] font-semibold uppercase tracking-[0.17em] transition-[opacity,transform] duration-[820ms] ease-[cubic-bezier(.19,1,.22,1)] hover:text-[#D69A66] md:text-[17px] ${
-      currentPath === path || (path === "/services" && isServicesActive) ? "text-white/78" : "text-white/40"
+      currentPath === path || (path === "/services" && isServicesActive)
+        ? "text-white/78"
+        : "text-white/40"
     }`;
+  const menuItemStyle = (index: number) => ({
+    opacity: menuOpen ? 1 : 0,
+    transform: menuOpen ? "translate3d(0, 0, 0)" : "translate3d(-96px, 0, 0)",
+    transitionDelay: menuOpen ? `${220 + index * 70}ms` : "0ms",
+    transitionProperty: "opacity, transform",
+  });
 
   return (
     <>
@@ -107,7 +191,7 @@ export default function Header() {
         <div className="mx-auto grid h-[72px] max-w-[1680px] grid-cols-[1fr_auto_1fr] items-center md:h-[76px]">
           <button
             type="button"
-            onClick={() => setMenuOpen(true)}
+            onClick={openMenu}
             aria-expanded={menuOpen}
             aria-controls="rolls-menu"
             className="flex w-[142px] cursor-pointer items-center gap-[18px] justify-self-start text-[10px] font-semibold uppercase tracking-[0.24em] transition duration-300 hover:text-white/68"
@@ -116,7 +200,12 @@ export default function Header() {
             <span>{t("header.menu")}</span>
           </button>
 
-          <Link href="/" aria-label={siteSettings.siteName} onClick={closeMenu} className="justify-self-center transition duration-300 hover:opacity-75">
+          <Link
+            href="/"
+            aria-label={siteSettings.siteName}
+            onClick={closeMenu}
+            className="justify-self-center transition duration-300 hover:opacity-75"
+          >
             {siteSettings.logoSmall || siteSettings.logo ? (
               <img
                 src={siteSettings.logoSmall ?? siteSettings.logo ?? ""}
@@ -140,14 +229,16 @@ export default function Header() {
 
       <div
         className={`fixed inset-0 z-[55] bg-black/5 backdrop-blur-[8px] transition-opacity duration-[650ms] ease-[cubic-bezier(.77,0,.18,1)] ${
-          menuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+          menuOpen
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
         }`}
         onClick={closeMenu}
       />
 
       <section
         id="rolls-menu"
-        className={`fixed left-0 top-0 z-[70] h-screen w-full max-w-[720px] overflow-hidden bg-[#050505]/18 text-white shadow-[38px_0_120px_rgba(0,0,0,0.18)] backdrop-blur-[18px] transition-transform duration-[760ms] ease-[cubic-bezier(.77,0,.18,1)] ${
+        className={`fixed left-0 top-0 z-[70] h-dvh w-full max-w-[720px] overflow-hidden bg-[#050505]/18 text-white shadow-[38px_0_120px_rgba(0,0,0,0.18)] backdrop-blur-[18px] transition-transform duration-[760ms] ease-[cubic-bezier(.77,0,.18,1)] ${
           menuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -160,75 +251,174 @@ export default function Header() {
           {t("header.close")}
         </button>
 
-        <div className="flex h-screen flex-col items-end overflow-y-auto px-8 pb-24 pt-28 md:pr-[92px] lg:pr-[118px]" data-native-scroll>
-          <nav aria-label="Основное меню" className="flex w-full max-w-[520px] flex-col items-end gap-[20px] md:gap-[25px]">
-            {primaryMenuLinks.map((item, index) =>
-              item.href === "/services" ? (
-                <div
-                  key="services-menu"
-                  className="w-full text-right transition-[opacity,transform] duration-[820ms] ease-[cubic-bezier(.19,1,.22,1)]"
-                  style={{
-                    opacity: menuOpen ? 1 : 0,
-                    transform: menuOpen ? "translate3d(0, 0, 0)" : "translate3d(-96px, 0, 0)",
-                    transitionDelay: menuOpen ? `${560 + index * 85}ms` : "0ms",
-                    transitionProperty: "opacity, transform",
-                  }}
-                >
-                  <Link href="/services" onClick={closeMenu} className={menuLinkCls("/services")}>
-                    Услуги
+        <div
+          className="flex h-dvh touch-pan-y flex-col items-end overflow-y-auto overscroll-contain px-6 pb-28 pt-24 [-webkit-overflow-scrolling:touch] sm:px-8 md:pb-32 md:pr-[92px] md:pt-28 lg:pr-[118px]"
+          data-native-scroll
+        >
+          <nav
+            aria-label="Основное меню"
+            className="relative w-full max-w-[520px]"
+          >
+            <div
+              className={`flex flex-col items-end gap-[20px] transition duration-500 md:gap-[25px] ${
+                menuView === "main"
+                  ? "translate-x-0 opacity-100"
+                  : "-translate-x-8 pointer-events-none absolute inset-x-0 top-0 opacity-0"
+              }`}
+            >
+              {primaryMenuLinks.map((item, index) =>
+                item.href === "/services" ? (
+                  <button
+                    key="services-menu"
+                    type="button"
+                    onClick={() => setMenuView("services")}
+                    className={`${menuLinkCls("/services")} flex w-full items-center justify-end gap-4 text-right`}
+                    style={menuItemStyle(index)}
+                  >
+                    <span>{item.label}</span>
+                    <span className="text-[#D69A66]">→</span>
+                  </button>
+                ) : (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={closeMenu}
+                    className={menuLinkCls(item.href)}
+                    style={menuItemStyle(index)}
+                  >
+                    {item.label}
                   </Link>
-                  <div className="mt-5 grid gap-3 border-r border-white/12 pr-4">
-                    {serviceNavigationGroups.map((group) => (
-                      <div key={group.id} className="grid gap-2">
-                        <Link
-                          href={group.href}
-                          onClick={closeMenu}
-                          className={`text-[12px] font-semibold uppercase tracking-[0.18em] transition hover:text-[#D69A66] ${
-                            currentPath === group.href ? "text-white/82" : "text-white/58"
-                          }`}
-                        >
-                          {group.title}
-                        </Link>
-                        <div className="grid gap-1.5">
-                          {group.items.map((child) => (
-                            <Link
-                              key={child.href}
-                              href={child.href}
-                              onClick={closeMenu}
-                              className={`text-[12px] leading-snug transition hover:text-[#D69A66] ${
-                                currentPath === child.href ? "text-white/72" : "text-white/36"
-                              }`}
-                            >
-                              {child.label}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
+                ),
+              )}
+            </div>
+
+            <div
+              className={`grid gap-4 text-right transition duration-500 ${
+                menuView === "services"
+                  ? "translate-x-0 opacity-100"
+                  : "pointer-events-none absolute inset-x-0 top-0 translate-x-8 opacity-0"
+              }`}
+            >
+              <button
+                type="button"
+                onClick={() => setMenuView("main")}
+                className="justify-self-end text-[11px] font-bold uppercase tracking-[0.22em] text-white/42 transition hover:text-[#D69A66]"
+              >
+                ← Меню
+              </button>
+              <div>
+                <Link
+                  href="/services"
+                  onClick={closeMenu}
+                  className="block text-[13px] font-semibold uppercase tracking-[0.18em] text-white/78 transition hover:text-[#D69A66] md:text-[17px]"
+                >
+                  Услуги
+                </Link>
+                <p className="mt-2 max-w-sm justify-self-end text-sm leading-relaxed text-white/38">
+                  Категории сгруппированы по составу работ. Внутри каждого
+                  направления - посадочные страницы услуг.
+                </p>
+              </div>
+              <div className="grid gap-2.5">
+                {serviceNavigationGroups.map((group) => {
+                  const active =
+                    group.href === currentPath ||
+                    group.items.some((item) => item.href === currentPath);
+
+                  return (
+                    <button
+                      key={group.id}
+                      type="button"
+                      onClick={() => {
+                        setActiveServiceGroupId(group.id);
+                        setMenuView("serviceGroup");
+                      }}
+                      className={`group rounded-[1.25rem] border px-4 py-3.5 text-right transition md:px-5 ${
+                        active
+                          ? "border-[#D69A66]/45 bg-[#D69A66]/10"
+                          : "border-white/10 bg-white/[0.035] hover:border-white/24 hover:bg-white/[0.055]"
+                      }`}
+                    >
+                      <span className="flex items-center justify-end gap-3 text-[12px] font-semibold uppercase tracking-[0.14em] text-white/76 md:text-sm">
+                        {group.title}
+                        <span className="shrink-0 text-[#D69A66] transition group-hover:translate-x-1">
+                          →
+                        </span>
+                      </span>
+                      <span className="mt-1.5 block text-sm leading-relaxed text-white/34">
+                        {group.description}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div
+              className={`grid gap-4 text-right transition duration-500 ${
+                menuView === "serviceGroup"
+                  ? "translate-x-0 opacity-100"
+                  : "pointer-events-none absolute inset-x-0 top-0 translate-x-8 opacity-0"
+              }`}
+            >
+              <button
+                type="button"
+                onClick={() => setMenuView("services")}
+                className="justify-self-end text-[11px] font-bold uppercase tracking-[0.22em] text-white/42 transition hover:text-[#D69A66]"
+              >
+                ← Услуги
+              </button>
+
+              {activeServiceGroup && (
+                <>
+                  <div>
+                    <Link
+                      href={activeServiceGroup.href}
+                      onClick={closeMenu}
+                      className={`block text-[13px] font-semibold uppercase tracking-[0.18em] transition hover:text-[#D69A66] md:text-[17px] ${
+                        currentPath === activeServiceGroup.href
+                          ? "text-white/82"
+                          : "text-white/72"
+                      }`}
+                    >
+                      {activeServiceGroup.title}
+                    </Link>
+                    <p className="mt-2 max-w-sm justify-self-end text-sm leading-relaxed text-white/38">
+                      {activeServiceGroup.description}
+                    </p>
+                  </div>
+
+                  <div className="grid gap-2">
+                    {activeServiceGroup.items.map((child, index) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        onClick={closeMenu}
+                        className={`group flex items-center justify-between gap-4 rounded-[1.15rem] border px-4 py-3.5 text-left transition md:px-5 ${
+                          currentPath === child.href
+                            ? "border-[#D69A66]/45 bg-[#D69A66]/10 text-white"
+                            : "border-white/10 bg-white/[0.035] text-white/58 hover:border-white/24 hover:text-white"
+                        }`}
+                      >
+                        <span className="text-[11px] uppercase tracking-[0.2em] text-[#D69A66]">
+                          0{index + 1}
+                        </span>
+                        <span className="flex-1 text-right text-sm leading-snug [overflow-wrap:anywhere]">
+                          {child.label}
+                        </span>
+                      </Link>
                     ))}
                   </div>
-                </div>
-              ) : (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={closeMenu}
-                  className={menuLinkCls(item.href)}
-                  style={{
-                    opacity: menuOpen ? 1 : 0,
-                    transform: menuOpen ? "translate3d(0, 0, 0)" : "translate3d(-96px, 0, 0)",
-                    transitionDelay: menuOpen ? `${560 + index * 85}ms` : "0ms",
-                    transitionProperty: "opacity, transform",
-                  }}
-                >
-                  {item.label}
-                </Link>
-              ),
-            )}
+                </>
+              )}
+            </div>
           </nav>
 
           <div
-            className={`absolute bottom-9 left-6 flex gap-5 text-[10px] font-bold uppercase tracking-[0.22em] transition-[opacity,transform] duration-[620ms] ease-[cubic-bezier(.77,0,.18,1)] md:left-[75px] ${
-              menuOpen ? "translate-x-0 opacity-100 delay-[760ms]" : "-translate-x-8 opacity-0"
+            className={`mt-10 flex w-full max-w-[520px] justify-start gap-5 text-[10px] font-bold uppercase tracking-[0.22em] transition-[opacity,transform] duration-[620ms] ease-[cubic-bezier(.77,0,.18,1)] ${
+              menuOpen
+                ? "translate-x-0 opacity-100 delay-[760ms]"
+                : "-translate-x-8 opacity-0"
             }`}
           >
             <button

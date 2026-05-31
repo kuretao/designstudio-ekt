@@ -2,7 +2,10 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { servicePageItems as fallbackServicePageItems } from "@/src/data";
+import {
+  getServiceLandingCopy,
+  servicePageItems as fallbackServicePageItems,
+} from "@/src/data";
 import { useCms } from "@/src/cms";
 import { GlassPanel } from "@/src/ui";
 import BrandStrip from "@/src/components/common/BrandStrip";
@@ -17,16 +20,33 @@ type ServicePageItem = (typeof fallbackServicePageItems)[number];
 function getPortfolioCategory(item: ServicePageItem): ProjectCategory {
   const value = `${item.id} ${item.title}`.toLowerCase();
 
-  if (value.includes("landshaft") || value.includes("ландшафт") || value.includes("озелен")) return "Ландшафт";
-  if (value.includes("arhitektur") || value.includes("архитект") || value.includes("3d")) return "Архитектура";
+  if (
+    value.includes("landshaft") ||
+    value.includes("ландшафт") ||
+    value.includes("озелен")
+  )
+    return "Ландшафт";
+  if (
+    value.includes("arhitektur") ||
+    value.includes("архитект") ||
+    value.includes("3d")
+  )
+    return "Архитектура";
 
   return "Интерьеры";
 }
 
-function ServiceCompareBlock({ item, projects }: { item: ServicePageItem; projects: Project[] }) {
+function ServiceCompareBlock({
+  item,
+  projects,
+}: {
+  item: ServicePageItem;
+  projects: Project[];
+}) {
   const [compare, setCompare] = useState(52);
   const category = getPortfolioCategory(item);
-  const project = projects.find((entry) => entry.category === category) ?? projects[0];
+  const project =
+    projects.find((entry) => entry.category === category) ?? projects[0];
   const beforeImage = project?.beforeImage ?? projects[2]?.image ?? item.image;
   const afterImage = project?.afterImage ?? item.image;
 
@@ -35,16 +55,30 @@ function ServiceCompareBlock({ item, projects }: { item: ServicePageItem; projec
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
         <div>
           <SectionLabel>До / После</SectionLabel>
-          <h2 className="mt-4 text-4xl font-light tracking-[-0.045em] md:text-6xl">Как идея превращается в готовое пространство</h2>
+          <h2 className="mt-4 text-4xl font-light tracking-[-0.045em] md:text-6xl">
+            Как идея превращается в готовое пространство
+          </h2>
           <p className="mt-5 text-lg leading-relaxed text-[#D6D1CA]">
-            Здесь можно поставить реальные пары изображений по услуге: исходное состояние и итоговый результат после проектирования.
+            Здесь можно поставить реальные пары изображений по услуге: исходное
+            состояние и итоговый результат после проектирования.
           </p>
         </div>
 
         <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.025]">
-          <img src={beforeImage} alt="До проектирования" className="h-[520px] w-full object-cover" />
-          <div className="absolute inset-y-0 left-0 overflow-hidden" style={{ width: `${compare}%` }}>
-            <img src={afterImage} alt="После проектирования" className="h-[520px] w-[calc(100vw-40px)] max-w-none object-cover lg:w-[760px]" />
+          <img
+            src={beforeImage}
+            alt="До проектирования"
+            className="h-[520px] w-full object-cover"
+          />
+          <div
+            className="absolute inset-y-0 left-0 overflow-hidden"
+            style={{ width: `${compare}%` }}
+          >
+            <img
+              src={afterImage}
+              alt="После проектирования"
+              className="h-[520px] w-[calc(100vw-40px)] max-w-none object-cover lg:w-[760px]"
+            />
           </div>
           <div className="absolute left-5 top-5 rounded-full border border-white/15 bg-[#050505]/62 px-4 py-2 text-xs uppercase tracking-[0.2em] text-white/72 backdrop-blur">
             До
@@ -52,7 +86,10 @@ function ServiceCompareBlock({ item, projects }: { item: ServicePageItem; projec
           <div className="absolute right-5 top-5 rounded-full border border-[#D69A66]/40 bg-[#050505]/62 px-4 py-2 text-xs uppercase tracking-[0.2em] text-[#D69A66] backdrop-blur">
             После
           </div>
-          <div className="absolute inset-y-0 w-px bg-[#D69A66] shadow-[0_0_28px_rgba(214,154,102,0.9)]" style={{ left: `${compare}%` }} />
+          <div
+            className="absolute inset-y-0 w-px bg-[#D69A66] shadow-[0_0_28px_rgba(214,154,102,0.9)]"
+            style={{ left: `${compare}%` }}
+          />
           <div
             className="pointer-events-none absolute top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#D69A66]/80 bg-[#050505]/70 shadow-[0_0_30px_rgba(214,154,102,0.35)] backdrop-blur"
             style={{ left: `${compare}%` }}
@@ -72,10 +109,20 @@ function ServiceCompareBlock({ item, projects }: { item: ServicePageItem; projec
   );
 }
 
-function ServicePortfolioBlock({ item, projects }: { item: ServicePageItem; projects: Project[] }) {
+function ServicePortfolioBlock({
+  item,
+  projects,
+}: {
+  item: ServicePageItem;
+  projects: Project[];
+}) {
   const category = getPortfolioCategory(item);
-  const targetProjects = projects.filter((project) => project.category === category);
-  const visibleProjects = (targetProjects.length ? targetProjects : projects).slice(0, 9);
+  const targetProjects = projects.filter(
+    (project) => project.category === category,
+  );
+  const visibleProjects = (
+    targetProjects.length ? targetProjects : projects
+  ).slice(0, 9);
 
   return (
     <section className="border-t border-white/10 px-5 py-24 md:px-10 lg:px-16">
@@ -83,10 +130,13 @@ function ServicePortfolioBlock({ item, projects }: { item: ServicePageItem; proj
         <div className="mb-10 grid gap-6 md:grid-cols-[1fr_0.75fr] md:items-end">
           <div>
             <SectionLabel>Тематическое портфолио</SectionLabel>
-            <h2 className="mt-4 text-4xl font-light tracking-[-0.045em] md:text-6xl">Целевые проекты по услуге</h2>
+            <h2 className="mt-4 text-4xl font-light tracking-[-0.045em] md:text-6xl">
+              Целевые проекты по услуге
+            </h2>
           </div>
           <p className="text-lg leading-relaxed text-[#D6D1CA]">
-            Карточки ведут на индивидуальные страницы проектов с уникальным URL. После наполнения CMS здесь останутся только релевантные кейсы.
+            Карточки ведут на индивидуальные страницы проектов с уникальным URL.
+            После наполнения CMS здесь останутся только релевантные кейсы.
           </p>
         </div>
 
@@ -98,14 +148,24 @@ function ServicePortfolioBlock({ item, projects }: { item: ServicePageItem; proj
               className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] transition duration-300 hover:-translate-y-2 hover:border-[#D69A66]/60"
             >
               <div className="relative h-72 overflow-hidden">
-                <img src={project.image} alt={project.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" />
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/68 via-transparent to-transparent" />
                 <div className="absolute bottom-5 left-5 right-5">
-                  <p className="mb-2 text-xs uppercase tracking-[0.24em] text-[#D69A66]">{project.category}</p>
-                  <h3 className="text-2xl font-light tracking-[-0.035em]">{project.title}</h3>
+                  <p className="mb-2 text-xs uppercase tracking-[0.24em] text-[#D69A66]">
+                    {project.category}
+                  </p>
+                  <h3 className="text-2xl font-light tracking-[-0.035em]">
+                    {project.title}
+                  </h3>
                 </div>
               </div>
-              <p className="p-6 text-sm leading-relaxed text-[#D6D1CA]">{project.description}</p>
+              <p className="p-6 text-sm leading-relaxed text-[#D6D1CA]">
+                {project.description}
+              </p>
             </Link>
           ))}
         </div>
@@ -114,7 +174,13 @@ function ServicePortfolioBlock({ item, projects }: { item: ServicePageItem; proj
   );
 }
 
-function ServiceDocumentsBlock({ item, projects }: { item: ServicePageItem; projects: Project[] }) {
+function ServiceDocumentsBlock({
+  item,
+  projects,
+}: {
+  item: ServicePageItem;
+  projects: Project[];
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [zoomImage, setZoomImage] = useState<string | null>(null);
   const docs = item.deliverables.map((title, index) => ({
@@ -129,10 +195,13 @@ function ServiceDocumentsBlock({ item, projects }: { item: ServicePageItem; proj
         <div className="mb-10 grid gap-6 md:grid-cols-[1fr_0.75fr] md:items-end">
           <div>
             <SectionLabel>Документация</SectionLabel>
-            <h2 className="mt-4 text-4xl font-light tracking-[-0.045em] md:text-6xl">Что входит в состав рабочей документации</h2>
+            <h2 className="mt-4 text-4xl font-light tracking-[-0.045em] md:text-6xl">
+              Что входит в состав рабочей документации
+            </h2>
           </div>
           <p className="text-lg leading-relaxed text-[#D6D1CA]">
-            Блок готов под реальные чертежи, ведомости, дендропланы и схемы инженерии. Изображение можно открыть крупно.
+            Блок готов под реальные чертежи, ведомости, дендропланы и схемы
+            инженерии. Изображение можно открыть крупно.
           </p>
         </div>
 
@@ -161,13 +230,23 @@ function ServiceDocumentsBlock({ item, projects }: { item: ServicePageItem; proj
               onClick={() => setZoomImage(activeDoc.image)}
               className="group relative min-h-[520px] overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] text-left"
             >
-              <img src={activeDoc.image} alt={activeDoc.title} className="absolute inset-0 h-full w-full object-cover opacity-62 grayscale transition duration-700 group-hover:scale-[1.03] group-hover:opacity-78" />
+              <img
+                src={activeDoc.image}
+                alt={activeDoc.title}
+                className="absolute inset-0 h-full w-full object-cover opacity-62 grayscale transition duration-700 group-hover:scale-[1.03] group-hover:opacity-78"
+              />
               <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(5,5,5,.88),rgba(5,5,5,.42)),linear-gradient(rgba(245,242,236,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(245,242,236,.08)_1px,transparent_1px)] bg-[length:auto,42px_42px,42px_42px]" />
               <div className="absolute inset-6 flex flex-col justify-between rounded-[1.5rem] border border-white/16 p-6">
-                <span className="text-xs uppercase tracking-[0.28em] text-[#D69A66]">Лист 0{activeIndex + 1}</span>
+                <span className="text-xs uppercase tracking-[0.28em] text-[#D69A66]">
+                  Лист 0{activeIndex + 1}
+                </span>
                 <div>
-                  <h3 className="max-w-xl text-4xl font-light tracking-[-0.045em]">{activeDoc.title}</h3>
-                  <p className="mt-4 text-sm uppercase tracking-[0.22em] text-white/48">Нажмите, чтобы увеличить</p>
+                  <h3 className="max-w-xl text-4xl font-light tracking-[-0.045em]">
+                    {activeDoc.title}
+                  </h3>
+                  <p className="mt-4 text-sm uppercase tracking-[0.22em] text-white/48">
+                    Нажмите, чтобы увеличить
+                  </p>
                 </div>
               </div>
             </button>
@@ -190,7 +269,11 @@ function ServiceDocumentsBlock({ item, projects }: { item: ServicePageItem; proj
           >
             ×
           </button>
-          <img src={zoomImage} alt="Увеличенный лист документации" className="max-h-[88vh] w-full max-w-6xl rounded-[1.5rem] object-contain shadow-[0_40px_140px_rgba(0,0,0,0.55)]" />
+          <img
+            src={zoomImage}
+            alt="Увеличенный лист документации"
+            className="max-h-[88vh] w-full max-w-6xl rounded-[1.5rem] object-contain shadow-[0_40px_140px_rgba(0,0,0,0.55)]"
+          />
         </div>
       )}
     </section>
@@ -207,13 +290,22 @@ function ExpertFooter() {
           <div className="grid gap-8 lg:grid-cols-[0.72fr_1fr] lg:items-end">
             <div>
               <SectionLabel>Экспертность</SectionLabel>
-              <h2 className="mt-4 text-4xl font-light tracking-[-0.045em] md:text-6xl">Остались вопросы по проекту? Давайте обсудим</h2>
+              <h2 className="mt-4 text-4xl font-light tracking-[-0.045em] md:text-6xl">
+                Остались вопросы по проекту? Давайте обсудим
+              </h2>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
               {reviewStats.slice(0, 3).map((stat) => (
-                <div key={stat.value} className="rounded-2xl border border-white/10 bg-white/[0.035] p-5">
-                  <strong className="block text-3xl font-light text-[#D69A66]">{stat.value}</strong>
-                  <span className="mt-3 block text-sm leading-relaxed text-[#D6D1CA]">{stat.label}</span>
+                <div
+                  key={stat.value}
+                  className="rounded-2xl border border-white/10 bg-white/[0.035] p-5"
+                >
+                  <strong className="block text-3xl font-light text-[#D69A66]">
+                    {stat.value}
+                  </strong>
+                  <span className="mt-3 block text-sm leading-relaxed text-[#D6D1CA]">
+                    {stat.label}
+                  </span>
                 </div>
               ))}
             </div>
@@ -226,7 +318,9 @@ function ExpertFooter() {
 
 function ServiceDetailPage({ item }: { item: ServicePageItem }) {
   const { servicePageItems, projects } = useCms();
-  const currentItem = servicePageItems.find((service) => service.id === item.id) ?? item;
+  const currentItem =
+    servicePageItems.find((service) => service.id === item.id) ?? item;
+  const landingCopy = getServiceLandingCopy(currentItem);
   const heroSlides = useMemo(
     () => [
       { image: currentItem.image, alt: currentItem.title },
@@ -245,9 +339,11 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
 
         <div className="relative z-10 mx-auto grid min-h-[calc(100vh-8rem)] max-w-7xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
           <div>
-            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">{currentItem.eyebrow}</p>
-            <h1 className="max-w-4xl text-5xl font-light leading-[0.94] tracking-[-0.06em] md:text-7xl lg:text-8xl">
+            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">
               {currentItem.title}
+            </p>
+            <h1 className="max-w-4xl text-[clamp(2.75rem,5.4vw,5.6rem)] font-light leading-[0.96] tracking-[-0.045em]">
+              {landingCopy.offerTitle}
             </h1>
             <div
               className="cms-rich-text mt-7 max-w-2xl text-lg leading-relaxed text-[#D6D1CA] md:text-xl"
@@ -272,17 +368,28 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
           <GlassPanel className="rounded-[2rem] p-6 md:p-8">
             <div className="grid gap-4 sm:grid-cols-2">
               <GlassPanel className="rounded-[1.25rem] p-5">
-                <span className="text-xs uppercase tracking-[0.28em] text-white/40">Стоимость</span>
-                <strong className="mt-3 block text-3xl font-light text-[#D69A66]">{currentItem.price}</strong>
+                <span className="text-xs uppercase tracking-[0.28em] text-white/40">
+                  Стоимость
+                </span>
+                <strong className="mt-3 block text-3xl font-light text-[#D69A66]">
+                  {currentItem.price}
+                </strong>
               </GlassPanel>
               <GlassPanel className="rounded-[1.25rem] p-5">
-                <span className="text-xs uppercase tracking-[0.28em] text-white/40">Срок</span>
-                <strong className="mt-3 block text-3xl font-light text-white">{currentItem.timeline}</strong>
+                <span className="text-xs uppercase tracking-[0.28em] text-white/40">
+                  Срок
+                </span>
+                <strong className="mt-3 block text-3xl font-light text-white">
+                  {currentItem.timeline}
+                </strong>
               </GlassPanel>
             </div>
             <div className="mt-5 grid gap-3">
               {currentItem.deliverables.map((entry) => (
-                <div key={entry} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-[#D6D1CA]">
+                <div
+                  key={entry}
+                  className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-[#D6D1CA]"
+                >
                   <span className="h-1.5 w-1.5 rounded-full bg-[#D69A66]" />
                   {entry}
                 </div>
@@ -300,8 +407,12 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
       <section className="border-t border-white/10 px-5 py-24 md:px-10 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
-            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Почему это работает</p>
-            <h2 className="text-4xl font-light tracking-[-0.045em] md:text-6xl">Страница собрана из реальной структуры услуги</h2>
+            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">
+              Почему это работает
+            </p>
+            <h2 className="text-4xl font-light tracking-[-0.045em] md:text-6xl">
+              Страница собрана из реальной структуры услуги
+            </h2>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {currentItem.benefits.map((benefit, index) => (
@@ -317,15 +428,20 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
       <section className="px-5 py-24 md:px-10 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-            <h2 className="max-w-3xl text-4xl font-light tracking-[-0.045em] md:text-6xl">Как движется проект</h2>
+            <h2 className="max-w-3xl text-4xl font-light tracking-[-0.045em] md:text-6xl">
+              Как движется проект
+            </h2>
             <p className="max-w-xl text-[#D6D1CA]">
-              Процесс коротко пересобран из старых страниц: от заявки и исходных данных до финальных файлов, чертежей или сопровождения.
+              Процесс коротко пересобран из старых страниц: от заявки и исходных
+              данных до финальных файлов, чертежей или сопровождения.
             </p>
           </div>
           <div className="grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 shadow-[0_24px_90px_rgba(0,0,0,0.24)] md:grid-cols-5">
             {currentItem.process.map((step, index) => (
               <GlassPanel key={step} className="p-6">
-                <span className="mb-12 block text-sm text-[#D69A66]">0{index + 1}</span>
+                <span className="mb-12 block text-sm text-[#D69A66]">
+                  0{index + 1}
+                </span>
                 <h3 className="text-xl font-light">{step}</h3>
               </GlassPanel>
             ))}
@@ -333,7 +449,10 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
         </div>
       </section>
 
-      <ProjectQuiz />
+      <ProjectQuiz
+        kind={landingCopy.quizKind}
+        serviceTitle={currentItem.title}
+      />
       <ExpertFooter />
       <ContactSection />
     </div>

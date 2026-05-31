@@ -1,5 +1,10 @@
 import { notFound } from "next/navigation";
-import { servicePageItems, contentPages } from "@/src/data";
+import type { Metadata } from "next";
+import {
+  contentPages,
+  getServiceLandingCopy,
+  servicePageItems,
+} from "@/src/data";
 import ServiceDetailPage from "@/src/modules/pages/ServiceDetailPage";
 import ContentPage from "@/src/modules/pages/ContentPage";
 
@@ -18,7 +23,47 @@ export function generateStaticParams() {
   ];
 }
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const servicePage = servicePageItems.find((item) => item.id === slug);
+
+  if (servicePage) {
+    const copy = getServiceLandingCopy(servicePage);
+
+    return {
+      title: `${copy.offerTitle} | 3D Smart Design Studio`,
+      description: copy.seoDescription,
+      keywords: copy.seoKeywords,
+      openGraph: {
+        title: copy.offerTitle,
+        description: copy.seoDescription,
+        images: [servicePage.image],
+      },
+    };
+  }
+
+  const contentPage = contentPages.find((page) => page.id === slug);
+  if (contentPage) {
+    return {
+      title: `${contentPage.title} | 3D Smart Design Studio`,
+      description: contentPage.text,
+    };
+  }
+
+  return {
+    title: "3D Smart Design Studio",
+  };
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
 
   const servicePage = servicePageItems.find((item) => item.id === slug);
@@ -34,18 +79,24 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 }
 
 async function loadCmsPage(slug: string) {
-  const cmsBaseUrl = process.env.CMS_API_INTERNAL_URL || "http://localhost:8080/api/v1";
+  const cmsBaseUrl =
+    process.env.CMS_API_INTERNAL_URL || "http://localhost:8080/api/v1";
 
   try {
-    const response = await fetch(`${cmsBaseUrl}/pages/${encodeURIComponent(slug)}`, {
-      cache: "no-store",
-      headers: { Accept: "application/json" },
-    });
+    const response = await fetch(
+      `${cmsBaseUrl}/pages/${encodeURIComponent(slug)}`,
+      {
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+      },
+    );
 
     if (!response.ok) return null;
 
     const page = await response.json();
-    const blocks = Array.isArray(page.blocks) ? page.blocks.map(normalizeBlock) : [];
+    const blocks = Array.isArray(page.blocks)
+      ? page.blocks.map(normalizeBlock)
+      : [];
     const hero = blocks.find((block: any) => block.type === "hero") ?? {};
 
     return {
@@ -69,7 +120,11 @@ function normalizeAsset(path?: string | null) {
   const value = path?.trim();
   if (!value) return null;
 
-  if (/^(https?:)?\/\//i.test(value) || value.startsWith("data:") || value.startsWith("/")) {
+  if (
+    /^(https?:)?\/\//i.test(value) ||
+    value.startsWith("data:") ||
+    value.startsWith("/")
+  ) {
     return value;
   }
 
@@ -93,7 +148,9 @@ function normalizeImageList(value: unknown): string[] {
 }
 
 function normalizeBlock(block: any) {
-  const images = normalizeImageList(block?.images?.length ? block.images : block?.image);
+  const images = normalizeImageList(
+    block?.images?.length ? block.images : block?.image,
+  );
 
   return {
     type: block?.type ?? "text",

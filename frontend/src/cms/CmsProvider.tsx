@@ -9,6 +9,7 @@ import {
   messengerLinks,
   newsArticles,
   projects,
+  requiredHomeHeroTitle,
   promos,
   reviewStats,
   serviceNavigationGroups as fallbackServiceNavigationGroups,
@@ -66,8 +67,9 @@ type CmsData = {
 const fallbackData: CmsData = {
   siteSettings: {
     siteName: "3D Smart Design Studio",
-    seoTitle: "3D Smart Design Studio",
-    seoDescription: "Студия концептуального дизайна. Интерьеры, архитектура, ландшафт.",
+    seoTitle: `${requiredHomeHeroTitle} | 3D Smart Design Studio`,
+    seoDescription:
+      "Дизайн интерьера, архитектурное проектирование, 3D-визуализация, ландшафтный дизайн, комплектация и авторский надзор в Самаре.",
     logo: null,
     logoSmall: null,
     favicon: null,
@@ -75,10 +77,9 @@ const fallbackData: CmsData = {
     socialPreviewImage: null,
   },
   homeHero: {
-    eyebrow: "Студия дизайна интерьера и архитектуры в Самаре",
-    title: "Дизайн с умом.",
-    text:
-      "Создаем интерьеры, архитектуру, 3D-визуализацию и ландшафтные проекты: от концепции до рабочей документации, комплектации и сопровождения.",
+    eyebrow: "3D Smart Design Studio",
+    title: requiredHomeHeroTitle,
+    text: "Создаем интерьеры, архитектуру, 3D-визуализацию и ландшафтные проекты: от концепции до рабочей документации, комплектации и сопровождения.",
     linkLabel: "Обсудить проект",
     linkHref: "/kontakty",
   },
@@ -112,7 +113,11 @@ const fallbackData: CmsData = {
 
 const CmsContext = createContext<CmsData>(fallbackData);
 
-function makeProjectSlug(project: { slug?: string; title?: string; id?: number }) {
+function makeProjectSlug(project: {
+  slug?: string;
+  title?: string;
+  id?: number;
+}) {
   if (project.slug) return project.slug;
 
   const base = project.title || `project-${project.id ?? ""}`;
@@ -127,7 +132,11 @@ function normalizeAsset(path?: string | null) {
   const value = path?.trim();
   if (!value) return null;
 
-  if (/^(https?:)?\/\//i.test(value) || value.startsWith("data:") || value.startsWith("/")) {
+  if (
+    /^(https?:)?\/\//i.test(value) ||
+    value.startsWith("data:") ||
+    value.startsWith("/")
+  ) {
     return value;
   }
 
@@ -151,7 +160,9 @@ function normalizeImageList(value: unknown): string[] {
 }
 
 function normalizeBlock(block: any) {
-  const images = normalizeImageList(block?.images?.length ? block.images : block?.image);
+  const images = normalizeImageList(
+    block?.images?.length ? block.images : block?.image,
+  );
 
   return {
     type: block?.type ?? "text",
@@ -184,9 +195,18 @@ function mergeServiceItems(payloadServices: any[]) {
     return {
       ...fallback,
       ...service,
-      deliverables: Array.isArray(service.deliverables) && service.deliverables.length ? service.deliverables : fallback.deliverables,
-      benefits: Array.isArray(service.benefits) && service.benefits.length ? service.benefits : fallback.benefits,
-      process: Array.isArray(service.process) && service.process.length ? service.process : fallback.process,
+      deliverables:
+        Array.isArray(service.deliverables) && service.deliverables.length
+          ? service.deliverables
+          : fallback.deliverables,
+      benefits:
+        Array.isArray(service.benefits) && service.benefits.length
+          ? service.benefits
+          : fallback.benefits,
+      process:
+        Array.isArray(service.process) && service.process.length
+          ? service.process
+          : fallback.process,
       image: service.image || fallback.image,
       price: service.price || fallback.price,
       timeline: service.timeline || fallback.timeline,
@@ -221,52 +241,83 @@ function normalizeServiceNavigationGroups(payloadGroups: any[]) {
         id: String(group.id ?? href ?? `service-group-${index}`),
         title,
         href,
-        description: typeof group?.description === "string" ? group.description : "",
+        description:
+          typeof group?.description === "string" ? group.description : "",
         items,
       };
     })
-    .filter((group): group is typeof fallbackServiceNavigationGroups[number] => Boolean(group));
+    .filter(
+      (group): group is (typeof fallbackServiceNavigationGroups)[number] =>
+        Boolean(group),
+    );
 
   return groups;
 }
 
 function normalizePayload(payload: any): CmsData {
   const settings = payload?.settings ?? {};
-  const apiServices = Array.isArray(payload?.services) && payload.services.length ? mergeServiceItems(payload.services) : fallbackServicePageItems;
-  const apiProjects = (Array.isArray(payload?.projects) && payload.projects.length ? payload.projects : projects).map((project: any) => ({
+  const apiServices =
+    Array.isArray(payload?.services) && payload.services.length
+      ? mergeServiceItems(payload.services)
+      : fallbackServicePageItems;
+  const apiProjects = (
+    Array.isArray(payload?.projects) && payload.projects.length
+      ? payload.projects
+      : projects
+  ).map((project: any) => ({
     ...project,
     slug: makeProjectSlug(project),
   }));
   const payloadPages = Array.isArray(payload?.pages) ? payload.pages : [];
-  const homePage = payloadPages.find((page: any) => page.slug === "home" || page.id === "home");
-  const homeBlocks = Array.isArray(homePage?.blocks) ? homePage.blocks.map(normalizeBlock) : [];
-  const homeBlock = homeBlocks.find((block: any) => block.type === "hero") ?? homeBlocks[0] ?? {};
-  const contentPayloadPages = payloadPages.filter((page: any) => page.slug !== "home" && page.id !== "home");
-  const apiPages =
-    contentPayloadPages.length
-      ? contentPayloadPages.map((page: any) => {
-          const blocks = Array.isArray(page.blocks) ? page.blocks.map(normalizeBlock) : [];
-          const hero = blocks.find((block: any) => block.type === "hero") ?? {};
-          return {
-            id: page.id ?? page.slug,
-            slug: page.slug,
-            title: page.title,
-            template: page.template,
-            body: page.body,
-            eyebrow: hero.eyebrow ?? "3D Smart Design Studio",
-            text: hero.text ?? hero.subtitle ?? page.seoDescription ?? "",
-            image: hero.image ?? apiProjects[0]?.image,
-            images: hero.images ?? [],
-            blocks,
-          };
-        })
-      : contentPages;
+  const homePage = payloadPages.find(
+    (page: any) => page.slug === "home" || page.id === "home",
+  );
+  const homeBlocks = Array.isArray(homePage?.blocks)
+    ? homePage.blocks.map(normalizeBlock)
+    : [];
+  const homeBlock =
+    homeBlocks.find((block: any) => block.type === "hero") ??
+    homeBlocks[0] ??
+    {};
+  const homeTitle =
+    typeof homeBlock.title === "string" ? homeBlock.title.trim() : "";
+  const normalizedHomeTitle = homeTitle.toLowerCase();
+  const shouldUseRequiredHomeTitle =
+    !homeTitle ||
+    ["дизайн с умом", "дизайн с умом."].includes(normalizedHomeTitle) ||
+    (normalizedHomeTitle.includes("дизайн интерьера") &&
+      normalizedHomeTitle.includes("архитектур") &&
+      !normalizedHomeTitle.includes("ландшафт"));
+  const contentPayloadPages = payloadPages.filter(
+    (page: any) => page.slug !== "home" && page.id !== "home",
+  );
+  const apiPages = contentPayloadPages.length
+    ? contentPayloadPages.map((page: any) => {
+        const blocks = Array.isArray(page.blocks)
+          ? page.blocks.map(normalizeBlock)
+          : [];
+        const hero = blocks.find((block: any) => block.type === "hero") ?? {};
+        return {
+          id: page.id ?? page.slug,
+          slug: page.slug,
+          title: page.title,
+          template: page.template,
+          body: page.body,
+          eyebrow: hero.eyebrow ?? "3D Smart Design Studio",
+          text: hero.text ?? hero.subtitle ?? page.seoDescription ?? "",
+          image: hero.image ?? apiProjects[0]?.image,
+          images: hero.images ?? [],
+          blocks,
+        };
+      })
+    : contentPages;
 
   return {
     siteSettings: {
       siteName: settings.siteName ?? fallbackData.siteSettings.siteName,
       seoTitle: settings.seoTitle ?? fallbackData.siteSettings.seoTitle,
-      seoDescription: settings.seoDescription ?? fallbackData.siteSettings.seoDescription,
+      seoDescription:
+        settings.seoDescription ?? fallbackData.siteSettings.seoDescription,
       logo: settings.logo ?? null,
       logoSmall: settings.logoSmall ?? null,
       favicon: settings.favicon ?? null,
@@ -276,7 +327,7 @@ function normalizePayload(payload: any): CmsData {
     homeHero: homePage
       ? {
           eyebrow: homeBlock.eyebrow ?? "",
-          title: homeBlock.title ?? fallbackData.homeHero.title,
+          title: shouldUseRequiredHomeTitle ? requiredHomeHeroTitle : homeTitle,
           text: homeBlock.subtitle ?? homeBlock.text ?? "",
           linkLabel: homeBlock.linkLabel ?? "",
           linkHref: homeBlock.linkHref ?? "",
@@ -292,10 +343,20 @@ function normalizePayload(payload: any): CmsData {
       price: item.price,
       text: item.text,
     })),
-    newsArticles: Array.isArray(payload?.news) && payload.news.length ? payload.news : newsArticles,
-    promos: Array.isArray(payload?.promos) && payload.promos.length ? payload.promos : promos,
-    testimonials: Array.isArray(payload?.reviews) && payload.reviews.length ? payload.reviews : testimonials,
-    faq: Array.isArray(payload?.faqs) && payload.faqs.length ? payload.faqs : faq,
+    newsArticles:
+      Array.isArray(payload?.news) && payload.news.length
+        ? payload.news
+        : newsArticles,
+    promos:
+      Array.isArray(payload?.promos) && payload.promos.length
+        ? payload.promos
+        : promos,
+    testimonials:
+      Array.isArray(payload?.reviews) && payload.reviews.length
+        ? payload.reviews
+        : testimonials,
+    faq:
+      Array.isArray(payload?.faqs) && payload.faqs.length ? payload.faqs : faq,
     contactInfo: {
       ...contactInfo,
       phone: settings.phone ?? contactInfo.phone,
@@ -313,14 +374,24 @@ function normalizePayload(payload: any): CmsData {
       vk: settings.messengers?.vk ?? messengerLinks.vk,
     },
     animationControls: {
-      enabled: settings.animations?.enabled ?? fallbackData.animationControls.enabled,
-      smoothScroll: settings.animations?.smoothScroll ?? fallbackData.animationControls.smoothScroll,
-      pageReveal: settings.animations?.pageReveal ?? fallbackData.animationControls.pageReveal,
+      enabled:
+        settings.animations?.enabled ?? fallbackData.animationControls.enabled,
+      smoothScroll:
+        settings.animations?.smoothScroll ??
+        fallbackData.animationControls.smoothScroll,
+      pageReveal:
+        settings.animations?.pageReveal ??
+        fallbackData.animationControls.pageReveal,
     },
     contentPages: apiPages,
-    careerVacancies: Array.isArray(payload?.vacancies) ? payload.vacancies : careerVacancies,
+    careerVacancies: Array.isArray(payload?.vacancies)
+      ? payload.vacancies
+      : careerVacancies,
     reviewStats,
-    menuItems: Array.isArray(payload?.menuItems) && payload.menuItems.length ? payload.menuItems : fallbackData.menuItems,
+    menuItems:
+      Array.isArray(payload?.menuItems) && payload.menuItems.length
+        ? payload.menuItems
+        : fallbackData.menuItems,
     ready: true,
   };
 }
@@ -340,7 +411,8 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
         cache: "no-store",
       })
         .then((response) => {
-          if (!response.ok) throw new Error(`CMS request failed: ${response.status}`);
+          if (!response.ok)
+            throw new Error(`CMS request failed: ${response.status}`);
           return response.json();
         })
         .then((payload) => setData(normalizePayload(payload)))

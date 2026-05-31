@@ -10,11 +10,24 @@ import { SiteI18nProvider } from "@/src/i18n";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "3D Smart Design Studio",
-  description: "Студия концептуального дизайна. Интерьеры, архитектура, ландшафт.",
+  title:
+    "Студия дизайна интерьера, архитектуры и ландшафта в Самаре | 3D Smart Design Studio",
+  description:
+    "3D Smart Design Studio: дизайн интерьера, архитектурное проектирование, 3D-визуализация, ландшафтный дизайн, комплектация и авторский надзор в Самаре.",
+  keywords: [
+    "дизайн интерьера Самара",
+    "архитектура Самара",
+    "ландшафтный дизайн Самара",
+    "3D-визуализация",
+    "3D Smart Design Studio",
+  ],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="ru">
       <body>

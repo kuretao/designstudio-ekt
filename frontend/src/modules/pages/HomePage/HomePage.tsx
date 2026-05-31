@@ -60,11 +60,12 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
         <section className="hero-section snap-section relative z-[1] flex min-h-screen overflow-hidden px-5 py-28 md:px-10 lg:px-16">
           <video
             className="hero-video absolute inset-0 h-full w-full object-cover opacity-75"
-            src={`${assetPrefix}/background.mp4`}
+            src={`${assetPrefix}/background-hero.mp4`}
             autoPlay
             muted
             loop
             playsInline
+            preload="auto"
           />
           <div className="hero-light-field absolute inset-0" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,rgba(232,221,206,.22),transparent_33%),radial-gradient(circle_at_18%_78%,rgba(111,128,106,.16),transparent_36%),linear-gradient(90deg,rgba(8,7,5,.88),rgba(8,7,5,.58)_44%,rgba(15,13,10,.2))]" />
@@ -77,7 +78,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
                   {homeHero.eyebrow}
                 </p>
               ) : null}
-              <h1 className="hero-reveal max-w-5xl text-6xl font-light leading-[0.92] tracking-[-0.07em] md:text-8xl lg:text-[9.5rem]">
+              <h1 className="hero-reveal max-w-5xl text-[clamp(3rem,7vw,6.6rem)] font-light leading-[0.96] tracking-[-0.045em]">
                 {homeHero.title}
               </h1>
               <div className="hero-reveal mt-8 grid max-w-4xl gap-6 md:grid-cols-[1fr_auto] md:items-end">

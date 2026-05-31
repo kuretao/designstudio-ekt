@@ -59,7 +59,7 @@ function NewsArticlePage({ article }: { article: NewsArticle }) {
             <span className="text-sm text-white/50">{currentArticle.date}</span>
             <span className="text-sm text-white/35">{currentArticle.readingTime} чтения</span>
           </div>
-          <h1 className="max-w-4xl text-5xl font-light leading-[0.95] tracking-[-0.055em] md:text-7xl">
+          <h1 className="max-w-4xl text-[clamp(2.7rem,5.2vw,5.4rem)] font-light leading-[0.98] tracking-[-0.04em]">
             {currentArticle.title}
           </h1>
         </div>

@@ -35,9 +35,9 @@ export function ContentPagesOverview() {
   return (
     <section className="border-t border-white/10 px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
-        <SectionLabel>Информационные страницы</SectionLabel>
+        <SectionLabel>Разделы сайта</SectionLabel>
         <h2 className="mb-12 max-w-4xl text-5xl font-light tracking-normal md:text-7xl">
-          Акции, новости, блог, отзывы и новые разделы
+          Материалы, отзывы и полезные страницы
         </h2>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {contentPages.map((page) => (

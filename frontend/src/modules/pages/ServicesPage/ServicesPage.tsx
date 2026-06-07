@@ -31,7 +31,7 @@ function ServicesHero() {
 
       <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl gap-10 lg:grid-cols-[0.94fr_1.06fr] lg:items-end">
         <div className="pb-6">
-          <p className="text-xs uppercase tracking-[0.38em] text-[#D69A66]">Services / 3D Smart Design Studio</p>
+          <p className="text-xs uppercase tracking-[0.38em] text-[#D69A66]">Услуги / 3D Smart Design Studio</p>
           <h1 className="mt-5 max-w-5xl text-[clamp(3rem,6.4vw,6.2rem)] font-light leading-[0.94] tracking-[-0.045em] text-white">
             Услуги студии
           </h1>
@@ -87,15 +87,23 @@ function ServicesHero() {
 }
 
 export function ServicesSummary() {
-  const { serviceNavigationGroups, servicePageItems } = useCms();
-  const mainServices = serviceNavigationGroups
-    .map((group) => servicePageItems.find((item) => `/${item.id}` === group.href))
+  const { servicePageItems } = useCms();
+  const coreServiceIds = [
+    "arhitekturnoe-proektirovanie",
+    "arhitekturnaya-3d-vizualizaciya",
+    "dizajn-interyera",
+    "komplektaciya-ob-ekta",
+    "landshaftnyj-dizajn",
+    "avtorskij-nadzor",
+  ];
+  const mainServices = coreServiceIds
+    .map((id) => servicePageItems.find((item) => item.id === id))
     .filter((service): service is NonNullable<typeof service> => Boolean(service));
 
   return (
     <section id="services" className="border-t border-white/10 px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
-        <SectionLabel>Services &amp; pricing</SectionLabel>
+        <SectionLabel>Услуги и цены</SectionLabel>
         <div className="mb-12 grid gap-8 md:grid-cols-[1fr_0.8fr] md:items-end">
           <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">Услуги и цены</h2>
           <p className="text-[#D6D1CA]">
@@ -133,7 +141,7 @@ export function ServicePages() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 grid gap-8 md:grid-cols-[1fr_0.8fr] md:items-end">
           <div>
-            <SectionLabel>Все страницы услуг</SectionLabel>
+            <SectionLabel>Направления услуг</SectionLabel>
             <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">Направления 3D Smart Design Studio</h2>
           </div>
           <p className="text-lg leading-relaxed text-[#D6D1CA]">
@@ -194,7 +202,7 @@ export function Workflow() {
   return (
     <section className="px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
-        <SectionLabel>Workflow</SectionLabel>
+        <SectionLabel>Этапы работы</SectionLabel>
         <h2 className="mb-14 max-w-4xl text-5xl font-light tracking-[-0.055em] md:text-7xl">
           Этапы работы без хаоса и лишней коммуникации
         </h2>

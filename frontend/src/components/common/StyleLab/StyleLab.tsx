@@ -109,7 +109,6 @@ export default function StyleLab() {
     };
 
     localStorage.setItem("homeStyleLabConcept", JSON.stringify(payload));
-    console.info("Mock style lab concept", payload);
     setSaved(true);
     window.setTimeout(() => setSaved(false), 2600);
   };
@@ -143,7 +142,7 @@ export default function StyleLab() {
       <div className="relative z-10 mx-auto grid min-h-[calc(136vh-22rem)] max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
         <div className="flex flex-col justify-between">
           <div>
-            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Style lab</p>
+            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Подбор стиля</p>
             <h2 className="max-w-3xl text-5xl font-light leading-tight text-[#F5F2EC] md:text-7xl">
               Соберите настроение будущего интерьера
             </h2>
@@ -296,7 +295,7 @@ export default function StyleLab() {
               >
                 Рассчитать проект
               </Link>
-              {saved && <span className="text-sm text-[#D6D1CA]">Подборка сохранена в моковом режиме</span>}
+              {saved && <span className="text-sm text-[#D6D1CA]">Подборка сохранена</span>}
             </div>
           </div>
         </GlassPanel>

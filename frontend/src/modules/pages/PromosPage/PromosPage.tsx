@@ -50,7 +50,7 @@ export default function PromosPage() {
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.94)_0%,rgba(5,5,5,.72)_52%,rgba(5,5,5,.26)_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(0deg,#050505_0%,rgba(5,5,5,.42)_32%,transparent_74%)]" />
           <div className="relative z-10 mx-auto max-w-7xl">
-            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Special offers</p>
+            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Специальные условия</p>
             <div className="grid gap-8 md:grid-cols-[1fr_0.55fr] md:items-end">
               <h1 className="text-[clamp(3rem,6.2vw,6rem)] font-light leading-[0.96] tracking-[-0.045em]">
                 Акции&nbsp;и скидки

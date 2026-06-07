@@ -246,7 +246,7 @@ export default function PrivacyPage() {
                 </a>
               </p>
               <p>
-                Email:{" "}
+                Почта:{" "}
                 <a href="mailto:3dsmartdesign@bk.ru" className="text-[#D69A66] transition hover:text-white">
                   3dsmartdesign@bk.ru
                 </a>

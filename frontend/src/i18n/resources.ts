@@ -4,8 +4,8 @@ export const resources = {
   ru: {
     translation: {
       header: {
-        menu: "Menu",
-        close: "Close",
+        menu: "Меню",
+        close: "Закрыть",
         contact: "Написать нам",
       },
       menu: {
@@ -14,9 +14,10 @@ export const resources = {
         services: "Услуги",
         blog: "Блог",
         contacts: "Контакты",
+        awards: "Награды и дипломы",
       },
       footer: {
-        brandText: "Студия концептуального дизайна интерьеров, архитектурного проектирования и ландшафтного дизайна.",
+        brandText: "Студия дизайна интерьеров, архитектурного проектирования, 3D-визуализации и ландшафтного дизайна.",
         services: "Услуги",
         sections: "Разделы",
         contacts: "Контакты",
@@ -24,7 +25,7 @@ export const resources = {
         schedule: "График",
         address: "Адрес",
         career: "Карьера",
-        partners: "Партнерам",
+        partners: "Партнёрам",
         privacy: "Политика конфиденциальности",
         agreement: "Пользовательское соглашение",
         remote: "Работаем удалённо по всему миру",
@@ -69,9 +70,10 @@ export const resources = {
         services: "Services",
         blog: "Blog",
         contacts: "Contacts",
+        awards: "Awards and Diplomas",
       },
       footer: {
-        brandText: "Conceptual interior design, architectural design and landscape design studio.",
+        brandText: "Interior design, architectural design, 3D visualization and landscape design studio.",
         services: "Services",
         sections: "Sections",
         contacts: "Contacts",
@@ -79,7 +81,7 @@ export const resources = {
         schedule: "Hours",
         address: "Location",
         career: "Careers",
-        partners: "Partners",
+        partners: "For Partners",
         privacy: "Privacy Policy",
         agreement: "User Agreement",
         remote: "Remote projects worldwide",
@@ -94,12 +96,20 @@ export const resources = {
         "dizajn-interera-kommercheskogo-prostranstva": "Commercial Interior Design",
         "komplektaciya-ob-ekta": "Project Procurement",
         "3d-vizualizaciya": "3D Visualization",
-        "arhitekturnaya-3d-vizualizaciya": "Architectural 3D Visualization",
+        "arhitekturnaya-3d-vizualizaciya": "Architectural 3D Visualization for Residential Developments",
         "landshaftnyj-dizajn": "Landscape Design",
         "virtualnyj-3d-tur-360": "Virtual 3D Tour 360°",
         "arhitekturnoe-proektirovanie": "Architectural Design",
         "eskiznyj-proekt": "Concept Design",
         "rabochaya-dokumentaciya": "Working Documentation",
+        "dizajn-interyera-chastnyh-prostranstv": "Private Interior Design",
+        "avtorskij-nadzor": "Author Supervision",
+        "arhitekturnaya-3d-vizualizaciya-kottedzhej": "Architectural 3D Visualization for Cottages",
+        "interernaya-3d-vizualizaciya": "Interior 3D Visualization",
+        "landshaftnoe-proektirovanie-i-genplan": "Landscape Planning and Master Plan",
+        "proektirovanie-inzhenernyh-sistem": "Engineering Systems Design",
+        "ozelenenie-i-dendroplan": "Planting Plan and Dendrology",
+        "avtorskij-nadzor-i-realizaciya": "Author Supervision and Implementation",
       },
     },
   },
@@ -111,5 +121,6 @@ export function menuKeyByHref(href: string) {
   if (href === "/services") return "menu.services";
   if (href === "/blog") return "menu.blog";
   if (href === "/kontakty") return "menu.contacts";
+  if (href === "/nagrady-i-diplomy") return "menu.awards";
   return null;
 }

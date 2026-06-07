@@ -175,7 +175,7 @@ export default function Footer() {
                   {siteSettings.siteName}
                 </p>
                 <p className="text-[10px] uppercase tracking-[0.22em] text-white/35">
-                  Studio
+                  Студия
                 </p>
               </div>
             </div>
@@ -292,7 +292,7 @@ export default function Footer() {
               {/* Email */}
               <div>
                 <p className="mb-1 text-[10px] uppercase tracking-[0.22em] text-white/25">
-                  Email
+                  Почта
                 </p>
                 <div className="space-y-1">
                   {contactInfo.emails.map((e) => (

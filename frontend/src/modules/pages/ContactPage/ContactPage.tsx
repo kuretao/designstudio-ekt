@@ -42,6 +42,8 @@ const socials = [
   { label: "Pinterest", href: "https://ru.pinterest.com/3D_SMART_DESIGN_STUDIO/",       icon: <PinIcon />, color: "#D69A66", bg: "rgba(214,154,102,0.12)",    border: "rgba(214,154,102,0.35)"  },
 ];
 
+const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 /* ─── animated counter ───────────────────────────────────────── */
 function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   const [val, setVal] = useState(0);
@@ -102,7 +104,7 @@ function ContactMapPanel() {
     <div className="flex flex-col gap-4">
       <div className="overflow-hidden rounded-[2.5rem] border border-white/10" style={{ minHeight: 360 }}>
         <iframe
-          title="3D Smart Design Studio map"
+          title="Карта 3D Smart Design Studio"
           src={contactInfo.mapSrc}
           className="h-full min-h-[360px] w-full grayscale invert"
           style={{ filter: "invert(1) grayscale(1) brightness(0.85) contrast(1.1)" }}
@@ -111,9 +113,9 @@ function ContactMapPanel() {
       <div className="rounded-[2rem] border border-white/10 bg-white/[0.025] p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[#D69A66]">Studio</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-[#D69A66]">Студия</p>
             <p className="mt-1 text-lg font-light text-white">3D Smart Design Studio</p>
-            <p className="mt-0.5 text-sm text-white/40">Samara · remote worldwide</p>
+            <p className="mt-0.5 text-sm text-white/40">Самара · работаем удаленно</p>
           </div>
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
             <div className="h-2.5 w-2.5 animate-pulse rounded-full bg-[#D69A66]" />
@@ -140,7 +142,7 @@ function ContactHero() {
 
       <div className="relative z-10 mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl items-end pb-24">
         <div className="max-w-6xl">
-          <p className="mb-5 text-xs uppercase tracking-[0.38em] text-[#D69A66]">Contacts / 3D Smart Design Studio</p>
+          <p className="mb-5 text-xs uppercase tracking-[0.38em] text-[#D69A66]">Контакты / 3D Smart Design Studio</p>
           <h1 className="max-w-5xl text-6xl font-light leading-[0.9] tracking-[-0.065em] text-white md:text-8xl lg:text-9xl">
             Свяжитесь с нами
           </h1>
@@ -207,9 +209,15 @@ export function ContactSection({ showIntro = true, compactTop = false }: Contact
 
   return (
     <section id="contact" className={`relative overflow-hidden px-5 pb-28 ${compactTop ? "pt-16" : "pt-20"} md:px-10 lg:px-16`}>
-      {/* Background glow orbs */}
-      <div className="pointer-events-none absolute -left-32 top-0 h-[600px] w-[600px] rounded-full opacity-20" style={{ background: "radial-gradient(circle, rgba(214,154,102,0.35) 0%, transparent 70%)", filter: "blur(80px)" }} />
-      <div className="pointer-events-none absolute -right-24 bottom-32 h-[500px] w-[500px] rounded-full opacity-15" style={{ background: "radial-gradient(circle, rgba(214,154,102,0.35) 0%, transparent 70%)", filter: "blur(80px)" }} />
+      <img
+        src={`${assetPrefix}/world-map-png.webp`}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        className="pointer-events-none absolute right-0 top-8 hidden h-auto w-[50vw] max-w-[760px] opacity-50 md:block"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#171511_0%,rgba(23,21,17,.9)_58%,rgba(23,21,17,.62)_100%)]" />
 
       <div className="relative z-10 mx-auto max-w-7xl">
 
@@ -261,7 +269,7 @@ export function ContactSection({ showIntro = true, compactTop = false }: Contact
               ),
             },
             {
-              label: "Email",
+              label: "Почта",
               content: (
                 <div className="space-y-1.5">
                   {contactInfo.emails.map((e) => (

@@ -100,7 +100,7 @@ export default function AgreementPage() {
                 <p>Студия концептуального дизайна <span className="text-white/80">3D Smart Design Studio</span></p>
                 <p>Сайт: <span className="text-[#D69A66]">3dsmartdesign.ru</span></p>
                 <p>Телефон: <span className="text-white/80">+7 (987) 942-12-42</span></p>
-                <p>Email: <span className="text-white/80">3dsmartdesign@bk.ru</span></p>
+                <p>Почта: <span className="text-white/80">3dsmartdesign@bk.ru</span></p>
               </div>
             </div>
           </div>

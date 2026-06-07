@@ -77,7 +77,7 @@ function AboutPage() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/20 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6">
-              <p className="mb-3 text-xs uppercase tracking-[0.32em] text-[#D69A66]">Design with logic</p>
+              <p className="mb-3 text-xs uppercase tracking-[0.32em] text-[#D69A66]">Дизайн с логикой</p>
               <h3 className="max-w-md text-3xl font-light tracking-[-0.04em]">
                 Красивое решение должно выдерживать стройку, бюджет и повседневную жизнь.
               </h3>

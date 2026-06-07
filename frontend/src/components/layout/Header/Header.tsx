@@ -63,9 +63,9 @@ function LogoMark() {
           strokeWidth="0.032"
         />
       </svg>
-      <span className="text-center text-[9px] font-medium uppercase leading-none tracking-[0.42em] text-white">
+      <span className="text-center text-[9px] font-medium leading-none tracking-[0.24em] text-white">
         3D Smart
-        <span className="mt-1 block tracking-[0.5em]">Design</span>
+        <span className="mt-1 block tracking-[0.2em]">Design Studio</span>
       </span>
     </span>
   );
@@ -204,14 +204,21 @@ export default function Header() {
             href="/"
             aria-label={siteSettings.siteName}
             onClick={closeMenu}
-            className="justify-self-center transition duration-300 hover:opacity-75"
+            className="flex min-w-[128px] flex-col items-center gap-1 justify-self-center text-center transition duration-300 hover:opacity-75"
           >
             {siteSettings.logoSmall || siteSettings.logo ? (
-              <img
-                src={siteSettings.logoSmall ?? siteSettings.logo ?? ""}
-                alt={siteSettings.siteName}
-                className="block max-h-12 max-w-[180px] object-contain"
-              />
+              <>
+                <img
+                  src={siteSettings.logoSmall ?? siteSettings.logo ?? ""}
+                  alt=""
+                  aria-hidden="true"
+                  className="block h-8 w-8 object-contain"
+                />
+                <span className="text-[9px] font-medium leading-none tracking-[0.24em] text-white">
+                  3D Smart
+                  <span className="mt-1 block tracking-[0.2em]">Design Studio</span>
+                </span>
+              </>
             ) : (
               <LogoMark />
             )}

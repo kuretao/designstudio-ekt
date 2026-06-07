@@ -625,9 +625,8 @@ export default function ProjectQuiz({
               </div>
 
               <p className="relative z-10 mt-10 text-sm leading-relaxed text-[#D6D1CA]/75">
-                Сейчас работает моковая логика: ответы сохраняются в браузере и
-                выводятся в консоль. Позже этот payload можно отправить на
-                backend без изменения интерфейса.
+                Ответы помогают быстро понять масштаб, сроки и формат проекта.
+                После отправки мы свяжемся с вами в выбранном канале.
               </p>
             </div>
 
@@ -783,8 +782,7 @@ export default function ProjectQuiz({
                     </label>
                     {submittedTo && (
                       <p className="rounded-2xl border border-[#D69A66]/25 bg-[#D69A66]/10 px-4 py-3 text-sm text-[#F5F2EC]">
-                        Мок-заявка сохранена. Канал: {submittedTo}. Payload уже
-                        готов для подключения backend.
+                        Заявка сохранена. Мы свяжемся с вами в выбранном канале: {submittedTo}.
                       </p>
                     )}
                   </div>

@@ -364,7 +364,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
       </div>
       <Noise />
       {children}
-      <div className="fixed bottom-5 right-5 z-[70] flex flex-col gap-2 md:bottom-8 md:right-8">
+      <div className="fixed right-3 top-24 z-[70] flex flex-col gap-2 md:bottom-8 md:right-8 md:top-auto">
         {floatingMessengers.map((messenger) => {
           const href = messenger.icon === "telegram" ? messengerLinks.telegram : messenger.icon === "vk" ? messengerLinks.vk : messengerLinks.max;
 
@@ -375,7 +375,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
               target="_blank"
               rel="noreferrer"
               aria-label={t(`fixed.${messenger.icon}`, messenger.label)}
-              className="grid h-12 w-12 place-items-center rounded-full border border-white/18 bg-white/12 text-white backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-white/34 hover:bg-white/18"
+              className="grid h-11 w-11 place-items-center rounded-full border border-white/18 bg-[#050505]/35 text-white backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-white/34 hover:bg-white/18 md:h-12 md:w-12"
             >
               <MessengerIcon icon={messenger.icon} />
             </a>

@@ -12,6 +12,7 @@ type Crumb = {
 const routeLabels: Record<string, string> = {
   "/akcii-i-skidki": "Акции",
   "/blog": "Блог",
+  "/nagrady-i-diplomy": "Награды и дипломы",
   "/kontakty": "Контакты",
   "/karera": "Карьера",
   "/novosti": "Новости",

@@ -626,7 +626,7 @@ export const serviceNavigationGroups: ServiceNavigationGroup[] = [
     title: "Архитектурное проектирование",
     href: "/arhitekturnoe-proektirovanie",
     description:
-      "Концепция, фасады, объемы здания и рабочая документация для строителей.",
+      "Концепция, фасады и рабочая документация",
     items: [
       { label: "Эскизный проект", href: "/eskiznyj-proekt" },
       { label: "Рабочая документация", href: "/rabochaya-dokumentaciya" },
@@ -637,7 +637,7 @@ export const serviceNavigationGroups: ServiceNavigationGroup[] = [
     title: "Дизайн интерьера",
     href: "/dizajn-interyera",
     description:
-      "Жилые и коммерческие интерьеры, комплектация и авторский надзор.",
+      "Частные и коммерческие пространства",
     items: [
       {
         label: "Дизайн интерьера частных пространств",
@@ -656,7 +656,7 @@ export const serviceNavigationGroups: ServiceNavigationGroup[] = [
     title: "3D-визуализация",
     href: "/3d-vizualizaciya",
     description:
-      "Рендеры, архитектурная и интерьерная визуализация, интерактивные 360°-туры.",
+      "Рендеры, экстерьеры и 3D-туры",
     items: [
       {
         label: "Архитектурная 3D-визуализация ЖК и девелопмента",
@@ -678,7 +678,7 @@ export const serviceNavigationGroups: ServiceNavigationGroup[] = [
     title: "Ландшафтный дизайн",
     href: "/landshaftnyj-dizajn",
     description:
-      "Генплан, инженерные системы, озеленение и сопровождение реализации участка.",
+      "Генплан, инженерные системы и озеленение",
     items: [
       {
         label: "Ландшафтное проектирование и генплан",
@@ -826,19 +826,19 @@ export const contentPages = [
   {
     id: "akcii-i-skidki",
     title: "Акции и скидки",
-    eyebrow: "Special offers",
+    eyebrow: "Специальные условия",
     text: "Пакетные условия для комплексных проектов: интерьер, визуализация, комплектация и сопровождение реализации.",
   },
   {
     id: "novosti",
     title: "Новости",
-    eyebrow: "Studio updates",
+    eyebrow: "Новости студии",
     text: "Публикуем новые услуги, проектные заметки, сезонные предложения и полезные материалы для клиентов студии.",
   },
   {
     id: "blog",
     title: "Блог",
-    eyebrow: "Design notes",
+    eyebrow: "Заметки о дизайне",
     text: "Материалы о планировках, визуализации, комплектации, ремонте и трендах. Перенесли основу старой страницы блога и оформили ее как журнальный раздел.",
   },
   {
@@ -850,14 +850,46 @@ export const contentPages = [
   {
     id: "karera",
     title: "Карьера",
-    eyebrow: "Join the studio",
+    eyebrow: "Команда студии",
     text: "Публикуем открытые вакансии студии, стажировки и проектные роли для дизайнеров, визуализаторов и архитекторов.",
   },
   {
     id: "partneram",
     title: "Партнерам",
-    eyebrow: "Collaboration",
+    eyebrow: "Сотрудничество",
     text: "Открыты к сотрудничеству с поставщиками, подрядчиками, девелоперами, шоурумами и профильными специалистами.",
+  },
+];
+
+export type StudioAward = {
+  title: string;
+  issuer: string;
+  year: string;
+  description: string;
+  image?: string;
+};
+
+export const awards: StudioAward[] = [
+  {
+    title: "Диплом администрации области",
+    issuer: "Администрация Самарской области",
+    year: "2026",
+    description:
+      "Официальное подтверждение профессионального уровня студии и вклада в развитие визуальной культуры среды.",
+  },
+  {
+    title: "Профессиональный сертификат",
+    issuer: "Профильная аттестация",
+    year: "2026",
+    description:
+      "Подтверждение профессиональных компетенций в проектировании, визуализации и сопровождении объектов.",
+  },
+  {
+    title: "Благодарственное письмо",
+    issuer: "Партнеры и заказчики",
+    year: "2026",
+    description:
+      "Отметка партнерского подхода, ответственности в коммуникации и качества работы с проектами.",
   },
 ];
 

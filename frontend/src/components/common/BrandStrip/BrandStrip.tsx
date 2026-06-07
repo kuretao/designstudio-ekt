@@ -53,7 +53,7 @@ export default function BrandStrip() {
             <h2 className="mt-3 text-3xl font-light tracking-[-0.04em] text-white md:text-5xl">Девелоперы и застройщики</h2>
           </div>
           <p className="max-w-2xl text-sm leading-relaxed text-[#D6D1CA] md:justify-self-end md:text-right">
-            Монохромный блок с логотипами партнеров и клиентов студии из прежнего раздела доверия.
+            Проекты студии выбирают частные клиенты, девелоперы и строительные компании, которым важны понятная визуализация и аккуратная реализация.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/10 sm:grid-cols-3 lg:grid-cols-4">

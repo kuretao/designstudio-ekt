@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import {
+  awards,
   careerVacancies,
   contactInfo,
   contentPages,
@@ -60,6 +61,7 @@ type CmsData = {
   contentPages: typeof contentPages;
   careerVacancies: typeof careerVacancies;
   reviewStats: typeof reviewStats;
+  awards: typeof awards;
   menuItems: { href: string; label: string }[];
   ready: boolean;
 };
@@ -101,6 +103,7 @@ const fallbackData: CmsData = {
   contentPages,
   careerVacancies,
   reviewStats,
+  awards,
   menuItems: [
     { href: "/o-nas", label: "О нас" },
     { href: "/portfolio", label: "Портфолио" },
@@ -388,6 +391,7 @@ function normalizePayload(payload: any): CmsData {
       ? payload.vacancies
       : careerVacancies,
     reviewStats,
+    awards: Array.isArray(payload?.awards) && payload.awards.length ? payload.awards : awards,
     menuItems:
       Array.isArray(payload?.menuItems) && payload.menuItems.length
         ? payload.menuItems
@@ -403,6 +407,7 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "/api/v1";
+    let cmsAvailable = true;
 
     const load = (signal: AbortSignal) =>
       fetch(`${baseUrl}/all`, {
@@ -418,7 +423,11 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
         .then((payload) => setData(normalizePayload(payload)))
         .catch((error) => {
           if (error.name !== "AbortError") {
-            console.warn("CMS fallback data is active", error);
+            cmsAvailable = false;
+
+            if (process.env.NODE_ENV !== "production") {
+              console.warn("CMS fallback data is active", error);
+            }
           }
         });
 
@@ -426,6 +435,8 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
     load(controller.signal);
 
     const timer = setInterval(() => {
+      if (!cmsAvailable) return;
+
       const c = new AbortController();
       load(c.signal);
     }, POLL_INTERVAL);

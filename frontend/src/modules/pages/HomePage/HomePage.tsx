@@ -9,9 +9,9 @@ import FAQ from "@/src/components/common/FAQ";
 import BrandStrip from "@/src/components/common/BrandStrip";
 import ProjectQuiz from "@/src/components/common/ProjectQuiz";
 import StyleLab from "@/src/components/common/StyleLab";
+import AwardsSection from "@/src/components/common/AwardsSection";
 import AboutPage from "@/src/modules/pages/AboutPage";
 import { ContactSection } from "@/src/modules/pages/ContactPage";
-import { ContentPagesOverview } from "@/src/modules/pages/ContentPage";
 import { PortfolioGrid, ProjectShowcase } from "@/src/modules/pages/PortfolioPage";
 import { ServicePages, ServicesSummary, Workflow } from "@/src/modules/pages/ServicesPage";
 import ContactModal from "@/src/modals/ContactModal";
@@ -60,12 +60,12 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
         <section className="hero-section snap-section relative z-[1] flex min-h-screen overflow-hidden px-5 py-28 md:px-10 lg:px-16">
           <video
             className="hero-video absolute inset-0 h-full w-full object-cover opacity-75"
-            src={`${assetPrefix}/background-hero.mp4`}
+            src={`${assetPrefix}/background112233.mp4`}
             autoPlay
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
           />
           <div className="hero-light-field absolute inset-0" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,rgba(232,221,206,.22),transparent_33%),radial-gradient(circle_at_18%_78%,rgba(111,128,106,.16),transparent_36%),linear-gradient(90deg,rgba(8,7,5,.88),rgba(8,7,5,.58)_44%,rgba(15,13,10,.2))]" />
@@ -118,7 +118,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
           <div className="story-backdrop absolute inset-0" aria-hidden="true" />
           
           <div className="relative z-10 mx-auto max-w-6xl">
-            <p className="section-in mb-10 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Design philosophy</p>
+            <p className="section-in mb-10 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Философия проекта</p>
             <h2 className="text-4xl font-light leading-tight tracking-[-0.045em] text-[#F5F2EC] md:text-6xl lg:text-7xl">
               {storyText.split(" ").map((word, index) => (
                 <span key={`${word}-${index}`} className="story-word inline-block pr-3">
@@ -142,13 +142,13 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
         <div className="relative z-10">
           <ProjectShowcase project={activeProject} />
           <AboutPage />
+          <AwardsSection />
           <BrandStrip />
           <ServicesSummary />
           <ServicePages />
           <ProjectQuiz />
           <Workflow />
           <FAQ />
-          <ContentPagesOverview />
           <ContactSection />
         </div>
       </div>

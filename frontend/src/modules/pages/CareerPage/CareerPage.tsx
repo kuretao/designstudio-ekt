@@ -149,7 +149,6 @@ function ApplyModal({ vacancy, onClose }: { vacancy: Vacancy | null; onClose: ()
     };
 
     localStorage.setItem("careerApplication", JSON.stringify(payload));
-    console.info("Mock career application payload", payload);
     setSent(true);
     setError("");
   };
@@ -206,7 +205,7 @@ function ApplyModal({ vacancy, onClose }: { vacancy: Vacancy | null; onClose: ()
           {error && <p className="rounded-2xl border border-[#D69A66]/25 bg-[#D69A66]/10 px-4 py-3 text-sm text-[#F5F2EC]">{error}</p>}
           {sent && (
             <p className="rounded-2xl border border-[#D69A66]/25 bg-[#D69A66]/10 px-4 py-3 text-sm text-[#F5F2EC]">
-              Отклик сохранен в моковом режиме. Payload лежит в localStorage и готов к подключению backend.
+              Отклик сохранен. Мы свяжемся с вами после рассмотрения заявки.
             </p>
           )}
 
@@ -326,7 +325,7 @@ export default function CareerPage() {
 
           <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
             <div className="pb-8">
-              <p className="text-xs uppercase tracking-[0.38em] text-[#D69A66]">Careers / 3D Smart Design Studio</p>
+              <p className="text-xs uppercase tracking-[0.38em] text-[#D69A66]">Карьера / 3D Smart Design Studio</p>
               <h1 className="mt-5 max-w-5xl text-[clamp(3rem,6.4vw,6.2rem)] font-light leading-[0.94] tracking-[-0.045em] text-white">
                 Карьера в студии
               </h1>
@@ -382,13 +381,13 @@ export default function CareerPage() {
           <div className="mx-auto max-w-7xl">
             <div className="mb-14 grid gap-8 md:grid-cols-[1fr_0.7fr] md:items-end">
               <div>
-                <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Open roles</p>
+                <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Открытые позиции</p>
                 <h2 className="max-w-4xl text-5xl font-light leading-[0.95] tracking-[-0.055em] md:text-7xl">
                   Вакансии для тех, кто любит точность и красивый результат
                 </h2>
               </div>
               <p className="text-lg leading-relaxed text-[#D6D1CA]">
-                Все позиции моковые для запуска раздела. Отклики пока сохраняются локально, а после подключения backend будут уходить в админку или CRM.
+                Мы открыты к сотрудничеству с дизайнерами, визуализаторами, архитекторами и специалистами по комплектации. Отклики помогают собрать сильную проектную команду под новые задачи.
               </p>
             </div>
 

@@ -1,8 +1,11 @@
 FROM php:8.4-cli-alpine
-
+RUN sed -i 's|https://dl-cdn.alpinelinux.org/alpine|https://mirror.yandex.ru/mirrors/alpine|g' /etc/apk/repositories \
+    && apk update \
+    && apk add --no-cache bash curl icu-dev libzip-dev oniguruma-dev zip \
+    && docker-php-ext-install intl zip mbstring pdo pdo_mysql
 RUN apk add --no-cache bash curl icu-dev libzip-dev oniguruma-dev zip \
     && docker-php-ext-install intl mbstring pdo_mysql zip
-
+	
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html

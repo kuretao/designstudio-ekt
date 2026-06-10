@@ -14,6 +14,8 @@ Route::prefix('v1')->group(function (): void {
     Route::get('news', [CmsController::class, 'news']);
     Route::get('news/{slug}', [CmsController::class, 'newsArticle']);
     Route::get('promos', [CmsController::class, 'promos']);
+    Route::get('awards', [CmsController::class, 'awards']);
+    Route::get('partners', [CmsController::class, 'partners']);
     Route::get('reviews', [CmsController::class, 'reviews']);
     Route::get('faqs', [CmsController::class, 'faqs']);
     Route::post('leads', [CmsController::class, 'storeLead']);

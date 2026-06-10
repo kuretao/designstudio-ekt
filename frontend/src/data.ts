@@ -893,6 +893,55 @@ export const awards: StudioAward[] = [
   },
 ];
 
+export type TrustedPartner = {
+  name: string;
+  note: string;
+  logo: string;
+};
+
+export const partners: TrustedPartner[] = [
+  {
+    name: "Capital Group",
+    note: "Крупная российская девелоперская компания в Москве и МО",
+    logo: "https://3dsmartdesign.ru/thumb/2/UTjcjjirjkNIb7gi9Ntcqw/400r/d/capital_group_companies.jpg",
+  },
+  {
+    name: "ГК Новый ДОН",
+    note: "Девелопер в Самарской области",
+    logo: "https://3dsmartdesign.ru/thumb/2/RlgeH9Y3csLYczkYsgNu2Q/400r/d/new_don.png",
+  },
+  {
+    name: "Донстрой",
+    note: "Ведущий девелопер Москвы",
+    logo: "https://3dsmartdesign.ru/thumb/2/g2LV_n-kEBXik20WYSCS1A/400r/d/donstroy.png",
+  },
+  {
+    name: "Новое время",
+    note: "Девелоперские проекты",
+    logo: "https://3dsmartdesign.ru/thumb/2/y2JTTt1Emb3k-aLkhLOnPg/400r/d/new_time.png",
+  },
+  {
+    name: "ГК СтройСтиль",
+    note: "Строительная группа в Самарской области",
+    logo: "https://3dsmartdesign.ru/thumb/2/kLTN_w8WucjQyKHSlM_5XA/400r/d/stroy_stil.png",
+  },
+  {
+    name: "СЗ Парковый",
+    note: "Специализированный застройщик",
+    logo: "https://3dsmartdesign.ru/thumb/2/CArE8uFr4NxRaKGKgcHC1g/400r/d/parkoviy.jpg",
+  },
+  {
+    name: "СЗ Весна",
+    note: "Специализированный застройщик",
+    logo: "https://3dsmartdesign.ru/thumb/2/vwriae_lbfxG4f5fGZ5EGA/400r/d/vesna.png",
+  },
+  {
+    name: "Берег",
+    note: "Девелоперские проекты",
+    logo: "https://3dsmartdesign.ru/thumb/2/jVJTB_JBkAeGhqSVfGu42g/400r/d/bereg.png",
+  },
+];
+
 export type CareerVacancy = {
   title: string;
   format: string;

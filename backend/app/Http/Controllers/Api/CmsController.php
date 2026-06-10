@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\StoreLeadRequest;
 use App\Http\Controllers\Controller;
+use App\Models\Award;
 use App\Models\Faq;
 use App\Models\Lead;
 use App\Models\MenuItem;
 use App\Models\NewsArticle;
 use App\Models\Page;
+use App\Models\Partner;
 use App\Models\Project;
 use App\Models\Promo;
 use App\Models\Review;
@@ -42,6 +44,8 @@ class CmsController extends Controller
             'services' => Service::query()->where('is_published', true)->orderBy('position')->get()->map(fn (Service $service) => $this->servicePayload($service))->values(),
             'news' => NewsArticle::query()->where('is_published', true)->orderBy('position')->get()->map(fn (NewsArticle $article) => $this->newsPayload($article))->values(),
             'promos' => Promo::query()->where('is_active', true)->orderBy('position')->get()->map(fn (Promo $promo) => $this->promoPayload($promo))->values(),
+            'awards' => Award::query()->where('is_active', true)->orderBy('position')->get()->map(fn (Award $award) => $this->awardPayload($award))->values(),
+            'partners' => Partner::query()->where('is_active', true)->orderBy('position')->get()->map(fn (Partner $partner) => $this->partnerPayload($partner))->values(),
             'reviews' => Review::query()->where('is_published', true)->orderBy('position')->get()->map(fn (Review $review) => $this->reviewPayload($review))->values(),
             'faqs' => Faq::query()->where('is_published', true)->orderBy('position')->get()->map(fn (Faq $faq) => ['q' => $faq->question, 'a' => $faq->answer])->values(),
             'vacancies' => Vacancy::query()->where('is_active', true)->orderBy('position')->get(),
@@ -94,6 +98,16 @@ class CmsController extends Controller
         return response()->json(Promo::query()->where('is_active', true)->orderBy('position')->get()->map(fn (Promo $promo) => $this->promoPayload($promo))->values());
     }
 
+    public function awards(): JsonResponse
+    {
+        return response()->json(Award::query()->where('is_active', true)->orderBy('position')->get()->map(fn (Award $award) => $this->awardPayload($award))->values());
+    }
+
+    public function partners(): JsonResponse
+    {
+        return response()->json(Partner::query()->where('is_active', true)->orderBy('position')->get()->map(fn (Partner $partner) => $this->partnerPayload($partner))->values());
+    }
+
     public function reviews(): JsonResponse
     {
         return response()->json(Review::query()->where('is_published', true)->orderBy('position')->get()->map(fn (Review $review) => $this->reviewPayload($review))->values());
@@ -136,6 +150,9 @@ class CmsController extends Controller
             'mapSrc' => $settings?->map_src,
             'seoTitle' => $settings?->seo_title,
             'seoDescription' => $settings?->seo_description,
+            'compareEyebrow' => $settings?->compare_eyebrow,
+            'compareTitle' => $settings?->compare_title,
+            'compareText' => $settings?->compare_text,
             'messengers' => [
                 'telegram' => $settings?->telegram_url,
                 'max' => $settings?->max_url,
@@ -314,6 +331,26 @@ class CmsController extends Controller
             'description' => $promo->description,
             'conditions' => $this->lines($promo->conditions),
             'image' => $promo->effective_image,
+        ];
+    }
+
+    private function awardPayload(Award $award): array
+    {
+        return [
+            'title' => $award->title,
+            'issuer' => $award->issuer,
+            'year' => $award->year,
+            'description' => $award->description,
+            'image' => $award->effective_image,
+        ];
+    }
+
+    private function partnerPayload(Partner $partner): array
+    {
+        return [
+            'name' => $partner->name,
+            'note' => $partner->note,
+            'logo' => $partner->effective_logo,
         ];
     }
 

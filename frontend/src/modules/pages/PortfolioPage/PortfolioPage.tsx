@@ -307,7 +307,7 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
 }
 
 export function ProjectShowcase({ project }: { project: Project }) {
-  const { projects } = useCms();
+  const { projects, siteSettings } = useCms();
   const [compare, setCompare] = useState(52);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const fallbackImages = [project.image, ...projects.map((item) => item.image)].filter(Boolean);
@@ -474,11 +474,9 @@ export function ProjectShowcase({ project }: { project: Project }) {
 
         <div className="mt-20 grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <div>
-            <SectionLabel className="mb-4">Render / Blueprint</SectionLabel>
-            <h3 className="text-4xl font-light tracking-[-0.045em] md:text-6xl">Сравнение до / после</h3>
-            <p className="mt-5 text-[#D6D1CA]">
-              Ползунок показывает, как меняется восприятие объекта после визуальной проработки. Здесь можно заменить демо на реальные чертежи, рендеры или фото объекта.
-            </p>
+            <SectionLabel className="mb-4">{siteSettings.compareEyebrow}</SectionLabel>
+            <h3 className="text-4xl font-light tracking-[-0.045em] md:text-6xl">{siteSettings.compareTitle}</h3>
+            <p className="mt-5 text-[#D6D1CA]">{siteSettings.compareText}</p>
           </div>
 
           <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.025] transition duration-500 hover:-translate-y-1 hover:border-[#D69A66]/55 hover:shadow-[0_28px_90px_rgba(214,154,102,0.12)]">

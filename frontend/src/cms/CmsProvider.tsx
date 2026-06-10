@@ -9,6 +9,7 @@ import {
   faq,
   messengerLinks,
   newsArticles,
+  partners,
   projects,
   requiredHomeHeroTitle,
   promos,
@@ -28,6 +29,9 @@ type SiteSettings = {
   favicon: string | null;
   appleTouchIcon: string | null;
   socialPreviewImage: string | null;
+  compareEyebrow: string;
+  compareTitle: string;
+  compareText: string;
 };
 
 type HomeHero = {
@@ -36,6 +40,11 @@ type HomeHero = {
   text: string;
   linkLabel: string;
   linkHref: string;
+};
+
+type HomeStory = {
+  eyebrow: string;
+  text: string;
 };
 
 type AnimationControls = {
@@ -47,6 +56,7 @@ type AnimationControls = {
 type CmsData = {
   siteSettings: SiteSettings;
   homeHero: HomeHero;
+  homeStory: HomeStory;
   projects: typeof projects;
   servicePageItems: typeof fallbackServicePageItems;
   serviceNavigationGroups: typeof fallbackServiceNavigationGroups;
@@ -62,6 +72,7 @@ type CmsData = {
   careerVacancies: typeof careerVacancies;
   reviewStats: typeof reviewStats;
   awards: typeof awards;
+  partners: typeof partners;
   menuItems: { href: string; label: string }[];
   ready: boolean;
 };
@@ -77,6 +88,10 @@ const fallbackData: CmsData = {
     favicon: null,
     appleTouchIcon: null,
     socialPreviewImage: null,
+    compareEyebrow: "Render / Blueprint",
+    compareTitle: "Сравнение до / после",
+    compareText:
+      "Ползунок показывает, как меняется восприятие объекта после визуальной проработки. Здесь можно заменить демо на реальные чертежи, рендеры или фото объекта.",
   },
   homeHero: {
     eyebrow: "3D Smart Design Studio",
@@ -84,6 +99,10 @@ const fallbackData: CmsData = {
     text: "Создаем интерьеры, архитектуру, 3D-визуализацию и ландшафтные проекты: от концепции до рабочей документации, комплектации и сопровождения.",
     linkLabel: "Обсудить проект",
     linkHref: "/kontakty",
+  },
+  homeStory: {
+    eyebrow: "Философия проекта",
+    text: "Мы проектируем не стены, а сценарии жизни: утренний свет, маршрут взгляда, тишину материалов и точную документацию для реализации.",
   },
   projects,
   servicePageItems: fallbackServicePageItems,
@@ -104,6 +123,7 @@ const fallbackData: CmsData = {
   careerVacancies,
   reviewStats,
   awards,
+  partners,
   menuItems: [
     { href: "/o-nas", label: "О нас" },
     { href: "/portfolio", label: "Портфолио" },
@@ -282,6 +302,9 @@ function normalizePayload(payload: any): CmsData {
     homeBlocks.find((block: any) => block.type === "hero") ??
     homeBlocks[0] ??
     {};
+  const homeStoryBlock = homeBlocks.find(
+    (block: any) => block.type === "text",
+  );
   const homeTitle =
     typeof homeBlock.title === "string" ? homeBlock.title.trim() : "";
   const normalizedHomeTitle = homeTitle.toLowerCase();
@@ -326,6 +349,9 @@ function normalizePayload(payload: any): CmsData {
       favicon: settings.favicon ?? null,
       appleTouchIcon: settings.appleTouchIcon ?? null,
       socialPreviewImage: settings.socialPreviewImage ?? null,
+      compareEyebrow: settings.compareEyebrow ?? fallbackData.siteSettings.compareEyebrow,
+      compareTitle: settings.compareTitle ?? fallbackData.siteSettings.compareTitle,
+      compareText: settings.compareText ?? fallbackData.siteSettings.compareText,
     },
     homeHero: homePage
       ? {
@@ -336,6 +362,12 @@ function normalizePayload(payload: any): CmsData {
           linkHref: homeBlock.linkHref ?? "",
         }
       : fallbackData.homeHero,
+    homeStory: homeStoryBlock
+      ? {
+          eyebrow: homeStoryBlock.eyebrow ?? fallbackData.homeStory.eyebrow,
+          text: homeStoryBlock.text ?? fallbackData.homeStory.text,
+        }
+      : fallbackData.homeStory,
     projects: apiProjects,
     servicePageItems: apiServices,
     serviceNavigationGroups: Array.isArray(payload?.serviceNavigationGroups)
@@ -392,6 +424,7 @@ function normalizePayload(payload: any): CmsData {
       : careerVacancies,
     reviewStats,
     awards: Array.isArray(payload?.awards) && payload.awards.length ? payload.awards : awards,
+    partners: Array.isArray(payload?.partners) && payload.partners.length ? payload.partners : partners,
     menuItems:
       Array.isArray(payload?.menuItems) && payload.menuItems.length
         ? payload.menuItems

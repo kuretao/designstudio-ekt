@@ -1,49 +1,12 @@
 "use client";
 
-const trustedDevelopers = [
-  {
-    name: "Capital Group",
-    note: "Крупная российская девелоперская компания в Москве и МО",
-    logo: "https://3dsmartdesign.ru/thumb/2/UTjcjjirjkNIb7gi9Ntcqw/400r/d/capital_group_companies.jpg",
-  },
-  {
-    name: "ГК Новый ДОН",
-    note: "Девелопер в Самарской области",
-    logo: "https://3dsmartdesign.ru/thumb/2/RlgeH9Y3csLYczkYsgNu2Q/400r/d/new_don.png",
-  },
-  {
-    name: "Донстрой",
-    note: "Ведущий девелопер Москвы",
-    logo: "https://3dsmartdesign.ru/thumb/2/g2LV_n-kEBXik20WYSCS1A/400r/d/donstroy.png",
-  },
-  {
-    name: "Новое время",
-    note: "Девелоперские проекты",
-    logo: "https://3dsmartdesign.ru/thumb/2/y2JTTt1Emb3k-aLkhLOnPg/400r/d/new_time.png",
-  },
-  {
-    name: "ГК СтройСтиль",
-    note: "Строительная группа в Самарской области",
-    logo: "https://3dsmartdesign.ru/thumb/2/kLTN_w8WucjQyKHSlM_5XA/400r/d/stroy_stil.png",
-  },
-  {
-    name: "СЗ Парковый",
-    note: "Специализированный застройщик",
-    logo: "https://3dsmartdesign.ru/thumb/2/CArE8uFr4NxRaKGKgcHC1g/400r/d/parkoviy.jpg",
-  },
-  {
-    name: "СЗ Весна",
-    note: "Специализированный застройщик",
-    logo: "https://3dsmartdesign.ru/thumb/2/vwriae_lbfxG4f5fGZ5EGA/400r/d/vesna.png",
-  },
-  {
-    name: "Берег",
-    note: "Девелоперские проекты",
-    logo: "https://3dsmartdesign.ru/thumb/2/jVJTB_JBkAeGhqSVfGu42g/400r/d/bereg.png",
-  },
-];
+import { useCms } from "@/src/cms";
 
 export default function BrandStrip() {
+  const { partners } = useCms();
+
+  if (!partners.length) return null;
+
   return (
     <section className="border-y border-white/8 bg-[#0c0b09]/45 px-5 py-12 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
@@ -57,7 +20,7 @@ export default function BrandStrip() {
           </p>
         </div>
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/10 sm:grid-cols-3 lg:grid-cols-4">
-          {trustedDevelopers.map((brand) => (
+          {partners.map((brand) => (
             <div
               key={brand.name}
               className="group flex min-h-32 flex-col items-center justify-center bg-[#11100d]/88 px-5 py-6 text-center transition hover:bg-white/[0.055]"

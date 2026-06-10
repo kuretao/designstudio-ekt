@@ -96,6 +96,17 @@ class SiteSettingFormPage extends FormPage
                         ]),
                     ])->icon('phone')->customAttributes(['class' => 'settings-section']),
                 ])->icon('phone'),
+                Tab::make('Портфолио', [
+                    Box::make('Блок «До / После»', [
+                        $this->sectionNote(
+                            'Сравнение визуальной проработки',
+                            'Этот текст показывается над слайдером «до / после» в портфолио. Изображения «до» и «после» задаются отдельно в карточке каждого проекта.'
+                        ),
+                        Grid::make([
+                            Column::make(CmsFieldSets::siteSettingSection('compare'))->columnSpan(12),
+                        ]),
+                    ])->icon('photo')->customAttributes(['class' => 'settings-section']),
+                ])->icon('arrows-right-left'),
                 Tab::make('Ссылки', [
                     Box::make('Мессенджеры и соцсети', [
                         $this->sectionNote(
@@ -135,6 +146,9 @@ class SiteSettingFormPage extends FormPage
             'pinterest_url' => ['nullable', 'url', 'max:2048'],
             'seo_title' => ['nullable', 'string', 'max:120'],
             'seo_description' => ['nullable', 'string', 'max:320'],
+            'compare_eyebrow' => ['nullable', 'string', 'max:255'],
+            'compare_title' => ['nullable', 'string', 'max:255'],
+            'compare_text' => ['nullable', 'string', 'max:2000'],
             'animations_enabled' => ['boolean'],
             'smooth_scroll_enabled' => ['boolean'],
             'page_reveal_enabled' => ['boolean'],

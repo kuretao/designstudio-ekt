@@ -19,6 +19,8 @@ use App\MoonShine\Resources\Project\ProjectResource;
 use App\MoonShine\Resources\Service\ServiceResource;
 use App\MoonShine\Resources\NewsArticle\NewsArticleResource;
 use App\MoonShine\Resources\Promo\PromoResource;
+use App\MoonShine\Resources\Award\AwardResource;
+use App\MoonShine\Resources\Partner\PartnerResource;
 use App\MoonShine\Resources\Review\ReviewResource;
 use App\MoonShine\Resources\Faq\FaqResource;
 use App\MoonShine\Resources\Vacancy\VacancyResource;
@@ -43,6 +45,8 @@ class MoonShineServiceProvider extends ServiceProvider
                 ServiceResource::class,
                 NewsArticleResource::class,
                 PromoResource::class,
+                AwardResource::class,
+                PartnerResource::class,
                 ReviewResource::class,
                 FaqResource::class,
                 VacancyResource::class,

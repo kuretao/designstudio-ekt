@@ -26,6 +26,8 @@ use App\MoonShine\Resources\Project\ProjectResource;
 use App\MoonShine\Resources\Service\ServiceResource;
 use App\MoonShine\Resources\NewsArticle\NewsArticleResource;
 use App\MoonShine\Resources\Promo\PromoResource;
+use App\MoonShine\Resources\Award\AwardResource;
+use App\MoonShine\Resources\Partner\PartnerResource;
 use App\MoonShine\Resources\Review\ReviewResource;
 use App\MoonShine\Resources\Faq\FaqResource;
 use App\MoonShine\Resources\Vacancy\VacancyResource;
@@ -72,6 +74,8 @@ final class MoonShineLayout extends AppLayout
                 MenuItem::make(ServiceResource::class, 'Услуги')->icon('wrench-screwdriver'),
                 MenuItem::make(NewsArticleResource::class, 'Новости')->icon('newspaper'),
                 MenuItem::make(PromoResource::class, 'Акции')->icon('tag'),
+                MenuItem::make(AwardResource::class, 'Награды и дипломы')->icon('trophy'),
+                MenuItem::make(PartnerResource::class, 'Партнеры и застройщики')->icon('building-office-2'),
             ], 'document-text'),
             MenuGroup::make('Обратная связь', [
                 MenuItem::make(LeadResource::class, 'Заявки')->icon('inbox'),

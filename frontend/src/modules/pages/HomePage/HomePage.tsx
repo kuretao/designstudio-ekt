@@ -48,10 +48,9 @@ function FeatureProject({ project, label, reverse = false }: { project: Project;
 }
 
 function HomePage({ activeProject, setActiveProject }: HomePageProps) {
-  const { homeHero, projects } = useCms();
+  const { homeHero, homeStory, projects } = useCms();
   const [contactModalOpen, setContactModalOpen] = useState(false);
-  const storyText =
-    "Мы проектируем не стены, а сценарии жизни: утренний свет, маршрут взгляда, тишину материалов и точную документацию для реализации.";
+  const storyText = homeStory.text;
   const heroLinkOpensModal = homeHero.linkHref === "/kontakty" || homeHero.linkLabel.toLowerCase().includes("обсудить");
 
   return (
@@ -118,7 +117,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
           <div className="story-backdrop absolute inset-0" aria-hidden="true" />
           
           <div className="relative z-10 mx-auto max-w-6xl">
-            <p className="section-in mb-10 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Философия проекта</p>
+            <p className="section-in mb-10 text-xs uppercase tracking-[0.45em] text-[#D69A66]">{homeStory.eyebrow}</p>
             <h2 className="text-4xl font-light leading-tight tracking-[-0.045em] text-[#F5F2EC] md:text-6xl lg:text-7xl">
               {storyText.split(" ").map((word, index) => (
                 <span key={`${word}-${index}`} className="story-word inline-block pr-3">

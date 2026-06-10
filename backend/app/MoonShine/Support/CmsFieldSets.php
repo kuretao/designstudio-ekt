@@ -40,6 +40,8 @@ final class CmsFieldSets
             'service' => self::service($compact),
             'news_article' => self::newsArticle($compact),
             'promo' => self::promo($compact),
+            'award' => self::award($compact),
+            'partner' => self::partner($compact),
             'review' => self::review($compact),
             'faq' => self::faq($compact),
             'vacancy' => self::vacancy($compact),
@@ -61,6 +63,7 @@ final class CmsFieldSets
 
         return [
             ...self::siteSettingSection('main'),
+            ...self::siteSettingSection('compare'),
             ...self::siteSettingSection('branding'),
             ...self::siteSettingSection('animations'),
             ...self::siteSettingSection('contacts'),
@@ -77,6 +80,16 @@ final class CmsFieldSets
                     ->required()
                     ->placeholder('3D Smart Design Studio')
                     ->hint('Показывается в подписи логотипа и используется как запасной заголовок сайта.'),
+            ],
+            'compare' => [
+                Text::make('Подпись блока «До / После»', 'compare_eyebrow')
+                    ->placeholder('Render / Blueprint')
+                    ->hint('Маленькая строка над заголовком блока сравнения «до / после» в портфолио.'),
+                Text::make('Заголовок блока «До / После»', 'compare_title')
+                    ->placeholder('Сравнение до / после')
+                    ->hint('Крупный заголовок блока сравнения с ползунком в портфолио.'),
+                Textarea::make('Текст блока «До / После»', 'compare_text')
+                    ->hint('Описание под заголовком блока сравнения. Изображения «до» и «после» задаются в карточке каждого проекта.'),
             ],
             'branding' => [
                 Image::make('Логотип сайта', 'site_logo')
@@ -693,6 +706,56 @@ final class CmsFieldSets
                 ->hint('Загрузите файл — он сохранится в хранилище. Если загружен файл, он имеет приоритет над URL ниже.'),
             Textarea::make('Или URL изображения', 'image')
                 ->hint('Вставьте внешнюю ссылку (например, Unsplash). Используется только если файл выше не загружен.'),
+        ];
+    }
+
+    private static function award(bool $compact): array
+    {
+        $fields = [
+            ID::make()->sortable(),
+            Text::make('Заголовок', 'title')->required(),
+            Text::make('Кем выдано', 'issuer'),
+            Text::make('Год', 'year'),
+            Number::make('Позиция', 'position')->sortable(),
+            Switcher::make('Активно', 'is_active'),
+        ];
+
+        return $compact ? $fields : [
+            ...$fields,
+            Textarea::make('Описание', 'description'),
+            Image::make('Загрузить изображение на сервер', 'image_file')
+                ->disk('public')
+                ->dir('awards')
+                ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'avif'])
+                ->disableDeleteFiles()
+                ->removable()
+                ->hint('Загрузите файл — он сохранится в хранилище. Если загружен файл, он имеет приоритет над URL ниже.'),
+            Textarea::make('Или URL изображения', 'image')
+                ->hint('Вставьте внешнюю ссылку. Используется только если файл выше не загружен.'),
+        ];
+    }
+
+    private static function partner(bool $compact): array
+    {
+        $fields = [
+            ID::make()->sortable(),
+            Text::make('Название', 'name')->required(),
+            Text::make('Описание', 'note'),
+            Number::make('Позиция', 'position')->sortable(),
+            Switcher::make('Активно', 'is_active'),
+        ];
+
+        return $compact ? $fields : [
+            ...$fields,
+            Image::make('Загрузить логотип на сервер', 'logo_file')
+                ->disk('public')
+                ->dir('partners')
+                ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'avif', 'svg'])
+                ->disableDeleteFiles()
+                ->removable()
+                ->hint('Загрузите файл — он сохранится в хранилище. Если загружен файл, он имеет приоритет над URL ниже.'),
+            Textarea::make('Или URL логотипа', 'logo')
+                ->hint('Вставьте внешнюю ссылку. Используется только если файл выше не загружен.'),
         ];
     }
 

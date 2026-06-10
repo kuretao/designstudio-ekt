@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Award;
+use App\Models\Partner;
 use App\Models\Faq;
 use App\Models\MenuItem;
 use App\Models\NewsArticle;
@@ -211,6 +213,16 @@ class DatabaseSeeder extends Seeder
             ],
         );
 
+        PageBlock::query()->updateOrCreate(
+            ['page_id' => $homePage->id, 'position' => 2],
+            [
+                'type' => 'text',
+                'eyebrow' => 'Философия проекта',
+                'text' => 'Мы проектируем не стены, а сценарии жизни: утренний свет, маршрут взгляда, тишину материалов и точную документацию для реализации.',
+                'is_active' => true,
+            ],
+        );
+
         collect([
             ['o-nas', 'О нас', 'about'],
             ['partneram', 'Партнерам', 'content'],
@@ -278,6 +290,40 @@ class DatabaseSeeder extends Seeder
             'position' => 1,
             'is_published' => true,
         ]);
+
+        collect([
+            ['Диплом администрации области', 'Администрация Самарской области', '2026', 'Официальное подтверждение профессионального уровня студии и вклада в развитие визуальной культуры среды.'],
+            ['Профессиональный сертификат', 'Профильная аттестация', '2026', 'Подтверждение профессиональных компетенций в проектировании, визуализации и сопровождении объектов.'],
+            ['Благодарственное письмо', 'Партнеры и заказчики', '2026', 'Отметка партнерского подхода, ответственности в коммуникации и качества работы с проектами.'],
+        ])->each(fn (array $award, int $index) => Award::query()->updateOrCreate(
+            ['title' => $award[0]],
+            [
+                'issuer' => $award[1],
+                'year' => $award[2],
+                'description' => $award[3],
+                'position' => $index + 1,
+                'is_active' => true,
+            ],
+        ));
+
+        collect([
+            ['Capital Group', 'Крупная российская девелоперская компания в Москве и МО', 'https://3dsmartdesign.ru/thumb/2/UTjcjjirjkNIb7gi9Ntcqw/400r/d/capital_group_companies.jpg'],
+            ['ГК Новый ДОН', 'Девелопер в Самарской области', 'https://3dsmartdesign.ru/thumb/2/RlgeH9Y3csLYczkYsgNu2Q/400r/d/new_don.png'],
+            ['Донстрой', 'Ведущий девелопер Москвы', 'https://3dsmartdesign.ru/thumb/2/g2LV_n-kEBXik20WYSCS1A/400r/d/donstroy.png'],
+            ['Новое время', 'Девелоперские проекты', 'https://3dsmartdesign.ru/thumb/2/y2JTTt1Emb3k-aLkhLOnPg/400r/d/new_time.png'],
+            ['ГК СтройСтиль', 'Строительная группа в Самарской области', 'https://3dsmartdesign.ru/thumb/2/kLTN_w8WucjQyKHSlM_5XA/400r/d/stroy_stil.png'],
+            ['СЗ Парковый', 'Специализированный застройщик', 'https://3dsmartdesign.ru/thumb/2/CArE8uFr4NxRaKGKgcHC1g/400r/d/parkoviy.jpg'],
+            ['СЗ Весна', 'Специализированный застройщик', 'https://3dsmartdesign.ru/thumb/2/vwriae_lbfxG4f5fGZ5EGA/400r/d/vesna.png'],
+            ['Берег', 'Девелоперские проекты', 'https://3dsmartdesign.ru/thumb/2/jVJTB_JBkAeGhqSVfGu42g/400r/d/bereg.png'],
+        ])->each(fn (array $partner, int $index) => Partner::query()->updateOrCreate(
+            ['name' => $partner[0]],
+            [
+                'note' => $partner[1],
+                'logo' => $partner[2],
+                'position' => $index + 1,
+                'is_active' => true,
+            ],
+        ));
 
         collect([
             ['Сколько длится разработка проекта?', 'Эскизная концепция занимает 2-4 недели, полный дизайн-проект обычно 8-14 недель.'],

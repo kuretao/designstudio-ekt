@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useCms } from "@/src/cms";
+import { localizedValue, menuKeyByHref, siteLocaleFromLanguage } from "@/src/i18n";
 import ContactModal from "@/src/modals/ContactModal";
 
 function LogoMark() {
@@ -99,6 +100,7 @@ export default function Header() {
   const currentPath = usePathname();
   const { menuItems, serviceNavigationGroups, siteSettings } = useCms();
   const { i18n, t } = useTranslation();
+  const locale = siteLocaleFromLanguage(i18n.language);
   const [modalOpen, setModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuView, setMenuView] = useState<
@@ -135,8 +137,35 @@ export default function Header() {
   };
   const changeLanguage = (locale: "ru" | "en") => {
     i18n.changeLanguage(locale);
-    closeMenu();
   };
+  const menuLabel = (item: {
+    href: string;
+    label: string;
+    labelRu?: string | null;
+    labelEn?: string | null;
+  }) => {
+    const fallbackKey = menuKeyByHref(item.href);
+    const fallback = fallbackKey ? t(fallbackKey) : item.label;
+
+    return localizedValue(locale, item.labelRu, item.labelEn, fallback);
+  };
+  const serviceGroupTitle = (group: {
+    title: string;
+    titleRu?: string | null;
+    titleEn?: string | null;
+    href: string;
+  }) => localizedValue(locale, group.titleRu, group.titleEn, t(`services.${group.href.slice(1)}`, group.title));
+  const serviceGroupDescription = (group: {
+    description: string;
+    descriptionRu?: string | null;
+    descriptionEn?: string | null;
+  }) => localizedValue(locale, group.descriptionRu, group.descriptionEn, group.description);
+  const serviceChildLabel = (item: {
+    href: string;
+    label: string;
+    labelRu?: string | null;
+    labelEn?: string | null;
+  }) => localizedValue(locale, item.labelRu, item.labelEn, t(`services.${item.href.slice(1)}`, item.label));
 
   const serviceHrefs = new Set([
     "/services",
@@ -151,12 +180,12 @@ export default function Header() {
       .map((item) => [item.href, item]),
   );
   const mainMenuLinks = [
-    menuByHref.get("/o-nas") ?? { href: "/o-nas", label: "О нас" },
-    menuByHref.get("/portfolio") ?? { href: "/portfolio", label: "Портфолио" },
-    { href: "/services", label: "Услуги" },
-    menuByHref.get("/blog") ?? { href: "/blog", label: "Блог" },
-    menuByHref.get("/kontakty") ?? { href: "/kontakty", label: "Контакты" },
-  ];
+    menuByHref.get("/o-nas") ?? { href: "/o-nas", label: t("menu.about") },
+    menuByHref.get("/portfolio") ?? { href: "/portfolio", label: t("menu.portfolio") },
+    { href: "/services", label: t("menu.services"), labelRu: "Услуги", labelEn: "Services" },
+    menuByHref.get("/blog") ?? { href: "/blog", label: t("menu.blog") },
+    menuByHref.get("/kontakty") ?? { href: "/kontakty", label: t("menu.contacts") },
+  ].map((item) => ({ ...item, label: menuLabel(item) }));
   const primaryMenuLinks = [...mainMenuLinks];
   const isServicesActive =
     currentPath === "/services" ||
@@ -311,7 +340,7 @@ export default function Header() {
                 onClick={() => setMenuView("main")}
                 className="justify-self-end text-[11px] font-bold uppercase tracking-[0.22em] text-white/42 transition hover:text-[#D69A66]"
               >
-                ← Меню
+                ← {t("menu.mainBack")}
               </button>
               <div>
                 <Link
@@ -319,11 +348,10 @@ export default function Header() {
                   onClick={closeMenu}
                   className="block text-[13px] font-semibold uppercase tracking-[0.18em] text-white/78 transition hover:text-[#D69A66] md:text-[17px]"
                 >
-                  Услуги
+                  {t("menu.services")}
                 </Link>
                 <p className="mt-2 max-w-sm justify-self-end text-sm leading-relaxed text-white/38">
-                  Категории сгруппированы по составу работ. Внутри каждого
-                  направления - посадочные страницы услуг.
+                  {t("menu.serviceIntro")}
                 </p>
               </div>
               <div className="grid gap-2.5">
@@ -347,13 +375,13 @@ export default function Header() {
                       }`}
                     >
                       <span className="flex items-center justify-end gap-3 text-[12px] font-semibold uppercase tracking-[0.14em] text-white/76 md:text-sm">
-                        {group.title}
+                        {serviceGroupTitle(group)}
                         <span className="shrink-0 text-[#D69A66] transition group-hover:translate-x-1">
                           →
                         </span>
                       </span>
                       <span className="mt-1.5 block text-sm leading-relaxed text-white/34">
-                        {group.description}
+                        {serviceGroupDescription(group)}
                       </span>
                     </button>
                   );
@@ -373,7 +401,7 @@ export default function Header() {
                 onClick={() => setMenuView("services")}
                 className="justify-self-end text-[11px] font-bold uppercase tracking-[0.22em] text-white/42 transition hover:text-[#D69A66]"
               >
-                ← Услуги
+                ← {t("menu.serviceBack")}
               </button>
 
               {activeServiceGroup && (
@@ -388,10 +416,10 @@ export default function Header() {
                           : "text-white/72"
                       }`}
                     >
-                      {activeServiceGroup.title}
+                      {serviceGroupTitle(activeServiceGroup)}
                     </Link>
                     <p className="mt-2 max-w-sm justify-self-end text-sm leading-relaxed text-white/38">
-                      {activeServiceGroup.description}
+                      {serviceGroupDescription(activeServiceGroup)}
                     </p>
                   </div>
 
@@ -411,7 +439,7 @@ export default function Header() {
                           0{index + 1}
                         </span>
                         <span className="flex-1 text-right text-sm leading-snug [overflow-wrap:anywhere]">
-                          {child.label}
+                          {serviceChildLabel(child)}
                         </span>
                       </Link>
                     ))}
@@ -422,26 +450,24 @@ export default function Header() {
           </nav>
 
           <div
-            className={`mt-10 flex w-full max-w-[520px] justify-start gap-5 text-[10px] font-bold uppercase tracking-[0.22em] transition-[opacity,transform] duration-[620ms] ease-[cubic-bezier(.77,0,.18,1)] ${
+            className={`mt-10 flex w-full max-w-[520px] justify-start transition-[opacity,transform] duration-[620ms] ease-[cubic-bezier(.77,0,.18,1)] ${
               menuOpen
                 ? "translate-x-0 opacity-100 delay-[760ms]"
                 : "-translate-x-8 opacity-0"
             }`}
           >
-            <button
-              type="button"
-              onClick={() => changeLanguage("ru")}
-              className={`transition hover:text-white/78 ${i18n.language === "ru" ? "text-white/78" : "text-white/34"}`}
-            >
-              РУ
-            </button>
-            <button
-              type="button"
-              onClick={() => changeLanguage("en")}
-              className={`transition hover:text-white/78 ${i18n.language === "en" ? "text-white/78" : "text-white/34"}`}
-            >
-              ENG
-            </button>
+            <label className="relative inline-flex items-center rounded-full border border-white/14 bg-white/[0.045] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.22em] text-white/72 transition hover:border-white/28">
+              <select
+                value={locale}
+                onChange={(event) => changeLanguage(event.target.value as "ru" | "en")}
+                aria-label="Language"
+                className="cursor-pointer appearance-none bg-transparent pr-7 text-inherit outline-none"
+              >
+                <option value="ru">RU</option>
+                <option value="en">EN</option>
+              </select>
+              <span className="pointer-events-none absolute right-3 text-[#D69A66]">⌄</span>
+            </label>
           </div>
         </div>
       </section>

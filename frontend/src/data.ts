@@ -609,14 +609,20 @@ export const servicePageItems = [
 
 export type ServiceNavigationChild = {
   label: string;
+  labelRu?: string | null;
+  labelEn?: string | null;
   href: string;
 };
 
 export type ServiceNavigationGroup = {
   id: string;
   title: string;
+  titleRu?: string | null;
+  titleEn?: string | null;
   href: string;
   description: string;
+  descriptionRu?: string | null;
+  descriptionEn?: string | null;
   items: ServiceNavigationChild[];
 };
 
@@ -1232,14 +1238,26 @@ export const newsArticles: NewsArticle[] = [
 export const faq = [
   {
     q: "Сколько длится разработка проекта?",
+    qRu: "Сколько длится разработка проекта?",
+    qEn: "How long does project development take?",
     a: "Эскизная концепция занимает 2-4 недели, полный дизайн-проект обычно 8-14 недель. Срок зависит от площади, состава работ и скорости согласований.",
+    aRu: "Эскизная концепция занимает 2-4 недели, полный дизайн-проект обычно 8-14 недель. Срок зависит от площади, состава работ и скорости согласований.",
+    aEn: "A concept design takes 2-4 weeks; a full design project usually takes 8-14 weeks. Timing depends on the area, scope of work, and approval speed.",
   },
   {
     q: "Можно заказать только визуализацию?",
+    qRu: "Можно заказать только визуализацию?",
+    qEn: "Can I order visualization only?",
     a: "Да. Для точного результата понадобятся планы, чертежи, референсы, материалы и список нужных ракурсов.",
+    aRu: "Да. Для точного результата понадобятся планы, чертежи, референсы, материалы и список нужных ракурсов.",
+    aEn: "Yes. For an accurate result, we need plans, drawings, references, materials, and a list of required views.",
   },
   {
     q: "Работаете удаленно?",
+    qRu: "Работаете удаленно?",
+    qEn: "Do you work remotely?",
     a: "Да. Мы ведем проекты в Самаре и удаленно: используем видео-брифы, облачные доски, 3D-презентации и подробные рабочие чертежи.",
+    aRu: "Да. Мы ведем проекты в Самаре и удаленно: используем видео-брифы, облачные доски, 3D-презентации и подробные рабочие чертежи.",
+    aEn: "Yes. We handle projects in Samara and remotely using video briefs, cloud boards, 3D presentations, and detailed working drawings.",
   },
 ];

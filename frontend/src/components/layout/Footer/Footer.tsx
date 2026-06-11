@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { useCms } from "@/src/cms";
+import { localizedValue, menuKeyByHref, siteLocaleFromLanguage } from "@/src/i18n";
 
 const socials = [
   {
@@ -133,20 +134,38 @@ export default function Footer() {
     messengerLinks,
     siteSettings,
   } = useCms();
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const locale = siteLocaleFromLanguage(i18n.language);
   const serviceByHref = new Map(
     servicePageItems.map((item) => [`/${item.id}`, item]),
   );
   const menuByHref = new Map(menuItems.map((item) => [item.href, item]));
+  const menuLabel = (item: {
+    href: string;
+    label: string;
+    labelRu?: string | null;
+    labelEn?: string | null;
+  }) => {
+    const fallbackKey = menuKeyByHref(item.href);
+    const fallback = fallbackKey ? t(fallbackKey) : item.label;
+
+    return localizedValue(locale, item.labelRu, item.labelEn, fallback);
+  };
+  const serviceGroupTitle = (group: {
+    title: string;
+    titleRu?: string | null;
+    titleEn?: string | null;
+    href: string;
+  }) => localizedValue(locale, group.titleRu, group.titleEn, t(`services.${group.href.slice(1)}`, group.title));
   const footerNavigation = [
-    menuByHref.get("/o-nas") ?? { href: "/o-nas", label: "О нас" },
-    menuByHref.get("/portfolio") ?? { href: "/portfolio", label: "Портфолио" },
-    menuByHref.get("/services") ?? { href: "/services", label: "Услуги" },
-    menuByHref.get("/blog") ?? { href: "/blog", label: "Блог" },
-    menuByHref.get("/kontakty") ?? { href: "/kontakty", label: "Контакты" },
+    menuByHref.get("/o-nas") ?? { href: "/o-nas", label: t("menu.about") },
+    menuByHref.get("/portfolio") ?? { href: "/portfolio", label: t("menu.portfolio") },
+    menuByHref.get("/services") ?? { href: "/services", label: t("menu.services") },
+    menuByHref.get("/blog") ?? { href: "/blog", label: t("menu.blog") },
+    menuByHref.get("/kontakty") ?? { href: "/kontakty", label: t("menu.contacts") },
     { href: "/karera", label: t("footer.career") },
     { href: "/partneram", label: t("footer.partners") },
-  ];
+  ].map((item) => ({ ...item, label: menuLabel(item) }));
   const socialItems = socials.map((social) =>
     social.label === "VK" ? { ...social, href: messengerLinks.vk } : social,
   );
@@ -219,7 +238,7 @@ export default function Footer() {
                     className="group flex items-start justify-between gap-3 text-sm font-medium leading-snug text-white/82 transition hover:text-[#D69A66]"
                   >
                     <span className="[overflow-wrap:anywhere]">
-                      {group.title}
+                      {serviceGroupTitle(group)}
                     </span>
                     <span className="mt-0.5 shrink-0 text-[#D69A66] transition group-hover:translate-x-0.5">
                       →
@@ -229,6 +248,12 @@ export default function Footer() {
                     {group.items.map((child) => {
                       const serviceTitle =
                         serviceByHref.get(child.href)?.title ?? child.label;
+                      const childLabel = localizedValue(
+                        locale,
+                        child.labelRu,
+                        child.labelEn,
+                        t(`services.${child.href.slice(1)}`, serviceTitle),
+                      );
 
                       return (
                         <li key={child.href}>
@@ -238,10 +263,7 @@ export default function Footer() {
                           >
                             <span className="mt-2 h-px w-2.5 shrink-0 bg-white/14 transition-all duration-200 group-hover:w-4 group-hover:bg-[#D69A66]" />
                             <span className="[overflow-wrap:anywhere]">
-                              {t(
-                                `services.${child.href.slice(1)}`,
-                                serviceTitle,
-                              )}
+                              {childLabel}
                             </span>
                           </Link>
                         </li>

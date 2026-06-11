@@ -3,7 +3,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import {
   awards,
-  careerVacancies,
   contactInfo,
   contentPages,
   faq,
@@ -53,6 +52,47 @@ type AnimationControls = {
   pageReveal: boolean;
 };
 
+type LocalizedMenuItem = {
+  href: string;
+  label: string;
+  labelRu?: string | null;
+  labelEn?: string | null;
+};
+
+type LocalizedFaq = {
+  q: string;
+  a: string;
+  qRu?: string | null;
+  qEn?: string | null;
+  aRu?: string | null;
+  aEn?: string | null;
+};
+
+type LocalizedVacancy = {
+  id: string;
+  title: string;
+  titleRu?: string | null;
+  titleEn?: string | null;
+  employment?: string | null;
+  employmentRu?: string | null;
+  employmentEn?: string | null;
+  location?: string | null;
+  locationRu?: string | null;
+  locationEn?: string | null;
+  salary?: string | null;
+  salaryRu?: string | null;
+  salaryEn?: string | null;
+  description?: string | null;
+  descriptionRu?: string | null;
+  descriptionEn?: string | null;
+  requirements: string[];
+  requirementsRu?: string[] | null;
+  requirementsEn?: string[] | null;
+  responsibilities: string[];
+  responsibilitiesRu?: string[] | null;
+  responsibilitiesEn?: string[] | null;
+};
+
 type CmsData = {
   siteSettings: SiteSettings;
   homeHero: HomeHero;
@@ -64,16 +104,16 @@ type CmsData = {
   newsArticles: typeof newsArticles;
   promos: typeof promos;
   testimonials: typeof testimonials;
-  faq: typeof faq;
+  faq: LocalizedFaq[];
   contactInfo: typeof contactInfo;
   messengerLinks: typeof messengerLinks;
   animationControls: AnimationControls;
   contentPages: typeof contentPages;
-  careerVacancies: typeof careerVacancies;
+  careerVacancies: LocalizedVacancy[];
   reviewStats: typeof reviewStats;
   awards: typeof awards;
   partners: typeof partners;
-  menuItems: { href: string; label: string }[];
+  menuItems: LocalizedMenuItem[];
   ready: boolean;
 };
 
@@ -120,16 +160,16 @@ const fallbackData: CmsData = {
     pageReveal: true,
   },
   contentPages,
-  careerVacancies,
+  careerVacancies: [],
   reviewStats,
   awards,
   partners,
   menuItems: [
-    { href: "/o-nas", label: "О нас" },
-    { href: "/portfolio", label: "Портфолио" },
-    { href: "/services", label: "Услуги" },
-    { href: "/blog", label: "Блог" },
-    { href: "/kontakty", label: "Контакты" },
+    { href: "/o-nas", label: "О нас", labelRu: "О нас", labelEn: "About Us" },
+    { href: "/portfolio", label: "Портфолио", labelRu: "Портфолио", labelEn: "Portfolio" },
+    { href: "/services", label: "Услуги", labelRu: "Услуги", labelEn: "Services" },
+    { href: "/blog", label: "Блог", labelRu: "Блог", labelEn: "Blog" },
+    { href: "/kontakty", label: "Контакты", labelRu: "Контакты", labelEn: "Contacts" },
   ],
   ready: false,
 };
@@ -255,6 +295,14 @@ function normalizeServiceNavigationGroups(payloadGroups: any[]) {
         ? group.items
             .map((item: any) => ({
               label: typeof item?.label === "string" ? item.label : "",
+              labelRu:
+                typeof item?.labelRu === "string"
+                  ? item.labelRu
+                  : typeof item?.label === "string"
+                    ? item.label
+                    : "",
+              labelEn:
+                typeof item?.labelEn === "string" ? item.labelEn : null,
               href: typeof item?.href === "string" ? item.href : "",
             }))
             .filter((item: any) => item.label && item.href)
@@ -263,18 +311,128 @@ function normalizeServiceNavigationGroups(payloadGroups: any[]) {
       return {
         id: String(group.id ?? href ?? `service-group-${index}`),
         title,
+        titleRu:
+          typeof group?.titleRu === "string" ? group.titleRu : title,
+        titleEn:
+          typeof group?.titleEn === "string" ? group.titleEn : null,
         href,
         description:
           typeof group?.description === "string" ? group.description : "",
+        descriptionRu:
+          typeof group?.descriptionRu === "string"
+            ? group.descriptionRu
+            : typeof group?.description === "string"
+              ? group.description
+              : "",
+        descriptionEn:
+          typeof group?.descriptionEn === "string"
+            ? group.descriptionEn
+            : null,
         items,
       };
     })
-    .filter(
-      (group): group is (typeof fallbackServiceNavigationGroups)[number] =>
-        Boolean(group),
-    );
+    .filter(Boolean) as typeof fallbackServiceNavigationGroups;
 
   return groups;
+}
+
+function normalizeMenuItems(payloadItems: any[]): LocalizedMenuItem[] {
+  return payloadItems
+    .map((item: any): LocalizedMenuItem | null => {
+      const href = typeof item?.href === "string" ? item.href : "";
+      const label = typeof item?.label === "string" ? item.label : "";
+
+      if (!href || !label) {
+        return null;
+      }
+
+      return {
+        href,
+        label,
+        labelRu:
+          typeof item?.labelRu === "string" ? item.labelRu : label,
+        labelEn:
+          typeof item?.labelEn === "string" ? item.labelEn : null,
+      };
+    })
+    .filter((item): item is LocalizedMenuItem => Boolean(item));
+}
+
+function normalizeFaqItems(payloadItems: any[]): LocalizedFaq[] {
+  return payloadItems
+    .map((item: any): LocalizedFaq | null => {
+      const q = typeof item?.q === "string" ? item.q : "";
+      const a = typeof item?.a === "string" ? item.a : "";
+
+      if (!q || !a) {
+        return null;
+      }
+
+      return {
+        q,
+        a,
+        qRu: typeof item?.qRu === "string" ? item.qRu : q,
+        qEn: typeof item?.qEn === "string" ? item.qEn : null,
+        aRu: typeof item?.aRu === "string" ? item.aRu : a,
+        aEn: typeof item?.aEn === "string" ? item.aEn : null,
+      };
+    })
+    .filter((item): item is LocalizedFaq => Boolean(item));
+}
+
+function normalizeLines(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+  }
+
+  if (typeof value === "string") {
+    return value
+      .split(/\r?\n/u)
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+}
+
+function normalizeVacancies(payloadItems: any[]): LocalizedVacancy[] {
+  return payloadItems
+    .map((item: any, index: number): LocalizedVacancy | null => {
+      const title = typeof item?.title === "string" ? item.title : "";
+
+      if (!title) {
+        return null;
+      }
+
+      const requirements = normalizeLines(item?.requirements);
+      const responsibilities = normalizeLines(item?.responsibilities);
+
+      return {
+        id: String(item?.id ?? (title.toLowerCase().replace(/[^a-zа-яё0-9]+/giu, "-") || `vacancy-${index}`)),
+        title,
+        titleRu: typeof item?.titleRu === "string" ? item.titleRu : title,
+        titleEn: typeof item?.titleEn === "string" ? item.titleEn : null,
+        employment: typeof item?.employment === "string" ? item.employment : null,
+        employmentRu: typeof item?.employmentRu === "string" ? item.employmentRu : typeof item?.employment === "string" ? item.employment : null,
+        employmentEn: typeof item?.employmentEn === "string" ? item.employmentEn : null,
+        location: typeof item?.location === "string" ? item.location : null,
+        locationRu: typeof item?.locationRu === "string" ? item.locationRu : typeof item?.location === "string" ? item.location : null,
+        locationEn: typeof item?.locationEn === "string" ? item.locationEn : null,
+        salary: typeof item?.salary === "string" ? item.salary : null,
+        salaryRu: typeof item?.salaryRu === "string" ? item.salaryRu : typeof item?.salary === "string" ? item.salary : null,
+        salaryEn: typeof item?.salaryEn === "string" ? item.salaryEn : null,
+        description: typeof item?.description === "string" ? item.description : null,
+        descriptionRu: typeof item?.descriptionRu === "string" ? item.descriptionRu : typeof item?.description === "string" ? item.description : null,
+        descriptionEn: typeof item?.descriptionEn === "string" ? item.descriptionEn : null,
+        requirements,
+        requirementsRu: Array.isArray(item?.requirementsRu) ? normalizeLines(item.requirementsRu) : requirements,
+        requirementsEn: normalizeLines(item?.requirementsEn),
+        responsibilities,
+        responsibilitiesRu: Array.isArray(item?.responsibilitiesRu) ? normalizeLines(item.responsibilitiesRu) : responsibilities,
+        responsibilitiesEn: normalizeLines(item?.responsibilitiesEn),
+      };
+    })
+    .filter((item): item is LocalizedVacancy => Boolean(item));
 }
 
 function normalizePayload(payload: any): CmsData {
@@ -391,7 +549,9 @@ function normalizePayload(payload: any): CmsData {
         ? payload.reviews
         : testimonials,
     faq:
-      Array.isArray(payload?.faqs) && payload.faqs.length ? payload.faqs : faq,
+      Array.isArray(payload?.faqs) && payload.faqs.length
+        ? normalizeFaqItems(payload.faqs)
+        : faq,
     contactInfo: {
       ...contactInfo,
       phone: settings.phone ?? contactInfo.phone,
@@ -420,14 +580,14 @@ function normalizePayload(payload: any): CmsData {
     },
     contentPages: apiPages,
     careerVacancies: Array.isArray(payload?.vacancies)
-      ? payload.vacancies
-      : careerVacancies,
+      ? normalizeVacancies(payload.vacancies)
+      : fallbackData.careerVacancies,
     reviewStats,
     awards: Array.isArray(payload?.awards) && payload.awards.length ? payload.awards : awards,
     partners: Array.isArray(payload?.partners) && payload.partners.length ? payload.partners : partners,
     menuItems:
       Array.isArray(payload?.menuItems) && payload.menuItems.length
-        ? payload.menuItems
+        ? normalizeMenuItems(payload.menuItems)
         : fallbackData.menuItems,
     ready: true,
   };

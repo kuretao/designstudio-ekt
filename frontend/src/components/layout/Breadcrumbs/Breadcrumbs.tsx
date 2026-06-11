@@ -2,27 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { useCms } from "@/src/cms";
+import { localizedValue, menuKeyByHref, siteLocaleFromLanguage } from "@/src/i18n";
 
 type Crumb = {
   label: string;
   href: string;
-};
-
-const routeLabels: Record<string, string> = {
-  "/akcii-i-skidki": "Акции",
-  "/blog": "Блог",
-  "/nagrady-i-diplomy": "Награды и дипломы",
-  "/kontakty": "Контакты",
-  "/karera": "Карьера",
-  "/novosti": "Новости",
-  "/o-nas": "О нас",
-  "/otzyvy-o-nas": "Отзывы",
-  "/partneram": "Партнерам",
-  "/politika-konfidencialnosti": "Политика конфиденциальности",
-  "/portfolio": "Портфолио",
-  "/services": "Услуги",
-  "/user/agreement": "Пользовательское соглашение",
 };
 
 function slugToLabel(slug: string) {
@@ -36,36 +22,58 @@ function slugToLabel(slug: string) {
 export default function Breadcrumbs() {
   const pathname = usePathname();
   const { newsArticles, projects, serviceNavigationGroups, servicePageItems } = useCms();
+  const { i18n, t } = useTranslation();
+  const locale = siteLocaleFromLanguage(i18n.language);
 
   if (pathname === "/") return null;
 
   const normalizedPath = pathname.replace(/\/$/, "") || "/";
-  const crumbs: Crumb[] = [{ label: "Главная", href: "/" }];
+  const routeLabel = (href: string) => {
+    const key = menuKeyByHref(href);
+
+    return key ? t(key) : null;
+  };
+  const serviceGroupTitle = (group: {
+    title: string;
+    titleRu?: string | null;
+    titleEn?: string | null;
+    href: string;
+  }) => localizedValue(locale, group.titleRu, group.titleEn, t(`services.${group.href.slice(1)}`, group.title));
+  const serviceChildLabel = (child: {
+    href: string;
+    label: string;
+    labelRu?: string | null;
+    labelEn?: string | null;
+  }) => {
+    const serviceTitle = servicePageItems.find((item) => `/${item.id}` === child.href)?.title ?? child.label;
+
+    return localizedValue(locale, child.labelRu, child.labelEn, t(`services.${child.href.slice(1)}`, serviceTitle));
+  };
+  const crumbs: Crumb[] = [{ label: t("menu.home"), href: "/" }];
   const serviceGroup = serviceNavigationGroups.find((group) =>
     group.href === normalizedPath || group.items.some((item) => item.href === normalizedPath),
   );
   const serviceChild = serviceGroup?.items.find((item) => item.href === normalizedPath);
 
   if (serviceGroup) {
-    crumbs.push({ label: "Услуги", href: "/services" });
-    crumbs.push({ label: serviceGroup.title, href: serviceGroup.href });
+    crumbs.push({ label: t("menu.services"), href: "/services" });
+    crumbs.push({ label: serviceGroupTitle(serviceGroup), href: serviceGroup.href });
 
     if (serviceChild && serviceChild.href !== serviceGroup.href) {
-      const serviceTitle = servicePageItems.find((item) => `/${item.id}` === serviceChild.href)?.title ?? serviceChild.label;
-      crumbs.push({ label: serviceTitle, href: serviceChild.href });
+      crumbs.push({ label: serviceChildLabel(serviceChild), href: serviceChild.href });
     }
   } else if (normalizedPath.startsWith("/portfolio/")) {
     const slug = normalizedPath.split("/").filter(Boolean).at(-1) ?? "";
     const project = projects.find((item) => item.slug === slug);
-    crumbs.push({ label: "Портфолио", href: "/portfolio" });
+    crumbs.push({ label: t("menu.portfolio"), href: "/portfolio" });
     crumbs.push({ label: project?.title ?? slugToLabel(slug), href: normalizedPath });
   } else if (normalizedPath.startsWith("/novosti/")) {
     const slug = normalizedPath.split("/").filter(Boolean).at(-1) ?? "";
     const article = newsArticles.find((item) => item.slug === slug);
-    crumbs.push({ label: "Новости", href: "/novosti" });
+    crumbs.push({ label: t("menu.news"), href: "/novosti" });
     crumbs.push({ label: article?.title ?? slugToLabel(slug), href: normalizedPath });
   } else {
-    crumbs.push({ label: routeLabels[normalizedPath] ?? slugToLabel(normalizedPath.split("/").filter(Boolean).join("-")), href: normalizedPath });
+    crumbs.push({ label: routeLabel(normalizedPath) ?? slugToLabel(normalizedPath.split("/").filter(Boolean).join("-")), href: normalizedPath });
   }
 
   return (

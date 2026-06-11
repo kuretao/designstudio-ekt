@@ -1,2 +1,7 @@
 export { default as SiteI18nProvider } from "./I18nProvider";
-export { menuKeyByHref } from "./resources";
+export {
+  localizedValue,
+  menuKeyByHref,
+  siteLocaleFromLanguage,
+  type SiteLocale,
+} from "./resources";

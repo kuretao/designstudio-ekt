@@ -3,8 +3,10 @@
 import type { ReactNode } from "react";
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { contentPages as fallbackContentPages } from "@/src/data";
 import { submitLead, useCms } from "@/src/cms";
+import { localizedValue, siteLocaleFromLanguage } from "@/src/i18n";
 import { GlassPanel } from "@/src/ui";
 import CinematicImage from "@/src/components/common/CinematicImage";
 import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
@@ -291,30 +293,55 @@ function CtaBlock({ block }: { block: ContentBlock }) {
 }
 
 function CareerContent({ careerVacancies }: { careerVacancies: any[] }) {
+  const { i18n, t } = useTranslation();
+  const locale = siteLocaleFromLanguage(i18n.language);
+
   return (
     <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
       <GlassPanel className="rounded-[2rem] p-7 md:p-9">
-        <SectionLabel className="mb-5">Вакансии</SectionLabel>
+        <SectionLabel className="mb-5">{t("career.openPositions")}</SectionLabel>
         {careerVacancies.length > 0 ? (
           <div className="space-y-4">
             {careerVacancies.map((vacancy) => {
-              const requirements = Array.isArray(vacancy.requirements)
-                ? vacancy.requirements
-                : String(vacancy.requirements ?? "")
-                    .split(/\r?\n/u)
-                    .filter(Boolean);
-              const format = vacancy.format ?? vacancy.employment ?? vacancy.location;
-              const workload = vacancy.workload ?? vacancy.salary;
+              const requirements =
+                locale === "en" && Array.isArray(vacancy.requirementsEn) && vacancy.requirementsEn.length
+                  ? vacancy.requirementsEn
+                  : Array.isArray(vacancy.requirementsRu) && vacancy.requirementsRu.length
+                    ? vacancy.requirementsRu
+                    : Array.isArray(vacancy.requirements)
+                      ? vacancy.requirements
+                      : String(vacancy.requirements ?? "")
+                          .split(/\r?\n/u)
+                          .filter(Boolean);
+              const format = localizedValue(
+                locale,
+                vacancy.employmentRu,
+                vacancy.employmentEn,
+                vacancy.format ?? vacancy.employment ?? vacancy.location,
+              );
+              const workload = localizedValue(
+                locale,
+                vacancy.salaryRu,
+                vacancy.salaryEn,
+                vacancy.workload ?? vacancy.salary,
+              );
+              const title = localizedValue(locale, vacancy.titleRu, vacancy.titleEn, vacancy.title);
+              const description = localizedValue(
+                locale,
+                vacancy.descriptionRu,
+                vacancy.descriptionEn,
+                vacancy.description,
+              );
 
               return (
-                <article key={vacancy.title} className="min-w-0 rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-6">
+                <article key={title} className="min-w-0 rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-6">
                   <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.22em] text-[#D69A66]">
                     {format ? <span>{format}</span> : null}
                     {format && workload ? <span className="h-1 w-1 rounded-full bg-white/25" /> : null}
                     {workload ? <span>{workload}</span> : null}
                   </div>
-                  <h2 className="mt-4 text-3xl font-light tracking-normal [overflow-wrap:anywhere]">{vacancy.title}</h2>
-                  <p className="mt-4 leading-relaxed text-[#D6D1CA] [overflow-wrap:anywhere]">{vacancy.description}</p>
+                  <h2 className="mt-4 text-3xl font-light tracking-normal [overflow-wrap:anywhere]">{title}</h2>
+                  <p className="mt-4 leading-relaxed text-[#D6D1CA] [overflow-wrap:anywhere]">{description}</p>
                   {requirements.length ? (
                     <ul className="mt-5 space-y-2 text-sm text-white/55">
                       {requirements.map((item: string) => (
@@ -331,22 +358,22 @@ function CareerContent({ careerVacancies }: { careerVacancies: any[] }) {
           </div>
         ) : (
           <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-7">
-            <h2 className="text-3xl font-light tracking-normal">Открытых вакансий пока нет</h2>
-            <p className="mt-4 max-w-2xl leading-relaxed text-[#D6D1CA]">Резюме и портфолио можно отправить на почту студии.</p>
+            <h2 className="text-3xl font-light tracking-normal">{t("career.fallbackVacancyTitle")}</h2>
+            <p className="mt-4 max-w-2xl leading-relaxed text-[#D6D1CA]">{t("career.fallbackVacancyText")}</p>
           </div>
         )}
       </GlassPanel>
       <GlassPanel className="rounded-[2rem] p-7 md:p-9">
-        <SectionLabel className="mb-5">Отклик</SectionLabel>
-        <h2 className="text-3xl font-light tracking-normal">Прислать портфолио</h2>
+        <SectionLabel className="mb-5">{t("career.applyTitle")}</SectionLabel>
+        <h2 className="text-3xl font-light tracking-normal">{t("career.portfolioTitle")}</h2>
         <p className="mt-4 leading-relaxed text-[#D6D1CA]">
-          Напишите пару строк о себе, приложите ссылку на портфолио и укажите направление: интерьер, архитектура или ландшафт.
+          {t("career.portfolioText")}
         </p>
         <a
           href="mailto:3dsmartdesign@bk.ru?subject=Отклик%20на%20вакансию%20с%20сайта"
           className="mt-8 inline-flex rounded-full bg-[#D69A66] px-7 py-4 text-sm font-medium uppercase tracking-[0.22em] text-[#050505] transition hover:bg-[#F5F2EC]"
         >
-          Отправить отклик
+          {t("career.submit")}
         </a>
       </GlassPanel>
     </div>

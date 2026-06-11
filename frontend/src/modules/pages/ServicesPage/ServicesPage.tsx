@@ -1,11 +1,13 @@
 ﻿"use client";
 
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useCms } from "@/src/cms";
 import CinematicImage from "@/src/components/common/CinematicImage";
 import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import { GlassPanel } from "@/src/ui";
 import SectionLabel from "@/src/components/common/SectionLabel";
+import { localizedValue, siteLocaleFromLanguage } from "@/src/i18n";
 
 const serviceHeroStats = [
   ["10 лет", "опыта в интерьерах, архитектуре и 3D"],
@@ -134,7 +136,15 @@ export function ServicesSummary() {
 
 export function ServicePages() {
   const { projects, serviceNavigationGroups, servicePageItems } = useCms();
+  const { i18n, t } = useTranslation();
+  const locale = siteLocaleFromLanguage(i18n.language);
   const serviceByHref = new Map(servicePageItems.map((item) => [`/${item.id}`, item]));
+  const groupTitle = (group: (typeof serviceNavigationGroups)[number]) =>
+    localizedValue(locale, group.titleRu, group.titleEn, t(`services.${group.href.slice(1)}`, group.title));
+  const groupDescription = (group: (typeof serviceNavigationGroups)[number]) =>
+    localizedValue(locale, group.descriptionRu, group.descriptionEn, group.description);
+  const childLabel = (child: (typeof serviceNavigationGroups)[number]["items"][number]) =>
+    localizedValue(locale, child.labelRu, child.labelEn, t(`services.${child.href.slice(1)}`, child.label));
 
   return (
     <section className="border-t border-white/10 px-5 py-28 md:px-10 lg:px-16">
@@ -160,19 +170,19 @@ export function ServicePages() {
                   <div className="relative h-72 overflow-hidden">
                     <CinematicImage
                       frames={[image, projects[(index + 1) % projects.length]?.image, projects[(index + 3) % projects.length]?.image]}
-                      alt={group.title}
+                      alt={groupTitle(group)}
                       fill
                       hint="motion"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/68 via-[#050505]/12 to-[#D69A66]/10" />
                     <div className="absolute bottom-5 left-5 right-5">
                       <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#D69A66]">Основная категория</p>
-                      <h3 className="text-3xl font-light tracking-[-0.04em]">{group.title}</h3>
+                      <h3 className="text-3xl font-light tracking-[-0.04em]">{groupTitle(group)}</h3>
                     </div>
                   </div>
                 </Link>
                 <div className="grid gap-5 p-6">
-                  <p className="leading-relaxed text-[#D6D1CA]">{group.description}</p>
+                  <p className="leading-relaxed text-[#D6D1CA]">{groupDescription(group)}</p>
                   <div className="grid gap-2">
                     {group.items.map((child) => (
                       <Link
@@ -180,7 +190,7 @@ export function ServicePages() {
                         href={child.href}
                         className="group flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm text-white/62 transition hover:border-[#D69A66]/45 hover:text-white"
                       >
-                        <span>{child.label}</span>
+                        <span>{childLabel(child)}</span>
                         <span className="text-[#D69A66] transition group-hover:translate-x-1">→</span>
                       </Link>
                     ))}

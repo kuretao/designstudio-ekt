@@ -3,9 +3,11 @@ import type { Metadata } from "next";
 import {
   contentPages,
   getServiceLandingCopy,
+  seoLandingPageItems,
   servicePageItems,
 } from "@/src/data";
 import ServiceDetailPage from "@/src/modules/pages/ServiceDetailPage";
+import SeoLandingPage from "@/src/modules/pages/SeoLandingPage";
 import ContentPage from "@/src/modules/pages/ContentPage";
 
 // Slugs that have their own dedicated app routes - exclude from [slug].
@@ -17,6 +19,7 @@ export const dynamic = "force-dynamic";
 export function generateStaticParams() {
   return [
     ...servicePageItems.map((item) => ({ slug: item.id })),
+    ...seoLandingPageItems.map((item) => ({ slug: item.id })),
     ...contentPages
       .filter((page) => !DEDICATED_ROUTES.has(page.id))
       .map((page) => ({ slug: page.id })),
@@ -30,6 +33,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const servicePage = servicePageItems.find((item) => item.id === slug);
+  const seoLandingPage = seoLandingPageItems.find((item) => item.id === slug);
 
   if (servicePage) {
     const copy = getServiceLandingCopy(servicePage);
@@ -42,6 +46,25 @@ export async function generateMetadata({
         title: copy.offerTitle,
         description: copy.seoDescription,
         images: [servicePage.image],
+      },
+    };
+  }
+
+  if (seoLandingPage) {
+    const copy = getServiceLandingCopy(seoLandingPage);
+
+    return {
+      title: `${copy.offerTitle} | 3D Smart Design Studio`,
+      description: copy.seoDescription,
+      keywords: copy.seoKeywords,
+      robots: {
+        index: true,
+        follow: true,
+      },
+      openGraph: {
+        title: copy.offerTitle,
+        description: copy.seoDescription,
+        images: [seoLandingPage.image],
       },
     };
   }
@@ -68,6 +91,9 @@ export default async function Page({
 
   const servicePage = servicePageItems.find((item) => item.id === slug);
   if (servicePage) return <ServiceDetailPage item={servicePage} />;
+
+  const seoLandingPage = seoLandingPageItems.find((item) => item.id === slug);
+  if (seoLandingPage) return <SeoLandingPage item={seoLandingPage} />;
 
   const contentPage = contentPages.find((page) => page.id === slug);
   if (contentPage) return <ContentPage page={contentPage} />;

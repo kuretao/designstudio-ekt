@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useCms } from "@/src/cms";
+import { isSeoLandingPath } from "@/src/data";
 import ContactModal from "@/src/modals/ContactModal";
 
 function LogoMark() {
@@ -184,6 +185,8 @@ export default function Header() {
     transitionDelay: menuOpen ? `${220 + index * 70}ms` : "0ms",
     transitionProperty: "opacity, transform",
   });
+
+  if (isSeoLandingPath(currentPath)) return null;
 
   return (
     <>

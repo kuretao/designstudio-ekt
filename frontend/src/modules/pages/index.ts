@@ -13,4 +13,5 @@ export { default as PrivacyPage } from "./PrivacyPage";
 export { default as PromosPage } from "./PromosPage";
 export { default as ReviewsPage } from "./ReviewsPage";
 export { default as ServiceDetailPage } from "./ServiceDetailPage";
+export { default as SeoLandingPage } from "./SeoLandingPage";
 export { default as ServicesPage } from "./ServicesPage";

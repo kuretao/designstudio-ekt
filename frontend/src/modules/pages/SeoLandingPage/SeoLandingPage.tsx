@@ -5,6 +5,7 @@ import {
   projects,
   seoLandingPageItems,
 } from "@/src/data";
+import VirtualTourDemo from "@/src/components/common/VirtualTourDemo";
 
 type SeoLandingItem = (typeof seoLandingPageItems)[number];
 
@@ -288,6 +289,7 @@ function HeroVisual({
 function SeoLandingPage({ item }: { item: SeoLandingItem }) {
   const copy = getServiceLandingCopy(item);
   const variant = getVariant(item);
+  const hasVirtualTourDemo = item.id === "virtualnyj-3d-tur-dlya-biznesa";
   const metrics = [
     ["Стоимость", item.price],
     ["Срок", item.timeline],
@@ -370,6 +372,8 @@ function SeoLandingPage({ item }: { item: SeoLandingItem }) {
           <HeroVisual item={item} variant={variant} />
         </div>
       </section>
+
+      {hasVirtualTourDemo && <VirtualTourDemo />}
 
       <section className="border-t border-white/10 px-5 py-20 md:px-10 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.58fr_1fr]">

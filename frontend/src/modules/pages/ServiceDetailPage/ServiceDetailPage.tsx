@@ -12,6 +12,7 @@ import BrandStrip from "@/src/components/common/BrandStrip";
 import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import ProjectQuiz from "@/src/components/common/ProjectQuiz";
 import SectionLabel from "@/src/components/common/SectionLabel";
+import VirtualTourDemo from "@/src/components/common/VirtualTourDemo";
 import { ContactSection } from "@/src/modules/pages/ContactPage";
 import type { Project, ProjectCategory } from "@/src/types";
 
@@ -320,6 +321,7 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
   const { servicePageItems, projects } = useCms();
   const currentItem =
     servicePageItems.find((service) => service.id === item.id) ?? item;
+  const isVirtualTour = currentItem.id === "virtualnyj-3d-tur-360";
   const landingCopy = getServiceLandingCopy(currentItem);
   const heroSlides = useMemo(
     () => [
@@ -400,6 +402,7 @@ function ServiceDetailPage({ item }: { item: ServicePageItem }) {
       </section>
 
       <BrandStrip />
+      {isVirtualTour && <VirtualTourDemo />}
       <ServiceCompareBlock item={currentItem} projects={projects} />
       <ServicePortfolioBlock item={currentItem} projects={projects} />
       <ServiceDocumentsBlock item={currentItem} projects={projects} />

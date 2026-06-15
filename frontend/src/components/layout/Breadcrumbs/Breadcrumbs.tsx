@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCms } from "@/src/cms";
-import { isSeoLandingPath } from "@/src/data";
+import { isSeoLandingPath, isStandaloneExperiencePath } from "@/src/data";
 
 type Crumb = {
   label: string;
@@ -38,7 +38,12 @@ export default function Breadcrumbs() {
   const pathname = usePathname();
   const { newsArticles, projects, serviceNavigationGroups, servicePageItems } = useCms();
 
-  if (pathname === "/" || isSeoLandingPath(pathname)) return null;
+  if (
+    pathname === "/" ||
+    isSeoLandingPath(pathname) ||
+    isStandaloneExperiencePath(pathname)
+  )
+    return null;
 
   const normalizedPath = pathname.replace(/\/$/, "") || "/";
   const crumbs: Crumb[] = [{ label: "Главная", href: "/" }];

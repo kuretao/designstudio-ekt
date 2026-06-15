@@ -7,6 +7,7 @@ import Footer from "@/src/components/layout/Footer";
 import SiteMetadata from "@/src/components/layout/SiteMetadata/SiteMetadata";
 import { CmsProvider } from "@/src/cms";
 import { SiteI18nProvider } from "@/src/i18n";
+import "pannellum/build/pannellum.css";
 import "./globals.css";
 
 export const metadata: Metadata = {

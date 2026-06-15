@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useCms } from "@/src/cms";
-import { isSeoLandingPath } from "@/src/data";
+import { isSeoLandingPath, isStandaloneExperiencePath } from "@/src/data";
 
 const socials = [
   {
@@ -156,7 +156,8 @@ export default function Footer() {
   const footerLinkCls =
     "group flex items-start gap-2 text-sm leading-snug text-white/45 transition-colors duration-200 hover:text-white";
 
-  if (isSeoLandingPath(pathname)) return null;
+  if (isSeoLandingPath(pathname) || isStandaloneExperiencePath(pathname))
+    return null;
 
   return (
     <footer className="premium-footer relative overflow-hidden border-t border-white/10">

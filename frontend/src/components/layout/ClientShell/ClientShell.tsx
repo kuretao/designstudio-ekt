@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useCms } from "@/src/cms";
+import { isStandaloneExperiencePath } from "@/src/data";
 import { GlobalStyle, Noise } from "@/src/ui";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -65,6 +66,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
   const { animationControls, messengerLinks } = useCms();
   const { t } = useTranslation();
   const pathname = usePathname();
+  const isStandaloneExperience = isStandaloneExperiencePath(pathname);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -364,24 +366,26 @@ export default function ClientShell({ children }: { children: React.ReactNode })
       </div>
       <Noise />
       {children}
-      <div className="fixed right-3 top-24 z-[70] flex flex-col gap-2 md:bottom-8 md:right-8 md:top-auto">
-        {floatingMessengers.map((messenger) => {
-          const href = messenger.icon === "telegram" ? messengerLinks.telegram : messenger.icon === "vk" ? messengerLinks.vk : messengerLinks.max;
+      {!isStandaloneExperience && (
+        <div className="fixed right-3 top-24 z-[70] flex flex-col gap-2 md:bottom-8 md:right-8 md:top-auto">
+          {floatingMessengers.map((messenger) => {
+            const href = messenger.icon === "telegram" ? messengerLinks.telegram : messenger.icon === "vk" ? messengerLinks.vk : messengerLinks.max;
 
-          return (
-            <a
-              key={messenger.label}
-              href={href}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={t(`fixed.${messenger.icon}`, messenger.label)}
-              className="grid h-11 w-11 place-items-center rounded-full border border-white/18 bg-[#050505]/35 text-white backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-white/34 hover:bg-white/18 md:h-12 md:w-12"
-            >
-              <MessengerIcon icon={messenger.icon} />
-            </a>
-          );
-        })}
-      </div>
+            return (
+              <a
+                key={messenger.label}
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={t(`fixed.${messenger.icon}`, messenger.label)}
+                className="grid h-11 w-11 place-items-center rounded-full border border-white/18 bg-[#050505]/35 text-white backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-white/34 hover:bg-white/18 md:h-12 md:w-12"
+              >
+                <MessengerIcon icon={messenger.icon} />
+              </a>
+            );
+          })}
+        </div>
+      )}
     </main>
   );
 }

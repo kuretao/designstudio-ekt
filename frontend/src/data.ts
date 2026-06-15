@@ -765,6 +765,13 @@ export function isSeoLandingPath(pathname: string) {
   return seoLandingSlugs.some((slug) => normalizedPath === `/${slug}`);
 }
 
+const standaloneExperiencePaths = ["/virtualnyj-3d-tur-demo"];
+
+export function isStandaloneExperiencePath(pathname: string) {
+  const normalizedPath = pathname.replace(/\/$/, "") || "/";
+  return standaloneExperiencePaths.includes(normalizedPath);
+}
+
 export type ServiceNavigationChild = {
   label: string;
   href: string;

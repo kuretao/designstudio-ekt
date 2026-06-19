@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { submitLead, useCms } from "@/src/cms";
+import { submitLead, useCms, useCmsText } from "@/src/cms";
 import type { ServiceQuizKind } from "@/src/data";
 import { GlassPanel } from "@/src/ui";
 import SectionLabel from "@/src/components/common/SectionLabel";
@@ -441,7 +441,7 @@ function StylePreview({ type }: { type?: QuizOption["visual"] }) {
   );
 }
 
-function buildMockEstimate(answers: Answers) {
+function buildMockEstimate(answers: Answers, defaultTimeline: string) {
   const area = answers.area;
   const scope = answers.scope;
   const minArea = area?.minArea ?? 50;
@@ -454,7 +454,7 @@ function buildMockEstimate(answers: Answers) {
 
   return {
     price: `${formatRub(min)} - ${formatRub(max)}`,
-    timeline: scope?.timeline ?? "3-12 недель",
+    timeline: scope?.timeline ?? defaultTimeline,
   };
 }
 
@@ -466,7 +466,34 @@ export default function ProjectQuiz({
   serviceTitle?: string;
 }) {
   const { messengerLinks } = useCms();
-  const questions = useMemo(() => quizQuestionSets[kind], [kind]);
+  const text = useCmsText();
+  const questions = useMemo(
+    () =>
+      quizQuestionSets[kind].map((question) => {
+        const baseKey = `quiz.${kind}.${question.id}`;
+
+        return {
+          ...question,
+          title: text(`${baseKey}.title`, question.title),
+          goal: text(`${baseKey}.goal`, question.goal),
+          options: question.options.map((option, index) => {
+            const optionKey = `${baseKey}.option${index + 1}`;
+
+            return {
+              ...option,
+              label: text(`${optionKey}.label`, option.label),
+              note: option.note
+                ? text(`${optionKey}.note`, option.note)
+                : undefined,
+              timeline: option.timeline
+                ? text(`${optionKey}.timeline`, option.timeline)
+                : undefined,
+            };
+          }),
+        };
+      }),
+    [kind, text],
+  );
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [name, setName] = useState("");
@@ -477,7 +504,10 @@ export default function ProjectQuiz({
 
   const currentQuestion = questions[step];
   const isContactStep = step >= questions.length;
-  const estimate = useMemo(() => buildMockEstimate(answers), [answers]);
+  const estimate = useMemo(
+    () => buildMockEstimate(answers, text("quiz.defaultTimeline", "3-12 недель")),
+    [answers, text],
+  );
   const progress = Math.round(
     (Math.min(step, questions.length) / questions.length) * 100,
   );
@@ -538,35 +568,36 @@ export default function ProjectQuiz({
       className="border-t border-white/10 px-5 py-28 md:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-7xl">
-        <SectionLabel>Project quiz</SectionLabel>
+        <SectionLabel>{text("quiz.sectionLabel", "Project quiz")}</SectionLabel>
 
         <div className="mb-12 grid gap-8 md:grid-cols-[1fr_0.8fr] md:items-end">
           <div>
             <h2 className="max-w-5xl text-5xl font-light tracking-[-0.055em] md:text-7xl">
-              Рассчитайте стоимость и сроки
-              {serviceTitle ? `: ${serviceTitle}` : " вашего проекта"} за 1
-              минуту
+              {text("quiz.titlePrefix", "Рассчитайте стоимость и сроки")}
+              {serviceTitle ? `: ${serviceTitle}` : text("quiz.titleDefaultProject", " вашего проекта")}{" "}
+              {text("quiz.titleSuffix", "за 1 минуту")}
             </h2>
             <p className="mt-6 max-w-3xl text-lg leading-relaxed text-[#D6D1CA]">
-              Ответьте на 5 вопросов, и мы подготовим персональное предложение.
-              Бонусом отправим PDF-чек-лист «Подготовка к ремонту: с чего
-              начать».
+              {text(
+                "quiz.intro",
+                "Ответьте на 5 вопросов, и мы подготовим персональное предложение. Бонусом отправим PDF-чек-лист «Подготовка к ремонту: с чего начать».",
+              )}
             </p>
           </div>
 
           <GlassPanel className="rounded-[2rem] p-6">
             <p className="text-xs uppercase tracking-[0.28em] text-[#D69A66]">
-              Предварительный ориентир
+              {text("quiz.estimateLabel", "Предварительный ориентир")}
             </p>
             <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
               <div>
-                <span className="block text-sm text-white/35">Стоимость</span>
+                <span className="block text-sm text-white/35">{text("quiz.priceLabel", "Стоимость")}</span>
                 <strong className="mt-1 block text-2xl font-light tracking-[-0.04em] text-[#F5F2EC]">
                   {estimate.price}
                 </strong>
               </div>
               <div>
-                <span className="block text-sm text-white/35">Сроки</span>
+                <span className="block text-sm text-white/35">{text("quiz.timelineLabel", "Сроки")}</span>
                 <strong className="mt-1 block text-2xl font-light tracking-[-0.04em] text-[#F5F2EC]">
                   {estimate.timeline}
                 </strong>
@@ -580,7 +611,7 @@ export default function ProjectQuiz({
             <div className="relative flex flex-col justify-between overflow-hidden border-b border-white/10 bg-[#0c0b09]/65 p-7 md:p-9 lg:border-b-0 lg:border-r">
               <img
                 src="https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1400&q=85"
-                alt="Интерьер с мягким светом и натуральными материалами"
+                alt={text("quiz.imageAlt", "Интерьер с мягким светом и натуральными материалами")}
                 className="absolute inset-0 h-full w-full object-cover opacity-30"
               />
               <div className="absolute inset-0 bg-gradient-to-br from-[#0c0b09]/95 via-[#0c0b09]/76 to-[#2A3028]/58" />
@@ -589,8 +620,10 @@ export default function ProjectQuiz({
                 <div className="mb-6 flex items-center justify-between text-xs uppercase tracking-[0.28em] text-white/35">
                   <span>
                     {isContactStep
-                      ? "Финал"
-                      : `Вопрос ${step + 1} из ${questions.length}`}
+                      ? text("quiz.finalStep", "Финал")
+                      : text("quiz.questionProgress", "Вопрос {current} из {total}")
+                          .replace("{current}", String(step + 1))
+                          .replace("{total}", String(questions.length))}
                   </span>
                   <span>{progress}%</span>
                 </div>
@@ -625,8 +658,10 @@ export default function ProjectQuiz({
               </div>
 
               <p className="relative z-10 mt-10 text-sm leading-relaxed text-[#D6D1CA]/75">
-                Ответы помогают быстро понять масштаб, сроки и формат проекта.
-                После отправки мы свяжемся с вами в выбранном канале.
+                {text(
+                  "quiz.sidebarText",
+                  "Ответы помогают быстро понять масштаб, сроки и формат проекта. После отправки мы свяжемся с вами в выбранном канале.",
+                )}
               </p>
             </div>
 
@@ -686,7 +721,7 @@ export default function ProjectQuiz({
                       disabled={step === 0}
                       className="rounded-full border border-white/10 px-5 py-3 text-xs uppercase tracking-[0.22em] text-white/55 transition hover:border-white/25 hover:text-white disabled:pointer-events-none disabled:opacity-35"
                     >
-                      Назад
+                      {text("quiz.backButton", "Назад")}
                     </button>
                     <button
                       type="button"
@@ -694,7 +729,7 @@ export default function ProjectQuiz({
                       disabled={Object.keys(answers).length < questions.length}
                       className="rounded-full border border-[#D69A66]/40 px-5 py-3 text-xs uppercase tracking-[0.22em] text-[#D69A66] transition hover:bg-[#D69A66] hover:text-[#050505] disabled:pointer-events-none disabled:opacity-35"
                     >
-                      К расчету
+                      {text("quiz.toEstimateButton", "К расчету")}
                     </button>
                   </div>
                 </>
@@ -702,27 +737,29 @@ export default function ProjectQuiz({
                 <div className="flex min-h-full flex-col justify-between">
                   <div>
                     <p className="mb-4 text-xs uppercase tracking-[0.32em] text-[#D69A66]">
-                      Спасибо! Мы уже начали расчет вашего проекта.
+                      {text("quiz.finalEyebrow", "Спасибо! Мы уже начали расчет вашего проекта.")}
                     </p>
                     <h3 className="max-w-3xl text-4xl font-light leading-tight tracking-[-0.045em] text-[#F5F2EC] md:text-5xl">
-                      Укажите, куда прислать расчет и ваш бонус
+                      {text("quiz.finalTitle", "Укажите, куда прислать расчет и ваш бонус")}
                     </h3>
                     <p className="mt-5 max-w-2xl text-base leading-relaxed text-[#D6D1CA]">
-                      Оставьте контакт, а мы подготовим персональное предложение
-                      и PDF-чек-лист по старту ремонта.
+                      {text(
+                        "quiz.finalText",
+                        "Оставьте контакт, а мы подготовим персональное предложение и PDF-чек-лист по старту ремонта.",
+                      )}
                     </p>
                   </div>
 
                   <div className="mt-10 grid gap-3">
                     <input
                       className={inputCls}
-                      placeholder="Ваше имя"
+                      placeholder={text("quiz.namePlaceholder", "Ваше имя")}
                       value={name}
                       onChange={(event) => setName(event.target.value)}
                     />
                     <input
                       className={inputCls}
-                      placeholder="Телефон, e-mail или @username"
+                      placeholder={text("quiz.contactPlaceholder", "Телефон, e-mail или @username")}
                       value={contact}
                       onChange={(event) => {
                         setContact(event.target.value);
@@ -731,8 +768,10 @@ export default function ProjectQuiz({
                     />
                     {showContactError && (
                       <p className="text-sm text-[#D69A66]">
-                        Добавьте контакт и подтвердите согласие, чтобы мы знали,
-                        куда отправить расчет.
+                        {text(
+                          "quiz.contactError",
+                          "Добавьте контакт и подтвердите согласие, чтобы мы знали, куда отправить расчет.",
+                        )}
                       </p>
                     )}
 
@@ -742,14 +781,14 @@ export default function ProjectQuiz({
                         onClick={() => submitMockLead("MAX")}
                         className="rounded-2xl border border-[#D69A66]/45 bg-[#D69A66] px-5 py-4 text-sm font-medium uppercase tracking-[0.16em] text-[#050505] transition hover:bg-[#F5F2EC]"
                       >
-                        Получить расчет в MAX
+                        {text("quiz.maxButton", "Получить расчет в MAX")}
                       </button>
                       <button
                         type="button"
                         onClick={() => submitMockLead("Telegram")}
                         className="rounded-2xl border border-[#D69A66]/45 bg-white/[0.04] px-5 py-4 text-sm font-medium uppercase tracking-[0.16em] text-[#D69A66] transition hover:bg-[#D69A66] hover:text-[#050505]"
                       >
-                        Получить расчет в Telegram
+                        {text("quiz.telegramButton", "Получить расчет в Telegram")}
                       </button>
                     </div>
 
@@ -761,28 +800,31 @@ export default function ProjectQuiz({
                         className="mt-1 accent-[#D69A66]"
                       />
                       <span className="text-xs leading-relaxed text-white/40">
-                        Я ознакомился(-ась) с{" "}
+                        {text("quiz.consentStart", "Я ознакомился(-ась) с")}{" "}
                         <Link
                           href="/user/agreement"
                           target="_blank"
                           className="text-[#D69A66]/70 underline underline-offset-2"
                         >
-                          пользовательским соглашением
+                          {text("quiz.agreement", "пользовательским соглашением")}
                         </Link>{" "}
-                        и{" "}
+                        {text("quiz.and", "и")}{" "}
                         <Link
                           href="/politika-konfidencialnosti"
                           target="_blank"
                           className="text-[#D69A66]/70 underline underline-offset-2"
                         >
-                          политикой конфиденциальности
+                          {text("quiz.privacy", "политикой конфиденциальности")}
                         </Link>
                         .
                       </span>
                     </label>
                     {submittedTo && (
                       <p className="rounded-2xl border border-[#D69A66]/25 bg-[#D69A66]/10 px-4 py-3 text-sm text-[#F5F2EC]">
-                        Заявка сохранена. Мы свяжемся с вами в выбранном канале: {submittedTo}.
+                        {text(
+                          "quiz.submitted",
+                          "Заявка сохранена. Мы свяжемся с вами в выбранном канале: {channel}.",
+                        ).replace("{channel}", submittedTo)}
                       </p>
                     )}
                   </div>
@@ -793,7 +835,7 @@ export default function ProjectQuiz({
                       onClick={() => setStep(questions.length - 1)}
                       className="rounded-full border border-white/10 px-5 py-3 text-xs uppercase tracking-[0.22em] text-white/55 transition hover:border-white/25 hover:text-white"
                     >
-                      Назад
+                      {text("quiz.backButton", "Назад")}
                     </button>
                     <button
                       type="button"
@@ -806,7 +848,7 @@ export default function ProjectQuiz({
                       }}
                       className="rounded-full border border-white/10 px-5 py-3 text-xs uppercase tracking-[0.22em] text-white/55 transition hover:border-white/25 hover:text-white"
                     >
-                      Пройти заново
+                      {text("quiz.restartButton", "Пройти заново")}
                     </button>
                   </div>
                 </div>

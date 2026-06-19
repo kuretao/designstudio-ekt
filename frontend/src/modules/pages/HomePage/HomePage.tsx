@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useCms } from "@/src/cms";
+import { useCms, useCmsText } from "@/src/cms";
 import type { Project } from "@/src/types";
 import { GlassPanel } from "@/src/ui";
 import FAQ from "@/src/components/common/FAQ";
@@ -23,7 +23,17 @@ type HomePageProps = {
   setActiveProject: (project: Project) => void;
 };
 
-function FeatureProject({ project, label, reverse = false }: { project: Project; label: string; reverse?: boolean }) {
+function FeatureProject({
+  project,
+  label,
+  labels,
+  reverse = false,
+}: {
+  project: Project;
+  label: string;
+  labels: { type: string; location: string; year: string };
+  reverse?: boolean;
+}) {
   return (
     <section className="snap-section feature-project-section relative flex min-h-screen items-end overflow-hidden px-5 py-16 md:px-10 lg:px-16">
       <div className="project-bg absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${project.image})` }} />
@@ -37,9 +47,9 @@ function FeatureProject({ project, label, reverse = false }: { project: Project;
           <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">{project.title}</h2>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-[#D6D1CA] md:text-lg">{project.description}</p>
           <div className="mt-9 grid grid-cols-3 gap-4 border-t border-white/15 pt-6 text-sm text-[#D6D1CA]">
-            <div><span className="block text-white">{project.category}</span>Тип</div>
-            <div><span className="block text-white">{project.location}</span>Локация</div>
-            <div><span className="block text-white">{project.year}</span>Год</div>
+            <div><span className="block text-white">{project.category}</span>{labels.type}</div>
+            <div><span className="block text-white">{project.location}</span>{labels.location}</div>
+            <div><span className="block text-white">{project.year}</span>{labels.year}</div>
           </div>
         </GlassPanel>
       </div>
@@ -49,9 +59,15 @@ function FeatureProject({ project, label, reverse = false }: { project: Project;
 
 function HomePage({ activeProject, setActiveProject }: HomePageProps) {
   const { homeHero, homeStory, projects } = useCms();
+  const text = useCmsText();
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const storyText = homeStory.text;
   const heroLinkOpensModal = homeHero.linkHref === "/kontakty" || homeHero.linkLabel.toLowerCase().includes("обсудить");
+  const projectLabels = {
+    type: text("home.projectTypeLabel", "Тип"),
+    location: text("home.projectLocationLabel", "Локация"),
+    year: text("home.projectYearLabel", "Год"),
+  };
 
   return (
     <>
@@ -111,7 +127,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
           </div>
         </section>
 
-        <FeatureProject project={projects[0]} label="Избранный проект 01" />
+        <FeatureProject project={projects[0]} label={text("home.featureProject01", "Избранный проект 01")} labels={projectLabels} />
 
         <section className="snap-section story-section relative z-[1] flex min-h-screen items-center  px-5 py-28 md:px-10 lg:px-16">
           <div className="story-backdrop absolute inset-0" aria-hidden="true" />
@@ -128,7 +144,7 @@ function HomePage({ activeProject, setActiveProject }: HomePageProps) {
           </div>
         </section>
 
-        <FeatureProject project={projects[2]} label="Избранный проект 02" reverse />
+        <FeatureProject project={projects[2]} label={text("home.featureProject02", "Избранный проект 02")} labels={projectLabels} reverse />
 
         <section className="snap-section portfolio-grid-section relative z-[1] min-h-screen px-5 py-28 md:px-10 lg:px-16">
           <PortfolioGrid onSelectProject={setActiveProject} />

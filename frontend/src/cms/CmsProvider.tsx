@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   awards,
   careerVacancies,
@@ -53,8 +54,16 @@ type AnimationControls = {
   pageReveal: boolean;
 };
 
+type UiText = {
+  ru?: string | null;
+  en?: string | null;
+  group?: string | null;
+  label?: string | null;
+};
+
 type CmsData = {
   siteSettings: SiteSettings;
+  uiTexts: Record<string, UiText>;
   homeHero: HomeHero;
   homeStory: HomeStory;
   projects: typeof projects;
@@ -73,7 +82,7 @@ type CmsData = {
   reviewStats: typeof reviewStats;
   awards: typeof awards;
   partners: typeof partners;
-  menuItems: { href: string; label: string }[];
+  menuItems: { href: string; label: string; labelRu?: string; labelEn?: string | null }[];
   ready: boolean;
 };
 
@@ -93,6 +102,7 @@ const fallbackData: CmsData = {
     compareText:
       "Ползунок показывает, как меняется восприятие объекта после визуальной проработки. Здесь можно заменить демо на реальные чертежи, рендеры или фото объекта.",
   },
+  uiTexts: {},
   homeHero: {
     eyebrow: "3D Smart Design Studio",
     title: requiredHomeHeroTitle,
@@ -255,6 +265,10 @@ function normalizeServiceNavigationGroups(payloadGroups: any[]) {
         ? group.items
             .map((item: any) => ({
               label: typeof item?.label === "string" ? item.label : "",
+              labelRu:
+                typeof item?.labelRu === "string" ? item.labelRu : item?.label,
+              labelEn:
+                typeof item?.labelEn === "string" ? item.labelEn : null,
               href: typeof item?.href === "string" ? item.href : "",
             }))
             .filter((item: any) => item.label && item.href)
@@ -263,18 +277,29 @@ function normalizeServiceNavigationGroups(payloadGroups: any[]) {
       return {
         id: String(group.id ?? href ?? `service-group-${index}`),
         title,
+        titleRu:
+          typeof group?.titleRu === "string" ? group.titleRu : title,
+        titleEn:
+          typeof group?.titleEn === "string" ? group.titleEn : null,
         href,
         description:
           typeof group?.description === "string" ? group.description : "",
+        descriptionRu:
+          typeof group?.descriptionRu === "string"
+            ? group.descriptionRu
+            : typeof group?.description === "string"
+              ? group.description
+              : "",
+        descriptionEn:
+          typeof group?.descriptionEn === "string"
+            ? group.descriptionEn
+            : null,
         items,
       };
     })
-    .filter(
-      (group): group is (typeof fallbackServiceNavigationGroups)[number] =>
-        Boolean(group),
-    );
+    .filter(Boolean);
 
-  return groups;
+  return groups as typeof fallbackServiceNavigationGroups;
 }
 
 function normalizePayload(payload: any): CmsData {
@@ -353,6 +378,10 @@ function normalizePayload(payload: any): CmsData {
       compareTitle: settings.compareTitle ?? fallbackData.siteSettings.compareTitle,
       compareText: settings.compareText ?? fallbackData.siteSettings.compareText,
     },
+    uiTexts:
+      payload?.uiTexts && typeof payload.uiTexts === "object"
+        ? payload.uiTexts
+        : {},
     homeHero: homePage
       ? {
           eyebrow: homeBlock.eyebrow ?? "",
@@ -487,6 +516,45 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
 
 export function useCms() {
   return useContext(CmsContext);
+}
+
+export function useCmsText() {
+  const { uiTexts } = useCms();
+  const { i18n } = useTranslation();
+  const locale = i18n.language?.startsWith("en") ? "en" : "ru";
+
+  return (key: string, fallback = "") => {
+    const item = uiTexts[key];
+    const localized = locale === "en" ? item?.en : item?.ru;
+
+    return localized?.trim() || item?.ru?.trim() || fallback;
+  };
+}
+
+export function useLocalizedField() {
+  const { i18n } = useTranslation();
+  const locale = i18n.language?.startsWith("en") ? "en" : "ru";
+
+  return <T extends Record<string, any>>(
+    item: T | null | undefined,
+    base: string,
+    fallback = "",
+  ) => {
+    if (!item) return fallback;
+
+    const suffix = locale === "en" ? "En" : "Ru";
+    const localized = item[`${base}${suffix}`];
+
+    if (typeof localized === "string" && localized.trim()) {
+      return localized;
+    }
+
+    const baseValue = item[base];
+
+    return typeof baseValue === "string" && baseValue.trim()
+      ? baseValue
+      : fallback;
+  };
 }
 
 export async function submitLead(payload: Record<string, unknown>) {

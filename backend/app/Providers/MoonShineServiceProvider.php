@@ -24,6 +24,7 @@ use App\MoonShine\Resources\Partner\PartnerResource;
 use App\MoonShine\Resources\Review\ReviewResource;
 use App\MoonShine\Resources\Faq\FaqResource;
 use App\MoonShine\Resources\Vacancy\VacancyResource;
+use App\MoonShine\Resources\UiText\UiTextResource;
 use App\MoonShine\Resources\Lead\LeadResource;
 
 class MoonShineServiceProvider extends ServiceProvider
@@ -50,6 +51,7 @@ class MoonShineServiceProvider extends ServiceProvider
                 ReviewResource::class,
                 FaqResource::class,
                 VacancyResource::class,
+                UiTextResource::class,
                 LeadResource::class,
             ])
             ->pages([

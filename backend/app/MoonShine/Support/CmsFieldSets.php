@@ -45,6 +45,7 @@ final class CmsFieldSets
             'review' => self::review($compact),
             'faq' => self::faq($compact),
             'vacancy' => self::vacancy($compact),
+            'ui_text' => self::uiText($compact),
             'lead' => self::lead($compact),
             default => [ID::make()->sortable()],
         };
@@ -827,6 +828,32 @@ final class CmsFieldSets
             Textarea::make('Требования EN, по одному в строке', 'requirements_en'),
             Textarea::make('Обязанности RU, по одной в строке', 'responsibilities_ru'),
             Textarea::make('Обязанности EN, по одной в строке', 'responsibilities_en'),
+        ];
+    }
+
+    private static function uiText(bool $compact): array
+    {
+        $fields = [
+            ID::make()->sortable(),
+            Text::make('Группа', 'group')->sortable(),
+            Text::make('Ключ', 'key')->required()->sortable(),
+            Text::make('Название в админке', 'label')->required(),
+            Number::make('Позиция', 'position')->sortable(),
+            Switcher::make('Активно', 'is_active'),
+        ];
+
+        return $compact ? [
+            ...$fields,
+            Preview::make('RU', 'value_ru', static fn (mixed $value): string => e(mb_strimwidth((string) $value, 0, 90, '...'))),
+            Preview::make('EN', 'value_en', static fn (mixed $value): string => e(mb_strimwidth((string) $value, 0, 90, '...'))),
+        ] : [
+            ...$fields,
+            Textarea::make('Текст RU', 'value_ru')
+                ->hint('Русский вариант строки. Используется как основной fallback.'),
+            Textarea::make('Текст EN', 'value_en')
+                ->hint('Английский вариант строки для переключателя RU/EN. Если оставить пустым, сайт покажет RU.'),
+            Textarea::make('Комментарий для редактора', 'description')
+                ->hint('Внутренняя подсказка: где строка используется или что в ней важно не сломать.'),
         ];
     }
 

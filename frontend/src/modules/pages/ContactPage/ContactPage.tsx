@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
-import { submitLead, useCms } from "@/src/cms";
+import { submitLead, useCms, useCmsText } from "@/src/cms";
 import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import SectionLabel from "@/src/components/common/SectionLabel";
 import CustomSelect from "@/src/components/forms/CustomSelect";
@@ -100,11 +100,12 @@ const contactStats = [
 
 function ContactMapPanel() {
   const { contactInfo } = useCms();
+  const text = useCmsText();
   return (
     <div className="flex flex-col gap-4">
       <div className="overflow-hidden rounded-[2.5rem] border border-white/10" style={{ minHeight: 360 }}>
         <iframe
-          title="Карта 3D Smart Design Studio"
+          title={text("contact.mapTitle", "Карта 3D Smart Design Studio")}
           src={contactInfo.mapSrc}
           className="h-full min-h-[360px] w-full grayscale invert"
           style={{ filter: "invert(1) grayscale(1) brightness(0.85) contrast(1.1)" }}
@@ -113,9 +114,9 @@ function ContactMapPanel() {
       <div className="rounded-[2rem] border border-white/10 bg-white/[0.025] p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[#D69A66]">Студия</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-[#D69A66]">{text("contact.mapEyebrow", "Студия")}</p>
             <p className="mt-1 text-lg font-light text-white">3D Smart Design Studio</p>
-            <p className="mt-0.5 text-sm text-white/40">Самара · работаем удаленно</p>
+            <p className="mt-0.5 text-sm text-white/40">{text("contact.mapLocation", "Самара · работаем удаленно")}</p>
           </div>
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
             <div className="h-2.5 w-2.5 animate-pulse rounded-full bg-[#D69A66]" />
@@ -128,6 +129,12 @@ function ContactMapPanel() {
 
 function ContactHero() {
   const { contactInfo, projects } = useCms();
+  const text = useCmsText();
+  const localizedStats = contactStats.map((stat, index) => ({
+    ...stat,
+    suffix: text(`contact.stats.${index + 1}.suffix`, stat.suffix),
+    label: text(`contact.stats.${index + 1}.label`, stat.label),
+  }));
   return (
     <section className="relative min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-10 lg:px-16">
       <HeroBackdropSlider
@@ -144,7 +151,7 @@ function ContactHero() {
         <div className="max-w-6xl">
           <p className="mb-5 text-xs uppercase tracking-[0.38em] text-[#D69A66]">Контакты / 3D Smart Design Studio</p>
           <h1 className="max-w-5xl text-6xl font-light leading-[0.9] tracking-[-0.065em] text-white md:text-8xl lg:text-9xl">
-            Свяжитесь с нами
+            {text("contact.titleLine1", "Свяжитесь")} {text("contact.titleLine2", "с нами")}
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-relaxed text-[#E8E0D8]/85 md:text-xl">
             Расскажите о проекте, сроках и формате работы. Ответим в течение рабочего дня и предложим понятный следующий шаг.
@@ -154,7 +161,7 @@ function ContactHero() {
               href="#contact-form"
               className="rounded-full border border-[#D69A66] bg-[#D69A66] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:-translate-y-0.5 hover:bg-[#E3AD7B]"
             >
-              Оставить заявку
+              {text("contact.formTitle", "Оставить заявку")}
             </a>
             <a
               href={contactInfo.phoneHref}
@@ -164,7 +171,7 @@ function ContactHero() {
             </a>
           </div>
           <div className="mt-12 flex flex-wrap gap-8 border-t border-white/12 pt-8 md:gap-16">
-            {contactStats.map((stat) => (
+            {localizedStats.map((stat) => (
               <div key={stat.label}>
                 <p className="text-3xl font-light tracking-[-0.04em] text-white md:text-4xl">
                   <Counter to={stat.val} suffix={stat.suffix} />
@@ -186,12 +193,18 @@ type ContactSectionProps = {
 
 export function ContactSection({ showIntro = true, compactTop = false }: ContactSectionProps) {
   const { contactInfo, messengerLinks, servicePageItems } = useCms();
+  const text = useCmsText();
   const [name, setName] = useState("");
   const [contactVal, setContactVal] = useState("");
   const [service, setService] = useState("");
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
   const socialItems = socials.map((social) => (social.label === "VK" ? { ...social, href: messengerLinks.vk } : social));
+  const localizedStats = contactStats.map((stat, index) => ({
+    ...stat,
+    suffix: text(`contact.stats.${index + 1}.suffix`, stat.suffix),
+    label: text(`contact.stats.${index + 1}.label`, stat.label),
+  }));
 
   const handleSubmit = async () => {
     if (!contactVal.trim()) return;
@@ -225,12 +238,12 @@ export function ContactSection({ showIntro = true, compactTop = false }: Contact
         {showIntro && (
           <>
             <FadeUp delay={0}>
-              <SectionLabel>Контакты</SectionLabel>
+              <SectionLabel>{text("contact.label", "Контакты")}</SectionLabel>
             </FadeUp>
             <FadeUp delay={80}>
               <h1 className="text-6xl font-light leading-[0.9] tracking-[-0.065em] md:text-8xl lg:text-[10rem]">
-                Свяжитесь<br />
-                <span className="text-[#D69A66]">с нами</span>
+                {text("contact.titleLine1", "Свяжитесь")}<br />
+                <span className="text-[#D69A66]">{text("contact.titleLine2", "с нами")}</span>
               </h1>
             </FadeUp>
           </>
@@ -239,7 +252,7 @@ export function ContactSection({ showIntro = true, compactTop = false }: Contact
         {/* ── Stats strip ── */}
         {showIntro && (
           <FadeUp delay={200} className="mt-12 flex flex-wrap gap-8 border-t border-white/8 pt-8 md:gap-16">
-            {contactStats.map((s) => (
+            {localizedStats.map((s) => (
               <div key={s.label}>
                 <p className="text-3xl font-light tracking-[-0.04em] text-white md:text-4xl">
                   <Counter to={s.val} suffix={s.suffix} />
@@ -254,7 +267,7 @@ export function ContactSection({ showIntro = true, compactTop = false }: Contact
         <div className={`${showIntro ? "mt-16" : "mt-0"} grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4`}>
           {[
             {
-              label: "Телефон",
+              label: text("contact.phoneLabel", "Телефон"),
               content: (
                 <a href={contactInfo.phoneHref} className="text-2xl font-light text-white transition duration-300 hover:text-[#D69A66]">
                   {contactInfo.phone}
@@ -269,7 +282,7 @@ export function ContactSection({ showIntro = true, compactTop = false }: Contact
               ),
             },
             {
-              label: "Почта",
+              label: text("contact.emailLabel", "Почта"),
               content: (
                 <div className="space-y-1.5">
                   {contactInfo.emails.map((e) => (
@@ -286,11 +299,11 @@ export function ContactSection({ showIntro = true, compactTop = false }: Contact
               ),
             },
             {
-              label: "График",
+              label: text("contact.scheduleLabel", "График"),
               content: (
                 <div className="space-y-1">
-                  <p className="text-sm text-white/75">Пн–Пт: 9:00 – 20:00</p>
-                  <p className="text-sm text-white/75">Сб–Вс: 10:00 – 19:00</p>
+                  <p className="text-sm text-white/75">{text("footer.weekdays", "Пн–Пт: 9:00 – 20:00")}</p>
+                  <p className="text-sm text-white/75">{text("footer.weekend", "Сб–Вс: 10:00 – 19:00")}</p>
                 </div>
               ),
               accent: "#D69A66",
@@ -302,11 +315,11 @@ export function ContactSection({ showIntro = true, compactTop = false }: Contact
               ),
             },
             {
-              label: "Локация",
+              label: text("contact.locationLabel", "Локация"),
               content: (
                 <div className="space-y-1">
-                  <p className="text-sm text-white/75">Самара, Россия</p>
-                  <p className="text-xs text-white/35">Работаем удалённо по всему миру</p>
+                  <p className="text-sm text-white/75">{text("contact.locationCity", "Самара, Россия")}</p>
+                  <p className="text-xs text-white/35">{text("contact.remoteText", "Работаем удалённо по всему миру")}</p>
                 </div>
               ),
               accent: "#D69A66",
@@ -368,30 +381,30 @@ export function ContactSection({ showIntro = true, compactTop = false }: Contact
           {/* Form */}
           <FadeUp delay={0}>
             <div className="rounded-[2.5rem] border border-white/10 bg-white/[0.025] p-8 md:p-10">
-              <SectionLabel className="mb-2">Написать нам</SectionLabel>
-              <h2 className="mb-8 text-3xl font-light tracking-[-0.04em] text-white">Оставить заявку</h2>
+              <SectionLabel className="mb-2">{text("contact.formLabel", "Написать нам")}</SectionLabel>
+              <h2 className="mb-8 text-3xl font-light tracking-[-0.04em] text-white">{text("contact.formTitle", "Оставить заявку")}</h2>
               <div className="grid gap-3">
                 <input
                   className={inputCls}
-                  placeholder="Ваше имя"
+                  placeholder={text("contact.namePlaceholder", "Ваше имя")}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
                 <input
                   className={inputCls}
-                  placeholder="Телефон или e-mail"
+                  placeholder={text("contact.contactPlaceholder", "Телефон или e-mail")}
                   value={contactVal}
                   onChange={(e) => setContactVal(e.target.value)}
                 />
                 <CustomSelect
                   value={service}
                   onChange={setService}
-                  placeholder="Выберите услугу"
+                  placeholder={text("contact.servicePlaceholder", "Выберите услугу")}
                   options={servicePageItems.map((item) => ({ value: item.title, label: item.title }))}
                 />
                 <textarea
                   className={`${inputCls} min-h-[120px] resize-none`}
-                  placeholder="Коротко о проекте"
+                  placeholder={text("contact.messagePlaceholder", "Коротко о проекте")}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                 />
@@ -405,7 +418,7 @@ export function ContactSection({ showIntro = true, compactTop = false }: Contact
                     border: sent ? "1px solid rgba(214,154,102,0.4)" : "none",
                   }}
                 >
-                  <span className="relative z-10">{sent ? "✓ Заявка отправлена" : "Отправить заявку"}</span>
+                  <span className="relative z-10">{sent ? text("contact.sentButton", "✓ Заявка отправлена") : text("contact.submitButton", "Отправить заявку")}</span>
                   {!sent && (
                     <div
                       className="absolute inset-0 -translate-x-full bg-white/20 skew-x-12 transition duration-500 group-hover:translate-x-full"

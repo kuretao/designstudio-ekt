@@ -2,12 +2,21 @@
 
 namespace App\Models;
 
+use App\Support\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class Award extends Model
 {
+    use HasTranslations;
+
     protected $guarded = [];
+
+    protected array $translatable = [
+        'title',
+        'issuer',
+        'description',
+    ];
 
     protected function casts(): array
     {

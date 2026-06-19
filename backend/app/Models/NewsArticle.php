@@ -2,12 +2,24 @@
 
 namespace App\Models;
 
+use App\Support\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class NewsArticle extends Model
 {
+    use HasTranslations;
+
     protected $guarded = [];
+
+    protected array $translatable = [
+        'title',
+        'category',
+        'preview',
+        'body',
+        'date',
+        'reading_time',
+    ];
 
     protected function casts(): array
     {

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCms } from "@/src/cms";
+import { useCms, useCmsText, useLocalizedField } from "@/src/cms";
 import { isSeoLandingPath, isStandaloneExperiencePath } from "@/src/data";
 
 type Crumb = {
@@ -37,6 +37,8 @@ function slugToLabel(slug: string) {
 export default function Breadcrumbs() {
   const pathname = usePathname();
   const { newsArticles, projects, serviceNavigationGroups, servicePageItems } = useCms();
+  const text = useCmsText();
+  const localize = useLocalizedField();
 
   if (
     pathname === "/" ||
@@ -46,14 +48,22 @@ export default function Breadcrumbs() {
     return null;
 
   const normalizedPath = pathname.replace(/\/$/, "") || "/";
-  const crumbs: Crumb[] = [{ label: "Главная", href: "/" }];
-  const serviceGroup = serviceNavigationGroups.find((group) =>
+  const localizedServiceNavigationGroups = serviceNavigationGroups.map((group) => ({
+    ...group,
+    title: localize(group, "title", group.title),
+    items: group.items.map((item) => ({
+      ...item,
+      label: localize(item, "label", item.label),
+    })),
+  }));
+  const crumbs: Crumb[] = [{ label: text("breadcrumbs.home", "Главная"), href: "/" }];
+  const serviceGroup = localizedServiceNavigationGroups.find((group) =>
     group.href === normalizedPath || group.items.some((item) => item.href === normalizedPath),
   );
   const serviceChild = serviceGroup?.items.find((item) => item.href === normalizedPath);
 
   if (serviceGroup) {
-    crumbs.push({ label: "Услуги", href: "/services" });
+    crumbs.push({ label: text("header.servicesRoot", "Услуги"), href: "/services" });
     crumbs.push({ label: serviceGroup.title, href: serviceGroup.href });
 
     if (serviceChild && serviceChild.href !== serviceGroup.href) {
@@ -76,7 +86,7 @@ export default function Breadcrumbs() {
 
   return (
     <nav
-      aria-label="Хлебные крошки"
+      aria-label={text("breadcrumbs.aria", "Хлебные крошки")}
       itemScope
       itemType="https://schema.org/BreadcrumbList"
       className="fixed left-0 right-0 top-[72px] z-[45] border-b border-white/10 bg-[#050505]/38 px-5 text-white backdrop-blur-[10px] md:top-[76px] md:px-10 lg:px-12"

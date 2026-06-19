@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCms } from "@/src/cms";
+import { useCms, useCmsText } from "@/src/cms";
 import SectionLabel from "@/src/components/common/SectionLabel";
 
 type AwardsSectionProps = {
@@ -40,6 +40,7 @@ function AwardDocument({ title, image }: { title: string; image?: string }) {
 
 export default function AwardsSection({ compact = false, showLink = true }: AwardsSectionProps) {
   const { awards } = useCms();
+  const text = useCmsText();
 
   if (!awards.length) return null;
 
@@ -48,21 +49,24 @@ export default function AwardsSection({ compact = false, showLink = true }: Awar
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 grid gap-8 md:grid-cols-[0.9fr_1fr] md:items-end">
           <div>
-            <SectionLabel>Награды и дипломы</SectionLabel>
+            <SectionLabel>{text("awards.label", "Награды и дипломы")}</SectionLabel>
             <h2 className="mt-4 max-w-4xl text-5xl font-light leading-[0.98] tracking-[-0.045em] md:text-7xl">
-              Подтверждения опыта и доверия
+              {text("awards.title", "Подтверждения опыта и доверия")}
             </h2>
           </div>
           <div className="md:justify-self-end md:text-right">
             <p className="max-w-2xl text-lg leading-relaxed text-[#D6D1CA]">
-              Дипломы, сертификаты и благодарности показывают, что студия работает открыто, системно и подтверждает качество не только портфолио.
+              {text(
+                "awards.text",
+                "Дипломы, сертификаты и благодарности показывают, что студия работает открыто, системно и подтверждает качество не только портфолио.",
+              )}
             </p>
             {showLink ? (
               <Link
                 href="/nagrady-i-diplomy"
                 className="mt-6 inline-flex rounded-full border border-[#D69A66]/55 px-6 py-3 text-xs uppercase tracking-[0.22em] text-[#D69A66] transition hover:bg-[#D69A66] hover:text-[#050505]"
               >
-                Все награды
+                {text("awards.allButton", "Все награды")}
               </Link>
             ) : null}
           </div>

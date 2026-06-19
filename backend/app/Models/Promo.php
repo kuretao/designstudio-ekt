@@ -2,12 +2,24 @@
 
 namespace App\Models;
 
+use App\Support\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class Promo extends Model
 {
+    use HasTranslations;
+
     protected $guarded = [];
+
+    protected array $translatable = [
+        'badge',
+        'title',
+        'highlight',
+        'valid_until',
+        'description',
+        'conditions',
+    ];
 
     protected function casts(): array
     {

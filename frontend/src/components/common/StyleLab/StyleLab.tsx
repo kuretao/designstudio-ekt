@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useCmsText } from "@/src/cms";
 import { GlassPanel } from "@/src/ui";
 
 type StyleOption = {
@@ -91,14 +92,32 @@ const lights: LightOption[] = [
 ];
 
 export default function StyleLab() {
+  const text = useCmsText();
   const [styleId, setStyleId] = useState(styles[0].id);
   const [materialId, setMaterialId] = useState(materials[0].id);
   const [lightId, setLightId] = useState(lights[0].id);
   const [saved, setSaved] = useState(false);
 
-  const activeStyle = useMemo(() => styles.find((item) => item.id === styleId) ?? styles[0], [styleId]);
-  const activeMaterial = useMemo(() => materials.find((item) => item.id === materialId) ?? materials[0], [materialId]);
-  const activeLight = useMemo(() => lights.find((item) => item.id === lightId) ?? lights[0], [lightId]);
+  const localizedStyles = styles.map((item) => ({
+    ...item,
+    label: text(`styleLab.styles.${item.id}.label`, item.label),
+    headline: text(`styleLab.styles.${item.id}.headline`, item.headline),
+    mood: text(`styleLab.styles.${item.id}.mood`, item.mood),
+  }));
+  const localizedMaterials = materials.map((item) => ({
+    ...item,
+    label: text(`styleLab.materials.${item.id}.label`, item.label),
+    texture: text(`styleLab.materials.${item.id}.texture`, item.texture),
+  }));
+  const localizedLights = lights.map((item) => ({
+    ...item,
+    label: text(`styleLab.lights.${item.id}.label`, item.label),
+    note: text(`styleLab.lights.${item.id}.note`, item.note),
+  }));
+
+  const activeStyle = useMemo(() => localizedStyles.find((item) => item.id === styleId) ?? localizedStyles[0], [localizedStyles, styleId]);
+  const activeMaterial = useMemo(() => localizedMaterials.find((item) => item.id === materialId) ?? localizedMaterials[0], [localizedMaterials, materialId]);
+  const activeLight = useMemo(() => localizedLights.find((item) => item.id === lightId) ?? localizedLights[0], [localizedLights, lightId]);
 
   const saveConcept = () => {
     const payload = {
@@ -116,7 +135,7 @@ export default function StyleLab() {
   return (
     <section className="style-lab-section relative z-[2] min-h-[136vh] overflow-hidden bg-[#0c0b09] px-5 py-36 md:px-10 md:py-44 lg:px-16">
       <div className="absolute inset-0">
-        {styles.map((item) => (
+        {localizedStyles.map((item) => (
           <img
             key={`bg-${item.id}`}
             src={item.image}
@@ -142,29 +161,32 @@ export default function StyleLab() {
       <div className="relative z-10 mx-auto grid min-h-[calc(136vh-22rem)] max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
         <div className="flex flex-col justify-between">
           <div>
-            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">Подбор стиля</p>
+            <p className="mb-5 text-xs uppercase tracking-[0.45em] text-[#D69A66]">{text("styleLab.eyebrow", "Подбор стиля")}</p>
             <h2 className="max-w-3xl text-5xl font-light leading-tight text-[#F5F2EC] md:text-7xl">
-              Соберите настроение будущего интерьера
+              {text("styleLab.title", "Соберите настроение будущего интерьера")}
             </h2>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#D6D1CA]">
-              Быстрый интерактивный эскиз показывает, как меняется ощущение проекта от стиля, материала и светового сценария.
+              {text(
+                "styleLab.text",
+                "Быстрый интерактивный эскиз показывает, как меняется ощущение проекта от стиля, материала и светового сценария.",
+              )}
             </p>
           </div>
 
           <GlassPanel className="mt-10 rounded-[2rem] p-6 md:p-7">
-            <p className="text-xs uppercase tracking-[0.3em] text-white/35">Бриф в один взгляд</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-white/35">{text("styleLab.briefLabel", "Бриф в один взгляд")}</p>
             <h3 className="mt-4 text-3xl font-light leading-tight text-[#F5F2EC]">{activeStyle.headline}</h3>
             <div className="mt-6 grid gap-4 text-sm text-[#D6D1CA] sm:grid-cols-3">
               <div>
-                <span className="block text-white/35">Стиль</span>
+                <span className="block text-white/35">{text("styleLab.styleLabel", "Стиль")}</span>
                 <span className="mt-1 block text-[#F5F2EC]">{activeStyle.mood}</span>
               </div>
               <div>
-                <span className="block text-white/35">Материал</span>
+                <span className="block text-white/35">{text("styleLab.materialLabel", "Материал")}</span>
                 <span className="mt-1 block text-[#F5F2EC]">{activeMaterial.texture}</span>
               </div>
               <div>
-                <span className="block text-white/35">Свет</span>
+                <span className="block text-white/35">{text("styleLab.lightLabel", "Свет")}</span>
                 <span className="mt-1 block text-[#F5F2EC]">{activeLight.note}</span>
               </div>
             </div>
@@ -173,7 +195,7 @@ export default function StyleLab() {
 
         <GlassPanel className="grid overflow-hidden rounded-[2rem] lg:grid-rows-[1fr_auto]">
           <div className="relative min-h-[560px] overflow-hidden md:min-h-[760px]">
-            {styles.map((item) => (
+            {localizedStyles.map((item) => (
               <img
                 key={item.id}
                 src={item.image}
@@ -193,13 +215,13 @@ export default function StyleLab() {
                     key={color}
                     className="h-9 w-9 rounded-full border border-white/25 shadow-[0_10px_28px_rgba(0,0,0,.26)]"
                     style={{ background: color }}
-                    aria-label={`Цвет ${color}`}
+                    aria-label={`${text("styleLab.colorAriaPrefix", "Цвет")} ${color}`}
                   />
                 ))}
                 <span
                   className="h-9 w-9 rounded-full border border-white/25 shadow-[0_10px_28px_rgba(0,0,0,.26)]"
                   style={{ background: activeMaterial.accent }}
-                  aria-label="Акцентный материал"
+                  aria-label={text("styleLab.accentMaterialAria", "Акцентный материал")}
                 />
               </div>
               <div className="flex flex-wrap items-end justify-between gap-4">
@@ -216,9 +238,9 @@ export default function StyleLab() {
 
           <div className="grid gap-6 border-t border-white/10 p-5 md:p-7">
             <div>
-              <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/35">Стиль</p>
+              <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/35">{text("styleLab.styleLabel", "Стиль")}</p>
               <div className="grid gap-2 sm:grid-cols-4">
-                {styles.map((item) => (
+                {localizedStyles.map((item) => (
                   <button
                     key={item.id}
                     type="button"
@@ -238,9 +260,9 @@ export default function StyleLab() {
 
             <div className="grid gap-5 lg:grid-cols-[1fr_0.8fr]">
               <div>
-                <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/35">Материал</p>
+                <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/35">{text("styleLab.materialLabel", "Материал")}</p>
                 <div className="grid gap-2 sm:grid-cols-2">
-                  {materials.map((item) => (
+                  {localizedMaterials.map((item) => (
                     <button
                       key={item.id}
                       type="button"
@@ -260,9 +282,9 @@ export default function StyleLab() {
               </div>
 
               <div>
-                <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/35">Свет</p>
+                <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/35">{text("styleLab.lightLabel", "Свет")}</p>
                 <div className="grid grid-cols-3 gap-2">
-                  {lights.map((item) => (
+                  {localizedLights.map((item) => (
                     <button
                       key={item.id}
                       type="button"
@@ -287,15 +309,15 @@ export default function StyleLab() {
                 onClick={saveConcept}
                 className="rounded-full bg-[#D69A66] px-6 py-3 text-xs uppercase tracking-[0.22em] text-[#050505] transition hover:bg-[#F5F2EC]"
               >
-                Сохранить подборку
+                {text("styleLab.saveButton", "Сохранить подборку")}
               </button>
               <Link
                 href="#project-quiz"
                 className="rounded-full border border-white/12 px-6 py-3 text-xs uppercase tracking-[0.22em] text-white/60 transition hover:border-[#D69A66]/55 hover:text-[#D69A66]"
               >
-                Рассчитать проект
+                {text("styleLab.calculateButton", "Рассчитать проект")}
               </Link>
-              {saved && <span className="text-sm text-[#D6D1CA]">Подборка сохранена</span>}
+              {saved && <span className="text-sm text-[#D6D1CA]">{text("styleLab.savedMessage", "Подборка сохранена")}</span>}
             </div>
           </div>
         </GlassPanel>

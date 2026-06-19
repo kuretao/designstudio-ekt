@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { useCms } from "@/src/cms";
+import { useCms, useCmsText, useLocalizedField } from "@/src/cms";
 import CinematicImage from "@/src/components/common/CinematicImage";
 import HeroBackdropSlider from "@/src/components/common/HeroBackdropSlider";
 import { GlassPanel } from "@/src/ui";
@@ -88,6 +88,7 @@ function ServicesHero() {
 
 export function ServicesSummary() {
   const { servicePageItems } = useCms();
+  const text = useCmsText();
   const coreServiceIds = [
     "arhitekturnoe-proektirovanie",
     "arhitekturnaya-3d-vizualizaciya",
@@ -103,11 +104,14 @@ export function ServicesSummary() {
   return (
     <section id="services" className="border-t border-white/10 px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
-        <SectionLabel>Услуги и цены</SectionLabel>
+        <SectionLabel>{text("servicesSummary.label", "Услуги и цены")}</SectionLabel>
         <div className="mb-12 grid gap-8 md:grid-cols-[1fr_0.8fr] md:items-end">
-          <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">Услуги и цены</h2>
+          <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">{text("servicesSummary.title", "Услуги и цены")}</h2>
           <p className="text-[#D6D1CA]">
-            Стоимость фиксируется после брифа и состава работ. Ниже - понятная стартовая структура по основным направлениям студии.
+            {text(
+              "servicesSummary.text",
+              "Стоимость фиксируется после брифа и состава работ. Ниже - понятная стартовая структура по основным направлениям студии.",
+            )}
           </p>
         </div>
 
@@ -134,6 +138,17 @@ export function ServicesSummary() {
 
 export function ServicePages() {
   const { projects, serviceNavigationGroups, servicePageItems } = useCms();
+  const text = useCmsText();
+  const localize = useLocalizedField();
+  const localizedServiceNavigationGroups = serviceNavigationGroups.map((group) => ({
+    ...group,
+    title: localize(group, "title", group.title),
+    description: localize(group, "description", group.description),
+    items: group.items.map((item) => ({
+      ...item,
+      label: localize(item, "label", item.label),
+    })),
+  }));
   const serviceByHref = new Map(servicePageItems.map((item) => [`/${item.id}`, item]));
 
   return (
@@ -141,16 +156,19 @@ export function ServicePages() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 grid gap-8 md:grid-cols-[1fr_0.8fr] md:items-end">
           <div>
-            <SectionLabel>Направления услуг</SectionLabel>
-            <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">Направления 3D Smart Design Studio</h2>
+            <SectionLabel>{text("servicePages.label", "Направления услуг")}</SectionLabel>
+            <h2 className="text-5xl font-light tracking-[-0.055em] md:text-7xl">{text("servicePages.title", "Направления 3D Smart Design Studio")}</h2>
           </div>
           <p className="text-lg leading-relaxed text-[#D6D1CA]">
-            Основные направления держат SEO-вес, а посадочные страницы вложены как подпункты: так клиент быстрее ориентируется в услугах.
+            {text(
+              "servicePages.text",
+              "Основные направления держат SEO-вес, а посадочные страницы вложены как подпункты: так клиент быстрее ориентируется в услугах.",
+            )}
           </p>
         </div>
 
         <div className="grid gap-5 md:grid-cols-2">
-          {serviceNavigationGroups.map((group, index) => {
+          {localizedServiceNavigationGroups.map((group, index) => {
             const mainService = serviceByHref.get(group.href);
             const image = mainService?.image ?? projects[index % projects.length]?.image;
 
@@ -166,7 +184,7 @@ export function ServicePages() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/68 via-[#050505]/12 to-[#D69A66]/10" />
                     <div className="absolute bottom-5 left-5 right-5">
-                      <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#D69A66]">Основная категория</p>
+                      <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[#D69A66]">{text("servicePages.categoryLabel", "Основная категория")}</p>
                       <h3 className="text-3xl font-light tracking-[-0.04em]">{group.title}</h3>
                     </div>
                   </div>
@@ -196,15 +214,22 @@ export function ServicePages() {
 }
 
 export function Workflow() {
-  const { projects } = useCms();
-  const steps = ["Бриф", "Концепция", "Визуализация", "Чертежи", "Комплектация", "Сопровождение"];
+  const text = useCmsText();
+  const steps = [
+    text("workflow.steps.brief", "Бриф"),
+    text("workflow.steps.concept", "Концепция"),
+    text("workflow.steps.visualization", "Визуализация"),
+    text("workflow.steps.drawings", "Чертежи"),
+    text("workflow.steps.procurement", "Комплектация"),
+    text("workflow.steps.support", "Сопровождение"),
+  ];
 
   return (
     <section className="px-5 py-28 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
-        <SectionLabel>Этапы работы</SectionLabel>
+        <SectionLabel>{text("workflow.label", "Этапы работы")}</SectionLabel>
         <h2 className="mb-14 max-w-4xl text-5xl font-light tracking-[-0.055em] md:text-7xl">
-          Этапы работы без хаоса и лишней коммуникации
+          {text("workflow.title", "Этапы работы без хаоса и лишней коммуникации")}
         </h2>
         <div className="grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] md:grid-cols-3 lg:grid-cols-6">
           {steps.map((step, index) => (

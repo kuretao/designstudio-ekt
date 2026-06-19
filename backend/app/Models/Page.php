@@ -2,13 +2,23 @@
 
 namespace App\Models;
 
+use App\Support\HasTranslations;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model
 {
+    use HasTranslations;
+
     protected $guarded = [];
+
+    protected array $translatable = [
+        'title',
+        'body',
+        'seo_title',
+        'seo_description',
+    ];
 
     protected function casts(): array
     {

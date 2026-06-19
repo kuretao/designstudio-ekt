@@ -1,36 +1,39 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { useCms } from "@/src/cms";
+import { useCms, useCmsText } from "@/src/cms";
 import CinematicImage from "@/src/components/common/CinematicImage";
 import { GlassPanel } from "@/src/ui";
 import SectionLabel from "@/src/components/common/SectionLabel";
 
-const studioFacts = [
-  { value: "10 лет", label: "практики в интерьерах, архитектуре и 3D" },
-  { value: "25+", label: "специалистов под разные масштабы задач" },
-  { value: "90%", label: "клиентов возвращаются с новыми проектами" },
-];
-
-const studioPrinciples = [
-  "начинаем с сценария жизни, а не с декора",
-  "проверяем красоту чертежами, светом и бюджетом",
-  "ведем проект до реализации, комплектации и замен",
-];
-
 function AboutPage() {
   const { projects } = useCms();
+  const text = useCmsText();
+  const studioFacts = [
+    { value: text("about.fact1.value", "10 лет"), label: text("about.fact1.label", "практики в интерьерах, архитектуре и 3D") },
+    { value: text("about.fact2.value", "25+"), label: text("about.fact2.label", "специалистов под разные масштабы задач") },
+    { value: text("about.fact3.value", "90%"), label: text("about.fact3.label", "клиентов возвращаются с новыми проектами") },
+  ];
+  const studioPrinciples = [
+    text("about.principle1", "начинаем с сценария жизни, а не с декора"),
+    text("about.principle2", "проверяем красоту чертежами, светом и бюджетом"),
+    text("about.principle3", "ведем проект до реализации, комплектации и замен"),
+  ];
+
   return (
     <section id="o-nas" className="relative overflow-hidden border-t border-white/10 px-5 py-28 md:px-10 lg:px-16">
       <div className="pointer-events-none absolute right-0 top-20 h-[520px] w-[520px] rounded-full bg-[#D69A66]/[0.06] blur-3xl" />
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
         <div>
-          <SectionLabel>О нас</SectionLabel>
+          <SectionLabel>{text("about.label", "О нас")}</SectionLabel>
           <h2 className="max-w-4xl text-5xl font-light leading-[0.95] tracking-[-0.055em] md:text-7xl">
-            Студия, которая собирает проект как систему
+            {text("about.title", "Студия, которая собирает проект как систему")}
           </h2>
           <p className="mt-7 max-w-2xl text-lg leading-relaxed text-[#D6D1CA]">
-            3D Smart Design Studio соединяет интерьер, архитектуру, визуализацию, ландшафт и комплектацию в один спокойный процесс. Клиент видит не набор картинок, а понятный маршрут от идеи до реализации.
+            {text(
+              "about.text",
+              "3D Smart Design Studio соединяет интерьер, архитектуру, визуализацию, ландшафт и комплектацию в один спокойный процесс. Клиент видит не набор картинок, а понятный маршрут от идеи до реализации.",
+            )}
           </p>
 
           <div className="mt-10 grid gap-3 sm:grid-cols-3">
@@ -47,13 +50,13 @@ function AboutPage() {
               href="/o-nas"
               className="rounded-full bg-[#D69A66] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition hover:bg-[#F5F2EC]"
             >
-              Подробнее о студии
+              {text("about.moreButton", "Подробнее о студии")}
             </Link>
             <Link
               href="/kontakty"
               className="rounded-full border border-white/15 px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#D6D1CA] transition hover:border-[#D69A66] hover:text-white"
             >
-              Обсудить проект
+              {text("about.contactButton", "Обсудить проект")}
             </Link>
           </div>
         </div>
@@ -71,15 +74,15 @@ function AboutPage() {
           <div className="group relative min-h-[620px] overflow-hidden rounded-[2.5rem] border border-white/10">
             <CinematicImage
               frames={[projects[0].image, projects[1].image, projects[4].image]}
-              alt="Интерьерный проект 3D Smart Design Studio"
+              alt={text("about.imageAlt", "Интерьерный проект 3D Smart Design Studio")}
               fill
               hint="studio"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/20 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6">
-              <p className="mb-3 text-xs uppercase tracking-[0.32em] text-[#D69A66]">Дизайн с логикой</p>
+              <p className="mb-3 text-xs uppercase tracking-[0.32em] text-[#D69A66]">{text("about.imageEyebrow", "Дизайн с логикой")}</p>
               <h3 className="max-w-md text-3xl font-light tracking-[-0.04em]">
-                Красивое решение должно выдерживать стройку, бюджет и повседневную жизнь.
+                {text("about.imageTitle", "Красивое решение должно выдерживать стройку, бюджет и повседневную жизнь.")}
               </h3>
             </div>
           </div>

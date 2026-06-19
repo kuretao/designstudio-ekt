@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import gsap from "gsap";
-import { useCms } from "@/src/cms";
+import { useCms, useCmsText } from "@/src/cms";
 import type { Project } from "@/src/types";
 import CinematicImage from "@/src/components/common/CinematicImage";
 import CustomSelect from "@/src/components/forms/CustomSelect";
@@ -27,17 +27,6 @@ function scrollToProjectShowcase() {
     });
   }, 60);
 }
-
-const squareOptions = [
-  { value: "compact", label: "до 100 м²" },
-  { value: "medium", label: "100-250 м²" },
-  { value: "large", label: "250+ м²" },
-];
-const toneOptions = [
-  { value: "warm", label: "Тёплый" },
-  { value: "neutral", label: "Нейтральный" },
-  { value: "dark", label: "Тёмный" },
-];
 
 function PortfolioHeroSlider({ onSelectProject }: PortfolioGridProps) {
   const { projects } = useCms();
@@ -170,7 +159,18 @@ function PortfolioHeroSlider({ onSelectProject }: PortfolioGridProps) {
 
 export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
   const { projects } = useCms();
-  const directionOptions = ["All projects", ...Array.from(new Set(projects.map((project) => project.category)))];
+  const text = useCmsText();
+  const squareOptions = [
+    { value: "compact", label: text("portfolio.filters.square.compact", "до 100 м²") },
+    { value: "medium", label: text("portfolio.filters.square.medium", "100-250 м²") },
+    { value: "large", label: text("portfolio.filters.square.large", "250+ м²") },
+  ];
+  const toneOptions = [
+    { value: "warm", label: text("portfolio.filters.tone.warm", "Тёплый") },
+    { value: "neutral", label: text("portfolio.filters.tone.neutral", "Нейтральный") },
+    { value: "dark", label: text("portfolio.filters.tone.dark", "Тёмный") },
+  ];
+  const directionOptions = [text("portfolio.filters.allProjects", "All projects"), ...Array.from(new Set(projects.map((project) => project.category)))];
   const directionSelectOptions = directionOptions.slice(1).map((direction) => ({ value: direction, label: direction }));
   const [searchQuery, setSearchQuery] = useState("");
   const [activeDirection, setActiveDirection] = useState("");
@@ -216,31 +216,31 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="grid gap-3 rounded-[1.55rem] border border-white/10 bg-white/[0.045] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-[1px] md:grid-cols-3 lg:w-[620px]">
             <div>
-              <span className="mb-2 block px-1 text-xs font-medium text-[#D69A66]">Directions</span>
+              <span className="mb-2 block px-1 text-xs font-medium text-[#D69A66]">{text("portfolio.filters.directions", "Directions")}</span>
               <CustomSelect
                 value={activeDirection}
                 onChange={setActiveDirection}
-                placeholder="All projects"
+                placeholder={text("portfolio.filters.allProjects", "All projects")}
                 options={directionSelectOptions}
               />
             </div>
 
             <div>
-              <span className="mb-2 block px-1 text-xs font-medium text-[#D69A66]">Square</span>
+              <span className="mb-2 block px-1 text-xs font-medium text-[#D69A66]">{text("portfolio.filters.square", "Square")}</span>
               <CustomSelect
                 value={activeSquare}
                 onChange={setActiveSquare}
-                placeholder="All options"
+                placeholder={text("portfolio.filters.allOptions", "All options")}
                 options={squareOptions}
               />
             </div>
 
             <div>
-              <span className="mb-2 block px-1 text-xs font-medium text-[#D69A66]">Tone</span>
+              <span className="mb-2 block px-1 text-xs font-medium text-[#D69A66]">{text("portfolio.filters.tone", "Tone")}</span>
               <CustomSelect
                 value={activeTone}
                 onChange={setActiveTone}
-                placeholder="All options"
+                placeholder={text("portfolio.filters.allOptions", "All options")}
                 options={toneOptions}
               />
             </div>
@@ -251,7 +251,7 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
               type="search"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="Country, City"
+              placeholder={text("portfolio.filters.searchPlaceholder", "Country, City")}
               className="h-[54px] w-full rounded-[1.55rem] border border-white/10 bg-white/[0.055] px-8 pr-16 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] outline-none backdrop-blur-[1px] transition placeholder:text-[#C4A898]/70 focus:border-[#D69A66]/45 focus:bg-white/[0.075]"
             />
             <span className="pointer-events-none absolute right-8 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-white" />
@@ -296,7 +296,7 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
             <div className="p-6">
               <p className="text-sm leading-relaxed text-[#D6D1CA]">{project.description}</p>
               <span className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-[#D69A66] transition group-hover:gap-3">
-                Предпросмотр <span>→</span>
+                {text("portfolio.preview", "Предпросмотр")} <span>→</span>
               </span>
             </div>
           </button>
@@ -308,6 +308,7 @@ export function PortfolioGrid({ onSelectProject }: PortfolioGridProps) {
 
 export function ProjectShowcase({ project }: { project: Project }) {
   const { projects, siteSettings } = useCms();
+  const text = useCmsText();
   const [compare, setCompare] = useState(52);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const fallbackImages = [project.image, ...projects.map((item) => item.image)].filter(Boolean);
@@ -371,22 +372,22 @@ export function ProjectShowcase({ project }: { project: Project }) {
 
             <div className="relative flex flex-col justify-between p-7 md:p-10">
               <div>
-                <SectionLabel>Выбранный проект</SectionLabel>
+                <SectionLabel>{text("portfolio.selectedProjectLabel", "Выбранный проект")}</SectionLabel>
                 <h2 className="text-5xl font-light leading-[0.95] tracking-[-0.055em] md:text-7xl">{project.title}</h2>
                 <p className="mt-7 text-lg leading-relaxed text-[#D6D1CA]">{project.description}</p>
                 <Link
                   href={`/portfolio/${project.slug}`}
                   className="mt-8 inline-flex rounded-full border border-[#D69A66] bg-[#D69A66] px-6 py-4 text-xs uppercase tracking-[0.24em] text-[#050505] transition duration-300 hover:-translate-y-0.5 hover:bg-[#F5F2EC]"
                 >
-                  Подробная информация
+                  {text("portfolio.detailsButton", "Подробная информация")}
                 </Link>
               </div>
 
               <div className="mt-10 grid gap-4">
                 {[
-                  ["Задача", "Собрать цельный визуальный код объекта: планировка, материалы, свет и настроение."],
-                  ["Результат", "Проект можно презентовать, согласовывать с подрядчиками и использовать как базу реализации."],
-                  ["Формат", "3D-ракурсы, подбор решений, рабочая логика и визуальная подача для клиента."],
+                  [text("portfolio.taskTitle", "Задача"), text("portfolio.taskText", "Собрать цельный визуальный код объекта: планировка, материалы, свет и настроение.")],
+                  [text("portfolio.resultTitle", "Результат"), text("portfolio.resultText", "Проект можно презентовать, согласовывать с подрядчиками и использовать как базу реализации.")],
+                  [text("portfolio.formatTitle", "Формат"), text("portfolio.formatText", "3D-ракурсы, подбор решений, рабочая логика и визуальная подача для клиента.")],
                 ].map(([title, text]) => (
                   <GlassPanel key={title} className="rounded-[1.25rem] p-5">
                     <span className="text-xs uppercase tracking-[0.28em] text-[#D69A66]">{title}</span>
@@ -416,7 +417,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/45 via-transparent to-[#D69A66]/10 opacity-0 transition duration-500 group-hover:opacity-100" />
               <span className="absolute bottom-5 left-5 text-xs uppercase tracking-[0.24em] text-[#D69A66]">0{index + 1}</span>
               <span className="absolute bottom-5 right-5 rounded-full border border-white/15 bg-black/35 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white/70 opacity-0 backdrop-blur transition group-hover:opacity-100">
-                Смотреть
+                {text("portfolio.viewImage", "Смотреть")}
               </span>
             </button>
           ))}
@@ -427,12 +428,12 @@ export function ProjectShowcase({ project }: { project: Project }) {
             className="fixed inset-0 z-[140] flex items-center justify-center bg-[#050505]/88 p-4 backdrop-blur-xl md:p-8"
             role="dialog"
             aria-modal="true"
-            aria-label={`Просмотр изображения проекта ${project.title}`}
+            aria-label={`${text("portfolio.lightboxAria", "Просмотр изображения проекта")} ${project.title}`}
             onClick={() => setLightboxIndex(null)}
           >
             <button
               type="button"
-              aria-label="Закрыть просмотр"
+              aria-label={text("portfolio.closeViewAria", "Закрыть просмотр")}
               onClick={() => setLightboxIndex(null)}
               className="absolute right-5 top-5 z-10 grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/10 text-2xl leading-none text-white transition hover:border-[#D69A66]/60 hover:text-[#D69A66]"
             >
@@ -440,7 +441,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
             </button>
             <button
               type="button"
-              aria-label="Предыдущее изображение"
+              aria-label={text("portfolio.prevImageAria", "Предыдущее изображение")}
               onClick={(event) => {
                 event.stopPropagation();
                 setLightboxIndex((current) => (current === null ? current : (current - 1 + gallery.length) % gallery.length));
@@ -457,7 +458,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
             />
             <button
               type="button"
-              aria-label="Следующее изображение"
+              aria-label={text("portfolio.nextImageAria", "Следующее изображение")}
               onClick={(event) => {
                 event.stopPropagation();
                 setLightboxIndex((current) => (current === null ? current : (current + 1) % gallery.length));
@@ -502,7 +503,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
               style={{ left: `${compare}%` }}
             />
             <input
-              aria-label="Сравнение до и после"
+              aria-label={text("portfolio.compareAria", "Сравнение до и после")}
               type="range"
               min="0"
               max="100"

@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTranslation } from "react-i18next";
-import { useCms } from "@/src/cms";
+import { useCms, useCmsText, useLocalizedField } from "@/src/cms";
 import { isSeoLandingPath, isStandaloneExperiencePath } from "@/src/data";
 
 const socials = [
@@ -130,25 +129,35 @@ export default function Footer() {
   const {
     contactInfo,
     serviceNavigationGroups,
-    servicePageItems,
     menuItems,
     messengerLinks,
     siteSettings,
   } = useCms();
-  const { t } = useTranslation();
+  const text = useCmsText();
+  const localize = useLocalizedField();
   const pathname = usePathname();
-  const serviceByHref = new Map(
-    servicePageItems.map((item) => [`/${item.id}`, item]),
-  );
-  const menuByHref = new Map(menuItems.map((item) => [item.href, item]));
+  const localizedMenuItems = menuItems.map((item) => ({
+    ...item,
+    label: localize(item, "label", item.label),
+  }));
+  const localizedServiceNavigationGroups = serviceNavigationGroups.map((group) => ({
+    ...group,
+    title: localize(group, "title", group.title),
+    description: localize(group, "description", group.description),
+    items: group.items.map((item) => ({
+      ...item,
+      label: localize(item, "label", item.label),
+    })),
+  }));
+  const menuByHref = new Map(localizedMenuItems.map((item) => [item.href, item]));
   const footerNavigation = [
-    menuByHref.get("/o-nas") ?? { href: "/o-nas", label: "О нас" },
-    menuByHref.get("/portfolio") ?? { href: "/portfolio", label: "Портфолио" },
-    menuByHref.get("/services") ?? { href: "/services", label: "Услуги" },
-    menuByHref.get("/blog") ?? { href: "/blog", label: "Блог" },
-    menuByHref.get("/kontakty") ?? { href: "/kontakty", label: "Контакты" },
-    { href: "/karera", label: t("footer.career") },
-    { href: "/partneram", label: t("footer.partners") },
+    menuByHref.get("/o-nas") ?? { href: "/o-nas", label: text("menu.about", "О нас") },
+    menuByHref.get("/portfolio") ?? { href: "/portfolio", label: text("menu.portfolio", "Портфолио") },
+    menuByHref.get("/services") ?? { href: "/services", label: text("header.servicesRoot", "Услуги") },
+    menuByHref.get("/blog") ?? { href: "/blog", label: text("menu.blog", "Блог") },
+    menuByHref.get("/kontakty") ?? { href: "/kontakty", label: text("menu.contacts", "Контакты") },
+    { href: "/karera", label: text("footer.career", "Карьера") },
+    { href: "/partneram", label: text("footer.partners", "Партнёрам") },
   ];
   const socialItems = socials.map((social) =>
     social.label === "VK" ? { ...social, href: messengerLinks.vk } : social,
@@ -181,12 +190,15 @@ export default function Footer() {
                   {siteSettings.siteName}
                 </p>
                 <p className="text-[10px] uppercase tracking-[0.22em] text-white/35">
-                  Студия
+                  {text("footer.brandKind", "Студия")}
                 </p>
               </div>
             </div>
             <p className="max-w-xs text-sm leading-relaxed text-white/45">
-              {t("footer.brandText")}
+              {text(
+                "footer.brandText",
+                "Студия дизайна интерьеров, архитектурного проектирования, 3D-визуализации и ландшафтного дизайна.",
+              )}
             </p>
 
             {/* Social pills with icons */}
@@ -212,10 +224,10 @@ export default function Footer() {
 
           <div className="lg:col-span-1">
             <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#D69A66]">
-              {t("footer.services")}
+              {text("footer.services", "Услуги")}
             </p>
             <div className="grid gap-x-10 gap-y-7 sm:grid-cols-2">
-              {serviceNavigationGroups.map((group) => (
+              {localizedServiceNavigationGroups.map((group) => (
                 <div
                   key={group.id}
                   className="border-t border-white/10 pt-4 first:border-t-0 first:pt-0 sm:[&:nth-child(-n+2)]:border-t-0 sm:[&:nth-child(-n+2)]:pt-0"
@@ -233,8 +245,7 @@ export default function Footer() {
                   </Link>
                   <ul className="mt-3 space-y-2.5">
                     {group.items.map((child) => {
-                      const serviceTitle =
-                        serviceByHref.get(child.href)?.title ?? child.label;
+                      const serviceTitle = child.label;
 
                       return (
                         <li key={child.href}>
@@ -244,10 +255,7 @@ export default function Footer() {
                           >
                             <span className="mt-2 h-px w-2.5 shrink-0 bg-white/14 transition-all duration-200 group-hover:w-4 group-hover:bg-[#D69A66]" />
                             <span className="[overflow-wrap:anywhere]">
-                              {t(
-                                `services.${child.href.slice(1)}`,
-                                serviceTitle,
-                              )}
+                              {serviceTitle}
                             </span>
                           </Link>
                         </li>
@@ -262,7 +270,7 @@ export default function Footer() {
           {/* ── Col 3 · Навигация ── */}
           <div>
             <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#D69A66]">
-              {t("footer.sections")}
+              {text("footer.sections", "Разделы")}
             </p>
             <ul className="space-y-2.5">
               {footerNavigation.map((l) => (
@@ -279,13 +287,13 @@ export default function Footer() {
           {/* ── Col 4 · Контакты ── */}
           <div>
             <p className="mb-5 text-[10px] uppercase tracking-[0.38em] text-[#D69A66]">
-              {t("footer.contacts")}
+              {text("footer.contacts", "Контакты")}
             </p>
             <div className="space-y-5">
               {/* Phone */}
               <div>
                 <p className="mb-1 text-[10px] uppercase tracking-[0.22em] text-white/25">
-                  {t("footer.phone")}
+                  {text("footer.phone", "Телефон")}
                 </p>
                 <a
                   href={contactInfo.phoneHref}
@@ -298,7 +306,7 @@ export default function Footer() {
               {/* Email */}
               <div>
                 <p className="mb-1 text-[10px] uppercase tracking-[0.22em] text-white/25">
-                  Почта
+                  {text("footer.email", "Почта")}
                 </p>
                 <div className="space-y-1">
                   {contactInfo.emails.map((e) => (
@@ -316,19 +324,19 @@ export default function Footer() {
               {/* Schedule */}
               <div>
                 <p className="mb-1 text-[10px] uppercase tracking-[0.22em] text-white/25">
-                  {t("footer.schedule")}
+                  {text("footer.schedule", "График")}
                 </p>
-                <p className="text-sm text-white/55">Пн–Пт: 9:00 – 20:00</p>
-                <p className="text-sm text-white/55">Сб–Вс: 10:00 – 19:00</p>
+                <p className="text-sm text-white/55">{text("footer.weekdays", "Пн–Пт: 9:00 – 20:00")}</p>
+                <p className="text-sm text-white/55">{text("footer.weekend", "Сб–Вс: 10:00 – 19:00")}</p>
               </div>
 
               {/* Location */}
               <div>
                 <p className="mb-1 text-[10px] uppercase tracking-[0.22em] text-white/25">
-                  {t("footer.address")}
+                  {text("footer.address", "Адрес")}
                 </p>
-                <p className="text-sm text-white/55">Самара, Россия</p>
-                <p className="text-xs text-white/30">{t("footer.remote")}</p>
+                <p className="text-sm text-white/55">{text("footer.locationCity", "Самара, Россия")}</p>
+                <p className="text-xs text-white/30">{text("footer.remote", "Работаем удалённо по всему миру")}</p>
               </div>
             </div>
           </div>
@@ -341,20 +349,20 @@ export default function Footer() {
           <div className="flex flex-col gap-1 text-xs text-white/30 md:flex-row md:items-center md:gap-4">
             <span>© 2026 3D Smart Design Studio</span>
             <span className="hidden md:block h-3 w-px bg-white/15" />
-            <span>ИП Шакинене Екатерина Игоревна</span>
+            <span>{text("footer.owner", "ИП Шакинене Екатерина Игоревна")}</span>
           </div>
           <div className="flex flex-wrap gap-4 text-xs text-white/30">
             <Link
               href="/politika-konfidencialnosti"
               className="transition-colors duration-200 hover:text-white/60"
             >
-              {t("footer.privacy")}
+              {text("footer.privacy", "Политика конфиденциальности")}
             </Link>
             <Link
               href="/user/agreement"
               className="transition-colors duration-200 hover:text-white/60"
             >
-              {t("footer.agreement")}
+              {text("footer.agreement", "Пользовательское соглашение")}
             </Link>
           </div>
         </div>

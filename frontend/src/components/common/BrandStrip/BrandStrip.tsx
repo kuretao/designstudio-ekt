@@ -1,9 +1,10 @@
 "use client";
 
-import { useCms } from "@/src/cms";
+import { useCms, useCmsText } from "@/src/cms";
 
 export default function BrandStrip() {
   const { partners } = useCms();
+  const text = useCmsText();
 
   if (!partners.length) return null;
 
@@ -12,11 +13,14 @@ export default function BrandStrip() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-7 grid gap-3 md:grid-cols-[0.55fr_1fr] md:items-end">
           <div>
-            <p className="text-xs uppercase tracking-[0.38em] text-[#D69A66]">Нам доверяют</p>
-            <h2 className="mt-3 text-3xl font-light tracking-[-0.04em] text-white md:text-5xl">Девелоперы и застройщики</h2>
+            <p className="text-xs uppercase tracking-[0.38em] text-[#D69A66]">{text("brandStrip.label", "Нам доверяют")}</p>
+            <h2 className="mt-3 text-3xl font-light tracking-[-0.04em] text-white md:text-5xl">{text("brandStrip.title", "Девелоперы и застройщики")}</h2>
           </div>
           <p className="max-w-2xl text-sm leading-relaxed text-[#D6D1CA] md:justify-self-end md:text-right">
-            Проекты студии выбирают частные клиенты, девелоперы и строительные компании, которым важны понятная визуализация и аккуратная реализация.
+            {text(
+              "brandStrip.text",
+              "Проекты студии выбирают частные клиенты, девелоперы и строительные компании, которым важны понятная визуализация и аккуратная реализация.",
+            )}
           </p>
         </div>
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/10 sm:grid-cols-3 lg:grid-cols-4">

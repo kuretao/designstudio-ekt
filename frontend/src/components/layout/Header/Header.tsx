@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { useCms } from "@/src/cms";
+import { useCms, useCmsText, useLocalizedField } from "@/src/cms";
 import { isSeoLandingPath, isStandaloneExperiencePath } from "@/src/data";
 import ContactModal from "@/src/modals/ContactModal";
 
@@ -99,7 +99,9 @@ function CloseIcon() {
 export default function Header() {
   const currentPath = usePathname();
   const { menuItems, serviceNavigationGroups, siteSettings } = useCms();
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
+  const text = useCmsText();
+  const localize = useLocalizedField();
   const [modalOpen, setModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuView, setMenuView] = useState<
@@ -139,39 +141,53 @@ export default function Header() {
     closeMenu();
   };
 
+  const localizedMenuItems = menuItems.map((item) => ({
+    ...item,
+    label: localize(item, "label", item.label),
+  }));
+  const localizedServiceNavigationGroups = serviceNavigationGroups.map((group) => ({
+    ...group,
+    title: localize(group, "title", group.title),
+    description: localize(group, "description", group.description),
+    items: group.items.map((item) => ({
+      ...item,
+      label: localize(item, "label", item.label),
+    })),
+  }));
+
   const serviceHrefs = new Set([
     "/services",
-    ...serviceNavigationGroups.flatMap((group) => [
+    ...localizedServiceNavigationGroups.flatMap((group) => [
       group.href,
       ...group.items.map((item) => item.href),
     ]),
   ]);
   const menuByHref = new Map(
-    menuItems
+    localizedMenuItems
       .filter((item) => !serviceHrefs.has(item.href))
       .map((item) => [item.href, item]),
   );
   const mainMenuLinks = [
-    menuByHref.get("/o-nas") ?? { href: "/o-nas", label: "О нас" },
-    menuByHref.get("/portfolio") ?? { href: "/portfolio", label: "Портфолио" },
-    { href: "/services", label: "Услуги" },
-    menuByHref.get("/blog") ?? { href: "/blog", label: "Блог" },
-    menuByHref.get("/kontakty") ?? { href: "/kontakty", label: "Контакты" },
+    menuByHref.get("/o-nas") ?? { href: "/o-nas", label: text("menu.about", "О нас") },
+    menuByHref.get("/portfolio") ?? { href: "/portfolio", label: text("menu.portfolio", "Портфолио") },
+    { href: "/services", label: text("header.servicesRoot", "Услуги") },
+    menuByHref.get("/blog") ?? { href: "/blog", label: text("menu.blog", "Блог") },
+    menuByHref.get("/kontakty") ?? { href: "/kontakty", label: text("menu.contacts", "Контакты") },
   ];
   const primaryMenuLinks = [...mainMenuLinks];
   const isServicesActive =
     currentPath === "/services" ||
     Array.from(serviceHrefs).some((href) => currentPath === href);
   const activeServiceGroup =
-    serviceNavigationGroups.find(
+    localizedServiceNavigationGroups.find(
       (group) => group.id === activeServiceGroupId,
     ) ??
-    serviceNavigationGroups.find(
+    localizedServiceNavigationGroups.find(
       (group) =>
         group.href === currentPath ||
         group.items.some((item) => item.href === currentPath),
     ) ??
-    serviceNavigationGroups[0];
+    localizedServiceNavigationGroups[0];
 
   const menuLinkCls = (path: string) =>
     `block text-right text-[13px] font-semibold uppercase tracking-[0.17em] transition-[opacity,transform] duration-[820ms] ease-[cubic-bezier(.19,1,.22,1)] hover:text-[#D69A66] md:text-[17px] ${
@@ -201,7 +217,7 @@ export default function Header() {
             className="flex w-[142px] cursor-pointer items-center gap-[18px] justify-self-start text-[10px] font-semibold uppercase tracking-[0.24em] transition duration-300 hover:text-white/68"
           >
             <MenuIcon />
-            <span>{t("header.menu")}</span>
+            <span>{text("header.menu", "Меню")}</span>
           </button>
 
           <Link
@@ -233,7 +249,7 @@ export default function Header() {
             onClick={openContact}
             className="w-[142px] justify-self-end text-right text-[10px] font-semibold uppercase tracking-[0.24em] transition duration-300 hover:text-white/68"
           >
-            {t("header.contact")}
+            {text("header.contact", "Написать нам")}
           </button>
         </div>
       </header>
@@ -259,7 +275,7 @@ export default function Header() {
           className="absolute left-6 top-8 z-10 flex cursor-pointer items-center gap-4 text-[11px] font-bold uppercase tracking-[0.18em] text-white transition hover:text-white/66 md:left-[75px] md:top-[50px]"
         >
           <CloseIcon />
-          {t("header.close")}
+          {text("header.close", "Закрыть")}
         </button>
 
         <div
@@ -267,7 +283,7 @@ export default function Header() {
           data-native-scroll
         >
           <nav
-            aria-label="Основное меню"
+            aria-label={text("header.mainMenuAria", "Основное меню")}
             className="relative w-full max-w-[520px]"
           >
             <div
@@ -315,7 +331,7 @@ export default function Header() {
                 onClick={() => setMenuView("main")}
                 className="justify-self-end text-[11px] font-bold uppercase tracking-[0.22em] text-white/42 transition hover:text-[#D69A66]"
               >
-                ← Меню
+                {text("header.backToMenu", "← Меню")}
               </button>
               <div>
                 <Link
@@ -323,15 +339,17 @@ export default function Header() {
                   onClick={closeMenu}
                   className="block text-[13px] font-semibold uppercase tracking-[0.18em] text-white/78 transition hover:text-[#D69A66] md:text-[17px]"
                 >
-                  Услуги
+                  {text("header.servicesRoot", "Услуги")}
                 </Link>
                 <p className="mt-2 max-w-sm justify-self-end text-sm leading-relaxed text-white/38">
-                  Категории сгруппированы по составу работ. Внутри каждого
-                  направления - посадочные страницы услуг.
+                  {text(
+                    "header.servicesDescription",
+                    "Категории сгруппированы по составу работ. Внутри каждого направления - посадочные страницы услуг.",
+                  )}
                 </p>
               </div>
               <div className="grid gap-2.5">
-                {serviceNavigationGroups.map((group) => {
+                {localizedServiceNavigationGroups.map((group) => {
                   const active =
                     group.href === currentPath ||
                     group.items.some((item) => item.href === currentPath);
@@ -377,7 +395,7 @@ export default function Header() {
                 onClick={() => setMenuView("services")}
                 className="justify-self-end text-[11px] font-bold uppercase tracking-[0.22em] text-white/42 transition hover:text-[#D69A66]"
               >
-                ← Услуги
+                {text("header.backToServices", "← Услуги")}
               </button>
 
               {activeServiceGroup && (
@@ -437,14 +455,14 @@ export default function Header() {
               onClick={() => changeLanguage("ru")}
               className={`transition hover:text-white/78 ${i18n.language === "ru" ? "text-white/78" : "text-white/34"}`}
             >
-              РУ
+              {text("header.languageRu", "РУ")}
             </button>
             <button
               type="button"
               onClick={() => changeLanguage("en")}
               className={`transition hover:text-white/78 ${i18n.language === "en" ? "text-white/78" : "text-white/34"}`}
             >
-              ENG
+              {text("header.languageEn", "ENG")}
             </button>
           </div>
         </div>

@@ -16,6 +16,7 @@ use App\Models\Promo;
 use App\Models\Review;
 use App\Models\Service;
 use App\Models\SiteSetting;
+use App\Models\UiText;
 use App\Models\Vacancy;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ class CmsController extends Controller
 
         return response()->json([
             'settings' => $this->settings($settings),
+            'uiTexts' => $this->uiTexts(),
             'menuItems' => $this->menuItems(),
             'serviceNavigationGroups' => $this->serviceNavigationGroups(),
         ]);
@@ -37,6 +39,7 @@ class CmsController extends Controller
     {
         return response()->json([
             'settings' => $this->settings(SiteSetting::query()->first()),
+            'uiTexts' => $this->uiTexts(),
             'menuItems' => $this->menuItems(),
             'serviceNavigationGroups' => $this->serviceNavigationGroups(),
             'pages' => Page::query()->where('is_published', true)->with(['blocks' => fn ($query) => $query->where('is_active', true)])->get()->map(fn (Page $page) => $this->pagePayload($page))->values(),
@@ -173,6 +176,23 @@ class CmsController extends Controller
         ];
     }
 
+    private function uiTexts(): array
+    {
+        return UiText::query()
+            ->where('is_active', true)
+            ->orderBy('position')
+            ->get()
+            ->mapWithKeys(fn (UiText $text): array => [
+                $text->key => [
+                    'ru' => $text->valueRu(),
+                    'en' => $text->valueEn(),
+                    'group' => $text->group,
+                    'label' => $text->label,
+                ],
+            ])
+            ->all();
+    }
+
     private function menuItems(): array
     {
         return MenuItem::query()
@@ -257,23 +277,37 @@ class CmsController extends Controller
         return [
             'id' => $page->slug,
             'slug' => $page->slug,
-            'title' => $page->title,
+            'title' => $page->fieldRu('title'),
+            'titleRu' => $page->fieldRu('title'),
+            'titleEn' => $page->fieldEn('title'),
             'template' => $page->template,
-            'body' => $page->body,
-            'seoTitle' => $page->seo_title,
-            'seoDescription' => $page->seo_description,
+            'body' => $page->fieldRu('body'),
+            'bodyRu' => $page->fieldRu('body'),
+            'bodyEn' => $page->fieldEn('body'),
+            'seoTitle' => $page->fieldRu('seo_title'),
+            'seoDescription' => $page->fieldRu('seo_description'),
             'blocks' => $page->blocks->map(function ($block): array {
                 $images = $this->imageList($block->image);
 
                 return [
                     'type' => $block->type,
-                    'eyebrow' => $block->eyebrow,
-                    'title' => $block->title,
-                    'subtitle' => $block->subtitle,
-                    'text' => $block->text,
+                    'eyebrow' => $block->fieldRu('eyebrow'),
+                    'eyebrowRu' => $block->fieldRu('eyebrow'),
+                    'eyebrowEn' => $block->fieldEn('eyebrow'),
+                    'title' => $block->fieldRu('title'),
+                    'titleRu' => $block->fieldRu('title'),
+                    'titleEn' => $block->fieldEn('title'),
+                    'subtitle' => $block->fieldRu('subtitle'),
+                    'subtitleRu' => $block->fieldRu('subtitle'),
+                    'subtitleEn' => $block->fieldEn('subtitle'),
+                    'text' => $block->fieldRu('text'),
+                    'textRu' => $block->fieldRu('text'),
+                    'textEn' => $block->fieldEn('text'),
                     'image' => $images[0] ?? null,
                     'images' => $images,
-                    'linkLabel' => $block->link_label,
+                    'linkLabel' => $block->fieldRu('link_label'),
+                    'linkLabelRu' => $block->fieldRu('link_label'),
+                    'linkLabelEn' => $block->fieldEn('link_label'),
                     'linkHref' => $block->link_href,
                 ];
             })->values(),
@@ -325,11 +359,19 @@ class CmsController extends Controller
         return [
             'id' => $project->id,
             'slug' => $project->slug,
-            'title' => $project->title,
-            'category' => $project->category,
-            'location' => $project->location,
+            'title' => $project->fieldRu('title'),
+            'titleRu' => $project->fieldRu('title'),
+            'titleEn' => $project->fieldEn('title'),
+            'category' => $project->fieldRu('category'),
+            'categoryRu' => $project->fieldRu('category'),
+            'categoryEn' => $project->fieldEn('category'),
+            'location' => $project->fieldRu('location'),
+            'locationRu' => $project->fieldRu('location'),
+            'locationEn' => $project->fieldEn('location'),
             'year' => $project->year,
-            'description' => $project->description,
+            'description' => $project->fieldRu('description'),
+            'descriptionRu' => $project->fieldRu('description'),
+            'descriptionEn' => $project->fieldEn('description'),
             'image' => $project->effective_image,
             'beforeImage' => $project->effective_before_image,
             'afterImage' => $project->effective_after_image,
@@ -342,15 +384,31 @@ class CmsController extends Controller
         return [
             'id' => $service->slug,
             'slug' => $service->slug,
-            'title' => $service->title,
-            'eyebrow' => $service->eyebrow,
-            'text' => $service->text,
+            'title' => $service->fieldRu('title'),
+            'titleRu' => $service->fieldRu('title'),
+            'titleEn' => $service->fieldEn('title'),
+            'eyebrow' => $service->fieldRu('eyebrow'),
+            'eyebrowRu' => $service->fieldRu('eyebrow'),
+            'eyebrowEn' => $service->fieldEn('eyebrow'),
+            'text' => $service->fieldRu('text'),
+            'textRu' => $service->fieldRu('text'),
+            'textEn' => $service->fieldEn('text'),
             'image' => $service->effective_image,
-            'price' => $service->price,
-            'timeline' => $service->timeline,
-            'deliverables' => $this->lines($service->deliverables),
-            'benefits' => $this->lines($service->benefits),
-            'process' => $this->lines($service->process),
+            'price' => $service->fieldRu('price'),
+            'priceRu' => $service->fieldRu('price'),
+            'priceEn' => $service->fieldEn('price'),
+            'timeline' => $service->fieldRu('timeline'),
+            'timelineRu' => $service->fieldRu('timeline'),
+            'timelineEn' => $service->fieldEn('timeline'),
+            'deliverables' => $this->lines($service->fieldRu('deliverables')),
+            'deliverablesRu' => $this->lines($service->fieldRu('deliverables')),
+            'deliverablesEn' => $this->lines($service->fieldEn('deliverables')),
+            'benefits' => $this->lines($service->fieldRu('benefits')),
+            'benefitsRu' => $this->lines($service->fieldRu('benefits')),
+            'benefitsEn' => $this->lines($service->fieldEn('benefits')),
+            'process' => $this->lines($service->fieldRu('process')),
+            'processRu' => $this->lines($service->fieldRu('process')),
+            'processEn' => $this->lines($service->fieldEn('process')),
         ];
     }
 
@@ -358,14 +416,32 @@ class CmsController extends Controller
     {
         return [
             'slug' => $article->slug,
-            'title' => $article->title,
-            'date' => $article->date,
+            'title' => $article->fieldRu('title'),
+            'titleRu' => $article->fieldRu('title'),
+            'titleEn' => $article->fieldEn('title'),
+            'date' => $article->fieldRu('date'),
+            'dateRu' => $article->fieldRu('date'),
+            'dateEn' => $article->fieldEn('date'),
             'dateIso' => $article->date_iso?->toDateString(),
-            'category' => $article->category,
-            'preview' => $article->preview,
+            'category' => $article->fieldRu('category'),
+            'categoryRu' => $article->fieldRu('category'),
+            'categoryEn' => $article->fieldEn('category'),
+            'preview' => $article->fieldRu('preview'),
+            'previewRu' => $article->fieldRu('preview'),
+            'previewEn' => $article->fieldEn('preview'),
             'image' => $article->effective_image,
-            'readingTime' => $article->reading_time,
-            'body' => collect(preg_split('/\R{2,}/', (string) $article->body) ?: [])
+            'readingTime' => $article->fieldRu('reading_time'),
+            'readingTimeRu' => $article->fieldRu('reading_time'),
+            'readingTimeEn' => $article->fieldEn('reading_time'),
+            'body' => collect(preg_split('/\R{2,}/', (string) $article->fieldRu('body')) ?: [])
+                ->filter()
+                ->map(fn (string $text) => ['type' => 'paragraph', 'text' => trim($text)])
+                ->values(),
+            'bodyRu' => collect(preg_split('/\R{2,}/', (string) $article->fieldRu('body')) ?: [])
+                ->filter()
+                ->map(fn (string $text) => ['type' => 'paragraph', 'text' => trim($text)])
+                ->values(),
+            'bodyEn' => collect(preg_split('/\R{2,}/', (string) $article->fieldEn('body')) ?: [])
                 ->filter()
                 ->map(fn (string $text) => ['type' => 'paragraph', 'text' => trim($text)])
                 ->values(),
@@ -377,12 +453,24 @@ class CmsController extends Controller
         return [
             'id' => $promo->slug,
             'slug' => $promo->slug,
-            'badge' => $promo->badge,
-            'title' => $promo->title,
-            'highlight' => $promo->highlight,
-            'validUntil' => $promo->valid_until,
-            'description' => $promo->description,
-            'conditions' => $this->lines($promo->conditions),
+            'badge' => $promo->fieldRu('badge'),
+            'badgeRu' => $promo->fieldRu('badge'),
+            'badgeEn' => $promo->fieldEn('badge'),
+            'title' => $promo->fieldRu('title'),
+            'titleRu' => $promo->fieldRu('title'),
+            'titleEn' => $promo->fieldEn('title'),
+            'highlight' => $promo->fieldRu('highlight'),
+            'highlightRu' => $promo->fieldRu('highlight'),
+            'highlightEn' => $promo->fieldEn('highlight'),
+            'validUntil' => $promo->fieldRu('valid_until'),
+            'validUntilRu' => $promo->fieldRu('valid_until'),
+            'validUntilEn' => $promo->fieldEn('valid_until'),
+            'description' => $promo->fieldRu('description'),
+            'descriptionRu' => $promo->fieldRu('description'),
+            'descriptionEn' => $promo->fieldEn('description'),
+            'conditions' => $this->lines($promo->fieldRu('conditions')),
+            'conditionsRu' => $this->lines($promo->fieldRu('conditions')),
+            'conditionsEn' => $this->lines($promo->fieldEn('conditions')),
             'image' => $promo->effective_image,
         ];
     }
@@ -390,10 +478,16 @@ class CmsController extends Controller
     private function awardPayload(Award $award): array
     {
         return [
-            'title' => $award->title,
-            'issuer' => $award->issuer,
+            'title' => $award->fieldRu('title'),
+            'titleRu' => $award->fieldRu('title'),
+            'titleEn' => $award->fieldEn('title'),
+            'issuer' => $award->fieldRu('issuer'),
+            'issuerRu' => $award->fieldRu('issuer'),
+            'issuerEn' => $award->fieldEn('issuer'),
             'year' => $award->year,
-            'description' => $award->description,
+            'description' => $award->fieldRu('description'),
+            'descriptionRu' => $award->fieldRu('description'),
+            'descriptionEn' => $award->fieldEn('description'),
             'image' => $award->effective_image,
         ];
     }
@@ -401,8 +495,12 @@ class CmsController extends Controller
     private function partnerPayload(Partner $partner): array
     {
         return [
-            'name' => $partner->name,
-            'note' => $partner->note,
+            'name' => $partner->fieldRu('name'),
+            'nameRu' => $partner->fieldRu('name'),
+            'nameEn' => $partner->fieldEn('name'),
+            'note' => $partner->fieldRu('note'),
+            'noteRu' => $partner->fieldRu('note'),
+            'noteEn' => $partner->fieldEn('note'),
             'logo' => $partner->effective_logo,
         ];
     }
@@ -410,12 +508,24 @@ class CmsController extends Controller
     private function reviewPayload(Review $review): array
     {
         return [
-            'name' => $review->name,
-            'date' => $review->date,
-            'service' => $review->service,
-            'title' => $review->title,
-            'text' => $review->text,
-            'adminReply' => $review->admin_reply,
+            'name' => $review->fieldRu('name'),
+            'nameRu' => $review->fieldRu('name'),
+            'nameEn' => $review->fieldEn('name'),
+            'date' => $review->fieldRu('date'),
+            'dateRu' => $review->fieldRu('date'),
+            'dateEn' => $review->fieldEn('date'),
+            'service' => $review->fieldRu('service'),
+            'serviceRu' => $review->fieldRu('service'),
+            'serviceEn' => $review->fieldEn('service'),
+            'title' => $review->fieldRu('title'),
+            'titleRu' => $review->fieldRu('title'),
+            'titleEn' => $review->fieldEn('title'),
+            'text' => $review->fieldRu('text'),
+            'textRu' => $review->fieldRu('text'),
+            'textEn' => $review->fieldEn('text'),
+            'adminReply' => $review->fieldRu('admin_reply'),
+            'adminReplyRu' => $review->fieldRu('admin_reply'),
+            'adminReplyEn' => $review->fieldEn('admin_reply'),
             'image' => $review->image,
         ];
     }

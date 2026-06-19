@@ -2,12 +2,22 @@
 
 namespace App\Models;
 
+use App\Support\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class Project extends Model
 {
+    use HasTranslations;
+
     protected $guarded = [];
+
+    protected array $translatable = [
+        'title',
+        'category',
+        'location',
+        'description',
+    ];
 
     protected function casts(): array
     {

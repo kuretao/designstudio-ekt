@@ -2,11 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { useTranslation } from "react-i18next";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { useCms } from "@/src/cms";
+import { useCms, useCmsText } from "@/src/cms";
 import { isStandaloneExperiencePath } from "@/src/data";
 import { GlobalStyle, Noise } from "@/src/ui";
 
@@ -64,7 +63,7 @@ function MessengerIcon({ icon }: { icon: string }) {
 export default function ClientShell({ children }: { children: React.ReactNode }) {
   const mainRef = useRef<HTMLDivElement | null>(null);
   const { animationControls, messengerLinks } = useCms();
-  const { t } = useTranslation();
+  const text = useCmsText();
   const pathname = usePathname();
   const isStandaloneExperience = isStandaloneExperiencePath(pathname);
 
@@ -377,7 +376,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
                 href={href}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={t(`fixed.${messenger.icon}`, messenger.label)}
+                aria-label={text(`fixed.${messenger.icon}`, messenger.label)}
                 className="grid h-11 w-11 place-items-center rounded-full border border-white/18 bg-[#050505]/35 text-white backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-white/34 hover:bg-white/18 md:h-12 md:w-12"
               >
                 <MessengerIcon icon={messenger.icon} />

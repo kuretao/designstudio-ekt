@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { submitLead, useCms } from "@/src/cms";
+import { submitLead, useCms, useCmsText } from "@/src/cms";
 
 type Props = {
   open: boolean;
@@ -15,6 +15,7 @@ const inputCls =
 
 export default function ContactModal({ open, onClose, promoTitle }: Props) {
   const { messengerLinks } = useCms();
+  const text = useCmsText();
   const backdropRef = useRef<HTMLDivElement>(null);
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
@@ -35,7 +36,7 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
 
   const messengerItems = [
     { label: "Telegram", href: messengerLinks.telegram, color: "border-[#D69A66]/35 text-[#D69A66]" },
-    { label: "Звонок", href: messengerLinks.phoneHref, color: "border-[#D69A66]/35 text-[#D69A66]" },
+    { label: text("modal.callLabel", "Звонок"), href: messengerLinks.phoneHref, color: "border-[#D69A66]/35 text-[#D69A66]" },
   ];
 
   return (
@@ -51,14 +52,14 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
         <div className="relative px-6 pb-4 pt-6">
           <button
             onClick={onClose}
-            aria-label="Закрыть"
+            aria-label={text("modal.closeAria", "Закрыть")}
             className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-white/35 transition hover:border-white/25 hover:text-white"
           >
             ×
           </button>
-          <p className="mb-1 text-[10px] uppercase tracking-[0.4em] text-[#D69A66]">Связаться с нами</p>
+          <p className="mb-1 text-[10px] uppercase tracking-[0.4em] text-[#D69A66]">{text("modal.eyebrow", "Связаться с нами")}</p>
           <h2 className="text-2xl font-light tracking-[-0.035em] text-[#F5F2EC]">
-            {promoTitle ? "Записаться на акцию" : "Напишите нам"}
+            {promoTitle ? text("modal.promoTitle", "Записаться на акцию") : text("modal.defaultTitle", "Напишите нам")}
           </h2>
           {promoTitle && <p className="mt-1.5 text-sm text-[#D6D1CA]">«{promoTitle}»</p>}
         </div>
@@ -66,7 +67,7 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
         <div className="mx-6 border-t border-white/8" />
 
         <div className="px-6 pt-4">
-          <p className="mb-3 text-[10px] uppercase tracking-[0.28em] text-white/30">Написать в мессенджере</p>
+          <p className="mb-3 text-[10px] uppercase tracking-[0.28em] text-white/30">{text("modal.messengerLabel", "Написать в мессенджере")}</p>
           <div className="grid grid-cols-2 gap-2">
             {messengerItems.map((item) => (
               <a
@@ -85,8 +86,8 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
         <div className="mx-6 mt-4 border-t border-white/8" />
 
         <div className="space-y-2.5 px-6 pt-4">
-          <input type="text" placeholder="Ваше имя" value={name} onChange={(event) => setName(event.target.value)} className={inputCls} />
-          <input type="text" placeholder="Телефон или e-mail" value={contact} onChange={(event) => setContact(event.target.value)} className={inputCls} />
+          <input type="text" placeholder={text("modal.namePlaceholder", "Ваше имя")} value={name} onChange={(event) => setName(event.target.value)} className={inputCls} />
+          <input type="text" placeholder={text("modal.contactPlaceholder", "Телефон или e-mail")} value={contact} onChange={(event) => setContact(event.target.value)} className={inputCls} />
           <button
             disabled={!agreed}
             onClick={async () => {
@@ -104,7 +105,7 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
               agreed ? "bg-[#D69A66] text-[#050505] hover:bg-[#F5F2EC]" : "cursor-not-allowed bg-white/5 text-white/20"
             }`}
           >
-            Отправить заявку
+            {text("modal.submitButton", "Отправить заявку")}
           </button>
         </div>
 
@@ -112,13 +113,13 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
           <label className="flex cursor-pointer items-start gap-3">
             <input type="checkbox" checked={agreed} onChange={(event) => setAgreed(event.target.checked)} className="mt-1 accent-[#D69A66]" />
             <span className="text-xs leading-relaxed text-white/40">
-              Я ознакомился(-ась) с{" "}
+              {text("modal.consentStart", "Я ознакомился(-ась) с")}{" "}
               <Link href="/user/agreement" target="_blank" className="text-[#D69A66]/70 underline underline-offset-2">
-                пользовательским соглашением
+                {text("modal.agreement", "пользовательским соглашением")}
               </Link>{" "}
-              и{" "}
+              {text("modal.and", "и")}{" "}
               <Link href="/politika-konfidencialnosti" target="_blank" className="text-[#D69A66]/70 underline underline-offset-2">
-                политикой конфиденциальности
+                {text("modal.privacy", "политикой конфиденциальности")}
               </Link>
               .
             </span>
@@ -126,7 +127,7 @@ export default function ContactModal({ open, onClose, promoTitle }: Props) {
         </div>
 
         <p className="px-6 pb-5 pt-3 text-center text-[11px] text-white/20">
-          Отвечаем в течение рабочего дня · Пн-Пт 9:00-20:00
+          {text("modal.responseTime", "Отвечаем в течение рабочего дня · Пн-Пт 9:00-20:00")}
         </p>
       </div>
     </div>

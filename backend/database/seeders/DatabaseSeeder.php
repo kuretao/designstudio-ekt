@@ -14,9 +14,12 @@ use App\Models\Promo;
 use App\Models\Review;
 use App\Models\Service;
 use App\Models\SiteSetting;
+use App\Models\UiText;
+use App\Models\Vacancy;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use App\Support\DefaultUiTexts;
 use MoonShine\Laravel\Models\MoonshineUser;
 use MoonShine\Laravel\Models\MoonshineUserRole;
 
@@ -59,6 +62,14 @@ class DatabaseSeeder extends Seeder
             'seo_title' => '3D Smart Design Studio',
             'seo_description' => 'Студия концептуального дизайна. Интерьеры, архитектура, ландшафт.',
         ]);
+
+        collect(DefaultUiTexts::rows())->each(fn (array $row, int $index) => UiText::query()->updateOrCreate(
+            ['key' => $row['key']],
+            [
+                ...$row,
+                'position' => $index + 1,
+            ],
+        ));
 
         collect([
             ['/o-nas', 'О нас', 'About Us'],
@@ -169,23 +180,27 @@ class DatabaseSeeder extends Seeder
         });
 
         $projects = collect([
-            ['kp-pavlovy-ozera', 'КП "Павловы Озера"', 'Интерьеры', 'Москва', '2026', 'Авторский интерьер загородного дома: мягкая неоклассика, продуманная кухня-гостиная, приватные спальни и спокойная палитра натуральных материалов.', 'https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=2200&q=90'],
-            ['river-park', 'ЖК "River Park"', 'Интерьеры', 'Самара', '2025', 'Квартира с открытой кухней-гостиной, скрытым хранением, световыми сценариями и визуализацией до начала ремонтных работ.', 'https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=2200&q=90'],
-            ['landshaftnyj-proekt', 'Ландшафтный проект', 'Ландшафт', 'Висловка', '2025', 'Благоустройство участка с маршрутами, вечерней подсветкой, зонами отдыха и растениями, подобранными под климат и уход.', 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=2200&q=90'],
-            ['ofisnoe-prostranstvo', 'Офисное пространство', 'Интерьеры', 'Белгородская область', '2026', 'Коммерческий интерьер с понятной навигацией, рабочими зонами, переговорными и визуальным языком бренда.', 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2200&q=90'],
-            ['villa-austria', 'Villa Austria', 'Архитектура', 'Вена', '2024', 'Архитектурная визуализация виллы: фасады, посадка на участок, вечерний свет, окружение и презентационные ракурсы.', 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=2200&q=90'],
-            ['kp-greenwood-2', 'КП GreenWood-2', 'Архитектура', 'Москва', '2025', 'Концепция частного дома с выразительной геометрией, панорамным остеклением и подготовкой материалов для согласования.', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=90'],
+            ['kp-pavlovy-ozera', 'КП "Павловы Озера"', 'KP "Pavlovy Ozera"', 'Интерьеры', 'Interiors', 'Москва', 'Moscow', '2026', 'Авторский интерьер загородного дома: мягкая неоклассика, продуманная кухня-гостиная, приватные спальни и спокойная палитра натуральных материалов.', 'Author-designed country house interior: soft neoclassic, thoughtful kitchen-living room, private bedrooms, and a calm palette of natural materials.', 'https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=2200&q=90'],
+            ['river-park', 'ЖК "River Park"', 'RC "River Park"', 'Интерьеры', 'Interiors', 'Самара', 'Samara', '2025', 'Квартира с открытой кухней-гостиной, скрытым хранением, световыми сценариями и визуализацией до начала ремонтных работ.', 'Apartment with open kitchen-living room, hidden storage, lighting scenarios, and visualization before renovation work begins.', 'https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=2200&q=90'],
+            ['landshaftnyj-projekt', 'Ландшафтный проект', 'Landscape Project', 'Ландшафт', 'Landscape', 'Висловка', 'Vislovka', '2025', 'Благоустройство участка с маршрутами, вечерней подсветкой, зонами отдыха и растениями, подобранными под климат и уход.', 'Landscaping with pathways, evening lighting, recreation areas, and plants selected for the local climate and maintenance needs.', 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=2200&q=90'],
+            ['ofisnoe-prostranstvo', 'Офисное пространство', 'Office Space', 'Интерьеры', 'Interiors', 'Белгородская область', 'Belgorod Region', '2026', 'Коммерческий интерьер с понятной навигацией, рабочими зонами, переговорными и визуальным языком бренда.', 'Commercial interior with clear navigation, work zones, meeting rooms, and a visual brand language.', 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2200&q=90'],
+            ['villa-austria', 'Villa Austria', 'Villa Austria', 'Архитектура', 'Architecture', 'Вена', 'Vienna', '2024', 'Архитектурная визуализация виллы: фасады, посадка на участок, вечерний свет, окружение и презентационные ракурсы.', 'Architectural visualization of a villa: facades, site placement, evening lighting, surroundings, and presentation views.', 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=2200&q=90'],
+            ['kp-greenwood-2', 'КП GreenWood-2', 'KP GreenWood-2', 'Архитектура', 'Architecture', 'Москва', 'Moscow', '2025', 'Концепция частного дома с выразительной геометрией, панорамным остеклением и подготовкой материалов для согласования.', 'Concept for a private house with expressive geometry, panoramic glazing, and presentation materials for approval.', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=90'],
         ]);
 
         $projects->each(fn (array $project, int $index) => Project::query()->updateOrCreate(
             ['slug' => $project[0]],
             [
                 'title' => $project[1],
-                'category' => $project[2],
-                'location' => $project[3],
-                'year' => $project[4],
-                'description' => $project[5],
-                'image' => $project[6],
+                'title_en' => $project[2],
+                'category' => $project[3],
+                'category_en' => $project[4],
+                'location' => $project[5],
+                'location_en' => $project[6],
+                'year' => $project[7],
+                'description' => $project[8],
+                'description_en' => $project[9],
+                'image' => $project[10],
                 'before_image' => $index < 2 ? 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=85' : null,
                 'after_image' => $index < 2 ? 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1600&q=85' : null,
                 'position' => $index + 1,
@@ -195,24 +210,32 @@ class DatabaseSeeder extends Seeder
         ));
 
         collect([
-            ['dizajn-interyera', 'Дизайн интерьера', 'Квартиры, дома, офисы', 'Проект под ключ для квартир, коттеджей и коммерческих помещений: планировка, 3D-визуализация, чертежи, спецификации и сопровождение реализации.', $projects[1][6], 'от 650 ₽/м²', '3-12 недель'],
-            ['dizajn-interera-kommercheskogo-prostranstva', 'Дизайн коммерческого пространства', 'Офисы, шоурумы, рестораны', 'Создаем интерьеры, которые работают на поток, бренд и продажи: от сценариев движения посетителей до мебели, света и технической документации.', $projects[3][6], 'от 1 500 ₽/м²', '4-10 недель'],
-            ['komplektaciya-ob-ekta', 'Комплектация объекта', 'Материалы, мебель, поставки', 'Подбираем материалы, мебель, освещение и оборудование, готовим ведомости, контролируем бюджет и помогаем проекту не рассыпаться на этапе закупок.', $projects[0][6], 'индивидуально', 'на протяжении ремонта'],
-            ['3d-vizualizaciya', '3D визуализация', 'Фотореалистичные рендеры', 'Создаем реалистичные изображения для согласований, презентаций, девелопмента и маркетинга.', $projects[0][6], 'от 10 000 ₽', 'от 5 дней'],
-            ['arhitekturnaya-3d-vizualizaciya', 'Архитектурная 3D визуализация', 'Коттеджи и жилые комплексы', 'Преобразуем чертежи в продающий образ: фасады, посадка на участок, дворы, благоустройство, дневные и вечерние сцены.', $projects[5][6], 'от 40 000 ₽', '5-7 дней'],
-            ['landshaftnyj-dizajn', 'Ландшафтный дизайн', 'Благоустройство участков', 'Проектируем участки под ключ: зонирование, дорожки, озеленение, дренажные решения, освещение, террасы и сценарии отдыха.', $projects[2][6], 'от 1 500 ₽/м²', '3-8 недель'],
+            ['dizajn-interyera', 'Дизайн интерьера', 'Interior Design', 'Квартиры, дома, офисы', 'Apartments, houses, offices', 'Проект под ключ для квартир, коттеджей и коммерческих помещений: планировка, 3D-визуализация, чертежи, спецификации и сопровождение реализации.', 'Full-service design for apartments, cottages, and commercial spaces: layout, 3D visualization, drawings, specifications, and implementation support.', $projects[1][10], 'от 650 ₽/м²', 'from 650 RUB/m²', '3-12 недель', '3-12 weeks'],
+            ['dizajn-interera-kommercheskogo-prostranstva', 'Дизайн коммерческого пространства', 'Commercial Interior Design', 'Офисы, шоурумы, рестораны', 'Offices, showrooms, restaurants', 'Создаем интерьеры, которые работают на поток, бренд и продажи: от сценариев движения посетителей до мебели, света и технической документации.', 'We create interiors that work for foot traffic, brand, and sales — from visitor flow scenarios to furniture, lighting, and technical documentation.', $projects[3][10], 'от 1 500 ₽/м²', 'from 1,500 RUB/m²', '4-10 недель', '4-10 weeks'],
+            ['komplektaciya-ob-ekta', 'Комплектация объекта', 'Project Procurement', 'Материалы, мебель, поставки', 'Materials, furniture, supplies', 'Подбираем материалы, мебель, освещение и оборудование, готовим ведомости, контролируем бюджет и помогаем проекту не рассыпаться на этапе закупок.', 'We select materials, furniture, lighting, and equipment, prepare schedules, control the budget, and keep the project on track during the procurement phase.', $projects[0][10], 'индивидуально', 'custom pricing', 'на протяжении ремонта', 'throughout renovation'],
+            ['3d-vizualizaciya', '3D визуализация', '3D Visualization', 'Фотореалистичные рендеры', 'Photorealistic renders', 'Создаем реалистичные изображения для согласований, презентаций, девелопмента и маркетинга.', 'We create realistic images for approvals, presentations, development, and marketing.', $projects[0][10], 'от 10 000 ₽', 'from 10,000 RUB', 'от 5 дней', 'from 5 days'],
+            ['arhitekturnaya-3d-vizualizaciya', 'Архитектурная 3D визуализация', 'Architectural 3D Visualization', 'Коттеджи и жилые комплексы', 'Cottages and residential complexes', 'Преобразуем чертежи в продающий образ: фасады, посадка на участок, дворы, благоустройство, дневные и вечерние сцены.', 'We turn drawings into compelling visuals: facades, site placement, courtyards, landscaping, day and night scenes.', $projects[5][10], 'от 40 000 ₽', 'from 40,000 RUB', '5-7 дней', '5-7 days'],
+            ['landshaftnyj-dizajn', 'Ландшафтный дизайн', 'Landscape Design', 'Благоустройство участков', 'Site landscaping', 'Проектируем участки под ключ: зонирование, дорожки, озеленение, дренажные решения, освещение, террасы и сценарии отдыха.', 'Full landscape design: zoning, pathways, planting, drainage, lighting, terraces, and recreation scenarios.', $projects[2][10], 'от 1 500 ₽/м²', 'from 1,500 RUB/m²', '3-8 недель', '3-8 weeks'],
         ])->each(fn (array $service, int $index) => Service::query()->updateOrCreate(
             ['slug' => $service[0]],
             [
                 'title' => $service[1],
-                'eyebrow' => $service[2],
-                'text' => $service[3],
-                'image' => $service[4],
-                'price' => $service[5],
-                'timeline' => $service[6],
+                'title_en' => $service[2],
+                'eyebrow' => $service[3],
+                'eyebrow_en' => $service[4],
+                'text' => $service[5],
+                'text_en' => $service[6],
+                'image' => $service[7],
+                'price' => $service[8],
+                'price_en' => $service[9],
+                'timeline' => $service[10],
+                'timeline_en' => $service[11],
                 'deliverables' => "обмерный план и ТЗ\n3D-визуализация\nрабочие чертежи\nподбор материалов",
+                'deliverables_en' => "measurement plan and brief\n3D visualization\nworking drawings\nmaterial selection",
                 'benefits' => "понятный бюджет\nпоэтапная оплата\nконтроль реализации\nпомощь с подрядчиками",
+                'benefits_en' => "clear budget\nphased payments\nimplementation control\ncontractor coordination",
                 'process' => "бриф\nпланировка\nвизуальная концепция\nчертежи\nсопровождение",
+                'process_en' => "brief\nlayout\nvisual concept\ndrawings\nimplementation support",
                 'position' => $index + 1,
                 'is_published' => true,
             ],
@@ -220,7 +243,7 @@ class DatabaseSeeder extends Seeder
 
         $homePage = Page::query()->updateOrCreate(
             ['slug' => 'home'],
-            ['title' => 'Главная', 'template' => 'content', 'is_published' => true],
+            ['title' => 'Главная', 'title_en' => 'Home', 'template' => 'content', 'is_published' => true],
         );
 
         PageBlock::query()->updateOrCreate(
@@ -228,9 +251,13 @@ class DatabaseSeeder extends Seeder
             [
                 'type' => 'hero',
                 'eyebrow' => 'Студия дизайна интерьера и архитектуры в Самаре',
+                'eyebrow_en' => 'Interior design and architecture studio in Samara',
                 'title' => 'Дизайн с умом.',
+                'title_en' => 'Design with logic.',
                 'subtitle' => 'Создаем интерьеры, архитектуру, 3D-визуализацию и ландшафтные проекты: от концепции до рабочей документации, комплектации и сопровождения.',
+                'subtitle_en' => 'We create interiors, architecture, 3D visualization, and landscape projects — from concept to working documentation, procurement, and support.',
                 'link_label' => 'Обсудить проект',
+                'link_label_en' => 'Discuss a project',
                 'link_href' => '/kontakty',
                 'is_active' => true,
             ],
@@ -241,21 +268,23 @@ class DatabaseSeeder extends Seeder
             [
                 'type' => 'text',
                 'eyebrow' => 'Философия проекта',
+                'eyebrow_en' => 'Project philosophy',
                 'text' => 'Мы проектируем не стены, а сценарии жизни: утренний свет, маршрут взгляда, тишину материалов и точную документацию для реализации.',
+                'text_en' => 'We design life scenarios, not walls: morning light, sightlines, material silence, and precise documentation for implementation.',
                 'is_active' => true,
             ],
         );
 
         collect([
-            ['o-nas', 'О нас', 'about'],
-            ['partneram', 'Партнерам', 'content'],
-            ['blog', 'Блог', 'blog'],
-            ['user/agreement', 'Пользовательское соглашение', 'legal'],
-            ['politika-konfidencialnosti', 'Политика конфиденциальности', 'legal'],
+            ['o-nas', 'О нас', 'About Us', 'about'],
+            ['partneram', 'Партнерам', 'For Partners', 'content'],
+            ['blog', 'Блог', 'Blog', 'blog'],
+            ['user/agreement', 'Пользовательское соглашение', 'User Agreement', 'legal'],
+            ['politika-konfidencialnosti', 'Политика конфиденциальности', 'Privacy Policy', 'legal'],
         ])->each(function (array $data): void {
             $page = Page::query()->updateOrCreate(
                 ['slug' => $data[0]],
-                ['title' => $data[1], 'template' => $data[2], 'is_published' => true],
+                ['title' => $data[1], 'title_en' => $data[2], 'template' => $data[3], 'is_published' => true],
             );
 
             PageBlock::query()->updateOrCreate(
@@ -264,28 +293,37 @@ class DatabaseSeeder extends Seeder
                     'type' => 'hero',
                     'eyebrow' => '3D Smart Design',
                     'title' => $data[1],
+                    'title_en' => $data[2],
                     'subtitle' => 'Редактируемый блок страницы из MoonShine.',
+                    'subtitle_en' => 'Editable page block from MoonShine.',
                     'text' => 'Этот текст можно заменить в админ-панели. Дизайн остается на Next, а содержание приходит из Laravel API.',
+                    'text_en' => 'This text can be replaced in the admin panel. Design stays on Next.js while content comes from the Laravel API.',
                     'is_active' => true,
                 ],
             );
         });
 
         collect([
-            ['s-novym-2026-godom-i-rozhdestvom', 'С Новым 2026 годом и Рождеством', '15 декабря 2025', '2025-12-15', 'Студия', 'Поздравляем клиентов и партнеров, подводим итоги сезона и готовим новые проектные направления.'],
-            ['odin-klik-vsya-kvartira-virtualnyj-tur-360', 'Один клик - вся квартира: виртуальный тур 360°', '20 августа 2025', '2025-08-20', 'Услуги', 'Как интерактивный тур помогает продавать, согласовывать планировки и показывать объект удаленно.'],
-            ['top-5-oshibok-pri-remonte-v-samare', 'Топ-5 ошибок при ремонте в Самаре', '15 августа 2025', '2025-08-15', 'Советы', 'Неполная смета, экономия на материалах, ремонт без проекта и другие ошибки, которые дорого исправлять.'],
+            ['s-novym-2026-godom-i-rozhdestvom', 'С Новым 2026 годом и Рождеством', 'Happy New Year and Christmas 2026', '15 декабря 2025', 'December 15, 2025', '2025-12-15', 'Студия', 'Studio', 'Поздравляем клиентов и партнеров, подводим итоги сезона и готовим новые проектные направления.', 'We congratulate our clients and partners, review the season, and prepare new project directions.', 'Мы поздравляем клиентов и партнеров с наступающим 2026 годом и Рождеством. Подводим итоги года, делимся планами на новый сезон.', 'We wish our clients and partners a happy 2026 and Merry Christmas. We review the year and share plans for the new season.'],
+            ['odin-klik-vsya-kvartira-virtualnyj-tur-360', 'Один клик - вся квартира: виртуальный тур 360°', 'One click — the whole apartment: 360° virtual tour', '20 августа 2025', 'August 20, 2025', '2025-08-20', 'Услуги', 'Services', 'Как интерактивный тур помогает продавать, согласовывать планировки и показывать объект удаленно.', 'How an interactive tour helps sell properties, coordinate layouts, and showcase objects remotely.', 'Интерактивный 3D-тур дает покупателям полное ощущение пространства, помогает продавцам закрыть сделки быстрее и снижает количество личных просмотров.', 'An interactive 3D tour gives buyers a full sense of space, helps sellers close deals faster, and reduces the number of in-person viewings.'],
+            ['top-5-oshibok-pri-remonte-v-samare', 'Топ-5 ошибок при ремонте в Самаре', 'Top 5 renovation mistakes in Samara', '15 августа 2025', 'August 15, 2025', '2025-08-15', 'Советы', 'Tips', 'Неполная смета, экономия на материалах, ремонт без проекта и другие ошибки, которые дорого исправлять.', 'Incomplete budgets, saving on materials, renovating without a design — and other expensive mistakes.', 'Частые ошибки при ремонте: неполная смета, экономия на материалах, ремонт без дизайн-проекта, неверная последовательность работ и игнорирование инженерных систем.', 'Common renovation mistakes: incomplete budgets, cheap materials, skipping the design phase, wrong work sequence, and ignoring engineering systems.'],
         ])->each(fn (array $article, int $index) => NewsArticle::query()->updateOrCreate(
             ['slug' => $article[0]],
             [
                 'title' => $article[1],
-                'date' => $article[2],
-                'date_iso' => $article[3],
-                'category' => $article[4],
-                'preview' => $article[5],
+                'title_en' => $article[2],
+                'date' => $article[3],
+                'date_en' => $article[4],
+                'date_iso' => $article[5],
+                'category' => $article[6],
+                'category_en' => $article[7],
+                'preview' => $article[8],
+                'preview_en' => $article[9],
                 'image' => 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=2200&q=90',
                 'reading_time' => '3 мин',
-                'body' => $article[5]."\n\nМатериал редактируется в MoonShine и отдается во фронтенд через Laravel API.",
+                'reading_time_en' => '3 min',
+                'body' => $article[10],
+                'body_en' => $article[11],
                 'position' => $index + 1,
                 'is_published' => true,
             ],
@@ -293,56 +331,76 @@ class DatabaseSeeder extends Seeder
 
         Promo::query()->updateOrCreate(['slug' => 'interior-start'], [
             'badge' => 'Пакет',
+            'badge_en' => 'Package',
             'title' => 'Старт дизайн-проекта',
+            'title_en' => 'Design project starter',
             'highlight' => 'планировка + мудборд',
+            'highlight_en' => 'layout + moodboard',
             'valid_until' => 'до 31.12.2026',
+            'valid_until_en' => 'until December 31, 2026',
             'description' => 'Быстрый вход в проект для квартир и домов.',
+            'description_en' => 'A fast entry into a design project for apartments and houses.',
             'conditions' => "обмер и техническое задание\nдо 3 планировочных решений\nколлажи по ключевым зонам",
-            'image' => $projects[1][6],
+            'conditions_en' => "measurement and brief\nup to 3 layout options\ncollages for key zones",
+            'image' => $projects[1][10],
             'position' => 1,
             'is_active' => true,
         ]);
 
         Review::query()->updateOrCreate(['name' => 'Анна и Дмитрий'], [
+            'name' => 'Анна и Дмитрий',
+            'name_en' => 'Anna and Dmitry',
             'date' => '2025',
+            'date_en' => '2025',
             'service' => 'Дизайн интерьера',
+            'service_en' => 'Interior Design',
             'title' => 'Проект получился точным и спокойным',
+            'title_en' => 'The project turned out precise and calm',
             'text' => 'Команда помогла собрать понятную планировку, материалы и визуализации до начала ремонта.',
+            'text_en' => 'The team helped us put together a clear layout, materials, and visualizations before renovation started.',
             'admin_reply' => 'Спасибо за доверие. Такие проекты особенно ценны, когда интерьер становится удобным каждый день.',
-            'image' => $projects[1][6],
+            'admin_reply_en' => 'Thank you for your trust. Projects like these are especially valuable when the interior becomes comfortable every day.',
+            'image' => $projects[1][10],
             'position' => 1,
             'is_published' => true,
         ]);
 
         collect([
-            ['Диплом администрации области', 'Администрация Самарской области', '2026', 'Официальное подтверждение профессионального уровня студии и вклада в развитие визуальной культуры среды.'],
-            ['Профессиональный сертификат', 'Профильная аттестация', '2026', 'Подтверждение профессиональных компетенций в проектировании, визуализации и сопровождении объектов.'],
-            ['Благодарственное письмо', 'Партнеры и заказчики', '2026', 'Отметка партнерского подхода, ответственности в коммуникации и качества работы с проектами.'],
+            ['Диплом администрации области', 'Regional Administration Diploma', 'Администрация Самарской области', 'Samara Regional Administration', '2026', 'Официальное подтверждение профессионального уровня студии и вклада в развитие визуальной культуры среды.', 'Official recognition of the studio\'s professional level and contribution to visual culture development.'],
+            ['Профессиональный сертификат', 'Professional Certificate', 'Профильная аттестация', 'Professional Certification', '2026', 'Подтверждение профессиональных компетенций в проектировании, визуализации и сопровождении объектов.', 'Confirmation of professional competencies in design, visualization, and project support.'],
+            ['Благодарственное письмо', 'Letter of Appreciation', 'Партнеры и заказчики', 'Partners and Clients', '2026', 'Отметка партнерского подхода, ответственности в коммуникации и качества работы с проектами.', 'Recognition of a collaborative approach, responsible communication, and project quality.'],
         ])->each(fn (array $award, int $index) => Award::query()->updateOrCreate(
             ['title' => $award[0]],
             [
-                'issuer' => $award[1],
-                'year' => $award[2],
-                'description' => $award[3],
+                'title' => $award[0],
+                'title_en' => $award[1],
+                'issuer' => $award[2],
+                'issuer_en' => $award[3],
+                'year' => $award[4],
+                'description' => $award[5],
+                'description_en' => $award[6],
                 'position' => $index + 1,
                 'is_active' => true,
             ],
         ));
 
         collect([
-            ['Capital Group', 'Крупная российская девелоперская компания в Москве и МО', 'https://3dsmartdesign.ru/thumb/2/UTjcjjirjkNIb7gi9Ntcqw/400r/d/capital_group_companies.jpg'],
-            ['ГК Новый ДОН', 'Девелопер в Самарской области', 'https://3dsmartdesign.ru/thumb/2/RlgeH9Y3csLYczkYsgNu2Q/400r/d/new_don.png'],
-            ['Донстрой', 'Ведущий девелопер Москвы', 'https://3dsmartdesign.ru/thumb/2/g2LV_n-kEBXik20WYSCS1A/400r/d/donstroy.png'],
-            ['Новое время', 'Девелоперские проекты', 'https://3dsmartdesign.ru/thumb/2/y2JTTt1Emb3k-aLkhLOnPg/400r/d/new_time.png'],
-            ['ГК СтройСтиль', 'Строительная группа в Самарской области', 'https://3dsmartdesign.ru/thumb/2/kLTN_w8WucjQyKHSlM_5XA/400r/d/stroy_stil.png'],
-            ['СЗ Парковый', 'Специализированный застройщик', 'https://3dsmartdesign.ru/thumb/2/CArE8uFr4NxRaKGKgcHC1g/400r/d/parkoviy.jpg'],
-            ['СЗ Весна', 'Специализированный застройщик', 'https://3dsmartdesign.ru/thumb/2/vwriae_lbfxG4f5fGZ5EGA/400r/d/vesna.png'],
-            ['Берег', 'Девелоперские проекты', 'https://3dsmartdesign.ru/thumb/2/jVJTB_JBkAeGhqSVfGu42g/400r/d/bereg.png'],
+            ['Capital Group', 'Capital Group', 'Крупная российская девелоперская компания в Москве и МО', 'Major Russian developer in Moscow and the Moscow Region', 'https://3dsmartdesign.ru/thumb/2/UTjcjjirjkNIb7gi9Ntcqw/400r/d/capital_group_companies.jpg'],
+            ['ГК Новый ДОН', 'Novy DON Group', 'Девелопер в Самарской области', 'Developer in the Samara Region', 'https://3dsmartdesign.ru/thumb/2/RlgeH9Y3csLYczkYsgNu2Q/400r/d/new_don.png'],
+            ['Донстрой', 'Donstroy', 'Ведущий девелопер Москвы', 'Leading Moscow developer', 'https://3dsmartdesign.ru/thumb/2/g2LV_n-kEBXik20WYSCS1A/400r/d/donstroy.png'],
+            ['Новое время', 'Novoye Vremya', 'Девелоперские проекты', 'Development projects', 'https://3dsmartdesign.ru/thumb/2/y2JTTt1Emb3k-aLkhLOnPg/400r/d/new_time.png'],
+            ['ГК СтройСтиль', 'StroyStil Group', 'Строительная группа в Самарской области', 'Construction group in the Samara Region', 'https://3dsmartdesign.ru/thumb/2/kLTN_w8WucjQyKHSlM_5XA/400r/d/stroy_stil.png'],
+            ['СЗ Парковый', 'SZ Parkovy', 'Специализированный застройщик', 'Specialized developer', 'https://3dsmartdesign.ru/thumb/2/CArE8uFr4NxRaKGKgcHC1g/400r/d/parkoviy.jpg'],
+            ['СЗ Весна', 'SZ Vesna', 'Специализированный застройщик', 'Specialized developer', 'https://3dsmartdesign.ru/thumb/2/vwriae_lbfxG4f5fGZ5EGA/400r/d/vesna.png'],
+            ['Берег', 'Bereg', 'Девелоперские проекты', 'Development projects', 'https://3dsmartdesign.ru/thumb/2/jVJTB_JBkAeGhqSVfGu42g/400r/d/bereg.png'],
         ])->each(fn (array $partner, int $index) => Partner::query()->updateOrCreate(
             ['name' => $partner[0]],
             [
-                'note' => $partner[1],
-                'logo' => $partner[2],
+                'name' => $partner[0],
+                'name_en' => $partner[1],
+                'note' => $partner[2],
+                'note_en' => $partner[3],
+                'logo' => $partner[4],
                 'position' => $index + 1,
                 'is_active' => true,
             ],

@@ -120,10 +120,12 @@ class MenuItemFormPage extends FormPage
                     }
                 },
             ],
-            'label' => ['nullable', 'string', 'max:255', 'required_without:page_id'],
+            'label_ru' => ['nullable', 'string', 'max:255', 'required_without:page_id'],
+            'label_en' => ['nullable', 'string', 'max:255'],
             'page_id' => ['nullable', 'integer', 'exists:pages,id', 'required_without:href'],
             'href' => ['nullable', 'string', 'max:2048', 'required_without:page_id', 'regex:/^(\/(?!\/)|#|https?:\/\/|mailto:|tel:)/i'],
-            'description' => ['nullable', 'string', 'max:2000'],
+            'description_ru' => ['nullable', 'string', 'max:2000'],
+            'description_en' => ['nullable', 'string', 'max:2000'],
             'position' => ['required', 'integer', 'min:0', 'max:9999'],
             'is_active' => ['nullable', 'boolean'],
         ];
@@ -136,14 +138,16 @@ class MenuItemFormPage extends FormPage
             'menu_area.in' => 'Выберите один из доступных разделов меню.',
             'parent_id.exists' => 'Выбранный родительский раздел больше недоступен.',
             'parent_id.not_in' => 'Пункт не может быть родителем самому себе.',
-            'label.required_without' => 'Напишите название пункта меню или выберите страницу, чтобы взять ее заголовок.',
-            'label.max' => 'Название пункта меню должно быть короче 255 символов.',
+            'label_ru.required_without' => 'Напишите русское название пункта меню или выберите страницу, чтобы взять ее заголовок.',
+            'label_ru.max' => 'Русское название пункта меню должно быть короче 255 символов.',
+            'label_en.max' => 'Английское название пункта меню должно быть короче 255 символов.',
             'page_id.required_without' => 'Выберите страницу или заполните поле "Другая ссылка".',
             'page_id.exists' => 'Выбранная страница больше недоступна. Выберите ее заново.',
             'href.required_without' => 'Выберите страницу или укажите другую ссылку.',
             'href.regex' => 'Другая ссылка должна начинаться с /, #, http://, https://, mailto: или tel:.',
             'href.max' => 'Ссылка слишком длинная. Проверьте, что вставлен именно адрес.',
-            'description.max' => 'Описание раздела услуг должно быть короче 2000 символов.',
+            'description_ru.max' => 'Русское описание раздела услуг должно быть короче 2000 символов.',
+            'description_en.max' => 'Английское описание раздела услуг должно быть короче 2000 символов.',
             'position.required' => 'Укажите порядок пункта в меню.',
             'position.integer' => 'Порядок должен быть целым числом.',
             'position.min' => 'Порядок не может быть отрицательным.',
@@ -163,13 +167,13 @@ class MenuItemFormPage extends FormPage
     private function overviewHtml(): string
     {
         $item = $this->getResource()->getItem();
-        $label = e($item?->label ?: 'Новый пункт меню');
+        $label = e($item?->labelRu() ?: 'Новый пункт меню');
         $updatedAt = $item?->updated_at?->format('d.m.Y, H:i') ?? 'еще не сохранялся';
         $target = 'Сначала выберите страницу или ссылку.';
         $area = CmsFieldSets::menuAreaLabel($item?->menu_area);
         $level = $item?->parent_id === null
             ? 'Верхний раздел'
-            : 'Подпункт раздела: ' . e($item->parent?->label ?? 'родитель не найден');
+            : 'Подпункт раздела: ' . e($item->parent?->labelRu() ?? 'родитель не найден');
 
         if ($item?->page_id !== null) {
             $target = $item->page?->title

@@ -42,19 +42,19 @@ class VacancyIndexPage extends IndexPage
         return [
             ID::make('#', 'id')->sortable(),
 
-            Preview::make('Вакансия', 'title', function (mixed $item): string {
-                if (! is_object($item)) {
+            Preview::make('Вакансия', 'title_ru', function (mixed $item): string {
+                if (! $item instanceof Vacancy) {
                     return '<div class="vac-title"><div class="vac-title__name">' . e((string) $item) . '</div></div>';
                 }
 
-                $name = e($item->title ?? '');
+                $name = e($item->fieldRu('title') ?? '');
 
                 $tags = '';
-                if (! empty($item->employment)) {
-                    $tags .= '<span class="vac-title__tag vac-title__tag--employment">' . e($item->employment) . '</span>';
+                if (filled($item->fieldRu('employment'))) {
+                    $tags .= '<span class="vac-title__tag vac-title__tag--employment">' . e($item->fieldRu('employment')) . '</span>';
                 }
-                if (! empty($item->location)) {
-                    $tags .= '<span class="vac-title__tag vac-title__tag--location">📍 ' . e($item->location) . '</span>';
+                if (filled($item->fieldRu('location'))) {
+                    $tags .= '<span class="vac-title__tag vac-title__tag--location">📍 ' . e($item->fieldRu('location')) . '</span>';
                 }
 
                 $metaHtml = $tags
@@ -64,9 +64,9 @@ class VacancyIndexPage extends IndexPage
                 return '<div class="vac-title"><div class="vac-title__name">' . $name . '</div>' . $metaHtml . '</div>';
             }),
 
-            Preview::make('Зарплата', 'salary', function (mixed $item): string {
-                $salary = is_object($item)
-                    ? (string) ($item->salary ?? '')
+            Preview::make('Зарплата', 'salary_ru', function (mixed $item): string {
+                $salary = $item instanceof Vacancy
+                    ? (string) ($item->fieldRu('salary') ?? '')
                     : (string) $item;
 
                 return ! empty(trim($salary))

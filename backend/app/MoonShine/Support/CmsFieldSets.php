@@ -213,10 +213,11 @@ final class CmsFieldSets
 
                     return sprintf(
                         '<span class="menu-tree-badge menu-tree-badge--child">Подпункт</span><span class="menu-parent-label">%s</span>',
-                        e($item->parent?->label ?? 'Родитель не найден'),
+                        e($item->parent?->labelRu() ?? 'Родитель не найден'),
                     );
                 }),
-                Text::make('Название', 'label')->sortable(),
+                Text::make('Название RU', 'label_ru')->sortable(),
+                Text::make('Название EN', 'label_en')->sortable(),
                 self::menuPageField(),
                 Preview::make('Ссылка на сайте', 'href', static function (mixed $item): string {
                     if (! $item instanceof MenuItem) {
@@ -269,20 +270,26 @@ final class CmsFieldSets
                         ->orderBy('position')
                         ->get()
                         ->mapWithKeys(static fn (MenuItem $item): array => [
-                            $item->id => sprintf('%s (%s)', $item->label, $item->siteHref() ?? 'без ссылки'),
+                            $item->id => sprintf('%s (%s)', $item->labelRu(), $item->siteHref() ?? 'без ссылки'),
                         ])
                         ->all())
                     ->nullable()
                     ->searchable()
                     ->hint('Заполняйте только для подпунктов. Если оставить пустым, запись станет верхним разделом структуры услуг.'),
-                Textarea::make('Описание раздела услуг', 'description')
+                Textarea::make('Описание раздела услуг RU', 'description_ru')
                     ->nullable()
                     ->hint('Показывается на странице "Услуги" у верхнего раздела. Для обычного меню и подпунктов можно оставить пустым.'),
+                Textarea::make('Описание раздела услуг EN', 'description_en')
+                    ->nullable()
+                    ->hint('Английская версия описания для переключателя RU/EN.'),
             ],
             'text' => [
-                Text::make('Название в меню', 'label')
+                Text::make('Название в меню RU', 'label_ru')
                     ->placeholder('О нас')
-                    ->hint('Текст, который увидит посетитель. Если выбрана страница и поле оставить пустым, возьмем заголовок страницы.'),
+                    ->hint('Русский текст, который увидит посетитель. Если выбрана страница и поле оставить пустым, возьмем заголовок страницы.'),
+                Text::make('Название в меню EN', 'label_en')
+                    ->placeholder('About Us')
+                    ->hint('Английский текст для переключателя языка на сайте.'),
             ],
             'target' => [
                 self::menuPageField(),
@@ -781,12 +788,18 @@ final class CmsFieldSets
 
     private static function faq(bool $compact): array
     {
-        return [
+        $fields = [
             ID::make()->sortable(),
-            Text::make('Вопрос', 'question')->required(),
-            Textarea::make('Ответ', 'answer')->required(),
+            Text::make('Вопрос RU', 'question_ru')->required(),
+            Text::make('Вопрос EN', 'question_en'),
             Number::make('Позиция', 'position')->sortable(),
             Switcher::make('Опубликовано', 'is_published'),
+        ];
+
+        return $compact ? $fields : [
+            ...$fields,
+            Textarea::make('Ответ RU', 'answer_ru')->required(),
+            Textarea::make('Ответ EN', 'answer_en'),
         ];
     }
 
@@ -794,19 +807,26 @@ final class CmsFieldSets
     {
         $fields = [
             ID::make()->sortable(),
-            Text::make('Заголовок', 'title')->required(),
-            Text::make('Занятость', 'employment'),
-            Text::make('Локация', 'location'),
-            Text::make('Зарплата', 'salary'),
+            Text::make('Заголовок RU', 'title_ru')->required(),
+            Text::make('Заголовок EN', 'title_en'),
+            Text::make('Занятость RU', 'employment_ru'),
+            Text::make('Занятость EN', 'employment_en'),
+            Text::make('Локация RU', 'location_ru'),
+            Text::make('Локация EN', 'location_en'),
+            Text::make('Зарплата RU', 'salary_ru'),
+            Text::make('Зарплата EN', 'salary_en'),
             Number::make('Позиция', 'position')->sortable(),
             Switcher::make('Активно', 'is_active'),
         ];
 
         return $compact ? $fields : [
             ...$fields,
-            Textarea::make('Описание', 'description'),
-            Textarea::make('Требования, по одному в строке', 'requirements'),
-            Textarea::make('Обязанности, по одной в строке', 'responsibilities'),
+            Textarea::make('Описание RU', 'description_ru'),
+            Textarea::make('Описание EN', 'description_en'),
+            Textarea::make('Требования RU, по одному в строке', 'requirements_ru'),
+            Textarea::make('Требования EN, по одному в строке', 'requirements_en'),
+            Textarea::make('Обязанности RU, по одной в строке', 'responsibilities_ru'),
+            Textarea::make('Обязанности EN, по одной в строке', 'responsibilities_en'),
         ];
     }
 

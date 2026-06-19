@@ -58,7 +58,8 @@ class PageResource extends ModelResource
         $label = trim((string) request()->input('menu_label'));
 
         $menuItem = MenuItem::query()->firstOrNew(['page_id' => $page->id]);
-        $menuItem->label = $label !== '' ? $label : $page->title;
+        $menuItem->label_ru = $label !== '' ? $label : $page->title;
+        $menuItem->label = $menuItem->label_ru;
         $menuItem->href = '/' . ltrim($page->slug, '/');
         $menuItem->is_active = $page->is_published;
 

@@ -31,6 +31,22 @@ class MenuItem extends Model
                 }
             }
 
+            if (blank($menuItem->label_ru) && filled($menuItem->label)) {
+                $menuItem->label_ru = $menuItem->label;
+            }
+
+            if (blank($menuItem->description_ru) && filled($menuItem->description)) {
+                $menuItem->description_ru = $menuItem->description;
+            }
+
+            if (blank($menuItem->label) && filled($menuItem->label_ru)) {
+                $menuItem->label = $menuItem->label_ru;
+            }
+
+            if (blank($menuItem->description) && filled($menuItem->description_ru)) {
+                $menuItem->description = $menuItem->description_ru;
+            }
+
             if ($menuItem->page_id === null) {
                 return;
             }
@@ -41,8 +57,12 @@ class MenuItem extends Model
                 return;
             }
 
+            if (blank($menuItem->label_ru) && blank($menuItem->label)) {
+                $menuItem->label_ru = $page->title;
+            }
+
             if (blank($menuItem->label)) {
-                $menuItem->label = $page->title;
+                $menuItem->label = $menuItem->label_ru ?: $page->title;
             }
 
             if (blank($menuItem->href)) {
@@ -88,5 +108,25 @@ class MenuItem extends Model
         }
 
         return filled($this->href) ? $this->href : null;
+    }
+
+    public function labelRu(): string
+    {
+        return $this->label_ru ?: $this->label;
+    }
+
+    public function labelEn(): ?string
+    {
+        return filled($this->label_en) ? $this->label_en : null;
+    }
+
+    public function descriptionRu(): ?string
+    {
+        return filled($this->description_ru) ? $this->description_ru : $this->description;
+    }
+
+    public function descriptionEn(): ?string
+    {
+        return filled($this->description_en) ? $this->description_en : null;
     }
 }

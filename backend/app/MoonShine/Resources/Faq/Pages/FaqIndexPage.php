@@ -42,13 +42,13 @@ class FaqIndexPage extends IndexPage
         return [
             ID::make('#', 'id')->sortable(),
 
-            Preview::make('Вопрос', 'question', function (mixed $item): string {
-                if (! is_object($item)) {
+            Preview::make('Вопрос', 'question_ru', function (mixed $item): string {
+                if (! $item instanceof Faq) {
                     return '<div class="faq-question"><div class="faq-question__text">' . e((string) $item) . '</div></div>';
                 }
 
-                $question  = e($item->question ?? '');
-                $answerRaw = strip_tags((string) ($item->answer ?? ''));
+                $question  = e($item->questionRu());
+                $answerRaw = strip_tags($item->answerRu());
                 $answer    = e(mb_substr($answerRaw, 0, 130));
 
                 $answerHtml = ! empty($answerRaw)

@@ -26,11 +26,13 @@ class MenuItemLinkingTest extends TestCase
         ]);
 
         $this->assertSame('О нас', $menuItem->fresh()->label);
+        $this->assertSame('О нас', $menuItem->fresh()->label_ru);
         $this->assertSame('/o-nas', $menuItem->fresh()->href);
 
         $this->getJson('/api/v1/bootstrap')
             ->assertOk()
             ->assertJsonPath('menuItems.0.label', 'О нас')
+            ->assertJsonPath('menuItems.0.labelRu', 'О нас')
             ->assertJsonPath('menuItems.0.href', '/o-nas');
 
         $page->update(['slug' => 'about-studio']);
@@ -92,6 +94,7 @@ class MenuItemLinkingTest extends TestCase
             'menu_area' => MenuItem::AREA_SERVICES,
             'page_id' => $groupPage->id,
             'description' => 'Жилые и коммерческие интерьеры.',
+            'description_en' => 'Residential and commercial interiors.',
             'position' => 1,
             'is_active' => true,
         ]);
@@ -100,6 +103,7 @@ class MenuItemLinkingTest extends TestCase
             'menu_area' => MenuItem::AREA_SERVICES,
             'parent_id' => $group->id,
             'page_id' => $childPage->id,
+            'label_en' => 'Project Procurement',
             'position' => 1,
             'is_active' => true,
         ]);
@@ -116,9 +120,12 @@ class MenuItemLinkingTest extends TestCase
             ->assertOk()
             ->assertJsonPath('menuItems', [])
             ->assertJsonPath('serviceNavigationGroups.0.title', 'Дизайн интерьера')
+            ->assertJsonPath('serviceNavigationGroups.0.titleRu', 'Дизайн интерьера')
             ->assertJsonPath('serviceNavigationGroups.0.href', '/dizajn-interyera')
             ->assertJsonPath('serviceNavigationGroups.0.description', 'Жилые и коммерческие интерьеры.')
+            ->assertJsonPath('serviceNavigationGroups.0.descriptionEn', 'Residential and commercial interiors.')
             ->assertJsonPath('serviceNavigationGroups.0.items.0.label', 'Комплектация объекта')
+            ->assertJsonPath('serviceNavigationGroups.0.items.0.labelEn', 'Project Procurement')
             ->assertJsonPath('serviceNavigationGroups.0.items.0.href', '/komplektaciya-ob-ekta')
             ->assertJsonCount(1, 'serviceNavigationGroups.0.items');
     }

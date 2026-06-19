@@ -47,8 +47,8 @@ class CmsController extends Controller
             'awards' => Award::query()->where('is_active', true)->orderBy('position')->get()->map(fn (Award $award) => $this->awardPayload($award))->values(),
             'partners' => Partner::query()->where('is_active', true)->orderBy('position')->get()->map(fn (Partner $partner) => $this->partnerPayload($partner))->values(),
             'reviews' => Review::query()->where('is_published', true)->orderBy('position')->get()->map(fn (Review $review) => $this->reviewPayload($review))->values(),
-            'faqs' => Faq::query()->where('is_published', true)->orderBy('position')->get()->map(fn (Faq $faq) => ['q' => $faq->question, 'a' => $faq->answer])->values(),
-            'vacancies' => Vacancy::query()->where('is_active', true)->orderBy('position')->get(),
+            'faqs' => Faq::query()->where('is_published', true)->orderBy('position')->get()->map(fn (Faq $faq) => $this->faqPayload($faq))->values(),
+            'vacancies' => Vacancy::query()->where('is_active', true)->orderBy('position')->get()->map(fn (Vacancy $vacancy) => $this->vacancyPayload($vacancy))->values(),
         ]);
     }
 
@@ -115,7 +115,7 @@ class CmsController extends Controller
 
     public function faqs(): JsonResponse
     {
-        return response()->json(Faq::query()->where('is_published', true)->orderBy('position')->get()->map(fn (Faq $faq) => ['q' => $faq->question, 'a' => $faq->answer])->values());
+        return response()->json(Faq::query()->where('is_published', true)->orderBy('position')->get()->map(fn (Faq $faq) => $this->faqPayload($faq))->values());
     }
 
     public function storeLead(StoreLeadRequest $request): JsonResponse
@@ -181,8 +181,8 @@ class CmsController extends Controller
             ->where('is_active', true)
             ->orderBy('position')
             ->get()
-            ->map(static fn (MenuItem $item): array => [
-                'label' => $item->label,
+            ->map(fn (MenuItem $item): array => [
+                ...$this->menuLabelPayload($item),
                 'href' => $item->siteHref(),
             ])
             ->filter(static fn (array $item): bool => filled($item['href']))
@@ -210,7 +210,7 @@ class CmsController extends Controller
                 }
 
                 $items = $group->children
-                    ->map(static function (MenuItem $item): ?array {
+                    ->map(function (MenuItem $item): ?array {
                         $href = $item->siteHref();
 
                         if ($href === null) {
@@ -218,7 +218,7 @@ class CmsController extends Controller
                         }
 
                         return [
-                            'label' => $item->label,
+                            ...$this->menuLabelPayload($item),
                             'href' => $href,
                         ];
                     })
@@ -228,15 +228,28 @@ class CmsController extends Controller
 
                 return [
                     'id' => 'service-nav-' . $group->id,
-                    'title' => $group->label,
+                    'title' => $group->labelRu(),
+                    'titleRu' => $group->labelRu(),
+                    'titleEn' => $group->labelEn(),
                     'href' => $href,
-                    'description' => $group->description ?? '',
+                    'description' => $group->descriptionRu() ?? '',
+                    'descriptionRu' => $group->descriptionRu(),
+                    'descriptionEn' => $group->descriptionEn(),
                     'items' => $items,
                 ];
             })
             ->filter()
             ->values()
             ->all();
+    }
+
+    private function menuLabelPayload(MenuItem $item): array
+    {
+        return [
+            'label' => $item->labelRu(),
+            'labelRu' => $item->labelRu(),
+            'labelEn' => $item->labelEn(),
+        ];
     }
 
     private function pagePayload(Page $page): array
@@ -264,6 +277,46 @@ class CmsController extends Controller
                     'linkHref' => $block->link_href,
                 ];
             })->values(),
+        ];
+    }
+
+    private function faqPayload(Faq $faq): array
+    {
+        return [
+            'q' => $faq->questionRu(),
+            'a' => $faq->answerRu(),
+            'qRu' => $faq->questionRu(),
+            'qEn' => $faq->questionEn(),
+            'aRu' => $faq->answerRu(),
+            'aEn' => $faq->answerEn(),
+        ];
+    }
+
+    private function vacancyPayload(Vacancy $vacancy): array
+    {
+        return [
+            'id' => $vacancy->id,
+            'title' => $vacancy->fieldRu('title'),
+            'titleRu' => $vacancy->fieldRu('title'),
+            'titleEn' => $vacancy->fieldEn('title'),
+            'employment' => $vacancy->fieldRu('employment'),
+            'employmentRu' => $vacancy->fieldRu('employment'),
+            'employmentEn' => $vacancy->fieldEn('employment'),
+            'location' => $vacancy->fieldRu('location'),
+            'locationRu' => $vacancy->fieldRu('location'),
+            'locationEn' => $vacancy->fieldEn('location'),
+            'salary' => $vacancy->fieldRu('salary'),
+            'salaryRu' => $vacancy->fieldRu('salary'),
+            'salaryEn' => $vacancy->fieldEn('salary'),
+            'description' => $vacancy->fieldRu('description'),
+            'descriptionRu' => $vacancy->fieldRu('description'),
+            'descriptionEn' => $vacancy->fieldEn('description'),
+            'requirements' => $this->lines($vacancy->fieldRu('requirements')),
+            'requirementsRu' => $this->lines($vacancy->fieldRu('requirements')),
+            'requirementsEn' => $this->lines($vacancy->fieldEn('requirements')),
+            'responsibilities' => $this->lines($vacancy->fieldRu('responsibilities')),
+            'responsibilitiesRu' => $this->lines($vacancy->fieldRu('responsibilities')),
+            'responsibilitiesEn' => $this->lines($vacancy->fieldEn('responsibilities')),
         ];
     }
 

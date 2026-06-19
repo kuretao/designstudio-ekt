@@ -44,12 +44,13 @@ class ProjectIndexPage extends IndexPage
 
             Preview::make('Проект', 'title', function (mixed $item): string {
                 if (! is_object($item)) {
-                    return '<div class="proj-card"><div class="proj-card__title">' . e((string) $item) . '</div></div>';
+                    return '<div class="proj-card"><div class="proj-card__title">'.e((string) $item).'</div></div>';
                 }
 
-                $title   = e($item->title ?? '');
-                $slug    = e($item->slug ?? '');
-                $initial = mb_strtoupper(mb_substr($item->title ?? 'P', 0, 1));
+                $rawTitle = $item->fieldRu('title') ?? '';
+                $title = e($rawTitle);
+                $slug = e($item->slug ?? '');
+                $initial = mb_strtoupper(mb_substr($rawTitle !== '' ? $rawTitle : 'P', 0, 1));
 
                 $thumb = ! empty($item->image)
                     ? sprintf(
@@ -67,9 +68,10 @@ class ProjectIndexPage extends IndexPage
             }),
 
             Preview::make('Категория', 'category', function (mixed $item): string {
-                $cat = is_object($item) ? ($item->category ?? '') : (string) $item;
+                $cat = is_object($item) ? ($item->fieldRu('category') ?? '') : (string) $item;
+
                 return ! empty($cat)
-                    ? '<span class="proj-category">' . e($cat) . '</span>'
+                    ? '<span class="proj-category">'.e($cat).'</span>'
                     : '<span style="color:#cbd5e1;font-size:12px;">—</span>';
             }),
 
@@ -79,21 +81,23 @@ class ProjectIndexPage extends IndexPage
                 }
 
                 $parts = '';
-                if (! empty($item->location)) {
-                    $parts .= '<div class="proj-meta__item">📍 ' . e($item->location) . '</div>';
+                $location = $item->fieldRu('location');
+
+                if (! empty($location)) {
+                    $parts .= '<div class="proj-meta__item">📍 '.e($location).'</div>';
                 }
                 if (! empty($item->year)) {
-                    $parts .= '<div class="proj-meta__item">📅 ' . e($item->year) . '</div>';
+                    $parts .= '<div class="proj-meta__item">📅 '.e($item->year).'</div>';
                 }
 
                 return $parts
-                    ? '<div class="proj-meta">' . $parts . '</div>'
+                    ? '<div class="proj-meta">'.$parts.'</div>'
                     : '<span style="color:#cbd5e1;font-size:12px;">—</span>';
             }),
 
             Preview::make('Статус', 'is_published', function (mixed $item): string {
                 $published = is_object($item) ? (bool) ($item->is_published ?? false) : (bool) $item;
-                $featured  = is_object($item) ? (bool) ($item->is_featured ?? false) : false;
+                $featured = is_object($item) ? (bool) ($item->is_featured ?? false) : false;
 
                 $pubBadge = $published
                     ? '<span class="proj-badge proj-badge--published">Опубликован</span>'
@@ -103,7 +107,7 @@ class ProjectIndexPage extends IndexPage
                     ? '<span class="proj-badge proj-badge--featured">★ Избранный</span>'
                     : '';
 
-                return '<div class="proj-badges">' . $pubBadge . $featBadge . '</div>';
+                return '<div class="proj-badges">'.$pubBadge.$featBadge.'</div>';
             }),
 
             Number::make('Поз.', 'position')->sortable(),
@@ -123,11 +127,16 @@ class ProjectIndexPage extends IndexPage
 
     private function buildOverviewHtml(): string
     {
-        $total       = Project::count();
-        $published   = Project::where('is_published', true)->count();
+        $total = Project::count();
+        $published = Project::where('is_published', true)->count();
         $unpublished = max($total - $published, 0);
-        $featured    = Project::where('is_featured', true)->count();
-        $categories  = Project::distinct()->whereNotNull('category')->count('category');
+        $featured = Project::where('is_featured', true)->count();
+        $categories = Project::query()
+            ->get()
+            ->map(static fn (Project $project): ?string => $project->fieldRu('category'))
+            ->filter()
+            ->unique()
+            ->count();
 
         $thisMonth = Project::whereYear('created_at', now()->year)
             ->whereMonth('created_at', now()->month)
@@ -135,7 +144,7 @@ class ProjectIndexPage extends IndexPage
 
         $withImage = Project::whereNotNull('image')->where('image', '!=', '')->count();
 
-        $latest     = Project::latest('created_at')->first(['created_at']);
+        $latest = Project::latest('created_at')->first(['created_at']);
         $latestDate = $latest?->created_at?->format('d.m.Y') ?? 'Нет';
 
         $createUrl = $this->getResource()->getFormPageUrl();

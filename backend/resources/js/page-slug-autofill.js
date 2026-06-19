@@ -85,7 +85,7 @@
             return;
         }
 
-        const titleInput = form.querySelector('input[name="title"]');
+        const titleInput = form.querySelector('input[name="title_ru"]');
         const slugInput = form.querySelector('input[name="slug"]');
         const control = form.querySelector("[data-page-slug-autofill-control]");
         const toggle = control?.querySelector("[data-page-slug-autofill-toggle]");

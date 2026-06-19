@@ -44,12 +44,14 @@ class AwardIndexPage extends IndexPage
 
             Preview::make('Награда', 'title', function (mixed $item): string {
                 if (! is_object($item)) {
-                    return '<div class="award-card"><div class="award-card__title">' . e((string) $item) . '</div></div>';
+                    return '<div class="award-card"><div class="award-card__title">'.e((string) $item).'</div></div>';
                 }
 
-                $title   = e($item->title ?? '');
-                $issuer  = $item->issuer ? e($item->issuer) : null;
-                $initial = mb_strtoupper(mb_substr($item->title ?? 'A', 0, 1));
+                $rawTitle = $item->fieldRu('title') ?? '';
+                $title = e($rawTitle);
+                $issuerValue = $item->fieldRu('issuer');
+                $issuer = $issuerValue ? e($issuerValue) : null;
+                $initial = mb_strtoupper(mb_substr($rawTitle !== '' ? $rawTitle : 'A', 0, 1));
 
                 $thumbSrc = $item->effective_image ?? null;
                 $thumb = ! empty($thumbSrc)
@@ -60,7 +62,7 @@ class AwardIndexPage extends IndexPage
                     : sprintf('<div class="award-card__thumb">%s</div>', $initial);
 
                 $issuerHtml = $issuer
-                    ? '<div class="award-card__issuer">' . $issuer . '</div>'
+                    ? '<div class="award-card__issuer">'.$issuer.'</div>'
                     : '';
 
                 return sprintf(
@@ -72,16 +74,18 @@ class AwardIndexPage extends IndexPage
             }),
 
             Preview::make('Описание', 'description', function (mixed $item): string {
-                $text = is_object($item) ? ($item->description ?? '') : (string) $item;
+                $text = is_object($item) ? ($item->fieldRu('description') ?? '') : (string) $item;
+
                 return ! empty($text)
-                    ? '<div class="award-description">' . e($text) . '</div>'
+                    ? '<div class="award-description">'.e($text).'</div>'
                     : '<span style="color:#cbd5e1;font-size:12px;">—</span>';
             }),
 
             Preview::make('Год', 'year', function (mixed $item): string {
                 $year = is_object($item) ? ($item->year ?? '') : (string) $item;
+
                 return ! empty($year)
-                    ? '<span>' . e((string) $year) . '</span>'
+                    ? '<span>'.e((string) $year).'</span>'
                     : '<span style="color:#cbd5e1;font-size:12px;">—</span>';
             }),
 
@@ -110,17 +114,17 @@ class AwardIndexPage extends IndexPage
 
     private function buildOverviewHtml(): string
     {
-        $total    = Award::count();
-        $active   = Award::where('is_active', true)->count();
+        $total = Award::count();
+        $active = Award::where('is_active', true)->count();
         $inactive = max($total - $active, 0);
         $withImage = Award::where(function ($q) {
             $q->whereNotNull('image_file')->where('image_file', '!=', '')
-              ->orWhere(function ($q2) {
-                  $q2->whereNotNull('image')->where('image', '!=', '');
-              });
+                ->orWhere(function ($q2) {
+                    $q2->whereNotNull('image')->where('image', '!=', '');
+                });
         })->count();
 
-        $latest     = Award::latest('created_at')->first(['created_at']);
+        $latest = Award::latest('created_at')->first(['created_at']);
         $latestDate = $latest?->created_at?->format('d.m.Y') ?? 'Нет';
 
         $createUrl = $this->getResource()->getFormPageUrl();

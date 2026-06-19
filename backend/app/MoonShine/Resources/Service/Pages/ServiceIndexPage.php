@@ -44,13 +44,15 @@ class ServiceIndexPage extends IndexPage
 
             Preview::make('Услуга', 'title', function (mixed $item): string {
                 if (! is_object($item)) {
-                    return '<div class="svc-card"><div class="svc-card__title">' . e((string) $item) . '</div></div>';
+                    return '<div class="svc-card"><div class="svc-card__title">'.e((string) $item).'</div></div>';
                 }
 
-                $title   = e($item->title ?? '');
-                $slug    = e($item->slug ?? '');
-                $eyebrow = $item->eyebrow ? e($item->eyebrow) : null;
-                $initial = mb_strtoupper(mb_substr($item->title ?? 'S', 0, 1));
+                $rawTitle = $item->fieldRu('title') ?? '';
+                $title = e($rawTitle);
+                $slug = e($item->slug ?? '');
+                $eyebrowValue = $item->fieldRu('eyebrow');
+                $eyebrow = $eyebrowValue ? e($eyebrowValue) : null;
+                $initial = mb_strtoupper(mb_substr($rawTitle !== '' ? $rawTitle : 'S', 0, 1));
 
                 $thumb = ! empty($item->image)
                     ? sprintf(
@@ -79,22 +81,25 @@ class ServiceIndexPage extends IndexPage
 
                 $parts = '';
 
-                if (! empty($item->price)) {
+                $price = $item->fieldRu('price');
+                $timeline = $item->fieldRu('timeline');
+
+                if (! empty($price)) {
                     $parts .= sprintf(
                         '<span class="svc-price">💰 %s</span>',
-                        e($item->price)
+                        e($price)
                     );
                 }
 
-                if (! empty($item->timeline)) {
+                if (! empty($timeline)) {
                     $parts .= sprintf(
                         '<span class="svc-timeline">⏱ %s</span>',
-                        e($item->timeline)
+                        e($timeline)
                     );
                 }
 
                 return $parts
-                    ? '<div class="svc-pricing">' . $parts . '</div>'
+                    ? '<div class="svc-pricing">'.$parts.'</div>'
                     : '<span style="color:#cbd5e1;font-size:12px;">—</span>';
             }),
 
@@ -123,18 +128,25 @@ class ServiceIndexPage extends IndexPage
 
     private function buildOverviewHtml(): string
     {
-        $total       = Service::count();
-        $published   = Service::where('is_published', true)->count();
+        $total = Service::count();
+        $published = Service::where('is_published', true)->count();
         $unpublished = max($total - $published, 0);
-        $withPrice   = Service::whereNotNull('price')->where('price', '!=', '')->count();
-        $withImage    = Service::whereNotNull('image')->where('image', '!=', '')->count();
+        $withPrice = Service::where(function ($query): void {
+            $query->whereNotNull('price_ru')
+                ->where('price_ru', '!=', '')
+                ->orWhere(function ($fallback): void {
+                    $fallback->whereNotNull('price')
+                        ->where('price', '!=', '');
+                });
+        })->count();
+        $withImage = Service::whereNotNull('image')->where('image', '!=', '')->count();
         $withoutPrice = max($total - $withPrice, 0);
 
         $thisMonth = Service::whereYear('created_at', now()->year)
             ->whereMonth('created_at', now()->month)
             ->count();
 
-        $latest     = Service::latest('created_at')->first(['created_at']);
+        $latest = Service::latest('created_at')->first(['created_at']);
         $latestDate = $latest?->created_at?->format('d.m.Y') ?? 'Нет';
 
         $createUrl = $this->getResource()->getFormPageUrl();

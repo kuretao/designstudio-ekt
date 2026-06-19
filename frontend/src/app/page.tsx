@@ -9,8 +9,20 @@ export default function Page() {
   const [activeProject, setActiveProject] = useState(projects[0]);
 
   useEffect(() => {
-    if (projects[0]) setActiveProject((current) => current ?? projects[0]);
+    if (!projects[0]) return;
+
+    setActiveProject((current) => {
+      if (!current) return projects[0];
+      return (
+        projects.find((project) => project.slug === current.slug) ?? projects[0]
+      );
+    });
   }, [projects]);
 
-  return <HomePage activeProject={activeProject} setActiveProject={setActiveProject} />;
+  return (
+    <HomePage
+      activeProject={activeProject}
+      setActiveProject={setActiveProject}
+    />
+  );
 }

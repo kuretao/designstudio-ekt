@@ -81,12 +81,17 @@ class PageBlockFormPage extends FormPage
         return [
             'page_id' => ['required', 'integer', 'exists:pages,id'],
             'type' => ['required', Rule::in(['hero', 'text', 'media', 'gallery', 'quote', 'cta'])],
-            'eyebrow' => ['nullable', 'string', 'max:255'],
-            'title' => ['nullable', 'string', 'max:255'],
-            'subtitle' => ['nullable', 'string'],
-            'text' => ['nullable', 'string'],
+            'eyebrow_ru' => ['nullable', 'string', 'max:255'],
+            'eyebrow_en' => ['nullable', 'string', 'max:255'],
+            'title_ru' => ['nullable', 'string', 'max:255'],
+            'title_en' => ['nullable', 'string', 'max:255'],
+            'subtitle_ru' => ['nullable', 'string'],
+            'subtitle_en' => ['nullable', 'string'],
+            'text_ru' => ['nullable', 'string'],
+            'text_en' => ['nullable', 'string'],
             'image' => ['nullable', 'string'],
-            'link_label' => ['nullable', 'string', 'max:255'],
+            'link_label_ru' => ['nullable', 'string', 'max:255'],
+            'link_label_en' => ['nullable', 'string', 'max:255'],
             'link_href' => ['nullable', 'string', 'max:2048'],
             'position' => ['required', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
@@ -100,9 +105,12 @@ class PageBlockFormPage extends FormPage
             'page_id.exists' => 'Выбранная страница не найдена. Выберите страницу из списка.',
             'type.required' => 'Выберите вид блока.',
             'type.in' => 'Выберите вид блока из списка.',
-            'eyebrow.max' => 'Маленькая строка над заголовком должна быть короче 255 символов.',
-            'title.max' => 'Заголовок блока должен быть короче 255 символов.',
-            'link_label.max' => 'Текст кнопки должен быть короче 255 символов.',
+            'eyebrow_ru.max' => 'Маленькая строка RU над заголовком должна быть короче 255 символов.',
+            'eyebrow_en.max' => 'Маленькая строка EN над заголовком должна быть короче 255 символов.',
+            'title_ru.max' => 'Заголовок блока RU должен быть короче 255 символов.',
+            'title_en.max' => 'Заголовок блока EN должен быть короче 255 символов.',
+            'link_label_ru.max' => 'Текст кнопки RU должен быть короче 255 символов.',
+            'link_label_en.max' => 'Текст кнопки EN должен быть короче 255 символов.',
             'link_href.max' => 'Адрес кнопки получился слишком длинным.',
             'position.required' => 'Укажите порядок блока на странице.',
             'position.integer' => 'Порядок блока должен быть числом.',
@@ -123,12 +131,12 @@ class PageBlockFormPage extends FormPage
     {
         $item = $this->getResource()->getItem();
         $page = $item?->page;
-        $pageTitle = e($page?->title ?: 'Страница еще не выбрана');
+        $pageTitle = e($page?->fieldRu('title') ?: $page?->title ?: 'Страница еще не выбрана');
         $path = ! $page
             ? 'страница выбирается в форме'
-            : ($page->slug === 'home' ? 'Главная страница сайта' : '/' . e(ltrim((string) $page->slug, '/')));
+            : ($page->slug === 'home' ? 'Главная страница сайта' : '/'.e(ltrim((string) $page->slug, '/')));
         $type = e(CmsFieldSets::pageBlockTypeLabel($item?->type));
-        $title = e($item?->title ?: 'Новый блок страницы');
+        $title = e($item?->fieldRu('title') ?: $item?->title ?: 'Новый блок страницы');
         $updatedAt = $item?->updated_at?->format('d.m.Y, H:i') ?? 'еще не сохранялся';
 
         return <<<HTML

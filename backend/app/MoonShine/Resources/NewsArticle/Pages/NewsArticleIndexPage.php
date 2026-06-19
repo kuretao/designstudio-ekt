@@ -44,13 +44,15 @@ class NewsArticleIndexPage extends IndexPage
 
             Preview::make('Статья', 'title', function (mixed $item): string {
                 if (! is_object($item)) {
-                    return '<div class="news-card"><div class="news-card__title">' . e((string) $item) . '</div></div>';
+                    return '<div class="news-card"><div class="news-card__title">'.e((string) $item).'</div></div>';
                 }
 
-                $title    = e($item->title ?? '');
-                $slug     = e($item->slug ?? '');
-                $category = $item->category ? e($item->category) : null;
-                $initial  = mb_strtoupper(mb_substr($item->title ?? 'N', 0, 1));
+                $rawTitle = $item->fieldRu('title') ?? '';
+                $title = e($rawTitle);
+                $slug = e($item->slug ?? '');
+                $categoryValue = $item->fieldRu('category');
+                $category = $categoryValue ? e($categoryValue) : null;
+                $initial = mb_strtoupper(mb_substr($rawTitle !== '' ? $rawTitle : 'N', 0, 1));
 
                 $thumb = ! empty($item->image)
                     ? sprintf(
@@ -73,9 +75,10 @@ class NewsArticleIndexPage extends IndexPage
             }),
 
             Preview::make('Аннотация', 'preview', function (mixed $item): string {
-                $text = is_object($item) ? ($item->preview ?? '') : (string) $item;
+                $text = is_object($item) ? ($item->fieldRu('preview') ?? '') : (string) $item;
+
                 return ! empty($text)
-                    ? '<div class="news-preview">' . e($text) . '</div>'
+                    ? '<div class="news-preview">'.e($text).'</div>'
                     : '<span style="color:#cbd5e1;font-size:12px;">—</span>';
             }),
 
@@ -86,22 +89,25 @@ class NewsArticleIndexPage extends IndexPage
 
                 $parts = '';
 
-                if (! empty($item->date)) {
+                $date = $item->fieldRu('date');
+                $readingTime = $item->fieldRu('reading_time');
+
+                if (! empty($date)) {
                     $parts .= sprintf(
                         '<div class="news-meta__date">📅 %s</div>',
-                        e($item->date)
+                        e($date)
                     );
                 }
 
-                if (! empty($item->reading_time)) {
+                if (! empty($readingTime)) {
                     $parts .= sprintf(
                         '<span class="news-meta__reading-pill">📖 %s</span>',
-                        e($item->reading_time)
+                        e($readingTime)
                     );
                 }
 
                 return $parts
-                    ? '<div class="news-meta">' . $parts . '</div>'
+                    ? '<div class="news-meta">'.$parts.'</div>'
                     : '<span style="color:#cbd5e1;font-size:12px;">—</span>';
             }),
 
@@ -130,19 +136,31 @@ class NewsArticleIndexPage extends IndexPage
 
     private function buildOverviewHtml(): string
     {
-        $total       = NewsArticle::count();
-        $published   = NewsArticle::where('is_published', true)->count();
+        $total = NewsArticle::count();
+        $published = NewsArticle::where('is_published', true)->count();
         $unpublished = max($total - $published, 0);
-        $categories  = NewsArticle::distinct()->whereNotNull('category')->count('category');
-        $withImage   = NewsArticle::whereNotNull('image')->where('image', '!=', '')->count();
+        $categories = NewsArticle::query()
+            ->get()
+            ->map(static fn (NewsArticle $article): ?string => $article->fieldRu('category'))
+            ->filter()
+            ->unique()
+            ->count();
+        $withImage = NewsArticle::whereNotNull('image')->where('image', '!=', '')->count();
 
         $thisMonth = NewsArticle::whereYear('created_at', now()->year)
             ->whereMonth('created_at', now()->month)
             ->count();
 
-        $withReading = NewsArticle::whereNotNull('reading_time')->where('reading_time', '!=', '')->count();
+        $withReading = NewsArticle::where(function ($query): void {
+            $query->whereNotNull('reading_time_ru')
+                ->where('reading_time_ru', '!=', '')
+                ->orWhere(function ($fallback): void {
+                    $fallback->whereNotNull('reading_time')
+                        ->where('reading_time', '!=', '');
+                });
+        })->count();
 
-        $latest     = NewsArticle::latest('created_at')->first(['created_at']);
+        $latest = NewsArticle::latest('created_at')->first(['created_at']);
         $latestDate = $latest?->created_at?->format('d.m.Y') ?? 'Нет';
 
         $createUrl = $this->getResource()->getFormPageUrl();

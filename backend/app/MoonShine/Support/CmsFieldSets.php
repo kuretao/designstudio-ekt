@@ -10,8 +10,8 @@ use App\Models\PageBlock;
 use App\MoonShine\Resources\Page\PageResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use MoonShine\CKEditor\Fields\CKEditor;
-use MoonShine\Laravel\Fields\Slug;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
+use MoonShine\Laravel\Fields\Slug;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\File;
 use MoonShine\UI\Fields\ID;
@@ -353,12 +353,13 @@ final class CmsFieldSets
         if ($compact) {
             return [
                 ID::make()->sortable(),
-                Text::make('Заголовок', 'title')->sortable(),
+                Text::make('Заголовок RU', 'title_ru')->sortable(),
+                Text::make('Заголовок EN', 'title_en'),
                 Preview::make('Адрес', 'slug', static function (mixed $item): string {
                     $slug = $item instanceof Page ? $item->slug : (string) $item;
 
                     return filled($slug)
-                        ? '<code class="page-path">/' . e(ltrim($slug, '/')) . '</code>'
+                        ? '<code class="page-path">/'.e(ltrim($slug, '/')).'</code>'
                         : '<span class="page-badge page-badge--muted">Нет адреса</span>';
                 }),
                 Preview::make('Тип', 'template', static function (mixed $item): string {
@@ -394,15 +395,18 @@ final class CmsFieldSets
     {
         return match ($section) {
             'main' => [
-                Text::make('Заголовок страницы', 'title')
+                Text::make('Заголовок страницы RU', 'title_ru')
                     ->required()
-                    ->placeholder('Доставка и оплата')
-                    ->hint('Главный заголовок страницы. Он будет виден посетителю и поможет создать адрес.'),
+                    ->placeholder('О нас')
+                    ->hint('Русский заголовок страницы. Он будет виден посетителю и поможет создать адрес.'),
+                Text::make('Заголовок страницы EN', 'title_en')
+                    ->placeholder('About Us')
+                    ->hint('Английский заголовок для переключателя RU/EN.'),
                 Slug::make('Адрес страницы', 'slug')
-                    ->from('title')
+                    ->from('title_ru')
                     ->unique()
                     ->required()
-                    ->placeholder('dostavka-i-oplata')
+                    ->placeholder('o-nas')
                     ->hint('Часть ссылки после домена. Для новой страницы обычно достаточно адреса, который предложит форма.'),
                 Select::make('Тип страницы', 'template')
                     ->options([
@@ -414,16 +418,24 @@ final class CmsFieldSets
                     ])
                     ->default('text')
                     ->hint('Для новой страницы обычно выбирайте "Текстовая" или "Страница-конструктор". Служебные типы нужны только существующим разделам вроде блога и юридических страниц.'),
-                CKEditor::make('Текст страницы', 'body')
-                    ->hint('Пишите текст как в обычном редакторе: заголовки, абзацы, списки и ссылки сохранятся на странице.'),
+                CKEditor::make('Текст страницы RU', 'body_ru')
+                    ->hint('Русский текст страницы. Для /o-nas чаще редактируются блоки страницы ниже в разделе "Блоки страниц".'),
+                CKEditor::make('Текст страницы EN', 'body_en')
+                    ->hint('Английская версия текста страницы. Если оставить пустой, сайт покажет русский fallback.'),
             ],
             'seo' => [
-                Text::make('SEO-заголовок', 'seo_title')
-                    ->placeholder('Доставка и оплата | 3D Smart Design')
-                    ->hint('Заголовок во вкладке и в поиске. Можно оставить пустым, тогда сайт использует заголовок страницы.'),
-                Textarea::make('SEO-описание', 'seo_description')
+                Text::make('SEO-заголовок RU', 'seo_title_ru')
+                    ->placeholder('О нас | 3D Smart Design')
+                    ->hint('Русский заголовок во вкладке и в поиске. Можно оставить пустым.'),
+                Text::make('SEO-заголовок EN', 'seo_title_en')
+                    ->placeholder('About Us | 3D Smart Design')
+                    ->hint('Английский SEO-заголовок.'),
+                Textarea::make('SEO-описание RU', 'seo_description_ru')
                     ->placeholder('Коротко опишите, что посетитель найдет на этой странице.')
-                    ->hint('Короткое описание для поиска и превью. Достаточно одного-двух предложений.'),
+                    ->hint('Русское описание для поиска и превью. Достаточно одного-двух предложений.'),
+                Textarea::make('SEO-описание EN', 'seo_description_en')
+                    ->placeholder('Briefly describe what visitors will find on this page.')
+                    ->hint('Английское описание для поиска и превью.'),
             ],
             'publish' => [
                 Switcher::make('Опубликовать страницу', 'is_published')
@@ -434,11 +446,16 @@ final class CmsFieldSets
                 Switcher::make('Создать или обновить пункт меню', 'create_menu_item')
                     ->onApply(static fn (Page $page): Page => $page)
                     ->hint('Включите при сохранении, если эта страница должна появиться в меню сайта.'),
-                Text::make('Название в меню', 'menu_label')
+                Text::make('Название в меню RU', 'menu_label_ru')
                     ->nullable()
-                    ->placeholder('Доставка')
+                    ->placeholder('О нас')
                     ->onApply(static fn (Page $page): Page => $page)
-                    ->hint('Можно оставить пустым: тогда пункт меню получит заголовок страницы.'),
+                    ->hint('Можно оставить пустым: тогда пункт меню получит русский заголовок страницы.'),
+                Text::make('Название в меню EN', 'menu_label_en')
+                    ->nullable()
+                    ->placeholder('About Us')
+                    ->onApply(static fn (Page $page): Page => $page)
+                    ->hint('Английское название пункта меню. Можно оставить пустым, если есть EN-заголовок страницы.'),
             ],
             default => [],
         };
@@ -470,7 +487,8 @@ final class CmsFieldSets
                         e(self::pageBlockTypeLabel($type)),
                     );
                 }),
-                Text::make('Заголовок', 'title')->sortable(),
+                Text::make('Заголовок RU', 'title_ru')->sortable(),
+                Text::make('Заголовок EN', 'title_en'),
                 Number::make('Порядок', 'position')->sortable(),
                 Switcher::make('Показывать', 'is_active'),
             ];
@@ -503,22 +521,36 @@ final class CmsFieldSets
                     ->hint('Для главной и шапок страниц выбирайте "Первый экран". Это блок с маленькой строкой, большим заголовком, описанием и кнопкой.'),
             ],
             'content' => [
-                Text::make('Маленькая строка над заголовком', 'eyebrow')
+                Text::make('Маленькая строка над заголовком RU', 'eyebrow_ru')
                     ->placeholder('Студия дизайна интерьера и архитектуры в Самаре')
-                    ->hint('На первом экране это тонкая подпись над крупным заголовком. Можно оставить пустой.'),
-                Text::make('Главный заголовок блока', 'title')
-                    ->placeholder('Дизайн с умом.')
-                    ->hint('Самый заметный текст блока. На главной это большая фраза на первом экране.'),
-                Textarea::make('Описание под заголовком', 'subtitle')
-                    ->placeholder('Создаем интерьеры, архитектуру, 3D-визуализацию и ландшафтные проекты...')
-                    ->hint('Короткий абзац рядом с кнопкой или сразу под заголовком. Для главного блока заполняйте именно это поле.'),
-                Textarea::make('Дополнительный текст блока', 'text')
-                    ->hint('Нужен для страниц, где блок показывает более длинное пояснение или текст карточки. Если на первом экране достаточно описания выше, поле можно оставить пустым.'),
+                    ->hint('Русская тонкая подпись над крупным заголовком. Можно оставить пустой.'),
+                Text::make('Маленькая строка над заголовком EN', 'eyebrow_en')
+                    ->placeholder('Interior design and architecture studio in Samara')
+                    ->hint('Английская подпись над заголовком.'),
+                Text::make('Главный заголовок блока RU', 'title_ru')
+                    ->placeholder('О нас')
+                    ->hint('Русский главный заголовок блока.'),
+                Text::make('Главный заголовок блока EN', 'title_en')
+                    ->placeholder('About Us')
+                    ->hint('Английский главный заголовок блока.'),
+                Textarea::make('Описание под заголовком RU', 'subtitle_ru')
+                    ->placeholder('Редактируемый блок страницы из MoonShine.')
+                    ->hint('Русский короткий абзац рядом с кнопкой или сразу под заголовком.'),
+                Textarea::make('Описание под заголовком EN', 'subtitle_en')
+                    ->placeholder('Editable page block from MoonShine.')
+                    ->hint('Английский короткий абзац рядом с кнопкой или сразу под заголовком.'),
+                Textarea::make('Дополнительный текст блока RU', 'text_ru')
+                    ->hint('Русский дополнительный текст блока.'),
+                Textarea::make('Дополнительный текст блока EN', 'text_en')
+                    ->hint('Английский дополнительный текст блока.'),
             ],
             'link' => [
-                Text::make('Текст кнопки', 'link_label')
+                Text::make('Текст кнопки RU', 'link_label_ru')
                     ->placeholder('Обсудить проект')
-                    ->hint('Надпись на кнопке. Если кнопка в этом блоке не нужна, оставьте поле пустым.'),
+                    ->hint('Русская надпись на кнопке. Если кнопка в этом блоке не нужна, оставьте поле пустым.'),
+                Text::make('Текст кнопки EN', 'link_label_en')
+                    ->placeholder('Discuss a project')
+                    ->hint('Английская надпись на кнопке.'),
                 Text::make('Куда ведет кнопка', 'link_href')
                     ->placeholder('/kontakty')
                     ->hint('Для страницы сайта укажите путь с /. Например: /kontakty. Можно вставить и полную внешнюю ссылку.'),
@@ -561,7 +593,7 @@ final class CmsFieldSets
                     return '';
                 }
 
-                $path = $page->slug === 'home' ? 'Главная' : '/' . ltrim((string) $page->slug, '/');
+                $path = $page->slug === 'home' ? 'Главная' : '/'.ltrim((string) $page->slug, '/');
 
                 return sprintf(
                     '%s - %s%s',
@@ -585,17 +617,21 @@ final class CmsFieldSets
         $fields = [
             ID::make()->sortable(),
             Text::make('Slug', 'slug')->required(),
-            Text::make('Заголовок', 'title')->required(),
-            Text::make('Категория', 'category')->required(),
+            Text::make('Заголовок RU', 'title_ru')->required(),
+            Text::make('Заголовок EN', 'title_en'),
+            Text::make('Категория RU', 'category_ru')->required(),
+            Text::make('Категория EN', 'category_en'),
             Number::make('Позиция', 'position')->sortable(),
             Switcher::make('Опубликовано', 'is_published'),
         ];
 
         return $compact ? $fields : [
             ...$fields,
-            Text::make('Локация', 'location'),
+            Text::make('Локация RU', 'location_ru'),
+            Text::make('Локация EN', 'location_en'),
             Text::make('Год', 'year'),
-            Textarea::make('Описание', 'description'),
+            Textarea::make('Описание RU', 'description_ru'),
+            Textarea::make('Описание EN', 'description_en'),
             Image::make('Загрузить главное изображение', 'image_file')
                 ->disk('public')
                 ->dir('projects')
@@ -632,17 +668,22 @@ final class CmsFieldSets
         $fields = [
             ID::make()->sortable(),
             Text::make('Slug', 'slug')->required(),
-            Text::make('Заголовок', 'title')->required(),
-            Text::make('Стоимость', 'price'),
-            Text::make('Срок', 'timeline'),
+            Text::make('Заголовок RU', 'title_ru')->required(),
+            Text::make('Заголовок EN', 'title_en'),
+            Text::make('Стоимость RU', 'price_ru'),
+            Text::make('Стоимость EN', 'price_en'),
+            Text::make('Срок RU', 'timeline_ru'),
+            Text::make('Срок EN', 'timeline_en'),
             Number::make('Позиция', 'position')->sortable(),
             Switcher::make('Опубликовано', 'is_published'),
         ];
 
         return $compact ? $fields : [
             ...$fields,
-            Text::make('Надзаголовок', 'eyebrow'),
-            CKEditor::make('Текст', 'text'),
+            Text::make('Надзаголовок RU', 'eyebrow_ru'),
+            Text::make('Надзаголовок EN', 'eyebrow_en'),
+            CKEditor::make('Текст RU', 'text_ru'),
+            CKEditor::make('Текст EN', 'text_en'),
             Image::make('Загрузить изображение на сервер', 'image_file')
                 ->disk('public')
                 ->dir('services')
@@ -652,9 +693,12 @@ final class CmsFieldSets
                 ->hint('Загрузите файл — он сохранится в хранилище. Если загружен файл, он имеет приоритет над URL ниже.'),
             Textarea::make('Или URL изображения', 'image')
                 ->hint('Вставьте внешнюю ссылку. Используется только если файл выше не загружен.'),
-            Textarea::make('Результаты, по одному в строке', 'deliverables'),
-            Textarea::make('Преимущества, по одному в строке', 'benefits'),
-            Textarea::make('Этапы, по одному в строке', 'process'),
+            Textarea::make('Результаты RU, по одному в строке', 'deliverables_ru'),
+            Textarea::make('Результаты EN, по одному в строке', 'deliverables_en'),
+            Textarea::make('Преимущества RU, по одному в строке', 'benefits_ru'),
+            Textarea::make('Преимущества EN, по одному в строке', 'benefits_en'),
+            Textarea::make('Этапы RU, по одному в строке', 'process_ru'),
+            Textarea::make('Этапы EN, по одному в строке', 'process_en'),
         ];
     }
 
@@ -663,8 +707,10 @@ final class CmsFieldSets
         $fields = [
             ID::make()->sortable(),
             Text::make('Slug', 'slug')->required(),
-            Text::make('Заголовок', 'title')->required(),
-            Text::make('Категория', 'category'),
+            Text::make('Заголовок RU', 'title_ru')->required(),
+            Text::make('Заголовок EN', 'title_en'),
+            Text::make('Категория RU', 'category_ru'),
+            Text::make('Категория EN', 'category_en'),
             Date::make('Дата ISO', 'date_iso'),
             Number::make('Позиция', 'position')->sortable(),
             Switcher::make('Опубликовано', 'is_published'),
@@ -672,8 +718,10 @@ final class CmsFieldSets
 
         return $compact ? $fields : [
             ...$fields,
-            Text::make('Дата для показа', 'date'),
-            Textarea::make('Анонс', 'preview'),
+            Text::make('Дата для показа RU', 'date_ru'),
+            Text::make('Дата для показа EN', 'date_en'),
+            Textarea::make('Анонс RU', 'preview_ru'),
+            Textarea::make('Анонс EN', 'preview_en'),
             Image::make('Загрузить изображение на сервер', 'image_file')
                 ->disk('public')
                 ->dir('news')
@@ -683,8 +731,10 @@ final class CmsFieldSets
                 ->hint('Загрузите файл — он сохранится в хранилище. Если загружен файл, он имеет приоритет над URL ниже.'),
             Textarea::make('Или URL изображения', 'image')
                 ->hint('Вставьте внешнюю ссылку. Используется только если файл выше не загружен.'),
-            Text::make('Время чтения', 'reading_time'),
-            Textarea::make('Текст статьи', 'body'),
+            Text::make('Время чтения RU', 'reading_time_ru'),
+            Text::make('Время чтения EN', 'reading_time_en'),
+            Textarea::make('Текст статьи RU', 'body_ru'),
+            Textarea::make('Текст статьи EN', 'body_en'),
         ];
     }
 
@@ -693,18 +743,24 @@ final class CmsFieldSets
         $fields = [
             ID::make()->sortable(),
             Text::make('Slug', 'slug')->required(),
-            Text::make('Заголовок', 'title')->required(),
-            Text::make('Бейдж', 'badge'),
+            Text::make('Заголовок RU', 'title_ru')->required(),
+            Text::make('Заголовок EN', 'title_en'),
+            Text::make('Бейдж RU', 'badge_ru'),
+            Text::make('Бейдж EN', 'badge_en'),
             Number::make('Позиция', 'position')->sortable(),
             Switcher::make('Активно', 'is_active'),
         ];
 
         return $compact ? $fields : [
             ...$fields,
-            Text::make('Акцент', 'highlight'),
-            Text::make('Действует до', 'valid_until'),
-            Textarea::make('Описание', 'description'),
-            Textarea::make('Условия, по одному в строке', 'conditions'),
+            Text::make('Акцент RU', 'highlight_ru'),
+            Text::make('Акцент EN', 'highlight_en'),
+            Text::make('Действует до RU', 'valid_until_ru'),
+            Text::make('Действует до EN', 'valid_until_en'),
+            Textarea::make('Описание RU', 'description_ru'),
+            Textarea::make('Описание EN', 'description_en'),
+            Textarea::make('Условия RU, по одному в строке', 'conditions_ru'),
+            Textarea::make('Условия EN, по одному в строке', 'conditions_en'),
             Image::make('Загрузить изображение на сервер', 'image_file')
                 ->disk('public')
                 ->dir('promo')
@@ -721,8 +777,10 @@ final class CmsFieldSets
     {
         $fields = [
             ID::make()->sortable(),
-            Text::make('Заголовок', 'title')->required(),
-            Text::make('Кем выдано', 'issuer'),
+            Text::make('Заголовок RU', 'title_ru')->required(),
+            Text::make('Заголовок EN', 'title_en'),
+            Text::make('Кем выдано RU', 'issuer_ru'),
+            Text::make('Кем выдано EN', 'issuer_en'),
             Text::make('Год', 'year'),
             Number::make('Позиция', 'position')->sortable(),
             Switcher::make('Активно', 'is_active'),
@@ -730,7 +788,8 @@ final class CmsFieldSets
 
         return $compact ? $fields : [
             ...$fields,
-            Textarea::make('Описание', 'description'),
+            Textarea::make('Описание RU', 'description_ru'),
+            Textarea::make('Описание EN', 'description_en'),
             Image::make('Загрузить изображение на сервер', 'image_file')
                 ->disk('public')
                 ->dir('awards')
@@ -771,18 +830,24 @@ final class CmsFieldSets
     {
         $fields = [
             ID::make()->sortable(),
-            Text::make('Имя', 'name')->required(),
-            Text::make('Услуга', 'service'),
-            Text::make('Заголовок', 'title'),
+            Text::make('Имя RU', 'name_ru')->required(),
+            Text::make('Имя EN', 'name_en'),
+            Text::make('Услуга RU', 'service_ru'),
+            Text::make('Услуга EN', 'service_en'),
+            Text::make('Заголовок RU', 'title_ru'),
+            Text::make('Заголовок EN', 'title_en'),
             Number::make('Позиция', 'position')->sortable(),
             Switcher::make('Опубликовано', 'is_published'),
         ];
 
         return $compact ? $fields : [
             ...$fields,
-            Text::make('Дата', 'date'),
-            Textarea::make('Текст', 'text'),
-            Textarea::make('Ответ администратора', 'admin_reply'),
+            Text::make('Дата RU', 'date_ru'),
+            Text::make('Дата EN', 'date_en'),
+            Textarea::make('Текст RU', 'text_ru'),
+            Textarea::make('Текст EN', 'text_en'),
+            Textarea::make('Ответ администратора RU', 'admin_reply_ru'),
+            Textarea::make('Ответ администратора EN', 'admin_reply_en'),
             Textarea::make('URL изображения или путь в хранилище', 'image'),
         ];
     }

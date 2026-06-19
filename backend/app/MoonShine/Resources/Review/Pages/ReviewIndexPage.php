@@ -6,7 +6,6 @@ namespace App\MoonShine\Resources\Review\Pages;
 
 use App\Models\Review;
 use App\MoonShine\Resources\Review\ReviewResource;
-use Illuminate\Support\Carbon;
 use MoonShine\AssetManager\InlineCss;
 use MoonShine\Contracts\AssetManager\AssetElementContract;
 use MoonShine\Contracts\UI\ComponentContract;
@@ -49,16 +48,18 @@ class ReviewIndexPage extends IndexPage
                     return e((string) $item);
                 }
 
-                $name    = e($item->name ?? 'Аноним');
-                $service = $item->service
-                    ? '<div class="rv-author__service">' . e($item->service) . '</div>'
+                $rawName = $item->fieldRu('name') ?? 'Аноним';
+                $name = e($rawName);
+                $serviceValue = $item->fieldRu('service');
+                $service = $serviceValue
+                    ? '<div class="rv-author__service">'.e($serviceValue).'</div>'
                     : '';
 
-                $initial = mb_strtoupper(mb_substr($item->name ?? 'A', 0, 1));
+                $initial = mb_strtoupper(mb_substr($rawName, 0, 1));
 
-                $palette    = ['#1d4ed8', '#0f766e', '#7c3aed', '#b45309', '#be185d', '#0e7490', '#047857'];
-                $colorIndex = abs(crc32($item->name ?? '')) % count($palette);
-                $color      = $palette[$colorIndex];
+                $palette = ['#1d4ed8', '#0f766e', '#7c3aed', '#b45309', '#be185d', '#0e7490', '#047857'];
+                $colorIndex = abs(crc32($rawName)) % count($palette);
+                $color = $palette[$colorIndex];
 
                 $avatar = sprintf(
                     '<div class="rv-author__avatar" style="background:%s">%s</div>',
@@ -77,21 +78,25 @@ class ReviewIndexPage extends IndexPage
             Preview::make('Отзыв', 'text', function (mixed $item): string {
                 if (! is_object($item)) {
                     $snippet = e(mb_substr(strip_tags((string) $item), 0, 120));
-                    return '<div class="rv-text"><div class="rv-text__body">' . $snippet . '</div></div>';
+
+                    return '<div class="rv-text"><div class="rv-text__body">'.$snippet.'</div></div>';
                 }
 
-                $titleHtml = $item->title
-                    ? '<div class="rv-text__title">' . e($item->title) . '</div>'
+                $title = $item->fieldRu('title');
+                $text = $item->fieldRu('text');
+
+                $titleHtml = $title
+                    ? '<div class="rv-text__title">'.e($title).'</div>'
                     : '';
 
-                $bodyHtml = ! empty($item->text)
-                    ? '<div class="rv-text__body">' . e(mb_substr(strip_tags((string) $item->text), 0, 120)) . '</div>'
+                $bodyHtml = ! empty($text)
+                    ? '<div class="rv-text__body">'.e(mb_substr(strip_tags((string) $text), 0, 120)).'</div>'
                     : '<div class="rv-text__body" style="color:#cbd5e1;font-style:italic;">Без текста</div>';
 
-                return '<div class="rv-text">' . $titleHtml . $bodyHtml . '</div>';
+                return '<div class="rv-text">'.$titleHtml.$bodyHtml.'</div>';
             }),
 
-            Text::make('Дата', 'date'),
+            Text::make('Дата', 'date_ru'),
 
             Preview::make('Статус', 'is_published', function (mixed $item): string {
                 $published = is_object($item)
@@ -105,7 +110,7 @@ class ReviewIndexPage extends IndexPage
 
             Preview::make('Ответ', 'admin_reply', function (mixed $item): string {
                 $reply = is_object($item)
-                    ? (string) ($item->admin_reply ?? '')
+                    ? (string) ($item->fieldRu('admin_reply') ?? '')
                     : (string) $item;
 
                 return ! empty(trim($reply))
@@ -130,17 +135,24 @@ class ReviewIndexPage extends IndexPage
 
     private function buildOverviewHtml(): string
     {
-        $total       = Review::count();
-        $published   = Review::where('is_published', true)->count();
+        $total = Review::count();
+        $published = Review::where('is_published', true)->count();
         $unpublished = max($total - $published, 0);
-        $withReply   = Review::whereNotNull('admin_reply')->where('admin_reply', '!=', '')->count();
-        $noReply     = max($total - $withReply, 0);
+        $withReply = Review::where(function ($query): void {
+            $query->whereNotNull('admin_reply_ru')
+                ->where('admin_reply_ru', '!=', '')
+                ->orWhere(function ($fallback): void {
+                    $fallback->whereNotNull('admin_reply')
+                        ->where('admin_reply', '!=', '');
+                });
+        })->count();
+        $noReply = max($total - $withReply, 0);
 
         $thisMonth = Review::whereYear('created_at', now()->year)
             ->whereMonth('created_at', now()->month)
             ->count();
 
-        $latest     = Review::latest('created_at')->first(['created_at']);
+        $latest = Review::latest('created_at')->first(['created_at']);
         $latestDate = $latest?->created_at?->format('d.m.Y') ?? 'Нет';
 
         $createUrl = $this->getResource()->getFormPageUrl();

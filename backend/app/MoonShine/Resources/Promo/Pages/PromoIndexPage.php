@@ -44,13 +44,15 @@ class PromoIndexPage extends IndexPage
 
             Preview::make('Акция', 'title', function (mixed $item): string {
                 if (! is_object($item)) {
-                    return '<div class="promo-card"><div class="promo-card__title">' . e((string) $item) . '</div></div>';
+                    return '<div class="promo-card"><div class="promo-card__title">'.e((string) $item).'</div></div>';
                 }
 
-                $title   = e($item->title ?? '');
-                $slug    = e($item->slug ?? '');
-                $badge   = $item->badge ? e($item->badge) : null;
-                $initial = mb_strtoupper(mb_substr($item->title ?? 'P', 0, 1));
+                $rawTitle = $item->fieldRu('title') ?? '';
+                $title = e($rawTitle);
+                $slug = e($item->slug ?? '');
+                $badgeValue = $item->fieldRu('badge');
+                $badge = $badgeValue ? e($badgeValue) : null;
+                $initial = mb_strtoupper(mb_substr($rawTitle !== '' ? $rawTitle : 'P', 0, 1));
 
                 $thumbSrc = $item->effective_image ?? null;
                 $thumb = ! empty($thumbSrc)
@@ -74,9 +76,10 @@ class PromoIndexPage extends IndexPage
             }),
 
             Preview::make('Описание', 'description', function (mixed $item): string {
-                $text = is_object($item) ? ($item->description ?? '') : (string) $item;
+                $text = is_object($item) ? ($item->fieldRu('description') ?? '') : (string) $item;
+
                 return ! empty($text)
-                    ? '<div class="promo-description">' . e($text) . '</div>'
+                    ? '<div class="promo-description">'.e($text).'</div>'
                     : '<span style="color:#cbd5e1;font-size:12px;">—</span>';
             }),
 
@@ -87,22 +90,25 @@ class PromoIndexPage extends IndexPage
 
                 $parts = '';
 
-                if (! empty($item->valid_until)) {
+                $validUntil = $item->fieldRu('valid_until');
+                $highlight = $item->fieldRu('highlight');
+
+                if (! empty($validUntil)) {
                     $parts .= sprintf(
                         '<div class="promo-meta__date">⏳ До: %s</div>',
-                        e($item->valid_until)
+                        e($validUntil)
                     );
                 }
 
-                if (! empty($item->highlight)) {
+                if (! empty($highlight)) {
                     $parts .= sprintf(
                         '<span class="promo-meta__highlight">✨ %s</span>',
-                        e($item->highlight)
+                        e($highlight)
                     );
                 }
 
                 return $parts
-                    ? '<div class="promo-meta">' . $parts . '</div>'
+                    ? '<div class="promo-meta">'.$parts.'</div>'
                     : '<span style="color:#cbd5e1;font-size:12px;">—</span>';
             }),
 
@@ -131,24 +137,38 @@ class PromoIndexPage extends IndexPage
 
     private function buildOverviewHtml(): string
     {
-        $total     = Promo::count();
-        $active    = Promo::where('is_active', true)->count();
-        $inactive  = max($total - $active, 0);
-        $withBadge = Promo::whereNotNull('badge')->where('badge', '!=', '')->count();
+        $total = Promo::count();
+        $active = Promo::where('is_active', true)->count();
+        $inactive = max($total - $active, 0);
+        $withBadge = Promo::where(function ($query): void {
+            $query->whereNotNull('badge_ru')
+                ->where('badge_ru', '!=', '')
+                ->orWhere(function ($fallback): void {
+                    $fallback->whereNotNull('badge')
+                        ->where('badge', '!=', '');
+                });
+        })->count();
         $withImage = Promo::where(function ($q) {
             $q->whereNotNull('image_file')->where('image_file', '!=', '')
-              ->orWhere(function ($q2) {
-                  $q2->whereNotNull('image')->where('image', '!=', '');
-              });
+                ->orWhere(function ($q2) {
+                    $q2->whereNotNull('image')->where('image', '!=', '');
+                });
         })->count();
 
         $thisMonth = Promo::whereYear('created_at', now()->year)
             ->whereMonth('created_at', now()->month)
             ->count();
 
-        $withDeadline = Promo::whereNotNull('valid_until')->where('valid_until', '!=', '')->count();
+        $withDeadline = Promo::where(function ($query): void {
+            $query->whereNotNull('valid_until_ru')
+                ->where('valid_until_ru', '!=', '')
+                ->orWhere(function ($fallback): void {
+                    $fallback->whereNotNull('valid_until')
+                        ->where('valid_until', '!=', '');
+                });
+        })->count();
 
-        $latest     = Promo::latest('created_at')->first(['created_at']);
+        $latest = Promo::latest('created_at')->first(['created_at']);
         $latestDate = $latest?->created_at?->format('d.m.Y') ?? 'Нет';
 
         $createUrl = $this->getResource()->getFormPageUrl();

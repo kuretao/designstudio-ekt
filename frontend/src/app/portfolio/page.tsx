@@ -13,9 +13,16 @@ export default function Page() {
 
     setActiveProject((current) => {
       if (!current) return projects[0];
-      return projects.some((project) => project.slug === current.slug) ? current : projects[0];
+      return (
+        projects.find((project) => project.slug === current.slug) ?? projects[0]
+      );
     });
   }, [projects]);
 
-  return <PortfolioPage activeProject={activeProject} setActiveProject={setActiveProject} />;
+  return (
+    <PortfolioPage
+      activeProject={activeProject}
+      setActiveProject={setActiveProject}
+    />
+  );
 }

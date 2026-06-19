@@ -54,6 +54,8 @@ type AnimationControls = {
   pageReveal: boolean;
 };
 
+type SiteLocale = "ru" | "en";
+
 type UiText = {
   ru?: string | null;
   en?: string | null;
@@ -82,7 +84,12 @@ type CmsData = {
   reviewStats: typeof reviewStats;
   awards: typeof awards;
   partners: typeof partners;
-  menuItems: { href: string; label: string; labelRu?: string; labelEn?: string | null }[];
+  menuItems: {
+    href: string;
+    label: string;
+    labelRu?: string;
+    labelEn?: string | null;
+  }[];
   ready: boolean;
 };
 
@@ -192,21 +199,241 @@ function normalizeImageList(value: unknown): string[] {
   );
 }
 
-function normalizeBlock(block: any) {
+function localeSuffix(locale: SiteLocale) {
+  return locale === "en" ? "En" : "Ru";
+}
+
+function hasText(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function localizeString(
+  item: Record<string, any> | null | undefined,
+  base: string,
+  locale: SiteLocale,
+  fallback: string | null = "",
+) {
+  const localized = item?.[`${base}${localeSuffix(locale)}`];
+  if (hasText(localized)) return localized;
+
+  const ru = item?.[`${base}Ru`];
+  if (hasText(ru)) return ru;
+
+  const direct = item?.[base];
+  if (hasText(direct)) return direct;
+
+  return fallback;
+}
+
+function localizeArray<T>(
+  item: Record<string, any> | null | undefined,
+  base: string,
+  locale: SiteLocale,
+  fallback: T[] = [],
+) {
+  const localized = item?.[`${base}${localeSuffix(locale)}`];
+  if (Array.isArray(localized) && localized.length) return localized as T[];
+
+  const ru = item?.[`${base}Ru`];
+  if (Array.isArray(ru) && ru.length) return ru as T[];
+
+  const direct = item?.[base];
+  if (Array.isArray(direct) && direct.length) return direct as T[];
+
+  return fallback;
+}
+
+function normalizeBlock(block: any, locale: SiteLocale) {
   const images = normalizeImageList(
     block?.images?.length ? block.images : block?.image,
   );
 
   return {
+    ...block,
     type: block?.type ?? "text",
-    eyebrow: block?.eyebrow ?? null,
-    title: block?.title ?? null,
-    subtitle: block?.subtitle ?? null,
-    text: block?.text ?? null,
+    eyebrow: localizeString(block, "eyebrow", locale, null),
+    title: localizeString(block, "title", locale, null),
+    subtitle: localizeString(block, "subtitle", locale, null),
+    text: localizeString(block, "text", locale, null),
     image: images[0] ?? null,
     images,
-    linkLabel: block?.linkLabel ?? null,
+    linkLabel: localizeString(block, "linkLabel", locale, null),
     linkHref: block?.linkHref ?? null,
+  };
+}
+
+function localizeProject(project: any, locale: SiteLocale) {
+  return {
+    ...project,
+    title: localizeString(project, "title", locale, project?.title ?? "") ?? "",
+    category:
+      localizeString(project, "category", locale, project?.category ?? "") ??
+      "",
+    location:
+      localizeString(project, "location", locale, project?.location ?? "") ??
+      "",
+    description:
+      localizeString(
+        project,
+        "description",
+        locale,
+        project?.description ?? "",
+      ) ?? "",
+  };
+}
+
+function localizeService(service: any, locale: SiteLocale) {
+  return {
+    ...service,
+    title: localizeString(service, "title", locale, service?.title ?? "") ?? "",
+    eyebrow:
+      localizeString(service, "eyebrow", locale, service?.eyebrow ?? "") ?? "",
+    text: localizeString(service, "text", locale, service?.text ?? "") ?? "",
+    price: localizeString(service, "price", locale, service?.price ?? "") ?? "",
+    timeline:
+      localizeString(service, "timeline", locale, service?.timeline ?? "") ??
+      "",
+    deliverables: localizeArray<string>(
+      service,
+      "deliverables",
+      locale,
+      service?.deliverables ?? [],
+    ),
+    benefits: localizeArray<string>(
+      service,
+      "benefits",
+      locale,
+      service?.benefits ?? [],
+    ),
+    process: localizeArray<string>(
+      service,
+      "process",
+      locale,
+      service?.process ?? [],
+    ),
+  };
+}
+
+function localizeNewsArticle(article: any, locale: SiteLocale) {
+  return {
+    ...article,
+    title: localizeString(article, "title", locale, article?.title ?? "") ?? "",
+    date: localizeString(article, "date", locale, article?.date ?? "") ?? "",
+    category:
+      localizeString(article, "category", locale, article?.category ?? "") ??
+      "",
+    preview:
+      localizeString(article, "preview", locale, article?.preview ?? "") ?? "",
+    readingTime:
+      localizeString(
+        article,
+        "readingTime",
+        locale,
+        article?.readingTime ?? "",
+      ) ?? "",
+    body: localizeArray(article, "body", locale, article?.body ?? []),
+  };
+}
+
+function localizePromo(promo: any, locale: SiteLocale) {
+  return {
+    ...promo,
+    badge: localizeString(promo, "badge", locale, promo?.badge ?? "") ?? "",
+    title: localizeString(promo, "title", locale, promo?.title ?? "") ?? "",
+    highlight:
+      localizeString(promo, "highlight", locale, promo?.highlight ?? "") ?? "",
+    validUntil:
+      localizeString(promo, "validUntil", locale, promo?.validUntil ?? "") ??
+      "",
+    description:
+      localizeString(promo, "description", locale, promo?.description ?? "") ??
+      "",
+    conditions: localizeArray<string>(
+      promo,
+      "conditions",
+      locale,
+      promo?.conditions ?? [],
+    ),
+  };
+}
+
+function localizeReview(review: any, locale: SiteLocale) {
+  return {
+    ...review,
+    name: localizeString(review, "name", locale, review?.name ?? "") ?? "",
+    date: localizeString(review, "date", locale, review?.date ?? "") ?? "",
+    service:
+      localizeString(review, "service", locale, review?.service ?? "") ?? "",
+    title: localizeString(review, "title", locale, review?.title ?? "") ?? "",
+    text: localizeString(review, "text", locale, review?.text ?? "") ?? "",
+    adminReply:
+      localizeString(review, "adminReply", locale, review?.adminReply ?? "") ??
+      "",
+  };
+}
+
+function localizeFaq(item: any, locale: SiteLocale) {
+  return {
+    ...item,
+    q: localizeString(item, "q", locale, item?.q ?? "") ?? "",
+    a: localizeString(item, "a", locale, item?.a ?? "") ?? "",
+  };
+}
+
+function localizeVacancy(vacancy: any, locale: SiteLocale) {
+  return {
+    ...vacancy,
+    title: localizeString(vacancy, "title", locale, vacancy?.title ?? "") ?? "",
+    employment:
+      localizeString(
+        vacancy,
+        "employment",
+        locale,
+        vacancy?.employment ?? "",
+      ) ?? "",
+    location:
+      localizeString(vacancy, "location", locale, vacancy?.location ?? "") ??
+      "",
+    salary:
+      localizeString(vacancy, "salary", locale, vacancy?.salary ?? "") ?? "",
+    description:
+      localizeString(
+        vacancy,
+        "description",
+        locale,
+        vacancy?.description ?? "",
+      ) ?? "",
+    requirements: localizeArray<string>(
+      vacancy,
+      "requirements",
+      locale,
+      vacancy?.requirements ?? [],
+    ),
+    responsibilities: localizeArray<string>(
+      vacancy,
+      "responsibilities",
+      locale,
+      vacancy?.responsibilities ?? [],
+    ),
+  };
+}
+
+function localizeNamedItem(item: any, locale: SiteLocale) {
+  return {
+    ...item,
+    name: localizeString(item, "name", locale, item?.name ?? "") ?? "",
+    note: localizeString(item, "note", locale, item?.note ?? "") ?? "",
+  };
+}
+
+function localizeAward(award: any, locale: SiteLocale) {
+  return {
+    ...award,
+    title: localizeString(award, "title", locale, award?.title ?? "") ?? "",
+    issuer: localizeString(award, "issuer", locale, award?.issuer ?? "") ?? "",
+    description:
+      localizeString(award, "description", locale, award?.description ?? "") ??
+      "",
   };
 }
 
@@ -251,11 +478,14 @@ function mergeServiceItems(payloadServices: any[]) {
   return [...merged, ...Array.from(byId.values())];
 }
 
-function normalizeServiceNavigationGroups(payloadGroups: any[]) {
+function normalizeServiceNavigationGroups(
+  payloadGroups: any[],
+  locale: SiteLocale,
+) {
   const groups = payloadGroups
     .map((group: any, index: number) => {
       const href = typeof group?.href === "string" ? group.href : "";
-      const title = typeof group?.title === "string" ? group.title : "";
+      const title = localizeString(group, "title", locale, "") ?? "";
 
       if (!href || !title) {
         return null;
@@ -264,11 +494,11 @@ function normalizeServiceNavigationGroups(payloadGroups: any[]) {
       const items = Array.isArray(group?.items)
         ? group.items
             .map((item: any) => ({
-              label: typeof item?.label === "string" ? item.label : "",
+              ...item,
+              label: localizeString(item, "label", locale, "") ?? "",
               labelRu:
                 typeof item?.labelRu === "string" ? item.labelRu : item?.label,
-              labelEn:
-                typeof item?.labelEn === "string" ? item.labelEn : null,
+              labelEn: typeof item?.labelEn === "string" ? item.labelEn : null,
               href: typeof item?.href === "string" ? item.href : "",
             }))
             .filter((item: any) => item.label && item.href)
@@ -277,13 +507,10 @@ function normalizeServiceNavigationGroups(payloadGroups: any[]) {
       return {
         id: String(group.id ?? href ?? `service-group-${index}`),
         title,
-        titleRu:
-          typeof group?.titleRu === "string" ? group.titleRu : title,
-        titleEn:
-          typeof group?.titleEn === "string" ? group.titleEn : null,
+        titleRu: typeof group?.titleRu === "string" ? group.titleRu : title,
+        titleEn: typeof group?.titleEn === "string" ? group.titleEn : null,
         href,
-        description:
-          typeof group?.description === "string" ? group.description : "",
+        description: localizeString(group, "description", locale, "") ?? "",
         descriptionRu:
           typeof group?.descriptionRu === "string"
             ? group.descriptionRu
@@ -291,9 +518,7 @@ function normalizeServiceNavigationGroups(payloadGroups: any[]) {
               ? group.description
               : "",
         descriptionEn:
-          typeof group?.descriptionEn === "string"
-            ? group.descriptionEn
-            : null,
+          typeof group?.descriptionEn === "string" ? group.descriptionEn : null,
         items,
       };
     })
@@ -302,34 +527,54 @@ function normalizeServiceNavigationGroups(payloadGroups: any[]) {
   return groups as typeof fallbackServiceNavigationGroups;
 }
 
-function normalizePayload(payload: any): CmsData {
+function normalizePayload(payload: any, locale: SiteLocale): CmsData {
   const settings = payload?.settings ?? {};
-  const apiServices =
-    Array.isArray(payload?.services) && payload.services.length
-      ? mergeServiceItems(payload.services)
-      : fallbackServicePageItems;
+  const payloadServices = Array.isArray(payload?.services)
+    ? payload.services.map((service: any) => localizeService(service, locale))
+    : [];
+  const apiServices = payloadServices.length
+    ? mergeServiceItems(payloadServices)
+    : fallbackServicePageItems;
   const apiProjects = (
     Array.isArray(payload?.projects) && payload.projects.length
       ? payload.projects
       : projects
-  ).map((project: any) => ({
-    ...project,
-    slug: makeProjectSlug(project),
-  }));
-  const payloadPages = Array.isArray(payload?.pages) ? payload.pages : [];
+  ).map((project: any) => {
+    const localized = localizeProject(project, locale);
+
+    return {
+      ...localized,
+      slug: makeProjectSlug(localized),
+    };
+  });
+  const payloadPages = Array.isArray(payload?.pages)
+    ? payload.pages.map((page: any) => ({
+        ...page,
+        title: localizeString(page, "title", locale, page?.title ?? "") ?? "",
+        body: localizeString(page, "body", locale, page?.body ?? "") ?? "",
+        seoTitle:
+          localizeString(page, "seoTitle", locale, page?.seoTitle ?? "") ?? "",
+        seoDescription:
+          localizeString(
+            page,
+            "seoDescription",
+            locale,
+            page?.seoDescription ?? "",
+          ) ?? "",
+        blocks: Array.isArray(page?.blocks)
+          ? page.blocks.map((block: any) => normalizeBlock(block, locale))
+          : [],
+      }))
+    : [];
   const homePage = payloadPages.find(
     (page: any) => page.slug === "home" || page.id === "home",
   );
-  const homeBlocks = Array.isArray(homePage?.blocks)
-    ? homePage.blocks.map(normalizeBlock)
-    : [];
+  const homeBlocks = Array.isArray(homePage?.blocks) ? homePage.blocks : [];
   const homeBlock =
     homeBlocks.find((block: any) => block.type === "hero") ??
     homeBlocks[0] ??
     {};
-  const homeStoryBlock = homeBlocks.find(
-    (block: any) => block.type === "text",
-  );
+  const homeStoryBlock = homeBlocks.find((block: any) => block.type === "text");
   const homeTitle =
     typeof homeBlock.title === "string" ? homeBlock.title.trim() : "";
   const normalizedHomeTitle = homeTitle.toLowerCase();
@@ -344,11 +589,10 @@ function normalizePayload(payload: any): CmsData {
   );
   const apiPages = contentPayloadPages.length
     ? contentPayloadPages.map((page: any) => {
-        const blocks = Array.isArray(page.blocks)
-          ? page.blocks.map(normalizeBlock)
-          : [];
+        const blocks = Array.isArray(page.blocks) ? page.blocks : [];
         const hero = blocks.find((block: any) => block.type === "hero") ?? {};
         return {
+          ...page,
           id: page.id ?? page.slug,
           slug: page.slug,
           title: page.title,
@@ -374,9 +618,12 @@ function normalizePayload(payload: any): CmsData {
       favicon: settings.favicon ?? null,
       appleTouchIcon: settings.appleTouchIcon ?? null,
       socialPreviewImage: settings.socialPreviewImage ?? null,
-      compareEyebrow: settings.compareEyebrow ?? fallbackData.siteSettings.compareEyebrow,
-      compareTitle: settings.compareTitle ?? fallbackData.siteSettings.compareTitle,
-      compareText: settings.compareText ?? fallbackData.siteSettings.compareText,
+      compareEyebrow:
+        settings.compareEyebrow ?? fallbackData.siteSettings.compareEyebrow,
+      compareTitle:
+        settings.compareTitle ?? fallbackData.siteSettings.compareTitle,
+      compareText:
+        settings.compareText ?? fallbackData.siteSettings.compareText,
     },
     uiTexts:
       payload?.uiTexts && typeof payload.uiTexts === "object"
@@ -400,7 +647,10 @@ function normalizePayload(payload: any): CmsData {
     projects: apiProjects,
     servicePageItems: apiServices,
     serviceNavigationGroups: Array.isArray(payload?.serviceNavigationGroups)
-      ? normalizeServiceNavigationGroups(payload.serviceNavigationGroups)
+      ? normalizeServiceNavigationGroups(
+          payload.serviceNavigationGroups,
+          locale,
+        )
       : fallbackServiceNavigationGroups,
     services: apiServices.map((item: any) => ({
       title: item.title,
@@ -409,18 +659,22 @@ function normalizePayload(payload: any): CmsData {
     })),
     newsArticles:
       Array.isArray(payload?.news) && payload.news.length
-        ? payload.news
+        ? payload.news.map((article: any) =>
+            localizeNewsArticle(article, locale),
+          )
         : newsArticles,
     promos:
       Array.isArray(payload?.promos) && payload.promos.length
-        ? payload.promos
+        ? payload.promos.map((promo: any) => localizePromo(promo, locale))
         : promos,
     testimonials:
       Array.isArray(payload?.reviews) && payload.reviews.length
-        ? payload.reviews
+        ? payload.reviews.map((review: any) => localizeReview(review, locale))
         : testimonials,
     faq:
-      Array.isArray(payload?.faqs) && payload.faqs.length ? payload.faqs : faq,
+      Array.isArray(payload?.faqs) && payload.faqs.length
+        ? payload.faqs.map((item: any) => localizeFaq(item, locale))
+        : faq,
     contactInfo: {
       ...contactInfo,
       phone: settings.phone ?? contactInfo.phone,
@@ -449,14 +703,28 @@ function normalizePayload(payload: any): CmsData {
     },
     contentPages: apiPages,
     careerVacancies: Array.isArray(payload?.vacancies)
-      ? payload.vacancies
+      ? payload.vacancies.map((vacancy: any) =>
+          localizeVacancy(vacancy, locale),
+        )
       : careerVacancies,
     reviewStats,
-    awards: Array.isArray(payload?.awards) && payload.awards.length ? payload.awards : awards,
-    partners: Array.isArray(payload?.partners) && payload.partners.length ? payload.partners : partners,
+    awards:
+      Array.isArray(payload?.awards) && payload.awards.length
+        ? payload.awards.map((award: any) => localizeAward(award, locale))
+        : awards,
+    partners:
+      Array.isArray(payload?.partners) && payload.partners.length
+        ? payload.partners.map((partner: any) =>
+            localizeNamedItem(partner, locale),
+          )
+        : partners,
     menuItems:
       Array.isArray(payload?.menuItems) && payload.menuItems.length
-        ? payload.menuItems
+        ? payload.menuItems.map((item: any) => ({
+            ...item,
+            label:
+              localizeString(item, "label", locale, item?.label ?? "") ?? "",
+          }))
         : fallbackData.menuItems,
     ready: true,
   };
@@ -465,7 +733,9 @@ function normalizePayload(payload: any): CmsData {
 const POLL_INTERVAL = 30_000;
 
 export function CmsProvider({ children }: { children: React.ReactNode }) {
-  const [data, setData] = useState<CmsData>(fallbackData);
+  const [payload, setPayload] = useState<any | null>(null);
+  const { i18n } = useTranslation();
+  const locale: SiteLocale = i18n.language?.startsWith("en") ? "en" : "ru";
 
   useEffect(() => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "/api/v1";
@@ -482,7 +752,10 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
             throw new Error(`CMS request failed: ${response.status}`);
           return response.json();
         })
-        .then((payload) => setData(normalizePayload(payload)))
+        .then((payload) => {
+          cmsAvailable = true;
+          setPayload(payload);
+        })
         .catch((error) => {
           if (error.name !== "AbortError") {
             cmsAvailable = false;
@@ -509,7 +782,10 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  const value = useMemo(() => data, [data]);
+  const value = useMemo(
+    () => (payload ? normalizePayload(payload, locale) : fallbackData),
+    [locale, payload],
+  );
 
   return <CmsContext.Provider value={value}>{children}</CmsContext.Provider>;
 }
@@ -526,8 +802,9 @@ export function useCmsText() {
   return (key: string, fallback = "") => {
     const item = uiTexts[key];
     const localized = locale === "en" ? item?.en : item?.ru;
+    const translatedFallback = i18n.t(key, { defaultValue: fallback });
 
-    return localized?.trim() || item?.ru?.trim() || fallback;
+    return localized?.trim() || item?.ru?.trim() || translatedFallback;
   };
 }
 

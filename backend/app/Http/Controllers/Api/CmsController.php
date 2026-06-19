@@ -285,7 +285,11 @@ class CmsController extends Controller
             'bodyRu' => $page->fieldRu('body'),
             'bodyEn' => $page->fieldEn('body'),
             'seoTitle' => $page->fieldRu('seo_title'),
+            'seoTitleRu' => $page->fieldRu('seo_title'),
+            'seoTitleEn' => $page->fieldEn('seo_title'),
             'seoDescription' => $page->fieldRu('seo_description'),
+            'seoDescriptionRu' => $page->fieldRu('seo_description'),
+            'seoDescriptionEn' => $page->fieldEn('seo_description'),
             'blocks' => $page->blocks->map(function ($block): array {
                 $images = $this->imageList($block->image);
 

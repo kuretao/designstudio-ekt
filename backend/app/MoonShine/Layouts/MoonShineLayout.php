@@ -22,6 +22,7 @@ use MoonShine\Support\UriKey;
 use App\MoonShine\Resources\MenuItem\MenuItemResource;
 use App\MoonShine\Resources\Page\PageResource;
 use App\MoonShine\Resources\PageBlock\PageBlockResource;
+use App\MoonShine\Resources\UiText\UiTextResource;
 use App\MoonShine\Resources\Project\ProjectResource;
 use App\MoonShine\Resources\Service\ServiceResource;
 use App\MoonShine\Resources\NewsArticle\NewsArticleResource;
@@ -68,6 +69,7 @@ final class MoonShineLayout extends AppLayout
                 MenuItem::make(MenuItemResource::class, 'Меню сайта')->icon('bars-3'),
                 MenuItem::make(PageResource::class, 'Страницы')->icon('document-text'),
                 MenuItem::make(PageBlockResource::class, 'Блоки страниц')->icon('squares-2x2'),
+                MenuItem::make(UiTextResource::class, 'UI-тексты')->icon('language'),
             ], 'globe-alt'),
             MenuGroup::make('Контент', [
                 MenuItem::make(ProjectResource::class, 'Проекты')->icon('photo'),

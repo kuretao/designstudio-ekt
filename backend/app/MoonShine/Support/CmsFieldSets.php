@@ -909,8 +909,8 @@ final class CmsFieldSets
 
         return $compact ? [
             ...$fields,
-            Preview::make('RU', 'value_ru', static fn (mixed $value): string => e(mb_strimwidth((string) $value, 0, 90, '...'))),
-            Preview::make('EN', 'value_en', static fn (mixed $value): string => e(mb_strimwidth((string) $value, 0, 90, '...'))),
+            Text::make('RU', 'value_ru')->customAttributes(['class' => 'max-w-[280px] truncate']),
+            Text::make('EN', 'value_en')->customAttributes(['class' => 'max-w-[280px] truncate']),
         ] : [
             ...$fields,
             Textarea::make('Текст RU', 'value_ru')

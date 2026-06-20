@@ -160,6 +160,174 @@ final class DefaultUiTexts
             ...self::quizRows(),
             ...self::portfolioFilterRows(),
             ...self::contactStatRows(),
+            ...self::aboutFullRows(),
+        ];
+    }
+
+    /**
+     * Строки полной страницы "О нас" (/o-nas).
+     * Группа about-full: hero, статистика, направления, принципы, команда, процесс, CTA.
+     */
+    private static function aboutFullRows(): array
+    {
+        $rows = [
+            // Hero / банер
+            self::row('aboutFull.hero.label', 'about-full', 'О нас: метка над заголовком', 'О студии', 'About the studio'),
+            self::row('aboutFull.hero.title', 'about-full', 'О нас: главный заголовок', 'Дизайн с умом', 'Design with logic'),
+            self::row('aboutFull.hero.text', 'about-full', 'О нас: описание в банере', '3D Smart Design Studio соединяет эстетику, инженерную логику и понятный процесс. Заказчик видит не просто красивую картинку, а уверенный маршрут от идеи до реализации.', '3D Smart Design Studio combines aesthetics, engineering logic, and a clear process. The client sees not just a beautiful image, but a confident route from idea to implementation.'),
+            self::row('aboutFull.hero.cta1', 'about-full', 'О нас: основная кнопка', 'Обсудить проект', 'Discuss a project'),
+            self::row('aboutFull.hero.cta2', 'about-full', 'О нас: вторая кнопка', 'Смотреть работы', 'View projects'),
+            self::row('aboutFull.hero.imageLabel', 'about-full', 'О нас: подпись на изображении', 'Премиальная подача начинается с точной системы', 'Premium presentation starts with a precise system'),
+            self::row('aboutFull.hero.approachLabel', 'about-full', 'О нас: подпись «Что внутри подхода»', 'Что внутри подхода', 'Inside the approach'),
+
+            // Принципы
+            self::row('aboutFull.principles.label', 'about-full', 'Принципы: метка', 'Принципы', 'Principles'),
+            self::row('aboutFull.principles.title', 'about-full', 'Принципы: заголовок', 'Не декорируем хаос. Собираем систему.', 'We do not decorate chaos. We build a system.'),
+            self::row('aboutFull.principles.text', 'about-full', 'Принципы: текст', 'Хороший проект ощущается легко, потому что за ним стоит точная работа: планировочная логика, материалы, свет, документация, бюджет и коммуникация.', 'A good project feels effortless because precise work stands behind it: planning logic, materials, light, documentation, budget, and communication.'),
+
+            // Команда
+            self::row('aboutFull.work.imageLabel1', 'about-full', 'Команда: подпись большого изображения', 'Интерьер как рабочий сценарий жизни', 'Interior as a working life scenario'),
+            self::row('aboutFull.work.imageLabel2', 'about-full', 'Команда: подпись изображения архитектуры', 'Архитектура и визуализация', 'Architecture and visualization'),
+            self::row('aboutFull.work.imageLabel3', 'about-full', 'Команда: подпись изображения ландшафта', 'Ландшафт как продолжение дома', 'Landscape as an extension of the house'),
+            self::row('aboutFull.team.label', 'about-full', 'Команда: метка', 'Команда', 'Team'),
+            self::row('aboutFull.team.title', 'about-full', 'Команда: заголовок', 'Под задачу собирается нужный состав', 'The right team is assembled for each task'),
+            self::row('aboutFull.team.text', 'about-full', 'Команда: текст', 'В проект могут входить дизайнеры, архитекторы, 3D-визуализаторы, комплектаторы и специалисты по рабочей документации. Клиенту не нужно координировать всех отдельно: мы держим проектную логику внутри студии.', 'Designers, architects, 3D visualizers, procurement specialists, and working documentation experts can join a project. The client does not need to coordinate everyone separately: we keep the project logic inside the studio.'),
+
+            // Процесс
+            self::row('aboutFull.process.label', 'about-full', 'Процесс: метка', 'Процесс', 'Process'),
+            self::row('aboutFull.process.title', 'about-full', 'Процесс: заголовок', 'Как мы работаем', 'How we work'),
+            self::row('aboutFull.process.text', 'about-full', 'Процесс: текст', 'Каждый этап дает понятный результат: от первого разговора до комплекта файлов, с которым можно принимать решения и двигаться дальше.', 'Each stage produces a clear result: from the first conversation to a set of files you can use to make decisions and move forward.'),
+
+            // CTA (оранжевый банер)
+            self::row('aboutFull.cta.eyebrow', 'about-full', 'CTA: надзаголовок', 'Начнем с разговора', 'Let’s start with a conversation'),
+            self::row('aboutFull.cta.title', 'about-full', 'CTA: заголовок', 'Расскажите о проекте, а мы предложим маршрут работы.', 'Tell us about the project and we will suggest a way forward.'),
+            self::row('aboutFull.cta.button', 'about-full', 'CTA: кнопка', 'Связаться', 'Get in touch'),
+        ];
+
+        // Статистика (4 пункта)
+        foreach (self::aboutFullStats() as $id => $stat) {
+            $rows[] = self::row("aboutFull.stats.{$id}.value", 'about-full', "Статистика {$id}: значение", $stat['value'][0], $stat['value'][1]);
+            $rows[] = self::row("aboutFull.stats.{$id}.label", 'about-full', "Статистика {$id}: подпись", $stat['label'][0], $stat['label'][1]);
+        }
+
+        // Направления (6 пунктов в правой панели hero)
+        foreach (self::aboutFullDirections() as $id => $direction) {
+            $rows[] = self::row("aboutFull.directions.{$id}", 'about-full', "Направление {$id}", $direction[0], $direction[1]);
+        }
+
+        // Принципы (4 пункта, заголовок + текст)
+        foreach (self::aboutFullPrinciples() as $id => $principle) {
+            $rows[] = self::row("aboutFull.principles.item.{$id}.title", 'about-full', "Принцип {$id}: заголовок", $principle['title'][0], $principle['title'][1]);
+            $rows[] = self::row("aboutFull.principles.item.{$id}.text", 'about-full', "Принцип {$id}: текст", $principle['text'][0], $principle['text'][1]);
+        }
+
+        // Буллеты команды (4 пункта)
+        foreach (self::aboutFullTeamBullets() as $id => $bullet) {
+            $rows[] = self::row("aboutFull.team.bullet.{$id}", 'about-full', "Команда: пункт {$id}", $bullet[0], $bullet[1]);
+        }
+
+        // Этапы процесса (6 шагов)
+        foreach (self::aboutFullProcessSteps() as $id => $step) {
+            $rows[] = self::row("aboutFull.process.step.{$id}.title", 'about-full', "Процесс {$id}: заголовок", $step['title'][0], $step['title'][1]);
+            $rows[] = self::row("aboutFull.process.step.{$id}.text", 'about-full', "Процесс {$id}: текст", $step['text'][0], $step['text'][1]);
+        }
+
+        return $rows;
+    }
+
+    private static function aboutFullStats(): array
+    {
+        return [
+            '1' => [
+                'value' => ['10 лет', '10 years'],
+                'label' => ['проектируем интерьеры, архитектуру и визуализации', 'designing interiors, architecture, and visualizations'],
+            ],
+            '2' => [
+                'value' => ['25+', '25+'],
+                'label' => ['специалистов подключаются под масштаб задачи', 'specialists join based on the task scale'],
+            ],
+            '3' => [
+                'value' => ['90%', '90%'],
+                'label' => ['клиентов возвращаются с новыми проектами', 'of clients return with new projects'],
+            ],
+            '4' => [
+                'value' => ['1500+', '1500+'],
+                'label' => ['задач в год: от рендера до полного сопровождения', 'tasks per year: from a render to full support'],
+            ],
+        ];
+    }
+
+    private static function aboutFullDirections(): array
+    {
+        return [
+            '1' => ['Дизайн интерьера', 'Interior design'],
+            '2' => ['Коммерческие пространства', 'Commercial spaces'],
+            '3' => ['Архитектурное проектирование', 'Architectural design'],
+            '4' => ['Архитектурная 3D-визуализация', 'Architectural 3D visualization'],
+            '5' => ['Ландшафтный дизайн', 'Landscape design'],
+            '6' => ['Комплектация объекта', 'Project procurement'],
+        ];
+    }
+
+    private static function aboutFullPrinciples(): array
+    {
+        return [
+            '1' => [
+                'title' => ['Сначала сценарий', 'Scenario first'],
+                'text' => ['Мы начинаем не с красивой картинки, а с того, как человек будет жить, работать, принимать гостей и двигаться по пространству.', 'We start not with a beautiful image, but with how a person will live, work, host guests, and move through the space.'],
+            ],
+            '2' => [
+                'title' => ['Красота держится на чертежах', 'Beauty rests on drawings'],
+                'text' => ['Визуальная идея сразу проверяется планировкой, материалами, светом, узлами, бюджетом и возможностью реализации.', 'The visual idea is immediately tested against the layout, materials, lighting, details, budget, and feasibility.'],
+            ],
+            '3' => [
+                'title' => ['Проект не бросается после рендера', 'The project is not dropped after the render'],
+                'text' => ['Помогаем с комплектацией, заменами, подрядчиками и авторским сопровождением, чтобы результат не распался на стройке.', 'We help with procurement, substitutions, contractors, and author supervision so the result does not fall apart on site.'],
+            ],
+            '4' => [
+                'title' => ['Удаленно тоже точно', 'Precise even remotely'],
+                'text' => ['Работаем с клиентами из разных городов через видео-брифы, 3D-презентации, облачные доски и понятные пакеты документации.', 'We work with clients from different cities through video briefs, 3D presentations, cloud boards, and clear documentation packages.'],
+            ],
+        ];
+    }
+
+    private static function aboutFullTeamBullets(): array
+    {
+        return [
+            '1' => ['единая коммуникация', 'single communication channel'],
+            '2' => ['понятные этапы', 'clear stages'],
+            '3' => ['фиксированный состав работ', 'fixed scope of work'],
+            '4' => ['реалистичная визуальная подача', 'realistic visual presentation'],
+        ];
+    }
+
+    private static function aboutFullProcessSteps(): array
+    {
+        return [
+            '1' => [
+                'title' => ['Бриф', 'Brief'],
+                'text' => ['Фиксируем задачу, стиль, бюджет, сроки, состав помещений и ограничения объекта.', 'We capture the task, style, budget, timeline, room layout, and site constraints.'],
+            ],
+            '2' => [
+                'title' => ['Концепция', 'Concept'],
+                'text' => ['Собираем планировку, референсы, материалы, свет и первый визуальный язык проекта.', 'We assemble the layout, references, materials, lighting, and the first visual language of the project.'],
+            ],
+            '3' => [
+                'title' => ['3D и согласование', '3D and approval'],
+                'text' => ['Показываем будущий результат до закупок и ремонта, спокойно проходим итерации правок.', 'We show the future result before procurement and renovation, calmly working through rounds of edits.'],
+            ],
+            '4' => [
+                'title' => ['Документация', 'Documentation'],
+                'text' => ['Готовим чертежи, ведомости, спецификации и техническую базу для подрядчиков.', 'We prepare drawings, schedules, specifications, and the technical base for contractors.'],
+            ],
+            '5' => [
+                'title' => ['Комплектация', 'Procurement'],
+                'text' => ['Подбираем материалы, мебель, свет, аналоги и поставщиков под согласованный бюджет.', 'We select materials, furniture, lighting, alternatives, and suppliers to fit the agreed budget.'],
+            ],
+            '6' => [
+                'title' => ['Сопровождение', 'Support'],
+                'text' => ['Отвечаем на вопросы реализации и помогаем сохранить авторскую идею в реальном объекте.', 'We answer implementation questions and help preserve the author’s idea in the real object.'],
+            ],
         ];
     }
 

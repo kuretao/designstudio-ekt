@@ -35,6 +35,8 @@ type SiteSettings = {
   compareText: string;
 };
 
+const DEFAULT_SITE_LOGO = "/logo.png";
+
 type HomeHero = {
   eyebrow: string;
   title: string;
@@ -99,7 +101,7 @@ const fallbackData: CmsData = {
     seoTitle: `${requiredHomeHeroTitle} | 3D Smart Design Studio`,
     seoDescription:
       "Дизайн интерьера, архитектурное проектирование, 3D-визуализация, ландшафтный дизайн, комплектация и авторский надзор в Самаре.",
-    logo: null,
+    logo: DEFAULT_SITE_LOGO,
     logoSmall: null,
     favicon: null,
     appleTouchIcon: null,
@@ -613,7 +615,7 @@ function normalizePayload(payload: any, locale: SiteLocale): CmsData {
       seoTitle: settings.seoTitle ?? fallbackData.siteSettings.seoTitle,
       seoDescription:
         settings.seoDescription ?? fallbackData.siteSettings.seoDescription,
-      logo: settings.logo ?? null,
+      logo: settings.logo || fallbackData.siteSettings.logo,
       logoSmall: settings.logoSmall ?? null,
       favicon: settings.favicon ?? null,
       appleTouchIcon: settings.appleTouchIcon ?? null,

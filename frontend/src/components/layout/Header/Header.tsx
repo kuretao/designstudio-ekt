@@ -224,7 +224,7 @@ export default function Header() {
             href="/"
             aria-label={siteSettings.siteName}
             onClick={closeMenu}
-            className="flex min-w-[128px] flex-col items-center gap-1 justify-self-center text-center transition duration-300 hover:opacity-75"
+            className="flex min-w-[128px] flex-col items-center gap-0.5 justify-self-center text-center transition duration-300 hover:opacity-75"
           >
             {siteSettings.logoSmall || siteSettings.logo ? (
               <>
@@ -232,7 +232,7 @@ export default function Header() {
                   src={siteSettings.logoSmall ?? siteSettings.logo ?? ""}
                   alt=""
                   aria-hidden="true"
-                  className="block h-8 w-8 object-contain"
+                  className="block h-12 w-12 object-contain"
                 />
                 <span className="text-[9px] font-medium leading-none tracking-[0.24em] text-white">
                   3D Smart

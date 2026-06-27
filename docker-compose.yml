@@ -13,8 +13,18 @@ services:
   frontend:
     build:
       context: ./frontend
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-/api/v1}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://3dsmartdesign.ru}
+        NEXT_PUBLIC_GOOGLE_TAG_ID: ${NEXT_PUBLIC_GOOGLE_TAG_ID:-}
+        GOOGLE_SITE_VERIFICATION: ${GOOGLE_SITE_VERIFICATION:-HlopiXKhbxQ7ylgQsea3aHhSYGyqjgy6Xgq55kBJffc}
+        YANDEX_SITE_VERIFICATION: ${YANDEX_SITE_VERIFICATION:-}
     environment:
       NEXT_PUBLIC_API_BASE_URL: /api/v1
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://3dsmartdesign.ru}
+      NEXT_PUBLIC_GOOGLE_TAG_ID: ${NEXT_PUBLIC_GOOGLE_TAG_ID:-}
+      GOOGLE_SITE_VERIFICATION: ${GOOGLE_SITE_VERIFICATION:-HlopiXKhbxQ7ylgQsea3aHhSYGyqjgy6Xgq55kBJffc}
+      YANDEX_SITE_VERIFICATION: ${YANDEX_SITE_VERIFICATION:-}
       CMS_API_INTERNAL_URL: http://backend:8000/api/v1
     depends_on:
       - backend
